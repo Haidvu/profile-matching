@@ -1,4 +1,4 @@
-# Front end
+# Front End
 
 Web app for UHCS Consulting Clinic
 
@@ -13,7 +13,7 @@ Web app for UHCS Consulting Clinic
 
 1. `git branch {branch-name}`
 2. `git checkout {branch-name}`
-3. `git push --set-upstream origin {branch-name}` (only needed once)
+3. `git push --set-upstream origin {branch-name}` 
 
 ### Workflow
 
