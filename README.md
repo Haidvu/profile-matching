@@ -1,6 +1,6 @@
 # Front End
 
-Web app for UHCS Consulting Clinic
+## Web app for UHCS Consulting Clinic
 
 ### Installation
 
@@ -22,7 +22,7 @@ Web app for UHCS Consulting Clinic
 3. `git commit -m {message}`
 4. `git push`
 
-> Your changes would be merged to master once you are done with the feature
+> Your changes would be merged to master once you are done with the feature.
 
 ### Merging lastest changes
 
@@ -30,3 +30,17 @@ Web app for UHCS Consulting Clinic
 2. `git pull`
 3. `git checkout {branch-name}`
 4. `git merge master`
+
+## Important Note
+
+> Please do not push to master branch. Make sure you are on your own branch before comitting any changes. Only checkout to master for pulling and merging changes.
+
+## File structure
+
+> Website is divided into pages and components. Each page/component has a folder with js and css files.
+
+## Tech Stack
+
+- React
+- Redux/Redux-Saga or Hooks/ReactQuery
+- Material-UI or Smantic
