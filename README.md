@@ -42,5 +42,5 @@
 ## Tech Stack
 
 - React
-- Redux/Redux-Saga or Hooks/ReactQuery
+- Formik/Hooks/ReactQuery
 - Material-UI or Smantic
