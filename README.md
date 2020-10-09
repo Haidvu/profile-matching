@@ -24,16 +24,14 @@
 
 > Your changes would be merged to master once you are done with the feature.
 
-### Merging lastest changes
+### Pulling from master
 
-1. `git checkout master`
-2. `git pull`
-3. `git checkout {branch-name}`
-4. `git merge master`
+1. `git checkout {branch-name}`
+2. `git pull origin master`
 
 ## Important Note
 
-> Please do not push to master branch. Make sure you are on your own branch before comitting any changes. Only checkout to master for pulling and merging changes.
+> Please make sure you are on your own branch (not on master) before you start working. You will not be able to push any changes to the master branch.
 
 ## File structure
 
@@ -43,4 +41,4 @@
 
 - React
 - Formik/Hooks/ReactQuery
-- Material-UI or Smantic
+- Material-UI
