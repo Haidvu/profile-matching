@@ -9,22 +9,20 @@
 }
 
 .form-container {
-    width: 50%;
+    width: 84%;
     margin: 50px auto;
 }
-
-.large {
-    width: 100%;
-}
-
-.small {
-    width: 20%;
+.form-grid{
+    padding-left: 71px;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    font-family: Lato;
+    font-style: normal;
     font-weight: bold;
+    font-size: 30px;
+    line-height: 36px;
 }
 
 input {
@@ -33,34 +31,43 @@ input {
     padding-left: 10px;
     border-radius: 5px;
     border: none;
+    font-size: 24px;
+    color: rgb(0,0,0);
 }
 
 input::placeholder {
     color: #797575;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 24px;
 }
 
 input:focus {
-    border-radius: 5px;
     border: 2px solid #C8102E;
     outline: none;
 }
 
 .input-long {
-    width: 250px;
+    width: 525px;
+    height: 58px;
 }
 
 .input-short {
-    width: 150px;
+    width: 231px;
+    height: 58px;
+}
+
+.input-short2{
+    width: 178px;
+    height: 58px;
 }
 
 select {
-    height: 28px; 
+    height: 32px; 
     background: rgba(194, 194, 194, 0.8);
     padding-left: 10px;
     border-radius: 5px;
     border: none;
+    font-size: 24px;
 }
 
 select::-ms-expand {
@@ -76,38 +83,42 @@ select:focus {
     display: flex;
     direction: row;
     align-items: center;
+    padding-top: 15px;
 }
 
 .checkbox-label {
-    padding-left: 10px;
-    font-weight: lighter;
-    font-size: 12px;
+    padding-left: 24px;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
     color: #C8102E;
 }
 
+.checkbox-input {
+    width: 30px;
+    height: 30px;
+}
 button {
-    padding: 9px 25px;
     border-radius: 0.4rem;
     outline: none;
-}
-
-.button-right {
-    margin-top: 36px;
-    float: right;
+    height: 55px;
+    width: 215px;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: bold;
 }
 
 .button-red {
     background-color: #C8102E;
     color: #FFFFFF;
-    font-size: 14px;
-    font-weight: bold;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-
-
-.button-grey {
-
+.button-red:hover {
+    background-color: #FFFFFF;
+    color: #C8102E;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .form-header {
@@ -118,4 +129,15 @@ button {
 .form-title {
     text-align: center;
     padding-bottom: 25px;
+}
+
+.buttons-container {
+    margin-top: 36px;
+    float: right;
+
+}
+
+.buttons-container > * {
+    display: inline-block;
+    margin: 0px 10px;
 }
