@@ -44,8 +44,8 @@ function Signup () {
   console.log('Visited fields', formik.touched)
 
   return (
-    <div class="form_login">
-                <div class="form_container">
+    <div className="form_login">
+                <div className="form_container">
                     <h1>Create an account</h1>
                     <form onSubmit={formik.handleSubmit}>
                         <div className='form-control'>
