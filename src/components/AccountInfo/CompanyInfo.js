@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from 'react';
-import { Button, Typography, FormControl, InputLabel, Input, Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import './AccountInfo.css'
+import CompanyInfo2 from './CompanyInfo2'
 
 const CompanyInfo = (props) => {
   const [companyAccount, setCompanyAccount] = useState({
@@ -33,72 +34,69 @@ const CompanyInfo = (props) => {
   }
 
   const nextStep = () => {
-    setFirstStep(false)
+    setFirstStep(false);
+    console.log(companyAccount);
   }
 
-  //go back 
   const goBack = () => {
-    setFirstStep(true)
+      setFirstStep(true)
   }
 
-  const handleSubmit = () => {
-    console.log("Clicked on submit")
-  }
-
-  const copyCompanyAddress = () => {
-    if(companyAccount.checkAddress) {
+  const copyCompanyAddress = (e) => {
+    if(e.target.value) {
       setCompanyAccount({
         ...companyAccount,
+        checkAddress: true,
         mailingAddress: companyAccount.companyAddress,
-        cityMailingAddress: companyAccount.cityMailingAddress,
-        stateMailingAddress: companyAccount.State
+        cityMailingAddress: companyAccount.city,
+        stateMailingAddress: companyAccount.state
       });
     }
   }
-
   if(firstStep) {
-    return( <div>
+    return(
+   <div>
       <div className= "form-container">
       <form>
         <div className="form-header">
             <h2 className="form-title">Company Account Information</h2>
             <hr style={{height: '4px', background:'rgb(0,0,0)'}}></hr>
         </div>
-        <Grid container direction="row" justify="center" spacing={1} className="form-grid">
+        <Grid container direction="row" justify="center" className="form-grid">
           {/* left part f */}
-          <Grid container id="left" item xs={4} direction="column" spacing={2}>
+          <Grid container id="left" item xs={6} direction="column" spacing={2}>
             <Grid item> 
               <label htmlFor="companyName">Company name:</label>
-              <input id="companyName" className="input-long" value={companyAccount.companyName} onChange={handleChange} placeholder="Company name"/>
+              <input type="text" id="companyName" name="companyName" className="input-long" onChange={handleChange} placeholder="Company name"/>
             </Grid>
             <Grid item>
               <label htmlFor="industryType">Industry type:</label>
-              <input id="industryType" className="input-long" value={companyAccount.companyAddress} onChange={handleChange} placeholder="Industry type"/>
+              <input type="text" id="industryType" name="industryName" className="input-long" onChange={handleChange} placeholder="Industry type"/>
             </Grid>
             <Grid item>
               <label htmlFor="companyEmail">Company Email</label>
-              <input id="companyEmail" className="input-long" value={companyAccount.companyEmail} onChange={handleChange} placeholder="user@example.com"/>
+              <input type="text" id="companyEmail" name="companyEmail" className="input-long" onChange={handleChange} placeholder="user@example.com"/>
             </Grid>
             <Grid item>
               <label htmlFor="phoneNumber">Phone number</label>
-              <input id="phoneNumber" className="input-short" value={companyAccount.phoneNumber} onChange={handleChange} placeholder="(###)-###-####"/>
+              <input type="text" id="phoneNumber" name="phoneNumber" className="input-short" onChange={handleChange} placeholder="(###)-###-####"/>
             </Grid>
           </Grid>
 
           {/* right part of form */}
-          <Grid container id = "right" item xs={4} direction="column" spacing={2}>
+          <Grid container id = "right" item xs={6} direction="column" spacing={2}>
             <Grid item >
               <label htmlFor="companyAddress">Company Address:</label>
-              <input id="companyAddress" className="input-long" value={companyAccount.companyAddress} onChange={handleChange} placeholder="ex: 123 Street"/>
+              <input type="text" id="companyAddress" name="companyAddress" className="input-long" onChange={handleChange} placeholder="ex: 123 Street"/>
             </Grid>
-            <Grid item container direction = "row" spacing={4}>
+            <Grid item container direction = "row" spacing={3}>
               <Grid item>
                 <label htmlFor="city">City:</label>
-                <input id="city" className="input-short" value={companyAccount.city} onChange={handleChange} placeholder="ex: Houston"/>
+                <input type="text" id="city" name="city" className="input-short2" placeholder="ex: Houston" onChange={handleChange}/>
               </Grid>
-              <Grid item >
+              <Grid item>
               <label htmlFor="state">State:</label>
-              <select name="state" id="state" onChange={handleChange}>
+              <select name="state" className="input-short2" id="state" onChange={handleChange}>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
                 <option value="AZ">Arizona</option>
@@ -153,25 +151,24 @@ const CompanyInfo = (props) => {
               </select>
               </Grid>
             </Grid>
-            
             <Grid item >
               <label htmlFor="mailingAddress">Mailing address</label>
-              <input id="mailingAddress" className="input-long" value={companyAccount.mailingAddress} onChange={handleChange} placeholder="ex) 123 Street"/>
+              <input type="text" id="mailingAddress" name="mailingAddress" className="input-long" onChange={handleChange} placeholder="ex) 123 Street"/>
               <div className="checkbox-container">
-                <input id="checkAddress" className="checkbox-input" type="checkbox" onClick={copyCompanyAddress}/>
+                <input id="checkAddress" name="checkAddress" className="checkbox-input" type="checkbox" onClick={copyCompanyAddress}/>
                 <label htmlFor="checkAddress" className="checkbox-label">
                   Mailing address same as company address
                 </label>
               </div>
             </Grid>
-            <Grid item container direction="row" spacing={4}>
-              <Grid item>
+            <Grid item container direction="row" spacing={3}>
+              <Grid item >
                   <label htmlFor="cityMailingAddress">City:</label>
-                  <input id="cityMailingAddress" className="input-short" value={companyAccount.cityMailingAddress} onChange={handleChange} placeholder="ex: Houston"/>
+                  <input type="text" id="cityMailingAddress" name="cityMailingAddress" className="input-short2" onChange={handleChange} placeholder="ex: Houston"/>
               </Grid>
               <Grid item >
                 <label htmlFor="stateMailingAddress">State:</label>
-                  <select name="stateMailingAddress" id="stateMailingAddress" onChange={handleChange}>
+                  <select className="input-short2" name="stateMailingAddress" id="stateMailingAddress" onChange={handleChange}>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
@@ -228,40 +225,17 @@ const CompanyInfo = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <button className="button-right button-red">Continue</button>
+        <div className="buttons-container">
+          <button className="button-red" onClick={nextStep}>Continue</button>
+        </div>
       </form>
       </div>
     </div>);
   }
   else {
-    return (
-<div>
-      <div className= "form-container">
-      <form>
-        <div className="form-header">
-            <h2 className="form-title">Company Account Information</h2>
-            <hr style={{height: '4px', background:'rgb(0,0,0)'}}></hr>
-        </div>
-        <Grid container direction="row" justify="center" spacing={1} className="form-grid">
-          {/* left part f */}
-          <Grid container item xs={4} direction="column" spacing={2}>
-
-          </Grid>
-
-          {/* middle part of form */}
-          <Grid container item xs={4} direction="column" spacing={2}>
-           
-            
-          </Grid>
-          {/* Right part */}
-          <Grid container item xs = {4} direction = "column" spacing = {2}>
-
-          </Grid>
-        </Grid>
-        <button className="button-right button-red">Continue</button>
-      </form>
-      </div>
-    </div>);
+    return(
+       <CompanyInfo2 goBack={goBack} companyAccount={companyAccount}></CompanyInfo2>
+    );
   }
 };
 
