@@ -16,6 +16,16 @@
     padding-left: 71px;
 }
 
+.form-header {
+    height: 100px;
+    width: 100%;
+}
+
+.form-title {
+    text-align: center;
+    padding-bottom: 25px;
+}
+
 label {
     display: block;
     font-family: Lato;
@@ -23,6 +33,7 @@ label {
     font-weight: bold;
     font-size: 30px;
     line-height: 36px;
+    padding-bottom: 15px;
 }
 
 input {
@@ -98,6 +109,7 @@ select:focus {
     width: 30px;
     height: 30px;
 }
+
 button {
     border-radius: 0.4rem;
     outline: none;
@@ -111,7 +123,6 @@ button {
 .button-red {
     background-color: #C8102E;
     color: #FFFFFF;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .button-red:hover {
@@ -121,14 +132,16 @@ button {
     transition: 0.3s;
 }
 
-.form-header {
-    height: 100px;
-    width: 100%;
+.button-grey {
+    background-color:#FFFFFF;
+    color: #C8102E;
 }
 
-.form-title {
-    text-align: center;
-    padding-bottom: 25px;
+.button-grey:hover {
+    background-color: #C8102E;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .buttons-container {
@@ -140,4 +153,34 @@ button {
 .buttons-container > * {
     display: inline-block;
     margin: 0px 10px;
+}
+
+.logo-image {
+    padding: 10px 0px;
+}
+
+.upload-button {
+    border-radius: 0.4rem;
+    outline: none;
+    height: 89px;
+    width: 215px;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 496px;
+    height: 134px;
+    background: rgba(194, 194, 194, 0.8);
+    padding-left: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 24px;
+    color: rgb(0,0,0);
+}
+
+textarea:focus {
+    border: 2px solid #C8102E;
+    outline: none;
 }

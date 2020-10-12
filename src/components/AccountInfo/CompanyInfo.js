@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from 'react';
-import { Button, Typography, FormControl, InputLabel, Input, Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import './AccountInfo.css'
 import CompanyInfo2 from './CompanyInfo2'
 
@@ -67,19 +67,19 @@ const CompanyInfo = (props) => {
           <Grid container id="left" item xs={6} direction="column" spacing={2}>
             <Grid item> 
               <label htmlFor="companyName">Company name:</label>
-              <input id="companyName" name="companyName" className="input-long" onChange={handleChange} placeholder="Company name"/>
+              <input type="text" id="companyName" name="companyName" className="input-long" onChange={handleChange} placeholder="Company name"/>
             </Grid>
             <Grid item>
               <label htmlFor="industryType">Industry type:</label>
-              <input id="industryType" name="industryName" className="input-long" onChange={handleChange} placeholder="Industry type"/>
+              <input type="text" id="industryType" name="industryName" className="input-long" onChange={handleChange} placeholder="Industry type"/>
             </Grid>
             <Grid item>
               <label htmlFor="companyEmail">Company Email</label>
-              <input id="companyEmail" name="companyEmail" className="input-long" onChange={handleChange} placeholder="user@example.com"/>
+              <input type="text" id="companyEmail" name="companyEmail" className="input-long" onChange={handleChange} placeholder="user@example.com"/>
             </Grid>
             <Grid item>
               <label htmlFor="phoneNumber">Phone number</label>
-              <input id="phoneNumber" name="phoneNumber" className="input-short" onChange={handleChange} placeholder="(###)-###-####"/>
+              <input type="text" id="phoneNumber" name="phoneNumber" className="input-short" onChange={handleChange} placeholder="(###)-###-####"/>
             </Grid>
           </Grid>
 
@@ -87,12 +87,12 @@ const CompanyInfo = (props) => {
           <Grid container id = "right" item xs={6} direction="column" spacing={2}>
             <Grid item >
               <label htmlFor="companyAddress">Company Address:</label>
-              <input id="companyAddress" name="companyAddress" className="input-long" onChange={handleChange} placeholder="ex: 123 Street"/>
+              <input type="text" id="companyAddress" name="companyAddress" className="input-long" onChange={handleChange} placeholder="ex: 123 Street"/>
             </Grid>
             <Grid item container direction = "row" spacing={3}>
               <Grid item>
                 <label htmlFor="city">City:</label>
-                <input id="city" name="city" className="input-short2" placeholder="ex: Houston" onChange={handleChange}/>
+                <input type="text" id="city" name="city" className="input-short2" placeholder="ex: Houston" onChange={handleChange}/>
               </Grid>
               <Grid item>
               <label htmlFor="state">State:</label>
@@ -153,7 +153,7 @@ const CompanyInfo = (props) => {
             </Grid>
             <Grid item >
               <label htmlFor="mailingAddress">Mailing address</label>
-              <input id="mailingAddress" name="mailingAddress" className="input-long" onChange={handleChange} placeholder="ex) 123 Street"/>
+              <input type="text" id="mailingAddress" name="mailingAddress" className="input-long" onChange={handleChange} placeholder="ex) 123 Street"/>
               <div className="checkbox-container">
                 <input id="checkAddress" name="checkAddress" className="checkbox-input" type="checkbox" onClick={copyCompanyAddress}/>
                 <label htmlFor="checkAddress" className="checkbox-label">
@@ -164,7 +164,7 @@ const CompanyInfo = (props) => {
             <Grid item container direction="row" spacing={3}>
               <Grid item >
                   <label htmlFor="cityMailingAddress">City:</label>
-                  <input id="cityMailingAddress" name="cityMailingAddress" className="input-short2" onChange={handleChange} placeholder="ex: Houston"/>
+                  <input type="text" id="cityMailingAddress" name="cityMailingAddress" className="input-short2" onChange={handleChange} placeholder="ex: Houston"/>
               </Grid>
               <Grid item >
                 <label htmlFor="stateMailingAddress">State:</label>
