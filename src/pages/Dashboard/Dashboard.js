@@ -1,7 +1,9 @@
 import React from "react";
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  //This is where the side menu and logged in navbar would go
+
+  return <div>Side Menu and AppBar</div>;
 };
 
 export default Dashboard;

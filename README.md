@@ -40,5 +40,5 @@
 ## Tech Stack
 
 - React
-- Formik/Hooks/ReactQuery
+- Formik/Context/ReactQuery
 - Material-UI
