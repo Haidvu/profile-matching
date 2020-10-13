@@ -14,6 +14,7 @@
 }
 .form-grid{
     padding-left: 71px;
+    padding-top: 30px;
 }
 
 .form-header {
@@ -24,6 +25,8 @@
 .form-title {
     text-align: center;
     padding-bottom: 25px;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 label {
@@ -156,7 +159,7 @@ button {
 }
 
 .logo-image {
-    padding: 10px 0px;
+    padding-bottom: 15px;
 }
 
 .upload-button {
@@ -183,4 +186,13 @@ textarea {
 textarea:focus {
     border: 2px solid #C8102E;
     outline: none;
+}
+
+.form-grid2 {
+    align-items: center;
+    padding-top: 30px;
+}
+
+.grid-left {
+    align-items: center;
 }
