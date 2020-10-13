@@ -60,7 +60,7 @@ const CompanyInfo = (props) => {
       <form>
         <div className="form-header">
             <h2 className="form-title">Company Account Information</h2>
-            <hr style={{height: '4px', background:'rgb(0,0,0)'}}></hr>
+            <hr style={{height: '8px', background:'rgb(0,0,0)'}}></hr>
         </div>
         <Grid container direction="row" justify="center" className="form-grid">
           {/* left part f */}

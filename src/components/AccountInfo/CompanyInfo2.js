@@ -30,11 +30,11 @@ const  CompanyInfo2 =  (props) => {
         <form>
           <div className="form-header">
               <h2 className="form-title">Company Account Information</h2>
-              <hr style={{height: '4px', background:'rgb(0,0,0)'}}></hr>
+              <hr style={{height: '8px', background:'rgb(0,0,0)'}}></hr>
           </div>
-          <Grid container direction="row" className="form-grid">
+          <Grid container direction="row" className="form-grid2">
             {/* left part of form */}
-            <Grid container item xs={4} direction="column" alignitems="center">
+            <Grid container item xs={4} direction="column" className="grid-left">
                 <Grid item >
                     <label>Company Logo</label>
                 </Grid >
@@ -63,14 +63,14 @@ const  CompanyInfo2 =  (props) => {
                 </Grid >
                 <Grid item>
                     <label>Company Mission</label>
-                    <textarea id="companyMission" name="companyMission" className="input-textarea">.............. 1/250</textarea>
+                    <textarea id="companyMission" name="companyMission" className="input-textarea" defaultValue="random"/>
                 </Grid >
             </Grid>
             {/* Right part */}
             <Grid container item xs={4} direction = "column" spacing = {2}>
             <Grid item>
                     <label>Company Description</label>
-                    <textarea id="companyDescription" name="companyDescription" className="input-textarea">.............. 1/250</textarea>
+                    <textarea id="companyDescription" name="companyDescription" className="input-textarea" defaultValue="random"/>
                 </Grid >
             </Grid>
           </Grid>
