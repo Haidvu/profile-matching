@@ -70,7 +70,7 @@ function Login() {
   return (
     <>
       {loggedIn ? (
-        <Redirect to="/dashboard/profile" />
+        <Redirect to="/profile" />
       ) : (
         <Grid container component="main" className={classes.root}>
           <CssBaseline />
