@@ -1,47 +1,48 @@
 import React from "react";
+
 import { useFormik } from 'formik'
 import { Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core/'
 import './Signup.css';
 
+
 const initialValues = {
-            username: '',
-            password: '',
-            confirmpassword: ''
-        }
+  username: "",
+  password: "",
+  confirmpassword: "",
+};
 
-const onSubmit = values => {
-            console.log('Form data', values)
-        }
+const onSubmit = (values) => {
+  console.log("Form data", values);
+};
 
-const validate = values => {
-            //values.name values.email values.channel
-            //errors.name errors.email erors.channel
-            let errors = {}
+const validate = (values) => {
+  //values.name values.email values.channel
+  //errors.name errors.email erors.channel
+  let errors = {};
 
-            if(!values.username) {
-                errors.username = 'Required'
-            }
+  if (!values.username) {
+    errors.username = "Required";
+  }
 
-            if(!values.password) {
-                errors.password = 'Required'
-            }
+  if (!values.password) {
+    errors.password = "Required";
+  }
 
-            if(!values.confirmpassword) {
-                errors.confirmpassword = 'Required'
-            }
+  if (!values.confirmpassword) {
+    errors.confirmpassword = "Required";
+  }
 
-            return errors
-        }
+  return errors;
+};
 
-function Signup () {
-  
+function Signup() {
   const formik = useFormik({
     initialValues,
     onSubmit,
-    validate
-  })
+    validate,
+  });
 
-  console.log('Visited fields', formik.touched)
+  console.log("Visited fields", formik.touched);
 
   return (
     <div className="form_login">
@@ -101,6 +102,5 @@ function Signup () {
         </div>
   )
 }
-
 
 export default Signup;
