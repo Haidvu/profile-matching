@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormik } from 'formik'
-import { FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core/'
+import { Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core/'
 import './Signup.css';
 
 const initialValues = {
@@ -63,7 +63,7 @@ function Signup () {
 
                         <div className='form-control'>
                             <h4>Password:</h4>
-                            <input type="password" 
+                            <input class="form_input" type="password" 
                             id="password" 
                             name="password"
                             placeholder="enter password"  
@@ -75,7 +75,7 @@ function Signup () {
 
                         <div className='form-control'>
                             <h4>Confirm password:</h4>
-                            <input type="password" 
+                            <input class="form_input" type="password" 
                             id="confirmpassword" 
                             name="confirmpassword"
                             placeholder="re-type password" 
@@ -95,12 +95,11 @@ function Signup () {
                                 </FormControl>
                         </div>
 
-                        <button className="button-right button-red">Signup</button>
+                        <Button variant="contained" color="secondary">Signup</Button>
                 </form>
             </div>
         </div>
   )
-
 }
 
 
