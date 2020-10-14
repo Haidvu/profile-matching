@@ -8,7 +8,6 @@ import CompanyInfo from "./components/AccountInfo/CompanyInfo";
 import ProtectedRoute from "./components/ProtecteRoute/ProtecteRoute";
 import Profile from "./pages/Profile/Profile";
 import Projects from "./pages/Projects/Projects";
-import DataContextProvider from "./contexts/dataContext";
 import ProtectedDashboard from "./components/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
 
@@ -21,10 +20,8 @@ const App = () => {
         <Route path="/signup" component={Signup} />
         <Route path="/studentinfo" component={StudentInfo} />
         <Route path="/companyinfo" component={CompanyInfo} />
-        <DataContextProvider>
-          <ProtectedRoute path="/profile" component={Profile} />
-          <ProtectedRoute path="/projects" component={Projects} />
-        </DataContextProvider>
+        <ProtectedRoute path="/profile" component={Profile} />
+        <ProtectedRoute path="/projects" component={Projects} />
         <Route path="*" component={NotFound} />
       </Switch>
       <ProtectedDashboard />
