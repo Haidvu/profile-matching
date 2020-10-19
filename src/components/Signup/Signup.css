@@ -46,6 +46,10 @@
   font-size: 15px;
 }
 
+.form_input:focus {
+  outline: none;
+}
+
 .form-control {
   margin-bottom: 20px;
 }
@@ -53,5 +57,3 @@
 .error {
   color: red;
 }
-
-
