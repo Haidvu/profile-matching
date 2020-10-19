@@ -9,5 +9,5 @@ ReactDOM.render(
       <App />
     </DataContextProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root") 
 );
