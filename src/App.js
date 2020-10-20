@@ -14,17 +14,15 @@ import NotFound from "./pages/NotFound/NotFound";
 const App = () => {
   return (
     <Router>
+      <ProtectedDashboard />
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/studentinfo" component={StudentInfo} />
         <Route path="/companyinfo" component={CompanyInfo} />
-        <ProtectedRoute path="/profile" component={Profile} />
-        <ProtectedRoute path="/projects" component={Projects} />
-        <Route path="*" component={NotFound} />
+        {/* <Route path="*" component={NotFound} /> */}
       </Switch>
-      <ProtectedDashboard />
     </Router>
   );
 };
