@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../contexts/dataContext";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Drawer,
@@ -17,6 +18,8 @@ import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "../../components/StudentRoutes/StudentRoutes";
 import StudentMenu from "../../components/StudentMenu/StudentMenu";
+import CompanyRoutes from "../../components/CompanyRoutes/CompanyRoutes";
+import CompanyMenu from "../../components/CompanyMenu/CompanyMenu";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
 
+  const { data } = useContext(DataContext);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -68,9 +73,7 @@ export default function Dashboard() {
             color="inherit"
             className={classes.rightToolbar}
           />
-          <Typography variant="h8" p={2}>
-            Name
-          </Typography>
+          <Typography p={2}>Name</Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -81,7 +84,8 @@ export default function Dashboard() {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <StudentMenu />
+            {data.userType === "student" ? <StudentMenu /> : <CompanyMenu />}
+
             <Link to="/" className={classes.link}>
               <ListItem>
                 <ListItemIcon>
@@ -96,7 +100,7 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <StudentRoutes />
+        {data.userType === "student" ? <StudentRoutes /> : <CompanyRoutes />}
       </main>
     </div>
   );

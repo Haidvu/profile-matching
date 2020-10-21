@@ -1,106 +1,142 @@
 import React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@material-ui/core/";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
-import { useFormik } from 'formik'
-import { Button, FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core/'
-import './Signup.css';
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    marginBottom: theme.spacing(2),
+  },
+}));
 
+export default function SignUp() {
+  const classes = useStyles();
 
-const initialValues = {
-  username: "",
-  password: "",
-  confirmpassword: "",
-};
-
-const onSubmit = (values) => {
-  console.log("Form data", values);
-};
-
-const validate = (values) => {
-  //values.name values.email values.channel
-  //errors.name errors.email erors.channel
-  let errors = {};
-
-  if (!values.username) {
-    errors.username = "Required";
-  }
-
-  if (!values.password) {
-    errors.password = "Required";
-  }
-
-  if (!values.confirmpassword) {
-    errors.confirmpassword = "Required";
-  }
-
-  return errors;
-};
-
-function Signup() {
-  const formik = useFormik({
-    initialValues,
-    onSubmit,
-    validate,
-  });
-
-  console.log("Visited fields", formik.touched);
+  const signUp = (e) => {
+    e.preventDefault();
+  };
 
   return (
-    <div className="form_login">
-                <div className="form_container">
-                    <h1>Create an account</h1>
-                    <form onSubmit={formik.handleSubmit}>
-                        <div className='form-control'>
-                            <h4>Username:</h4>
-                            <input class="form_input" type="text" 
-                            id="username" 
-                            name="username"
-                            placeholder="enter username" 
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur} 
-                            value={formik.values.username} /> 
-                            { formik.touched.username && formik.errors.username ? <div className='error'>{formik.errors.username}</div> : null}
-                        </div>
-
-
-                        <div className='form-control'>
-                            <h4>Password:</h4>
-                            <input class="form_input" type="password" 
-                            id="password" 
-                            name="password"
-                            placeholder="enter password"  
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}  
-                            value={formik.values.password}/> 
-                            {formik.touched.password && formik.errors.password ? <div className='error'>{formik.errors.password}</div> : null}
-                        </div>
-
-                        <div className='form-control'>
-                            <h4>Confirm password:</h4>
-                            <input class="form_input" type="password" 
-                            id="confirmpassword" 
-                            name="confirmpassword"
-                            placeholder="re-type password" 
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur} 
-                            value={formik.values.confirmpassword}/> 
-                            {formik.touched.confirmpassword && formik.errors.confirmpassword ? <div className='error'>{formik.errors.confirmpassword}</div> : null}
-                        </div>
-
-                        <div>
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">Choose account type</FormLabel>
-                                <RadioGroup aria-label="account_type" name="account_type" row>
-                                    <FormControlLabel value="Student" control={<Radio />} label="Student" />
-                                    <FormControlLabel value="Company" control={<Radio />} label="Company" />
-                                </RadioGroup>
-                                </FormControl>
-                        </div>
-
-                        <Button variant="contained" color="secondary">Signup</Button>
-                </form>
-            </div>
-        </div>
-  )
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <form className={classes.form} onSubmit={signUp}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                // placeholder="passwardo"
+                // InputLabelProps={{
+                //   shrink: true,
+                // }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password2"
+                label="Confirm Password"
+                type="password"
+                id="confirm-password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl>
+                <FormLabel>Choose account type</FormLabel>
+                <RadioGroup
+                  className={classes.radio}
+                  aria-label="account_type"
+                  name="account_type"
+                  row
+                  color="secondary"
+                >
+                  <FormControlLabel
+                    value="Student"
+                    control={<Radio />}
+                    label="Student"
+                  />
+                  <FormControlLabel
+                    value="Company"
+                    control={<Radio />}
+                    label="Company"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="secondary"
+            className={classes.submit}
+          >
+            Sign Up
+          </Button>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <Link href="/login" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
+  );
 }
-
-export default Signup;
