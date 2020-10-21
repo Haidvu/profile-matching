@@ -27,12 +27,10 @@
   flex-wrap: wrap;
 }
 
-
-.separator{
+.separator {
   border: 2px solid rgb(0, 0, 0);
   width: 100%;
 }
-
 
 .form_container_studentinfo > h1 {
   margin-bottom: 20px;
@@ -42,51 +40,50 @@
   line-height: 36px;
 }
 
-.form_container_studentinfo > form{
+.form_container_studentinfo > form {
   width: 100%;
   padding-top: 30px;
 }
 
 h4 {
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
   font-weight: bold;
   font-size: 20px;
   line-height: 36px;
 }
 
-
-
-
-@media screen and (min-width: 701px){
-  .form_input, .date-picker {
+@media screen and (min-width: 701px) {
+  .form_input,
+  .date-picker {
     height: 45px;
     padding-left: 10px;
     border-radius: 5px;
     border: none;
     font-size: 24px;
-    color: rgb(0,0,0);
+    color: rgb(0, 0, 0);
     width: 90%;
   }
 
   .row > div.column {
     flex: 0 50%;
     width: 100%;
-    padding: 10px
+    padding: 10px;
   }
 
- .list_of_all_degrees_type{
+  .list_of_all_degrees_type {
     width: 100%;
   }
 }
 
-@media screen and (max-width: 700px){
-  .form_input, .date-picker{
+@media screen and (max-width: 700px) {
+  .form_input,
+  .date-picker {
     height: 45px;
     padding-left: 10px;
     border-radius: 5px;
     border: none;
     font-size: 24px;
-    color: rgb(0,0,0); 
+    color: rgb(0, 0, 0);
   }
 
   .row > div.column {
@@ -94,14 +91,13 @@ h4 {
     width: 100%;
   }
 
-.list_of_all_degrees_type{
+  .list_of_all_degrees_type {
     width: 100%;
   }
-  
 }
 
 /*Upload Button*/
-span.MuiButton-contained{
+span.MuiButton-contained {
   border-radius: 10px;
   height: 40px;
   border: 1px solid;
@@ -116,15 +112,11 @@ span.MuiButton-contained{
   text-align: center;
 }
 
-span.MuiButton-contained:hover{
-
+span.MuiButton-contained:hover {
   border-color: darkgray;
   background: #ffffff;
   color: #c8102e;
-
 }
-
-
 
 .form-control {
   margin-bottom: 30px;
@@ -135,14 +127,14 @@ span.MuiButton-contained:hover{
   font-size: 15px !important;
 }
 
-.button-nav{
-  display: flex; 
-  flex-flow:  wrap; 
-  align-content: flex-end; 
+.button-nav {
+  display: flex;
+  flex-flow: wrap;
+  align-content: flex-end;
 }
 
-.button-red{
-border-radius: 10px;
+.button-red {
+  border-radius: 10px;
   height: 40px;
   border: 1px solid;
   margin-top: 10px;
@@ -156,12 +148,12 @@ border-radius: 10px;
 }
 
 .button-white {
- border-radius: 10px;
+  border-radius: 10px;
   height: 40px;
   border: 1px solid;
   margin-top: 10px;
   border-color: darkgray;
-  background:  white  ;
+  background: white;
   color: #c8102e;
   font-style: normal;
   font-weight: bold;
@@ -171,13 +163,11 @@ border-radius: 10px;
 }
 
 .button-white:hover {
-  background-color: #C8102E;
+  background-color: #c8102e;
   color: white;
   cursor: pointer;
   transition: 0.3s;
 }
-
-
 
 /* Testing React Date Picker */
 
@@ -323,7 +313,7 @@ border-radius: 10px;
   border: thin solid gray;
 }
 .react-date-picker__inputGroup {
-  min-width: calc((4px * 3) +  0.54em * 8  +  0.217em * 2);
+  min-width: calc((4px * 3) + 0.54em * 8 + 0.217em * 2);
   flex-grow: 1;
   padding: 0 2px;
   box-sizing: content-box;
@@ -353,7 +343,7 @@ border-radius: 10px;
 }
 .react-date-picker__inputGroup__input--hasLeadingZero {
   margin-left: -0.54em;
-  padding-left: calc(1px +  0.54em);
+  padding-left: calc(1px + 0.54em);
 }
 .react-date-picker__button {
   border: 0;
@@ -412,7 +402,7 @@ border-radius: 10px;
   font-size: 1.25em;
 }
 .react-date-picker__inputGroup {
-  min-width: calc(4px + (4px * 3) +  0.54em * 8  +  0.217em * 2);
+  min-width: calc(4px + (4px * 3) + 0.54em * 8 + 0.217em * 2);
   flex-grow: 1;
   display: flex;
   padding: 2px;
@@ -434,7 +424,7 @@ border-radius: 10px;
 }
 .react-date-picker__inputGroup__input--hasLeadingZero {
   margin-left: -0.54em;
-  padding-left: calc(1px +  0.54em);
+  padding-left: calc(1px + 0.54em);
 }
 .react-date-picker__calendar {
   border-radius: 4px;
@@ -465,7 +455,7 @@ border-radius: 10px;
   width: 15px;
   height: 15px;
 }
-@description : A date picker for your React app.;
+@description: A date picker for your React app.;
 
 .react-calendar {
   border-radius: 4px;
@@ -584,39 +574,42 @@ border-radius: 10px;
 }
 /* Mine */
 
-.react-calendar__tile, .react-calendar__month-view__days__day{
+.react-calendar__tile,
+.react-calendar__month-view__days__day {
   color: black;
 }
 
-.react-calendar__navigation__label{
+.react-calendar__navigation__label {
   color: black;
 }
 
-.react-calendar__navigation__arrow, .react-calendar__navigation__next-button{
+.react-calendar__navigation__arrow,
+.react-calendar__navigation__next-button {
   color: black;
 }
 
-.react-date-picker__clear-button, .react-date-picker__button{
+.react-date-picker__clear-button,
+.react-date-picker__button {
   width: 50px;
 }
 
-.react-date-picker__wrapper{
+.react-date-picker__wrapper {
   border: none !important;
 }
 
-.react-date-picker__inputGroup__input:focus{
+.react-date-picker__inputGroup__input:focus {
   border: none;
 }
 
-textarea:focus{
+textarea:focus {
   border: none !important;
-} 
+}
 
-div.description{
+div.description {
   width: 90%;
   height: 100%;
 }
 
-span.resumeName{
+span.resumeName {
   font-size: 20px;
 }
