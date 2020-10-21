@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import StudentMenu from "../StudentMenu/StudentMenu";
 
 const Dashboard = (props) => {
   const { location } = props;
@@ -8,7 +9,7 @@ const Dashboard = (props) => {
     location.pathname.match(/projects/)
   ) {
     //This is where the side menu and logged in navbar would go
-    return <div>Side Menu and AppBar</div>;
+    return <div><StudentMenu/></div>;
   }
 
   return null;
