@@ -5,23 +5,20 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import StudentInfo from "./components/AccountInfo/StudentInfo";
 import CompanyInfo from "./components/AccountInfo/CompanyInfo";
-import ProtectedRoute from "./components/ProtecteRoute/ProtecteRoute";
-import Profile from "./pages/Profile/Profile";
-import Projects from "./pages/Projects/Projects";
-import ProtectedDashboard from "./components/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const App = () => {
   return (
     <Router>
-      <ProtectedDashboard />
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/studentinfo" component={StudentInfo} />
         <Route path="/companyinfo" component={CompanyInfo} />
-        {/* <Route path="*" component={NotFound} /> */}
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="*" component={NotFound} />
       </Switch>
     </Router>
   );
