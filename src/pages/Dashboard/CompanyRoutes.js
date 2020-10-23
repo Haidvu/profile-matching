@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, useRouteMatch, Switch } from "react-router-dom";
-import CompanyProfile from "../../pages/CompanyProfile/CompanyProfile";
-import CompanyProject from "../../pages/CompanyProject/CompanyProject";
+import CompanyProfile from "../CompanyProfile/CompanyProfile";
+import CompanyProject from "../CompanyProject/CompanyProject";
 
 const CompanyRoutes = () => {
   let { path } = useRouteMatch();

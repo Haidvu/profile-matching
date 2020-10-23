@@ -46,9 +46,9 @@ input::placeholder {
 }
 
 /* input:focus {
-        border: 2px solid #C8102E;
-        outline: none;
-    } */
+  border: 2px solid #c8102e;
+  outline: none;
+} */
 
 .input-long {
   width: 525px;

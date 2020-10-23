@@ -53,7 +53,7 @@ export default function StudentProfile() {
         className={classes.profileLogo}
         src={ProfileLogo}
       ></img>
-      {/* <List>
+      <List>
         <ListItem alignItems="flex-start">
           <ListItemIcon>
             <FormatListBulletedTwoToneIcon />
@@ -159,7 +159,7 @@ export default function StudentProfile() {
             <EditTwoToneIcon />
           </IconButton>
         </ListItem>
-      </List> */}
+      </List>
     </div>
   );
 }

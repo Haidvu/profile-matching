@@ -26,7 +26,7 @@ const StudentMenu = () => {
       url: `${url}/projects`,
       icon: <BusinessRoundedIcon />,
     },
-    { text: "My Team", url: `${url}/team`, icon: <StarsIcon /> },
+    { text: "My Teams", url: `${url}/teams`, icon: <StarsIcon /> },
     {
       text: "Search",
       url: `${url}/search`,

@@ -16,10 +16,10 @@ import {
 } from "@material-ui/core";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
-import StudentRoutes from "../../components/StudentRoutes/StudentRoutes";
-import StudentMenu from "../../components/StudentMenu/StudentMenu";
-import CompanyRoutes from "../../components/CompanyRoutes/CompanyRoutes";
-import CompanyMenu from "../../components/CompanyMenu/CompanyMenu";
+import StudentRoutes from "./StudentRoutes";
+import StudentMenu from "./StudentMenu";
+import CompanyRoutes from "./CompanyRoutes";
+import CompanyMenu from "./CompanyMenu";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
