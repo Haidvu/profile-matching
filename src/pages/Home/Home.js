@@ -54,7 +54,7 @@ function Home() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Grid>
+      <Grid container component="main">
         <Grid item xs={12}>
           <Navbar />
         </Grid>

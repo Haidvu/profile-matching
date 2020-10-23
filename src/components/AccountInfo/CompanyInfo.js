@@ -69,8 +69,8 @@ const CompanyInfo = (props) => {
   }
 
   const goBack = () => {
-      setFirstStep(true)
-  }
+    setFirstStep(true);
+  };
 
   const copyCompanyAddress = (e) => {
     if(e.target.value) {
@@ -261,8 +261,7 @@ const CompanyInfo = (props) => {
         }
       </form>
       </div> 
-    </div>
-    );
-  }
+    </div>)
+  };
 
 export default CompanyInfo;

@@ -1,116 +1,106 @@
-@import url('http://fonts.googleapis.com/css?family=Lato:400,700');
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Lato';
-    font-style: normal;
-}
-
 .form-container {
-    width: 84%;
-    margin: 50px auto;
+  width: 84%;
+  margin: 50px auto;
 }
-.form-grid{
-    padding-left: 71px;
-    padding-top: 30px;
+.form-grid {
+  padding-left: 71px;
+  padding-top: 30px;
 }
 
 .form-header {
-    height: 100px;
-    width: 100%;
+  height: 100px;
+  width: 100%;
 }
 
 .form-title {
-    text-align: center;
-    padding-bottom: 25px;
-    font-size: 30px;
-    font-weight: bold;
+  text-align: center;
+  padding-bottom: 25px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 label {
-    display: block;
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 30px;
-    line-height: 36px;
-    padding-bottom: 15px;
+  display: block;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 36px;
+  padding-bottom: 15px;
 }
 
 input {
-    height: 32px; 
-    background: rgba(194, 194, 194, 0.8);
-    padding-left: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 24px;
-    color: rgb(0,0,0);
+  height: 32px;
+  background: rgba(194, 194, 194, 0.8);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 24px;
+  color: rgb(0, 0, 0);
 }
 
 input::placeholder {
-    color: #797575;
-    font-weight: bold;
-    font-size: 24px;
+  color: #797575;
+  font-weight: bold;
+  font-size: 24px;
 }
 
-input:focus {
-    border: 2px solid #C8102E;
-    outline: none;
-}
+/* input:focus {
+  border: 2px solid #c8102e;
+  outline: none;
+} */
 
 .input-long {
-    width: 525px;
-    height: 58px;
+  width: 525px;
+  height: 58px;
 }
 
 .input-short {
-    width: 231px;
-    height: 58px;
+  width: 231px;
+  height: 58px;
 }
 
-.input-short2{
-    width: 178px;
-    height: 58px;
+.input-short2 {
+  width: 178px;
+  height: 58px;
 }
 
 select {
-    height: 32px; 
-    background: rgba(194, 194, 194, 0.8);
-    padding-left: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 24px;
+  height: 32px;
+  background: rgba(194, 194, 194, 0.8);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 24px;
 }
 
 select::-ms-expand {
-    display: none;
+  display: none;
 }
 
 select:focus {
-    outline: none;
-    border: 2px solid #C8102E;
+  outline: none;
+  border: 2px solid #c8102e;
 }
 
 .checkbox-container {
-    display: flex;
-    direction: row;
-    align-items: center;
-    padding-top: 15px;
+  display: flex;
+  direction: row;
+  align-items: center;
+  padding-top: 15px;
 }
 
 .checkbox-label {
-    padding-left: 24px;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-    color: #C8102E;
+  padding-left: 24px;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #c8102e;
 }
 
 .checkbox-input {
-    width: 30px;
-    height: 30px;
+  width: 30px;
+  height: 30px;
 }
 
 button {
@@ -124,75 +114,74 @@ button {
 }
 
 .button-red {
-    background-color: #C8102E;
-    color: #FFFFFF;
+  background-color: #c8102e;
+  color: #ffffff;
 }
 
 .button-red:hover {
-    background-color: #FFFFFF;
-    color: #C8102E;
-    cursor: pointer;
-    transition: 0.3s;
+  background-color: #ffffff;
+  color: #c8102e;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .button-grey {
-    background-color:#FFFFFF;
-    color: #C8102E;
+  background-color: #ffffff;
+  color: #c8102e;
 }
 
 .button-grey:hover {
-    background-color: #C8102E;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
+  background-color: #c8102e;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .buttons-container {
-    margin-top: 36px;
-    float: right;
-
+  margin-top: 36px;
+  float: right;
 }
 
 .buttons-container > * {
-    display: inline-block;
-    margin: 0px 10px;
+  display: inline-block;
+  margin: 0px 10px;
 }
 
 .logo-image {
-    padding-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 .upload-button {
-    border-radius: 0.3rem;
-    outline: none;
-    height: 89px;
-    width: 215px;
-    font-size: 24px;
-    line-height: 29px;
-    font-weight: bold;
+  border-radius: 0.3rem;
+  outline: none;
+  height: 89px;
+  width: 215px;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: bold;
 }
 
 textarea {
-    width: 496px;
-    height: 134px;
-    background: rgba(194, 194, 194, 0.8);
-    padding-left: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 24px;
-    color: rgb(0,0,0);
+  width: 496px;
+  height: 134px;
+  background: rgba(194, 194, 194, 0.8);
+  padding-left: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 24px;
+  color: rgb(0, 0, 0);
 }
 
 textarea:focus {
-    border: 2px solid #C8102E;
-    outline: none;
+  border: 2px solid #c8102e;
+  outline: none;
 }
 
 .form-grid2 {
-    align-items: center;
-    padding-top: 30px;
+  align-items: center;
+  padding-top: 30px;
 }
 
 .grid-left {
-    align-items: center;
+  align-items: center;
 }

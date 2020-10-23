@@ -1,15 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
 import Home from "./pages/Home/Home";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import StudentInfo from "./components/AccountInfo/StudentInfo";
 import CompanyInfo from "./components/AccountInfo/CompanyInfo";
-import ProtectedRoute from "./components/ProtecteRoute/ProtecteRoute";
-import Profile from "./pages/Profile/Profile";
-import Projects from "./pages/Projects/Projects";
-import ProtectedDashboard from "./components/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const App = () => {
   return (
@@ -20,11 +18,9 @@ const App = () => {
         <Route path="/signup" component={Signup} />
         <Route path="/studentinfo" component={StudentInfo} />
         <Route path="/companyinfo" component={CompanyInfo} />
-        <ProtectedRoute path="/profile" component={Profile} />
-        <ProtectedRoute path="/projects" component={Projects} />
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="*" component={NotFound} />
       </Switch>
-      <ProtectedDashboard />
     </Router>
   );
 };
