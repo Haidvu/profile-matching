@@ -1,7 +1,10 @@
 import React from "react";
+import { AppBar } from '@material-ui/core'
+import ShortTextIcon from '@material-ui/icons/ShortText';
+import { makeStyles } from '@material-ui/core/styles'
 
 const CompanyProfile = () => {
-  return <div>CompanyProfile</div>;
+  
 };
 
 export default CompanyProfile;

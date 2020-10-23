@@ -114,7 +114,7 @@ select:focus {
 }
 
 button {
-    border-radius: 0.4rem;
+    border-radius: 0.3rem;
     outline: none;
     height: 55px;
     width: 215px;
@@ -163,7 +163,7 @@ button {
 }
 
 .upload-button {
-    border-radius: 0.4rem;
+    border-radius: 0.3rem;
     outline: none;
     height: 89px;
     width: 215px;
