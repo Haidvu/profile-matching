@@ -104,13 +104,13 @@ select:focus {
 }
 
 button {
-  border-radius: 0.4rem;
-  outline: none;
-  height: 55px;
-  width: 215px;
-  font-size: 30px;
-  line-height: 36px;
-  font-weight: bold;
+    border-radius: 0.3rem;
+    outline: none;
+    height: 55px;
+    width: 215px;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: bold;
 }
 
 .button-red {
@@ -152,7 +152,7 @@ button {
 }
 
 .upload-button {
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   outline: none;
   height: 89px;
   width: 215px;
