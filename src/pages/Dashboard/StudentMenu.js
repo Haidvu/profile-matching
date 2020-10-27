@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
-import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 import StarsIcon from "@material-ui/icons/Stars";
 import { Link, useRouteMatch } from "react-router-dom";
@@ -21,11 +20,6 @@ const StudentMenu = () => {
 
   const options = [
     { text: "Profile", url: `${url}`, icon: <AccountCircleRoundedIcon /> },
-    {
-      text: "My Projects",
-      url: `${url}/projects`,
-      icon: <BusinessRoundedIcon />,
-    },
     { text: "My Companies", url: `${url}/companies`, icon: <StarsIcon /> },
     {
       text: "Search",
