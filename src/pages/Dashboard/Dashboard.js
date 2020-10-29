@@ -60,8 +60,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-
   const { data } = useContext(DataContext);
+
+  //implement logout
+
+  //impletment useEffect
+  //loads profile
+  //logs out if no profile
 
   return (
     <div className={classes.root}>

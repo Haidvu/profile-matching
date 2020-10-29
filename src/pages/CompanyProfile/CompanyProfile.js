@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import {  Typography,
-  TextField,
+import {
+  Typography,
   List,
   ListItem,
   Divider,
@@ -10,21 +10,13 @@ import {  Typography,
   ListItemIcon,
   IconButton,
   Input,
-  Button
 } from "@material-ui/core";
-import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
-import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
-import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
-import ShortTextRoundedIcon from '@material-ui/icons/ShortTextRounded';
+import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
+import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
-import LanguageRoundedIcon from '@material-ui/icons/LanguageRounded';
-import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
-import DescriptionRoundedIcon from "@material-ui/icons/DescriptionRounded";
-import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
-import StarsIcon from "@material-ui/icons/Stars";
+import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-
-import { DataContext } from '../../contexts/dataContext'
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -52,45 +44,48 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#FFFFFF",
   },
   formInput: {
-      width: '50%'
-  }
+    width: "50%",
+  },
 }));
 export default function CompanyProfile() {
   const classes = useStyles();
 
-  const [profileInfo, setProfileInfo] = useState({ //This is the data
-        companyMission: '',
-        companyDescription: '',
-        companyType: '',
-        companyWebsite: '',
-        companyRep: ''
-  })
+  // const [profileInfo, setProfileInfo] = useState({
+  //   //This is the data
+  //   companyMission: "",
+  //   companyDescription: "",
+  //   companyType: "",
+  //   companyWebsite: "",
+  //   companyRep: "",
+  // });
 
-  const [profileInput, showProfileInput] = useState({ //This tells whether to show input fields. 
-      companyMission: false,
-      companyDescription: false,
-      companyType: false,
-      companyWebsite: false,
-      companyRep: false,
+  const [profileInput, showProfileInput] = useState({
+    //This tells whether to show input fields.
+    companyMission: false,
+    companyDescription: false,
+    companyType: false,
+    companyWebsite: false,
+    companyRep: false,
   });
 
   const handleOpenEdit = (name) => {
-     showProfileInput({
-         ...profileInput,
-         [name]: true
-        });
-  }
+    showProfileInput({
+      ...profileInput,
+      [name]: true,
+    });
+  };
 
   const handleCloseEdit = (name) => {
     showProfileInput({
-        ...profileInput,
-        [name]: false
-       });
-  }
+      ...profileInput,
+      [name]: false,
+    });
+  };
 
-  const handleSave = (name) => { //Make api call to save data. 
-      handleCloseEdit(name);
-  }
+  const handleSave = (name) => {
+    //Make api call to save data.
+    handleCloseEdit(name);
+  };
 
   return (
     <div>
@@ -100,180 +95,275 @@ export default function CompanyProfile() {
         src={ProfileLogo}
       ></img>
       <List>
-      <ListItem alignItems="flex-start">
+        <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <ShortTextRoundedIcon fontSize="large"/>
+            <ShortTextRoundedIcon fontSize="large" />
           </ListItemIcon>
           <ListItemText
             primary="Company Mission"
             secondary={
-                <React.Fragment>
-                    { profileInput.companyMission === false ? (<Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                    >
-                        Company Mission Info
-                    </Typography>): (
-                        <Input className={classes.formInput}></Input>
-                    )}
-                </React.Fragment>
-                }
-            />
-            { profileInput.companyMission === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyMission')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyMission')}}>
-                <ClearRoundedIcon/>
+              <React.Fragment>
+                {profileInput.companyMission === false ? (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    Company Mission Info
+                  </Typography>
+                ) : (
+                  <Input className={classes.formInput}></Input>
+                )}
+              </React.Fragment>
+            }
+          />
+          {profileInput.companyMission === false ? (
+            <IconButton
+              className={classes.icon}
+              onClick={() => {
+                handleOpenEdit("companyMission");
+              }}
+            >
+              <EditTwoToneIcon />
             </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('companyMission')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
+          ) : (
+            <>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleCloseEdit("companyMission");
+                }}
+              >
+                <ClearRoundedIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleSave("companyMission");
+                }}
+              >
+                <CheckRoundedIcon style={{ color: "green" }} />
+              </IconButton>
+            </>
+          )}
         </ListItem>
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <ShortTextRoundedIcon fontSize="large"/>
+            <ShortTextRoundedIcon fontSize="large" />
           </ListItemIcon>
           <ListItemText
             primary="Company Description"
             secondary={
-                <React.Fragment>
-                    { profileInput.companyDescription === false ? (<Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                    >
-                        Company Description Info
-                    </Typography>): (
-                        <Input className={classes.formInput}></Input>
-                    )}
-                </React.Fragment>
-                }
-            />
-            { profileInput.companyDescription === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyDescription')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyDescription')}}>
-                <ClearRoundedIcon/>
+              <React.Fragment>
+                {profileInput.companyDescription === false ? (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    Company Description Info
+                  </Typography>
+                ) : (
+                  <Input className={classes.formInput}></Input>
+                )}
+              </React.Fragment>
+            }
+          />
+          {profileInput.companyDescription === false ? (
+            <IconButton
+              className={classes.icon}
+              onClick={() => {
+                handleOpenEdit("companyDescription");
+              }}
+            >
+              <EditTwoToneIcon />
             </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('companyDescription')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
+          ) : (
+            <>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleCloseEdit("companyDescription");
+                }}
+              >
+                <ClearRoundedIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleSave("companyDescription");
+                }}
+              >
+                <CheckRoundedIcon style={{ color: "green" }} />
+              </IconButton>
+            </>
+          )}
         </ListItem>
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <BusinessRoundedIcon/>
+            <BusinessRoundedIcon />
           </ListItemIcon>
           <ListItemText
             primary="Organization Represntative"
             secondary={
-                <React.Fragment>
-                    { profileInput.companyRep === false ? (<Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                    >
-                        Name of person who created account
-                    </Typography>): (
-                        <Input className={classes.formInput}></Input>
-                    )}
-                </React.Fragment>
-                }
-            />
-            { profileInput.companyRep === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyRep')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyRep')}}>
-                <ClearRoundedIcon/>
+              <React.Fragment>
+                {profileInput.companyRep === false ? (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    Name of person who created account
+                  </Typography>
+                ) : (
+                  <Input className={classes.formInput}></Input>
+                )}
+              </React.Fragment>
+            }
+          />
+          {profileInput.companyRep === false ? (
+            <IconButton
+              className={classes.icon}
+              onClick={() => {
+                handleOpenEdit("companyRep");
+              }}
+            >
+              <EditTwoToneIcon />
             </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('companyRep')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
+          ) : (
+            <>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleCloseEdit("companyRep");
+                }}
+              >
+                <ClearRoundedIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleSave("companyRep");
+                }}
+              >
+                <CheckRoundedIcon style={{ color: "green" }} />
+              </IconButton>
+            </>
+          )}
         </ListItem>
 
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <LanguageRoundedIcon/>
+            <LanguageRoundedIcon />
           </ListItemIcon>
           <ListItemText
             primary="Website"
             secondary={
-                <React.Fragment>
-                    { profileInput.companyWebsite === false ? (<Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                    >
-                        wwww.example.com
-                    </Typography>): (
-                        <Input className={classes.formInput}></Input>
-                    )}
-                </React.Fragment>
-                }
-            />
-            { profileInput.companyWebsite === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyWebsite')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyWebsite')}}>
-                <ClearRoundedIcon/>
+              <React.Fragment>
+                {profileInput.companyWebsite === false ? (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    wwww.example.com
+                  </Typography>
+                ) : (
+                  <Input className={classes.formInput}></Input>
+                )}
+              </React.Fragment>
+            }
+          />
+          {profileInput.companyWebsite === false ? (
+            <IconButton
+              className={classes.icon}
+              onClick={() => {
+                handleOpenEdit("companyWebsite");
+              }}
+            >
+              <EditTwoToneIcon />
             </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('companyWebsite')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
+          ) : (
+            <>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleCloseEdit("companyWebsite");
+                }}
+              >
+                <ClearRoundedIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleSave("companyWebsite");
+                }}
+              >
+                <CheckRoundedIcon style={{ color: "green" }} />
+              </IconButton>
+            </>
+          )}
         </ListItem>
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <LanguageRoundedIcon/>
+            <LanguageRoundedIcon />
           </ListItemIcon>
           <ListItemText
             primary="Organization Type"
             secondary={
-                <React.Fragment>
-                    { profileInput.companyType === false ? (<Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                    >
-                        Organization Type
-                    </Typography>): (
-                        <Input className={classes.formInput}></Input>
-                    )}
-                </React.Fragment>
-                }
-            />
-            { profileInput.companyType=== false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyType')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyType')}}>
-                <ClearRoundedIcon/>
+              <React.Fragment>
+                {profileInput.companyType === false ? (
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    Organization Type
+                  </Typography>
+                ) : (
+                  <Input className={classes.formInput}></Input>
+                )}
+              </React.Fragment>
+            }
+          />
+          {profileInput.companyType === false ? (
+            <IconButton
+              className={classes.icon}
+              onClick={() => {
+                handleOpenEdit("companyType");
+              }}
+            >
+              <EditTwoToneIcon />
             </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('companyType')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
+          ) : (
+            <>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleCloseEdit("companyType");
+                }}
+              >
+                <ClearRoundedIcon />
+              </IconButton>
+              <IconButton
+                className={classes.icon}
+                onClick={() => {
+                  handleSave("companyType");
+                }}
+              >
+                <CheckRoundedIcon style={{ color: "green" }} />
+              </IconButton>
+            </>
+          )}
         </ListItem>
       </List>
     </div>

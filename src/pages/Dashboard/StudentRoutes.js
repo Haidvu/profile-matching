@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, useRouteMatch, Switch } from "react-router-dom";
-import StudentProject from "../StudentProject/StudentProject";
 import StudentProfile from "../StudentProfile/StudentProfile";
 
 const StudentRoutes = () => {
@@ -9,7 +8,6 @@ const StudentRoutes = () => {
     <div>
       <Switch>
         <Route path={path} exact component={StudentProfile} />
-        <Route path={`${path}/projects`} exact component={StudentProject} />
         {/* <Route
           path={`${path}/*`}
           render={() => (
