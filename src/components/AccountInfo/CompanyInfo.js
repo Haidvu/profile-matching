@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Grid, Typography, Container, TextField, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, Divider, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik, Form, Formik } from 'formik'
-import * as Yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -220,7 +219,6 @@ const CompanyInfo = (props) => {
                     <Select label="Organization Type" name="orgType" id="orgType">
                           <MenuItem key="Private" value="Private">Private</MenuItem>
                           <MenuItem key="nonProfit" value="nonProfit">Non-Profit</MenuItem>
-                          <MenuItem key="Private" value="Private">Private</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid >

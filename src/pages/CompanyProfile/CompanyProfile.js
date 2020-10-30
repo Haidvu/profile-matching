@@ -11,7 +11,8 @@ import {  Typography,
   IconButton,
   Input,
   Select,
-  MenuItem
+  MenuItem,
+  FormControl
 } from "@material-ui/core";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
@@ -21,6 +22,7 @@ import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import ShortTextRoundedIcon from '@material-ui/icons/ShortTextRounded';
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import LanguageRoundedIcon from '@material-ui/icons/LanguageRounded';
+import PhoneRoundedIcon from '@material-ui/icons/PhoneRounded';
 import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
 import DescriptionRoundedIcon from "@material-ui/icons/DescriptionRounded";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
@@ -58,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
     display: "flex",
     position: "relative",
+    maxHeight: '250px'
   },
   inline: {
     display: "inline",
@@ -85,14 +88,14 @@ const useStyles = makeStyles((theme) => ({
 export default function CompanyProfile() {
   const classes = useStyles();
 
-  const [profileInfo, setProfileInfo] = useState({ //This is the data
-        companyMission: '',
-        companyDescription: '',
-        companyType: '',
-        companyWebsite: '',
-        companyRep: '',
-        orgType: '',
-        industryType: ''
+  const [profileInfo, setProfileInfo] = useState({ //This is the data you get from api. 
+        companyMission: 'This is the company mission',
+        companyDescription: 'This is company Description',
+        companyType: 'Public',
+        companyWebsite: 'www.example.com',
+        companyRep: 'John Doe',
+        industryType: 'Information Technology',
+        phoneNumber: '123-456-7890'
   })
 
   const [profileInput, showProfileInput] = useState({ //This tells whether to show input fields. 
@@ -101,8 +104,8 @@ export default function CompanyProfile() {
       companyType: false,
       companyWebsite: false,
       companyRep: false,
-      orgType: false,
-      industryType: false
+      industryType: false,
+      phoneNumber: false,
   });
 
   const handleOpenEdit = (name) => {
@@ -121,6 +124,13 @@ export default function CompanyProfile() {
 
   const handleSave = (name) => { //Make api call to save data. 
       handleCloseEdit(name);
+  }
+
+  const handleChange = (e) => {
+      setProfileInfo({
+          ...profileInfo,
+          [e.target.name]: e.target.value
+      })
   }
 
   return (
@@ -145,9 +155,9 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        Company Mission Info
+                        {profileInfo.companyMission}
                     </Typography>): (
-                        <Input className={classes.formInput}></Input>
+                        <Input className={classes.formInput} value={profileInfo.companyMission} onChange={handleChange} placeholder={profileInfo.companyMission} name="companyMission"></Input>
                     )}
                 </React.Fragment>
                 }
@@ -180,9 +190,9 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        Company Description Info
+                        {profileInfo.companyDescription}
                     </Typography>): (
-                        <Input className={classes.formInput}></Input>
+                        <Input className={classes.formInput} value={profileInfo.companyDescription} onChange={handleChange} name="companyDescription"></Input>
                     )}
                 </React.Fragment>
                 }
@@ -215,9 +225,9 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        Name of person who created account
+                        {profileInfo.companyRep}
                     </Typography>): (
-                        <Input className={classes.formInput}></Input>
+                        <Input className={classes.formInput} value={profileInfo.companyRep} onChange={handleChange} name="companyRep"></Input>
                     )}
                 </React.Fragment>
                 }
@@ -251,9 +261,9 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        wwww.example.com
+                        {profileInfo.companyWebsite}
                     </Typography>): (
-                        <Input className={classes.formInput}></Input>
+                        <Input className={classes.formInput} value={profileInfo.companyWebsite} onChange={handleChange} name="companyWebsite"></Input>
                     )}
                 </React.Fragment>
                 }
@@ -286,9 +296,12 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        Organization Type
+                        {profileInfo.companyType}
                     </Typography>): (
-                        <Input className={classes.formInput}></Input>
+                        <Select value={profileInfo.companyType} name="companyType" className={classes.formInput} onChange={handleChange}>
+                            <MenuItem value="Public">Public</MenuItem>
+                            <MenuItem value="Private">Private</MenuItem>
+                        </Select>
                     )}
                 </React.Fragment>
                 }
@@ -321,9 +334,9 @@ export default function CompanyProfile() {
                         className={classes.inline}
                         color="textPrimary"
                     >
-                        Organization Type
+                        {profileInfo.industryType}
                     </Typography>) : (
-                        <Select className={classes.formInput}>
+                        <Select className={classes.formInput} value={profileInfo.industryType} onChange={handleChange} name="industryType">
                             {industryTypes.map((industryType) => (
                                 <MenuItem key={industryType} value={industryType}>{industryType}</MenuItem>
                             ))}
@@ -345,7 +358,43 @@ export default function CompanyProfile() {
             </IconButton>
             </>)}
         </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemIcon>
+            <PhoneRoundedIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Phone Number"
+            secondary={
+                <React.Fragment>
+                    { profileInput.phoneNumber === false ? (<Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                    >
+                        {profileInfo.phoneNumber}
+                    </Typography>): (
+                        <Input className={classes.formInput} value={profileInfo.phoneNumber} onChange={handleChange} name="phoneNumber"></Input>
+                    )}
+                </React.Fragment>
+                }
+            />
+            { profileInput.phoneNumber=== false ? (
+                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('phoneNumber')}}>
+                    <EditTwoToneIcon/>
+                </IconButton>
+            ) : (<>
+            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('phoneNumber')}}>
+                <ClearRoundedIcon/>
+            </IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleSave('phoneNumber')}}>
+                <CheckRoundedIcon style={{ color: 'green'}}/>
+            </IconButton>
+            </>)}
+        </ListItem>
       </List>
+      {/* <pre>{JSON.stringify(profileInfo, null, 2)}</pre> */}
     </div>
   );
 }
