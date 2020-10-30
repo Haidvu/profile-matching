@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import StudentProject from "../../components/StudentProject/StudentProject";
+import StudentProjectTimeline from "../../components/StudentProject/StudentProjectTimeline";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,6 +15,7 @@ import StarsIcon from '@material-ui/icons/Stars';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
+import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
 
 const useStyles = makeStyles((theme) => ({
   profileLogo:{
@@ -71,6 +74,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize:"small",
     background:"white",
   },
+  myProjects: {
+    fontWeight: "bold",
+    color:"#606060",
+    padding: '0 auto',
+  }
 }));
 
 export default function StudentProfile (){
@@ -437,7 +445,19 @@ export default function StudentProfile (){
             </IconButton>
             </>)}
         </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+              <ListItemIcon>
+                <HorizontalSplitIcon />
+              </ListItemIcon>
+              <ListItemText primary={
+              <Box component={'span'} className={classes.myProjects}>My Projects</Box>
+            }>
+              </ListItemText>
+        </ListItem>
       </List>
+      <StudentProject />
+      <StudentProjectTimeline />
     </div>
   );
 };

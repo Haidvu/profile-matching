@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, useRouteMatch, Switch } from "react-router-dom";
-import StudentProject from "../StudentProject/StudentProject";
+import StudentProject from "../../components/StudentProject/StudentProject";
 import StudentProfile from "../StudentProfile/StudentProfile";
 
 const StudentRoutes = () => {
