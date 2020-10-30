@@ -1,267 +1,255 @@
 import React from "react";
 import { useState } from 'react';
-import { Grid } from '@material-ui/core';
-import './AccountInfo.css'
-import CompanyInfo2 from './CompanyInfo2'
-import { useFormik } from 'formik'
+import { Grid, Typography, Container, TextField, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, Divider, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles'
+import { useFormik, Form, Formik } from 'formik'
+import * as Yup from 'yup';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: theme.spacing(7)
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(6),
+    justifyContent: 'center'
+  },
+  formControl: {
+    width: "100%"
+  },
+  checkLabel: {
+    color: theme.palette.secondary
+  },
+  submit: {
+    marginTop: theme.spacing(4),
+  },
+
+}));
 
 const CompanyInfo = (props) => {
-  const [firstStep, setFirstStep] = useState(true)
+  const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO','MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+  ]
+  const industryTypes = [
+    'Agriculture Services',
+    'Architecture/Design',
+    'Arts/Education',
+    'Business/Finance/Consulting',
+    'Construction/RealEstate',
+    'Engineering/Manufacturing',
+    'Education Services',
+    'Food Service/Hospitality/Tourism',
+    'GOvernment/Non-Profites',
+    'Healthcare/Life-Science',
+    'Information Technology',
+    'Legal',
+    'Media/Marketing/Communications',
+    'Religious Organizations',
+    'Retail/Trade/Fashion',
+    'Sports/Recreation',
+    'Utilities/Energy/Environment',
+    'UH Faculty/Staff',
+    'University Career Services',
+    'Univrsity Education Support Program (VESP)',
+    'Transportation/Logistics'
+  ]
 
+  const classes = useStyles();
+  const [firstStep, setFirstStep] = useState(true)
+  const [disable, setDisable] = useState(false);
   const initialValues = {
-    companyName: '',
-      industryType: '',
-      companyEmail: '',
-      phoneNumber: '',
-      companyAddress: '',
-      city: '',
-      state: '',
-      mailingAddress: '',
-      cityMailingAddress: '',
-      stateMailingAddress: '',
-      checkAddress: false,
-      orgRepresentative: '',
-      organizationType: '',
-      compantWebsite: '',
-      companyMission: '',
-      companyDescription: '',
-      uploadImage: ''
+    name: '',
+    industryType: '',
+    phoneNumber: '',
+    address: '',
+    city: '',
+    state: '',
+    mailingAddress: '',
+    city2: '',
+    state2: '',
+    checkedAddress: [],
+    orgRepresentative: '',
+    orgType: '',
+    website: '',
+    companyMission: '',
+    companyDescription: '',
   }
+
+  const validate = (values) => {}
 
   const onSubmit = (values) => {
-      console.log("Clicked Submit");
-      console.log(values)
-  }
-
-  const validateFirst = (values) => {
-    let errors = {}
-    if(!values.companyName) {
-      errors.companyName = 'Required'
-    }
-    if(!values.industryType) {
-      errors.industryType = 'Required'
-    }
-    if(!values.companyEmail) {
-      errors.companyEmail = 'Required'
-    } else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(values.companyEmail)) {
-      errors.companyEmail = 'Invalid Email Format'
-    }
-    return errors
+    console.log("Clicked Submit");
+    console.log(values)
   }
 
   const formik = useFormik({
     initialValues,
     onSubmit,
+    validate
   })
 
   const nextStep = () => {
-    let errors = validateFirst(formik.values);
-    console.log(errors);
-    if(Object.keys(errors).length === 0) {
-      console.log("no errors found")
-      setFirstStep(false);
-      console.log(errors);
-    }
-    else {
-      console.log("errors found")
-      console.log(errors);
-    }
+    console.log(formik.values);
+    setFirstStep(false);
   }
 
   const goBack = () => {
     setFirstStep(true);
   };
 
-  const copyCompanyAddress = (e) => {
-    if(e.target.value) {
-      formik.values.checkAddress =  true;
-      formik.values.cityMailingAddress =  formik.values.city;
-      formik.values.stateMailingAddress = formik.values.state;
+  const copyAddress = () => {
+    if(formik.values.checkedAddress[0] == 'on') {
+      setDisable(!disable);
+    }
+    else {
+      console.log("off")
+      setDisable(!disable);
     }
   }
+  
   return(
-   <div>
-      <div className= "form-container">
-      <form>
-        <div className="form-header">
-            <h2 className="form-title">Company Account Information</h2>
-            <hr style={{height: '8px', background:'rgb(0,0,0)'}}></hr>
-        </div>
-        { firstStep === true ? (
-            <div>
-                  <Grid container direction="row" justify="center" className="form-grid">
-                  {/* left part f */}
-                  <Grid container id="left" item xs={6} direction="column" spacing={2}>
-                    <Grid item> 
-                      <label htmlFor="companyName">Company name:</label>
-                      <input type="text" id="companyName" name="companyName" className="input-long" onChange={formik.handleChange} value={formik.values.companyName} placeholder="Company name"/>
-                    </Grid>
-                    <Grid item>
-                      <label htmlFor="industryType">Industry type:</label>
-                      <input type="text" id="industryType" name="industryType" className="input-long" onChange={formik.handleChange} value={formik.values.industryType} placeholder="Industry type"/>
-                    </Grid>
-                    <Grid item>
-                      <label htmlFor="companyEmail">Company Email</label>
-                      <input type="text" id="companyEmail" name="companyEmail" className="input-long" onChange={formik.handleChange} value={formik.values.companyEmail} placeholder="user@example.com"/>
-                    </Grid>
-                    <Grid item>
-                      <label htmlFor="phoneNumber">Phone number</label>
-                      <input type="text" id="phoneNumber" name="phoneNumber" className="input-short" onChange={formik.handleChange} value={formik.values.phoneNumber} placeholder="(###)-###-####"/>
-                    </Grid>
-                  </Grid>
-        
-                  {/* right part of form */}
-                  <Grid container id = "right" item xs={6} direction="column" spacing={2}>
-                    <Grid item >
-                      <label htmlFor="companyAddress">Company Address:</label>
-                      <input type="text" id="companyAddress" name="companyAddress" className="input-long" onChange={formik.handleChange} placeholder="ex: 123 Street"/>
-                    </Grid>
-                    <Grid item container direction = "row" spacing={3}>
-                      <Grid item>
-                        <label htmlFor="city">City:</label>
-                        <input type="text" id="city" name="city" className="input-short2" onChange={formik.handleChange} value={formik.values.city} placeholder="ex: Houston"/>
-                      </Grid>
-                      <Grid item>
-                      <label htmlFor="state">State:</label>
-                      <select name="state" className="input-short2" id="state" onChange={formik.handleChange} value={formik.values.state}>
-                        <option value="AL">AL</option>
-                        <option value="AK">AK</option>
-                        <option value="AZ">AZ</option>
-                        <option value="AR">AR</option>
-                        <option value="CA">CA</option>
-                        <option value="CO">CO</option>
-                        <option value="CT">CT</option>
-                        <option value="DE">DE</option>
-                        <option value="DC">DC</option>
-                        <option value="FL">FL</option>
-                        <option value="GA">GA</option>
-                        <option value="HI">HI</option>
-                        <option value="ID">ID</option>
-                        <option value="IL">IL</option>
-                        <option value="IN">IN</option>
-                        <option value="IA">IA</option>
-                        <option value="KS">KS</option>
-                        <option value="KY">KY</option>
-                        <option value="LA">LA</option>
-                        <option value="ME">ME</option>
-                        <option value="MD">MD</option>
-                        <option value="MA">MA</option>
-                        <option value="MI">MI</option>
-                        <option value="MN">MN</option>
-                        <option value="MS">MS</option>
-                        <option value="MO">MO</option>
-                        <option value="MT">MT</option>
-                        <option value="NE">NE</option>
-                        <option value="NV">NV</option>
-                        <option value="NH">NH</option>
-                        <option value="NJ">NJ</option>
-                        <option value="NM">NM</option>
-                        <option value="NY">NY</option>
-                        <option value="NC">NC</option>
-                        <option value="ND">ND</option>
-                        <option value="OH">OH</option>
-                        <option value="OK">OK</option>
-                        <option value="OR">OR</option>
-                        <option value="PA">PA</option>
-                        <option value="RI">RI</option>
-                        <option value="SC">SC</option>
-                        <option value="SD">SD</option>
-                        <option value="TN">TN</option>
-                        <option value="TX">TX</option>
-                        <option value="UT">UT</option>
-                        <option value="VT">VT</option>
-                        <option value="VA">VA</option>
-                        <option value="WA">WA</option>
-                        <option value="WV">WV</option>
-                        <option value="WI">WI</option>
-                        <option value="WY">WY</option>
-                      </select>
-                      </Grid>
-                    </Grid>
-                    <Grid item >
-                      <label htmlFor="mailingAddress">Mailing address</label>
-                      <input type="text" id="mailingAddress" name="mailingAddress" className="input-long" onChange={formik.handleChange} value={formik.values.mailingAddress} placeholder="ex) 123 Street"/>
-                      <div className="checkbox-container">
-                        <input id="checkAddress" name="checkAddress" className="checkbox-input" type="checkbox" onClick={copyCompanyAddress}/>
-                        <label htmlFor="checkAddress" className="checkbox-label">
-                          Mailing address same as company address
-                        </label>
-                      </div>
-                    </Grid>
-                    <Grid item container direction="row" spacing={3}>
-                      <Grid item >
-                          <label htmlFor="cityMailingAddress">City:</label>
-                          <input type="text" id="cityMailingAddress" name="cityMailingAddress" className="input-short2" onChange={formik.handleChange} placeholder="ex: Houston"/>
-                      </Grid>
-                      <Grid item >
-                        <label htmlFor="stateMailingAddress">State:</label>
-                          <select className="input-short2" name="stateMailingAddress" id="stateMailingAddress" onChange={formik.handleChange}>
-                          <option value="AL">AL</option>
-                          <option value="AK">AK</option>
-                          <option value="AZ">AZ</option>
-                          <option value="AR">AR</option>
-                          <option value="CA">CA</option>
-                          <option value="CO">CO</option>
-                          <option value="CT">CT</option>
-                          <option value="DE">DE</option>
-                          <option value="DC">DC</option>
-                          <option value="FL">FL</option>
-                          <option value="GA">GA</option>
-                          <option value="HI">HI</option>
-                          <option value="ID">ID</option>
-                          <option value="IL">IL</option>
-                          <option value="IN">IN</option>
-                          <option value="IA">IA</option>
-                          <option value="KS">KS</option>
-                          <option value="KY">KY</option>
-                          <option value="LA">LA</option>
-                          <option value="ME">ME</option>
-                          <option value="MD">MD</option>
-                          <option value="MA">MA</option>
-                          <option value="MI">MI</option>
-                          <option value="MN">MN</option>
-                          <option value="MS">MS</option>
-                          <option value="MO">MO</option>
-                          <option value="MT">MT</option>
-                          <option value="NE">NE</option>
-                          <option value="NV">NV</option>
-                          <option value="NH">NH</option>
-                          <option value="NJ">NJ</option>
-                          <option value="NM">NM</option>
-                          <option value="NY">NY</option>
-                          <option value="NC">NC</option>
-                          <option value="ND">ND</option>
-                          <option value="OH">OH</option>
-                          <option value="OK">OK</option>
-                          <option value="OR">OR</option>
-                          <option value="PA">PA</option>
-                          <option value="RI">RI</option>
-                          <option value="SC">SC</option>
-                          <option value="SD">SD</option>
-                          <option value="TN">TN</option>
-                          <option value="TX">TX</option>
-                          <option value="UT">UT</option>
-                          <option value="VT">VT</option>
-                          <option value="VA">VA</option>
-                          <option value="WA">WA</option>
-                          <option value="WV">WV</option>
-                          <option value="WI">WI</option>
-                          <option value="WY">WY</option>
-                          </select>
-                      </Grid>
-                    </Grid>
-                  </Grid>
+    <Container component="main" maxwidth="xs">
+      <div className={classes.root}>
+        <Typography component="h1" variant="h5">
+          Company Account Information
+        </Typography>
+        <Divider/>
+        <form className={classes.form}>
+          { firstStep === true ? (<>
+          <Grid container id="master" direction="row" justify="space-between" spacing={2} alignItems="flex-start">
+            {/* Left Grid */}
+            <Grid container item xs={6} spacing={3} direction="column">
+              <Grid item>     
+                <TextField variant="outlined" fullWidth  id="name" label="Company Name"  name="name" onChange={formik.handleChange} value={formik.values.name}/>
+              </Grid>
+              <Grid item>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel>Industry Type</InputLabel>
+                    <Select label="Industry Type" value={formik.values.industryType} onChange={formik.handleChange} name="industryType">
+                      {industryTypes.map((item) => (
+                          <MenuItem key={item} value={item}>{item}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
-                <div className="buttons-container">
-                <button className="button-red" onClick={nextStep} type='button'>Continue</button>
-              </div>
-            </div> ) : (
-              <CompanyInfo2 formik={formik} goBack={goBack}></CompanyInfo2>
-            )
-        }
-      </form>
-      </div> 
-    </div>)
+              <Grid item>
+                  <TextField variant="outlined" fullWidth id="phoneNumber" label="Phone Number" name="phoneNumber" onChange={formik.handleChange} value={formik.values.phoneNumber} />
+              </Grid>
+            </Grid>
+
+            {/* COLUMN2------------------------------------- */}
+            <Grid container item xs={6} spacing={3} direction="column">
+              <Grid item>
+                  <TextField variant="outlined" fullWidth id="address" label="Company Address" name="address" onChange={formik.handleChange} value={formik.values.address}/>
+              </Grid>
+              <Grid container item direction="row" spacing={10}>
+                <Grid item xs={6}>
+                  <TextField variant="outlined" fullWidth id="city" label="City" name="city" onChange={formik.handleChange} value={formik.values.city}/>
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel>ST</InputLabel>
+                    <Select label="State" value={formik.values.state} onChange={formik.handleChange} name="state">
+                      {states.map((state) => (
+                          <MenuItem key={state} value={state}>{state}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <TextField variant="outlined" fullWidth id="mailingAddress" label="Mailing Address" name="mailingAddress" disabled={disable} onChange={formik.handleChange} value={formik.values.mailingAddress}/>
+                <FormControlLabel className={classes.checkLabel} value="on" control={<Checkbox name="checkedAddress" color="secondary" onClick={copyAddress} onChange={formik.handleChange}/>} label="Mailing address same as company Address" labelPlacement="end"/>
+              </Grid>
+              <Grid container item direction="row" spacing={10}>
+                <Grid item xs={6}>
+                  <TextField variant="outlined" fullWidth id="city2" label="City" name="city2" disabled={disable} onChange={formik.handleChange} value={formik.values.city2}/>
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl variant="outlined" className={classes.formControl} disabled={disable}>
+                    <InputLabel>ST</InputLabel>
+                    <Select label="State" name="state2" id="state2" value={formik.values.state2} onChange={formik.handleChange} name="state2">
+                      {states.map((state) => (
+                          <MenuItem key={state} value={state}>{state}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          {/* Bottom Buttons */}
+          <Grid container justify="flex-end">
+              <Grid item>
+                <Button variant="contained" color="secondary" className={classes.submit} onClick={nextStep} size="large">Continue</Button>
+              </Grid>
+          </Grid>
+          <pre>{JSON.stringify(formik.values, null, 2)}</pre>
+          <pre>{JSON.stringify(disable, null, 2)}</pre>
+          </>) : (
+          <>
+          <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
+            {/* left part of form  */} 
+            {/* <Grid container item xs={4} irection="column" className="grid-left"
+            >
+              <Grid item>
+                <label>Company Logo</label>
+              </Grid>
+              <Grid item>
+                <img className="logo-image" src={logo} alt="Logo" />
+              </Grid>
+              <Grid item>
+                <button className="button-red upload-button">
+                  Upload Image
+                </button>
+              </Grid>
+            </Grid> */}
+
+            {/* middle part of form */}
+            <Grid container item xs={6} item direction="column" spacing={3}>
+                <Grid item>
+                  <TextField variant="outlined"  fullWidth id="orgRep" label="Organization Representative" name="orgRep"/>
+                </Grid >
+                <Grid item xs={4}>
+                  <FormControl variant="outlined" className={classes.formControl} disabled={disable} >
+                    <InputLabel>ST</InputLabel>
+                    <Select label="Organization Type" name="orgType" id="orgType">
+                          <MenuItem key="Private" value="Private">Private</MenuItem>
+                          <MenuItem key="nonProfit" value="nonProfit">Non-Profit</MenuItem>
+                          <MenuItem key="Private" value="Private">Private</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid >
+                <Grid item>
+                  <TextField variant="outlined"  fullWidth id="website" label="Company Website" name="website" placeholder="wwww.example.com"/>
+                </Grid >
+            </Grid>
+            {/* Right part */}
+            <Grid container item xs={6} direction="column" spacing={3}>
+              <Grid item>
+                <TextField variant="outlined" multiline rows={5}  fullWidth id="companyMission" label="Company Mission" name="companyMission"/>
+              </Grid >
+              <Grid item>
+              <TextField variant="outlined" multiline rows={5}  fullWidth id="companyDescription" label="Company Description" name="companyDescription"/>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container justify="flex-end" spacing={3}>
+              <Grid item>
+                <Button variant="outlined" color="secondary" className={classes.submit} onClick={goBack} size="large">Go Back</Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" color="secondary" className={classes.submit} size="large" type="submit">Submit</Button>
+              </Grid>
+          </Grid>
+        </>)}
+        </form>
+      </div>
+    </Container> )
   };
 
 export default CompanyInfo;

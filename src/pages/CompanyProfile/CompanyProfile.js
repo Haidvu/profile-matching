@@ -10,9 +10,12 @@ import {  Typography,
   ListItemIcon,
   IconButton,
   Input,
-  Button
+  Select,
+  MenuItem
 } from "@material-ui/core";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
+import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
+import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import ShortTextRoundedIcon from '@material-ui/icons/ShortTextRounded';
@@ -25,6 +28,30 @@ import StarsIcon from "@material-ui/icons/Stars";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 
 import { DataContext } from '../../contexts/dataContext'
+
+const industryTypes = [
+    'Agriculture Services',
+    'Architecture/Design',
+    'Arts/Education',
+    'Business/Finance/Consulting',
+    'Construction/RealEstate',
+    'Engineering/Manufacturing',
+    'Education Services',
+    'Food Service/Hospitality/Tourism',
+    'Government/Non-Profites',
+    'Healthcare/Life-Science',
+    'Information Technology',
+    'Legal',
+    'Media/Marketing/Communications',
+    'Religious Organizations',
+    'Retail/Trade/Fashion',
+    'Sports/Recreation',
+    'Utilities/Energy/Environment',
+    'UH Faculty/Staff',
+    'University Career Services',
+    'Univrsity Education Support Program (VESP)',
+    'Transportation/Logistics'
+]
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -63,7 +90,9 @@ export default function CompanyProfile() {
         companyDescription: '',
         companyType: '',
         companyWebsite: '',
-        companyRep: ''
+        companyRep: '',
+        orgType: '',
+        industryType: ''
   })
 
   const [profileInput, showProfileInput] = useState({ //This tells whether to show input fields. 
@@ -72,6 +101,8 @@ export default function CompanyProfile() {
       companyType: false,
       companyWebsite: false,
       companyRep: false,
+      orgType: false,
+      industryType: false
   });
 
   const handleOpenEdit = (name) => {
@@ -172,7 +203,7 @@ export default function CompanyProfile() {
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemIcon>
-            <BusinessRoundedIcon/>
+            <PersonRoundedIcon/>
           </ListItemIcon>
           <ListItemText
             primary="Organization Represntative"
@@ -271,6 +302,45 @@ export default function CompanyProfile() {
                 <ClearRoundedIcon/>
             </IconButton>
             <IconButton className={classes.icon} onClick={() => {handleSave('companyType')}}>
+                <CheckRoundedIcon style={{ color: 'green'}}/>
+            </IconButton>
+            </>)}
+        </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemIcon>
+            <WorkRoundedIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Industry Type"
+            secondary={
+                <React.Fragment>
+                    { profileInput.industryType === false ? (<Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                    >
+                        Organization Type
+                    </Typography>) : (
+                        <Select className={classes.formInput}>
+                            {industryTypes.map((industryType) => (
+                                <MenuItem key={industryType} value={industryType}>{industryType}</MenuItem>
+                            ))}
+                        </Select>
+                    )}
+                </React.Fragment>
+                }
+            />
+            { profileInput.industryType=== false ? (
+                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('industryType')}}>
+                    <EditTwoToneIcon/>
+                </IconButton>
+            ) : (<>
+            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('industryType')}}>
+                <ClearRoundedIcon/>
+            </IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleSave('industryType')}}>
                 <CheckRoundedIcon style={{ color: 'green'}}/>
             </IconButton>
             </>)}
