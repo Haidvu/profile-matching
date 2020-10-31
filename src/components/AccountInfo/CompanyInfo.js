@@ -153,7 +153,7 @@ const CompanyInfo = () => {
           { firstStep === true ? (<>
           <Grid container id="master" direction="row" justify="space-between" spacing={2} alignItems="flex-start">
             {/* Left Grid */}
-            <Grid container item xs={6} spacing={3} direction="column">
+            <Grid container id="first-left" item xs={6} spacing={3} direction="column">
               <Grid item>     
                 <TextField variant="outlined" fullWidth  id="name" label="Company Name"  name="name" onChange={formik.handleChange} value={formik.values.name}/>
               </Grid>
@@ -182,11 +182,11 @@ const CompanyInfo = () => {
             </Grid>
 
             {/* COLUMN2------------------------------------- */}
-            <Grid container item xs={6} spacing={3} direction="column">
+            <Grid container id="first-right" item xs={6} spacing={3} direction="column">
               <Grid item>
                   <TextField variant="outlined" fullWidth id="address" label="Company Address" name="address" onChange={formik.handleChange} value={formik.values.address}/>
               </Grid>
-              <Grid container item direction="row" spacing={10}>
+              <Grid container id="address-container-1" item direction="row" spacing={10}>
                 <Grid item xs={6}>
                   <TextField variant="outlined" fullWidth id="city" label="City" name="city" onChange={formik.handleChange} value={formik.values.city}/>
                 </Grid>
@@ -205,7 +205,7 @@ const CompanyInfo = () => {
                 <TextField variant="outlined" fullWidth id="mailingAddress" label="Mailing Address" name="mailingAddress" disabled={disable} onChange={formik.handleChange} value={formik.values.mailingAddress}/>
                 <FormControlLabel className={classes.checkLabel} value="true" control={<Checkbox name="checkedAddress" color="secondary" onClick={checkMailingAddress} onChange={formik.handleChange}/>} label="Mailing address same as company Address" labelPlacement="end"/>
               </Grid>
-              <Grid container item direction="row" spacing={10}>
+              <Grid container id="address-container-2" item direction="row" spacing={10}>
                 <Grid item xs={6}>
                   <TextField variant="outlined" fullWidth id="city2" label="City" name="city2" disabled={disable} onChange={formik.handleChange} value={formik.values.city2}/>
                 </Grid>
@@ -224,7 +224,7 @@ const CompanyInfo = () => {
           </Grid>
 
           {/* Bottom Buttons */}
-          <Grid container justify="flex-end">
+          <Grid container id="first-continer-buttons" justify="flex-end">
               <Grid item>
                 <Button variant="contained" color="secondary" className={classes.submit} onClick={nextStep} size="large">Continue</Button>
               </Grid>
@@ -232,24 +232,8 @@ const CompanyInfo = () => {
           </>) : (
           <>
           <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
-            {/* left part of form  */} 
-            {/* <Grid container item xs={4} irection="column" className="grid-left"
-            >
-              <Grid item>
-                <label>Company Logo</label>
-              </Grid>
-              <Grid item>
-                <img className="logo-image" src={logo} alt="Logo" />
-              </Grid>
-              <Grid item>
-                <button className="button-red upload-button">
-                  Upload Image
-                </button>
-              </Grid>
-            </Grid> */}
-
-            {/* middle part of form */}
-            <Grid container item xs={6} item direction="column" spacing={3}>
+            {/* Left part of form */}
+            <Grid container id="second-left" item xs={6} item direction="column" spacing={3}>
                 <Grid item>
                   <TextField variant="outlined"  fullWidth id="companyRep" label="Organization Representative" name="companyRep" onChange={formik.handleChange} value={formik.values.companyRep}/>
                 </Grid >
@@ -267,8 +251,9 @@ const CompanyInfo = () => {
                   <TextField variant="outlined"  fullWidth id="website" label="Company Website" name="website" placeholder="wwww.example.com" onChange={formik.handleChange} value={formik.values.website}/>
                 </Grid >
             </Grid>
+
             {/* Right part */}
-            <Grid container item xs={6} direction="column" spacing={3}>
+            <Grid container id="second-right" item xs={6} direction="column" spacing={3}>
               <Grid item>
                 <TextField variant="outlined" multiline rows={5}  fullWidth id="mission" label="Company Mission" name="mission" onChange={formik.handleChange} value={formik.values.mission}/>
               </Grid >
@@ -277,7 +262,8 @@ const CompanyInfo = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid container justify="flex-end" spacing={3}>
+
+          <Grid container id="buttons-container" justify="flex-end" spacing={3}>
               <Grid item>
                 <Button variant="outlined" color="secondary" className={classes.submit} onClick={goBack} size="large">Go Back</Button>
               </Grid>
