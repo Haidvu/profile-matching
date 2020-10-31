@@ -23,6 +23,7 @@ import ShortTextRoundedIcon from '@material-ui/icons/ShortTextRounded';
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import LanguageRoundedIcon from '@material-ui/icons/LanguageRounded';
 import PhoneRoundedIcon from '@material-ui/icons/PhoneRounded';
+import LocationOnRoundedIcon from '@material-ui/icons/LocationOnRounded';
 import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
 import DescriptionRoundedIcon from "@material-ui/icons/DescriptionRounded";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
@@ -83,10 +84,16 @@ const useStyles = makeStyles((theme) => ({
   },
   formInput: {
       width: '50%'
+  },
+  formInput2: {
+      width: '20%',
+      marginRight: '30px'
   }
 }));
 export default function CompanyProfile() {
   const classes = useStyles();
+  const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO','MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+  ]
 
   const [profileInfo, setProfileInfo] = useState({ //This is the data you get from api. 
         companyMission: 'This is the company mission',
@@ -95,7 +102,13 @@ export default function CompanyProfile() {
         companyWebsite: 'www.example.com',
         companyRep: 'John Doe',
         industryType: 'Information Technology',
-        phoneNumber: '123-456-7890'
+        phoneNumber: '123-456-7890',
+        companyAddress: '123 Main St',
+        city: 'Houston',
+        state: 'TX',
+        mailingAddress: '456 Houston Ave',
+        city2: 'New York',
+        state2: 'NY'
   })
 
   const [profileInput, showProfileInput] = useState({ //This tells whether to show input fields. 
@@ -106,6 +119,8 @@ export default function CompanyProfile() {
       companyRep: false,
       industryType: false,
       phoneNumber: false,
+      companyAddress: false,
+      mailingAddress: false
   });
 
   const handleOpenEdit = (name) => {
@@ -123,7 +138,11 @@ export default function CompanyProfile() {
   }
 
   const handleSave = (name) => { //Make api call to save data. 
-      handleCloseEdit(name);
+    if(name === 'companyAddress' || name === 'mailingAddress') {
+        //Test if all 3 fields are filled,
+        //else don't close and show error mesasge. 
+    }
+    handleCloseEdit(name);
   }
 
   const handleChange = (e) => {
@@ -393,8 +412,94 @@ export default function CompanyProfile() {
             </IconButton>
             </>)}
         </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemIcon>
+            <LocationOnRoundedIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Company Address"
+            secondary={
+                <React.Fragment>
+                    { profileInput.companyAddress === false ? (<Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                    >
+                        {`${profileInfo.companyAddress},  ${profileInfo.city} ${profileInfo.state}`}
+                    </Typography>): (
+                        <>
+                        <Input className={classes.formInput2} value={profileInfo.companyAddress} onChange={handleChange} name="companyAddress" placeholder="Street Address"></Input>
+                        <Input className={classes.formInput2} value={profileInfo.city} onChange={handleChange} name="city" placeholder="City"></Input>
+                        <Select className={classes.formInput2} label="State" value={profileInfo.state} onChange={handleChange} name="state" placeholder="state">
+                            {states.map((state) => (
+                                <MenuItem key={state} value={state}>{state}</MenuItem>
+                            ))}
+                        </Select>
+                        </>
+                    )}
+                </React.Fragment>
+                }
+            />
+            { profileInput.companyAddress=== false ? (
+                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('companyAddress')}}>
+                    <EditTwoToneIcon/>
+                </IconButton>
+            ) : (<>
+            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('companyAddress')}}>
+                <ClearRoundedIcon/>
+            </IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleSave('companyAddress')}}>
+                <CheckRoundedIcon style={{ color: 'green'}}/>
+            </IconButton>
+            </>)}
+        </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemIcon>
+            <LocationOnRoundedIcon/>
+          </ListItemIcon>
+          <ListItemText
+            primary="Mailing Address"
+            secondary={
+                <React.Fragment>
+                    { profileInput.mailingAddress === false ? (<Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                    >
+                        {`${profileInfo.mailingAddress},  ${profileInfo.city2} ${profileInfo.state2}`}
+                    </Typography>): (
+                        <>
+                        <Input className={classes.formInput2} value={profileInfo.mailingAddress} onChange={handleChange} name="mailingAddress" placeholder="Street Address"></Input>
+                        <Input className={classes.formInput2} value={profileInfo.city2} onChange={handleChange} name="city2" placeholder="City"></Input>
+                        <Select className={classes.formInput2} label="State" value={profileInfo.state2} onChange={handleChange} name="state2" placeholder="State">
+                            {states.map((state) => (
+                                <MenuItem key={state} value={state}>{state}</MenuItem>
+                            ))}
+                        </Select>
+                        </>
+                    )}
+                </React.Fragment>
+                }
+            />
+            { profileInput.mailingAddress=== false ? (
+                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('mailingAddress')}}>
+                    <EditTwoToneIcon/>
+                </IconButton>
+            ) : (<>
+            <IconButton className={classes.icon} onClick={() => {handleCloseEdit('mailingAddress')}}>
+                <ClearRoundedIcon/>
+            </IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleSave('mailingAddress')}}>
+                <CheckRoundedIcon style={{ color: 'green'}}/>
+            </IconButton>
+            </>)}
+        </ListItem>
       </List>
-      {/* <pre>{JSON.stringify(profileInfo, null, 2)}</pre> */}
+      <pre>{JSON.stringify(profileInfo, null, 2)}</pre>
     </div>
   );
 }
