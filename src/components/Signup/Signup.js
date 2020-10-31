@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+
+import React, { useContext, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -6,6 +7,7 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
+import Alert from "@material-ui/lab/Alert";
 import {
   Button,
   FormControl,
@@ -17,6 +19,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { DataContext } from '../../contexts/dataContext'
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,17 +40,60 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     marginBottom: theme.spacing(2),
   },
+  alert: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export default function SignUp() {
   const classes = useStyles();
+  const [signUpInfo, setSignUpInfo] = useState({
+    email: "",
+    role_id: "",
+    password1: "",
+    password2: "",
+  });
 
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setSignUpInfo({ ...signUpInfo, [e.target.name]: e.target.value });
+  };
+
+  let history = useHistory();
   const signUp = (e) => {
+    setError("");
+    axios
+      .post("http://18.213.74.196:8000/api/user_accounts/signup", signUpInfo)
+      .then((res) => {
+        if (res.data.error) {
+          setError(res.data.error);
+        } else {
+          //authenticate again after the user is created
+          const email = signUpInfo.email;
+          const password = signUpInfo.password1;
+          axios
+            .post("http://18.213.74.196:8000/api/token/", { email, password })
+            .then((res) => {
+              localStorage.setItem("token", res.data.access);
+              localStorage.setItem("role_id", res.data.role_id);
+              localStorage.setItem("email_id", res.data.email_id);
+              history.push("/accountInfo");
+            });
+        }
+      })
+      .catch((err) => console.log(err));
+
     e.preventDefault();
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      {error ? (
+        <Alert className={classes.alert} variant="filled" severity="error">
+          {error}
+        </Alert>
+      ) : null}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -66,6 +113,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -73,15 +121,12 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
+                name="password1"
                 label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                // placeholder="passwardo"
-                // InputLabelProps={{
-                //   shrink: true,
-                // }}
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -94,6 +139,7 @@ export default function SignUp() {
                 type="password"
                 id="confirm-password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -102,17 +148,18 @@ export default function SignUp() {
                 <RadioGroup
                   className={classes.radio}
                   aria-label="account_type"
-                  name="account_type"
+                  name="role_id"
                   row
                   color="secondary"
+                  onChange={handleChange}
                 >
                   <FormControlLabel
-                    value="Student"
+                    value="0"
                     control={<Radio />}
                     label="Student"
                   />
                   <FormControlLabel
-                    value="Company"
+                    value="1"
                     control={<Radio />}
                     label="Company"
                   />
