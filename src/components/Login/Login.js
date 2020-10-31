@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -76,7 +76,14 @@ function Login() {
       .catch((err) => console.log(err));
   };
 
-  //add useEffect to redirect login if the user is already has token
+  //redirect to dashboard if the user already has a token
+  useEffect(() => {
+    if (localStorage.getItem("token") && localStorage.getItem("slug")) {
+      history.push("/dashboard");
+    }
+  }, [history]);
+
+  //add token error indicators
 
   return (
     <>

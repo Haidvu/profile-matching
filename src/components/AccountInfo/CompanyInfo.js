@@ -6,10 +6,10 @@ import CompanyInfo2 from "./CompanyInfo2";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+// import { config } from "../../authConfig";
 
 const CompanyInfo = (props) => {
   const [firstStep, setFirstStep] = useState(true);
-  const token = localStorage.getItem("token");
   let history = useHistory();
 
   const initialValues = {
@@ -58,17 +58,11 @@ const CompanyInfo = (props) => {
       username: localStorage.getItem("email_id"),
     };
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
     axios
       .post(
         "http://18.213.74.196:8000/api/company_profile/create",
-        data,
-        config
+        data
+        //config
       )
       .then((res) => {
         localStorage.setItem("slug", res.data.slug);
