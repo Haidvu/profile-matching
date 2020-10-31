@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,6 +20,9 @@ import StudentRoutes from "./StudentRoutes";
 import StudentMenu from "./StudentMenu";
 import CompanyRoutes from "./CompanyRoutes";
 import CompanyMenu from "./CompanyMenu";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { getConfig } from "../../authConfig";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -59,9 +62,66 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+  const { data, dispatch } = useContext(DataContext);
   const classes = useStyles();
+  const slug = localStorage.getItem("slug");
+  const role_id = localStorage.getItem("role_id");
+  let history = useHistory();
 
-  const { data } = useContext(DataContext);
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("slug");
+    localStorage.removeItem("role_id");
+    localStorage.removeItem("email_id");
+    history.push("/login");
+  };
+
+  useEffect(() => {
+    if (slug) {
+      const url =
+        role_id === "0"
+          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
+          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
+
+      axios
+        .get(url, getConfig())
+        .then((res) => {
+          dispatch({ type: "SET_PROFILE", payload: res.data });
+        })
+        .catch((err) => {
+          // to prevent user from changing their roles
+          // would keep commented while in developement
+          // console.log(err.response);
+          // if (err.response.status === 404) {
+          //   logout();
+          // }
+        });
+    }
+  }, [role_id, slug, dispatch]);
+
+  const userOptions = () => {
+    switch (role_id) {
+      case "0":
+        return {
+          name: data.profile.full_name,
+          menu: <StudentMenu />,
+          routes: <StudentRoutes />,
+        };
+      case "1":
+        return {
+          name: data.profile.company_name,
+          menu: <CompanyMenu />,
+          routes: <CompanyRoutes />,
+        };
+      default: {
+        logout();
+        return null;
+      }
+    }
+  };
+
+  //TODO
+  //logs out if no profile found 404
 
   return (
     <div className={classes.root}>
@@ -73,7 +133,9 @@ export default function Dashboard() {
             color="inherit"
             className={classes.rightToolbar}
           />
-          <Typography p={2}>Name</Typography>
+          <Typography p={2}>{`Welcome! ${
+            userOptions() ? userOptions().name : ""
+          }`}</Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -84,10 +146,10 @@ export default function Dashboard() {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {data.userType === "student" ? <StudentMenu /> : <CompanyMenu />}
+            {userOptions() ? userOptions().menu : null}
 
-            <Link to="/" className={classes.link}>
-              <ListItem>
+            <Link to="/login" className={classes.link}>
+              <ListItem onClick={logout}>
                 <ListItemIcon>
                   <ExitToAppRoundedIcon />
                 </ListItemIcon>
@@ -100,7 +162,7 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        {data.userType === "student" ? <StudentRoutes /> : <CompanyRoutes />}
+        {userOptions() ? userOptions().routes : null}
       </main>
     </div>
   );
