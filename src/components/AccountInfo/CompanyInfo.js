@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from 'react';
 import { Grid, Typography, Container, TextField, Select, MenuItem, InputLabel, FormControl, FormControlLabel, Checkbox, Divider, Button, RadioGroup, Radio } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik } from 'formik'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
+import { getConfig } from '../../authConfig'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +60,6 @@ const CompanyInfo = () => {
 
   let history = useHistory();
 
-  const history = useHistory();
   const classes = useStyles();
   const [firstStep, setFirstStep] = useState(true);
   const [disable, setDisable] = useState(false);
@@ -113,6 +113,7 @@ const CompanyInfo = () => {
       .post(
         "http://18.213.74.196:8000/api/company_profile/create",
         data,
+        getConfig()
       )
       .then((res) => {
         localStorage.setItem("slug", res.data.slug);
@@ -151,7 +152,7 @@ const CompanyInfo = () => {
         </Typography>
         <Divider/>
         <form className={classes.form} onSubmit={formik.handleSubmit}>
-          { firstStep === true ? (
+          { firstStep === true ? (<>
             <Grid container id="master" direction="row" justify="space-between" spacing={2} alignItems="flex-start">
               {/* Left Grid */}
               <Grid container id="first-left" item xs={6} spacing={3} direction="column">
@@ -221,54 +222,58 @@ const CompanyInfo = () => {
                     </FormControl>
                   </Grid>
                 </Grid>
-
+              </Grid>
+            </Grid>
             {/* Bottom Buttons */}
             <Grid container id="first-continer-buttons" justify="flex-end">
                 <Grid item>
                   <Button variant="contained" color="secondary" className={classes.submit} onClick={nextStep} size="large">Continue</Button>
                 </Grid>
             </Grid>
+            </>
           ) : (
-          <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
-            {/* Left part of form */}
-            <Grid container id="second-left" item xs={6} item direction="column" spacing={3}>
+          <>
+            <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
+              {/* Left part of form */}
+              <Grid container item id="second-left" item xs={6} item direction="column" spacing={3}>
+                  <Grid item>
+                    <TextField variant="outlined"  fullWidth id="companyRep" label="Organization Representative" name="companyRep" onChange={formik.handleChange} value={formik.values.companyRep}/>
+                  </Grid >
+                  <Grid item xs={4}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                      <InputLabel>Organization Type</InputLabel>
+                      <Select label="Organization Type" name="companyType" id="companyType" onChange={formik.handleChange} value={formik.values.companyType}>
+                            <MenuItem value="1">Private</MenuItem>
+                            <MenuItem value="2">Non-Profit</MenuItem>
+                            <MenuItem value="0">Social Business</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid >
+                  <Grid item>
+                    <TextField variant="outlined"  fullWidth id="website" label="Company Website" name="website" placeholder="wwww.example.com" onChange={formik.handleChange} value={formik.values.website}/>
+                  </Grid >
+              </Grid>
+
+              {/* Right part */}
+              <Grid container item id="second-right" item xs={6} direction="column" spacing={3}>
                 <Grid item>
-                  <TextField variant="outlined"  fullWidth id="companyRep" label="Organization Representative" name="companyRep" onChange={formik.handleChange} value={formik.values.companyRep}/>
-                </Grid >
-                <Grid item xs={4}>
-                  <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel>Organization Type</InputLabel>
-                    <Select label="Organization Type" name="companyType" id="companyType" onChange={formik.handleChange} value={formik.values.companyType}>
-                          <MenuItem value="1">Private</MenuItem>
-                          <MenuItem value="2">Non-Profit</MenuItem>
-                          <MenuItem value="0">Social Business</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <TextField variant="outlined" multiline rows={5}  fullWidth id="mission" label="Company Mission" name="mission" onChange={formik.handleChange} value={formik.values.mission}/>
                 </Grid >
                 <Grid item>
-                  <TextField variant="outlined"  fullWidth id="website" label="Company Website" name="website" placeholder="wwww.example.com" onChange={formik.handleChange} value={formik.values.website}/>
-                </Grid >
+                  <TextField variant="outlined" multiline rows={5}  fullWidth id="description" label="Company Description" name="description" onChange={formik.handleChange} value={formik.values.description}/>
+                </Grid>
+              </Grid>
             </Grid>
 
-            {/* Right part */}
-            <Grid container id="second-right" item xs={6} direction="column" spacing={3}>
-              <Grid item>
-                <TextField variant="outlined" multiline rows={5}  fullWidth id="mission" label="Company Mission" name="mission" onChange={formik.handleChange} value={formik.values.mission}/>
-              </Grid >
-              <Grid item>
-                <TextField variant="outlined" multiline rows={5}  fullWidth id="description" label="Company Description" name="description" onChange={formik.handleChange} value={formik.values.description}/>
-              </Grid>
+            <Grid container id="buttons-container" justify="flex-end" spacing={3}>
+                <Grid item>
+                  <Button variant="outlined" color="secondary" className={classes.submit} onClick={goBack} size="large">Go Back</Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color="secondary" className={classes.submit} size="large" type="submit">Submit</Button>
+                </Grid>
             </Grid>
-          </Grid>
-
-          <Grid container id="buttons-container" justify="flex-end" spacing={3}>
-              <Grid item>
-                <Button variant="outlined" color="secondary" className={classes.submit} onClick={goBack} size="large">Go Back</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" color="secondary" className={classes.submit} size="large" type="submit">Submit</Button>
-              </Grid>
-          </Grid>
+          </>
           )}
         </form>
       </div>
