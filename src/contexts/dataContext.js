@@ -3,7 +3,9 @@ import { dataReducer } from "../reducers/dataReducer";
 
 export const DataContext = createContext();
 
-const initialState = { userType: "company" };
+const initialState = {
+  profile: {},
+};
 
 const DataContextProvider = (props) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);

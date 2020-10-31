@@ -1,8 +1,7 @@
 export const dataReducer = (state, action) => {
   switch (action.type) {
-    case "TEST":
-      return { ...state };
-
+    case "SET_PROFILE":
+      return { ...state, profile: action.playload };
     default:
       return state;
   }

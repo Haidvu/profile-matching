@@ -80,10 +80,35 @@ const CompanyInfo = (props) => {
   const validate = (values) => {}
 
   const onSubmit = (values) => {
-    console.log("Clicked Submit");
-    console.log(values)
-  }
+    const data = {
+      company_name: values.companyName,
+      company_phone_no: values.phoneNumber,
+      industry_type: values.industryType,
+      representative_name: values.orgRepresentative,
+      company_representative_type: 1,
+      company_type: 1,
+      company_address: getAddress(values),
+      mailing_address: values.checkAddress
+        ? getAddress(values)
+        : getMailingAddress(values),
+      company_website: values.companyWebsite,
+      company_mission: values.companyMission,
+      company_description: values.companyDescription,
+      username: localStorage.getItem("email_id"),
+    };
 
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/company_profile/create",
+        data
+        //config
+      )
+      .then((res) => {
+        localStorage.setItem("slug", res.data.slug);
+        history.push("/dashboard");
+      })
+      .catch((err) => console.log(err));
+  };
   const formik = useFormik({
     initialValues,
     onSubmit,

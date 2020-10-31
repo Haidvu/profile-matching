@@ -9,7 +9,6 @@ const StudentRoutes = () => {
     <div>
       <Switch>
         <Route path={path} exact component={StudentProfile} />
-        <Route path={`${path}/projects`} exact component={StudentProject} />
         {/* <Route
           path={`${path}/*`}
           render={() => (
