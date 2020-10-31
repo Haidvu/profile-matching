@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import loginbackground from "../../assets/LoginBackground.jpg";
 import { useHistory } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,11 +40,16 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  loginAlert: {
+    width: "100%",
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 function Login() {
   const classes = useStyles();
   let history = useHistory();
+  const [error, setError] = useState("");
 
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -73,7 +79,12 @@ function Login() {
           history.push("/accountInfo");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(
+          err.response.data.detail +
+            ". Make sure your email and password is correct."
+        );
+      });
   };
 
   //redirect to dashboard if the user already has a token
@@ -83,8 +94,6 @@ function Login() {
     }
   }, [history]);
 
-  //add token error indicators
-
   return (
     <>
       <Grid container component="main" className={classes.root}>
@@ -92,6 +101,15 @@ function Login() {
         <Grid item xs={false} sm={4} md={7} className={classes.image} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
+            {error ? (
+              <Alert
+                className={classes.loginAlert}
+                variant="filled"
+                severity="error"
+              >
+                {error}
+              </Alert>
+            ) : null}
             <Avatar className={classes.avatar}>
               <LockOutlinedIcon />
             </Avatar>
