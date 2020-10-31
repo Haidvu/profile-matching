@@ -77,37 +77,39 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (role_id === "0") {
+    if (slug) {
+      const url =
+        role_id === "0"
+          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
+          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
+
       axios
-        .get(
-          `http://18.213.74.196:8000/api/student_profile/${slug}`,
-          getConfig()
-        )
+        .get(url, getConfig())
         .then((res) => {
-          console.log(res.data);
-          dispatch("SET_PROFILE");
+          dispatch({ type: "SET_PROFILE", payload: res.data });
         })
-        .catch((err) => console.log(err));
-    } else if (role_id === "1") {
-      axios
-        .get(
-          `http://18.213.74.196:8000/api/company_profile/${slug}`,
-          getConfig()
-        )
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // to prevent user from changing their roles
+          // would keep commented while in developement
+          // console.log(err.response);
+          // if (err.response.status === 404) {
+          //   logout();
+          // }
+        });
     }
-  }, [role_id, slug]);
+  }, [role_id, slug, dispatch]);
 
   const userOptions = () => {
     switch (role_id) {
       case "0":
         return {
+          name: data.profile.full_name,
           menu: <StudentMenu />,
           routes: <StudentRoutes />,
         };
       case "1":
         return {
+          name: data.profile.company_name,
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
@@ -120,8 +122,6 @@ export default function Dashboard() {
 
   //TODO
   //logs out if no profile found 404
-  //SET_PROFILE
-  //ERROS on login
 
   return (
     <div className={classes.root}>
@@ -133,7 +133,9 @@ export default function Dashboard() {
             color="inherit"
             className={classes.rightToolbar}
           />
-          <Typography p={2}>Name</Typography>
+          <Typography p={2}>{`Welcome! ${
+            userOptions() ? userOptions().name : ""
+          }`}</Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -146,7 +148,7 @@ export default function Dashboard() {
           <List>
             {userOptions() ? userOptions().menu : null}
 
-            <Link className={classes.link}>
+            <Link to="/login" className={classes.link}>
               <ListItem onClick={logout}>
                 <ListItemIcon>
                   <ExitToAppRoundedIcon />
