@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import {  Typography,
-  TextField,
   List,
   ListItem,
   Divider,
@@ -12,25 +11,16 @@ import {  Typography,
   Input,
   Select,
   MenuItem,
-  FormControl
 } from "@material-ui/core";
-import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 import WorkRoundedIcon from '@material-ui/icons/WorkRounded';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import ShortTextRoundedIcon from '@material-ui/icons/ShortTextRounded';
-import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import LanguageRoundedIcon from '@material-ui/icons/LanguageRounded';
 import PhoneRoundedIcon from '@material-ui/icons/PhoneRounded';
 import LocationOnRoundedIcon from '@material-ui/icons/LocationOnRounded';
-import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
-import DescriptionRoundedIcon from "@material-ui/icons/DescriptionRounded";
-import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
-import StarsIcon from "@material-ui/icons/Stars";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-
-import { DataContext } from '../../contexts/dataContext'
 
 const industryTypes = [
     'Agriculture Services',
