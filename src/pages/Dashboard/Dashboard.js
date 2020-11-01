@@ -141,8 +141,7 @@ export default function Dashboard() {
       <Drawer
         className={classes.drawer}
         variant="permanent"
-        classes={{ paper: classes.drawerPaper }}
-      >
+        classes={{ paper: classes.drawerPaper }}>
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
