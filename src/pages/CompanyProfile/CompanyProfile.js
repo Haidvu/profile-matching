@@ -942,6 +942,7 @@ export default function CompanyProfile() {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             required
+            type="password"
             className={classes.dialogInput}
           />
         </DialogContent>
