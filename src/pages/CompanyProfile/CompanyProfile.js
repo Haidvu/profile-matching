@@ -955,7 +955,6 @@ export default function CompanyProfile() {
           </Button>
         </DialogActions>
       </Dialog>
-      <pre>{JSON.stringify(profileInfo, null, 2)}</pre>
     </div>
   );
 }
