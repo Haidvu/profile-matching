@@ -13,11 +13,13 @@ import {
   Checkbox,
   Divider,
   Button,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useFormik, Form, Formik } from "formik";
-import axios from "axios";
+import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 import { getConfig } from "../../authConfig";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +47,59 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CompanyInfo = () => {
-  const states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO','MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-  ]
+  const states = [
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CO",
+    "CT",
+    "DE",
+    "DC",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+  ];
   const industryTypes = [
     "Agriculture Services",
     "Architecture/Design",
@@ -55,19 +108,20 @@ const CompanyInfo = () => {
     "Construction/RealEstate",
     "Engineering/Manufacturing",
     "Education Services",
-    "Food Service/Hospitality/Tourism",
+    "Food Service",
+    "Hospitality",
+    "Tourism",
     "GOvernment/Non-Profites",
     "Healthcare/Life-Science",
     "Information Technology",
     "Legal",
-    "Media/Marketing/Communications",
+    "Marketing",
+    "Media/Communications",
     "Religious Organizations",
     "Retail/Trade/Fashion",
     "Sports/Recreation",
     "Utilities/Energy/Environment",
     "UH Faculty/Staff",
-    "University Career Services",
-    "Univrsity Education Support Program (VESP)",
     "Transportation/Logistics",
   ];
 
@@ -86,44 +140,45 @@ const CompanyInfo = () => {
     mailingAddress: "",
     city2: "",
     state2: "",
-    checkedAddress: [],
-    orgRepresentative: "",
-    orgType: "",
+    checkedAddress: null,
+    companyRep: "",
+    companyType: "",
     website: "",
-    companyMission: "",
-    companyDescription: "",
+    mission: "",
+    description: "",
+    isSolo: null,
   };
 
-  const validate = (values) => {};
-
-  //I wrote two fucntions to put together address and mailing address
-  //but I accidentally removed them in the process of mergin so
-  //you would to rewirte them
-
-  const getAddress = () => {
+  const getAddress = (values) => {
+    if (values.address && values.city && values.state) {
+      return `${values.address}|${values.city}|${values.state}`;
+    }
     return "";
   };
 
-  const getMailingAddress = () => {
+  const getMailingAddress = (values) => {
+    if (values.mailingAddress && values.city2 && values.state2) {
+      return `${values.mailingAddress}|${values.city2}|${values.state2}`;
+    }
     return "";
   };
 
   const onSubmit = (values) => {
     const data = {
-      company_name: values.companyName,
+      company_name: values.name,
       company_phone_no: values.phoneNumber,
       industry_type: values.industryType,
-      representative_name: values.orgRepresentative,
-      company_representative_type: 1,
-      company_type: 1,
+      representative_name: values.companyRep,
+      company_representative_type: parseInt(values.isSolo),
+      company_type: parseInt(values.companyType),
       company_address: getAddress(values),
-      mailing_address: values.checkAddress
+      mailing_address: values.checkedAddress
         ? getAddress(values)
         : getMailingAddress(values),
-      company_website: values.companyWebsite,
-      company_mission: values.companyMission,
-      company_description: values.companyDescription,
-      username: localStorage.getItem("email_id"),
+      company_website: values.website,
+      company_mission: values.mission,
+      company_description: values.description,
+      username: parseInt(localStorage.getItem("email_id")),
     };
 
     axios
@@ -136,16 +191,15 @@ const CompanyInfo = () => {
         localStorage.setItem("slug", res.data.slug);
         history.push("/dashboard");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   };
+
   const formik = useFormik({
     initialValues,
     onSubmit,
-    validate,
   });
 
   const nextStep = () => {
-    console.log(formik.values);
     setFirstStep(false);
   };
 
@@ -153,11 +207,10 @@ const CompanyInfo = () => {
     setFirstStep(true);
   };
 
-  const copyAddress = () => {
-    if (formik.values.checkedAddress[0] == "on") {
+  const checkMailingAddress = () => {
+    if (formik.values.checkedAddress) {
       setDisable(!disable);
     } else {
-      console.log("off");
       setDisable(!disable);
     }
   };
@@ -169,7 +222,7 @@ const CompanyInfo = () => {
           Company Account Information
         </Typography>
         <Divider />
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={formik.handleSubmit}>
           {firstStep === true ? (
             <>
               <Grid
@@ -178,10 +231,15 @@ const CompanyInfo = () => {
                 direction="row"
                 justify="space-between"
                 spacing={2}
-                alignItems="flex-start"
-              >
+                alignItems="flex-start">
                 {/* Left Grid */}
-                <Grid container item xs={6} spacing={3} direction="column">
+                <Grid
+                  container
+                  id="first-left"
+                  item
+                  xs={6}
+                  spacing={3}
+                  direction="column">
                   <Grid item>
                     <TextField
                       variant="outlined"
@@ -196,15 +254,13 @@ const CompanyInfo = () => {
                   <Grid item>
                     <FormControl
                       variant="outlined"
-                      className={classes.formControl}
-                    >
+                      className={classes.formControl}>
                       <InputLabel>Industry Type</InputLabel>
                       <Select
                         label="Industry Type"
                         value={formik.values.industryType}
                         onChange={formik.handleChange}
-                        name="industryType"
-                      >
+                        name="industryType">
                         {industryTypes.map((item) => (
                           <MenuItem key={item} value={item}>
                             {item}
@@ -224,10 +280,39 @@ const CompanyInfo = () => {
                       value={formik.values.phoneNumber}
                     />
                   </Grid>
+                  <Grid item>
+                    <Typography>Is this a one person company?</Typography>
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControl}>
+                      <RadioGroup
+                        aria-label="Are you single member company"
+                        name="isSolo"
+                        value={formik.values.isSolo}
+                        onChange={formik.handleChange}>
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="Yes (1)"
+                        />
+                        <FormControlLabel
+                          value="0"
+                          control={<Radio />}
+                          label="No (>=2)"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
                 </Grid>
 
                 {/* COLUMN2------------------------------------- */}
-                <Grid container item xs={6} spacing={3} direction="column">
+                <Grid
+                  container
+                  id="first-right"
+                  item
+                  xs={6}
+                  spacing={3}
+                  direction="column">
                   <Grid item>
                     <TextField
                       variant="outlined"
@@ -239,7 +324,12 @@ const CompanyInfo = () => {
                       value={formik.values.address}
                     />
                   </Grid>
-                  <Grid container item direction="row" spacing={10}>
+                  <Grid
+                    container
+                    id="address-container-1"
+                    item
+                    direction="row"
+                    spacing={10}>
                     <Grid item xs={6}>
                       <TextField
                         variant="outlined"
@@ -254,15 +344,13 @@ const CompanyInfo = () => {
                     <Grid item xs={4}>
                       <FormControl
                         variant="outlined"
-                        className={classes.formControl}
-                      >
+                        className={classes.formControl}>
                         <InputLabel>ST</InputLabel>
                         <Select
                           label="State"
                           value={formik.values.state}
                           onChange={formik.handleChange}
-                          name="state"
-                        >
+                          name="state">
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -285,12 +373,12 @@ const CompanyInfo = () => {
                     />
                     <FormControlLabel
                       className={classes.checkLabel}
-                      value="on"
+                      value="true"
                       control={
                         <Checkbox
                           name="checkedAddress"
                           color="secondary"
-                          onClick={copyAddress}
+                          onClick={checkMailingAddress}
                           onChange={formik.handleChange}
                         />
                       }
@@ -298,7 +386,12 @@ const CompanyInfo = () => {
                       labelPlacement="end"
                     />
                   </Grid>
-                  <Grid container item direction="row" spacing={10}>
+                  <Grid
+                    container
+                    id="address-container-2"
+                    item
+                    direction="row"
+                    spacing={10}>
                     <Grid item xs={6}>
                       <TextField
                         variant="outlined"
@@ -315,17 +408,14 @@ const CompanyInfo = () => {
                       <FormControl
                         variant="outlined"
                         className={classes.formControl}
-                        disabled={disable}
-                      >
+                        disabled={disable}>
                         <InputLabel>ST</InputLabel>
                         <Select
                           label="State"
                           name="state2"
                           id="state2"
                           value={formik.values.state2}
-                          onChange={formik.handleChange}
-                          name="state2"
-                        >
+                          onChange={formik.handleChange}>
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -337,23 +427,19 @@ const CompanyInfo = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
               {/* Bottom Buttons */}
-              <Grid container justify="flex-end">
+              <Grid container id="first-continer-buttons" justify="flex-end">
                 <Grid item>
                   <Button
                     variant="contained"
                     color="secondary"
                     className={classes.submit}
                     onClick={nextStep}
-                    size="large"
-                  >
+                    size="large">
                     Continue
                   </Button>
                 </Grid>
               </Grid>
-              <pre>{JSON.stringify(formik.values, null, 2)}</pre>
-              <pre>{JSON.stringify(disable, null, 2)}</pre>
             </>
           ) : (
             <>
@@ -362,53 +448,40 @@ const CompanyInfo = () => {
                 direction="row"
                 spacing={2}
                 justify="space-between"
-                alignItems="flex-start"
-              >
-                {/* left part of form  */}
-                {/* <Grid container item xs={4} irection="column" className="grid-left"
-            >
-              <Grid item>
-                <label>Company Logo</label>
-              </Grid>
-              <Grid item>
-                <img className="logo-image" src={logo} alt="Logo" />
-              </Grid>
-              <Grid item>
-                <button className="button-red upload-button">
-                  Upload Image
-                </button>
-              </Grid>
-            </Grid> */}
-
-                {/* middle part of form */}
-                <Grid container item xs={6} item direction="column" spacing={3}>
+                alignItems="flex-start">
+                {/* Left part of form */}
+                <Grid
+                  container
+                  item
+                  id="second-left"
+                  xs={6}
+                  direction="column"
+                  spacing={3}>
                   <Grid item>
                     <TextField
                       variant="outlined"
                       fullWidth
-                      id="orgRep"
+                      id="companyRep"
                       label="Organization Representative"
-                      name="orgRep"
+                      name="companyRep"
+                      onChange={formik.handleChange}
+                      value={formik.values.companyRep}
                     />
                   </Grid>
                   <Grid item xs={4}>
                     <FormControl
                       variant="outlined"
-                      className={classes.formControl}
-                      disabled={disable}
-                    >
-                      <InputLabel>ST</InputLabel>
+                      className={classes.formControl}>
+                      <InputLabel>Comapany Type</InputLabel>
                       <Select
-                        label="Organization Type"
-                        name="orgType"
-                        id="orgType"
-                      >
-                        <MenuItem key="Private" value="Private">
-                          Private
-                        </MenuItem>
-                        <MenuItem key="nonProfit" value="nonProfit">
-                          Non-Profit
-                        </MenuItem>
+                        label="Company Type"
+                        name="companyType"
+                        id="companyType"
+                        onChange={formik.handleChange}
+                        value={formik.values.companyType}>
+                        <MenuItem value="1">Private</MenuItem>
+                        <MenuItem value="2">Non-Profit</MenuItem>
+                        <MenuItem value="0">Social Business</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -420,20 +493,31 @@ const CompanyInfo = () => {
                       label="Company Website"
                       name="website"
                       placeholder="wwww.example.com"
+                      onChange={formik.handleChange}
+                      value={formik.values.website}
                     />
                   </Grid>
                 </Grid>
+
                 {/* Right part */}
-                <Grid container item xs={6} direction="column" spacing={3}>
+                <Grid
+                  container
+                  item
+                  id="second-right"
+                  xs={6}
+                  direction="column"
+                  spacing={3}>
                   <Grid item>
                     <TextField
                       variant="outlined"
                       multiline
                       rows={5}
                       fullWidth
-                      id="companyMission"
+                      id="mission"
                       label="Company Mission"
-                      name="companyMission"
+                      name="mission"
+                      onChange={formik.handleChange}
+                      value={formik.values.mission}
                     />
                   </Grid>
                   <Grid item>
@@ -442,22 +526,28 @@ const CompanyInfo = () => {
                       multiline
                       rows={5}
                       fullWidth
-                      id="companyDescription"
+                      id="description"
                       label="Company Description"
-                      name="companyDescription"
+                      name="description"
+                      onChange={formik.handleChange}
+                      value={formik.values.description}
                     />
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid container justify="flex-end" spacing={3}>
+
+              <Grid
+                container
+                id="buttons-container"
+                justify="flex-end"
+                spacing={3}>
                 <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
                     className={classes.submit}
                     onClick={goBack}
-                    size="large"
-                  >
+                    size="large">
                     Go Back
                   </Button>
                 </Grid>
@@ -467,8 +557,7 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    type="submit"
-                  >
+                    type="submit">
                     Submit
                   </Button>
                 </Grid>
