@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useContext, useEffect} from "react";
 import StudentProject from "../../components/StudentProject/StudentProject";
 import StudentProjectTimeline from "../../components/StudentProject/StudentProjectTimeline";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
@@ -6,18 +6,30 @@ import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import {TextField,Box,Avatar,List,ListItem, Divider, ListItemText, ListItemIcon,IconButton, Button } from "@material-ui/core";
+import {TextField,Box,Dialog,DialogTitle, DialogActions,DialogContent,Avatar,List,ListItem, Divider, ListItemText, ListItemIcon,IconButton, Button } from "@material-ui/core";
 import FormatListBulletedTwoToneIcon from '@material-ui/icons/FormatListBulletedTwoTone';
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded';
-import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
-import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
 import StarsIcon from '@material-ui/icons/Stars';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
+import { DataContext } from "../../contexts/dataContext";
+import { getConfig } from "../../authConfig";
+import axios from "axios";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
+  dialogInput: {
+    paddingBottom: theme.spacing(2),
+  },
+  loginAlert: {
+    marginBottom: theme.spacing(2),
+  },
+  dialogConfirm: {
+    marginBottom: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
   profileLogo:{
     backgroundRepeat: "no-repeat",
     position:"relative",
@@ -34,17 +46,12 @@ const useStyles = makeStyles((theme) => ({
     width:"5%",
     color:theme.palette.secondary.main
   },
-  download:{
-    objectFit: "contain",
-    position:"relative",
-    width:"5%",
-  },
   skills:{
     position: "relative",
     border: "1px solid #A6A6A6",
     borderRadius: "50%",
     color:"#5B5B5B",
-    padding:"2%",
+    padding:"1%",
     width:"5%"
   },
   skillsContainer:{
@@ -74,6 +81,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize:"small",
     background:"white",
   },
+  degree:{
+    width:"30vh",
+    fontSize:"small",
+    background:"white",
+  },
   myProjects: {
     fontWeight: "bold",
     color:"#606060",
@@ -82,35 +94,50 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentProfile (){
+  //initially get the data from DataContext
+  const { data, dispatch } = useContext(DataContext);
+  const { profile } = data;
  //this is the animated component for the react-select library
   const animatedComponents = makeAnimated();
  //this is the for the stylings of the page
   const classes = useStyles();
   //options of skills that will be sent to the select statement
   const options = [{label:'C++', value:0}, {label:'Java', value:1}, {label:'C#', value:2}]
+  const list = [{label:'C++', value:0}, {label:'Java', value:1}]
   //this is the original data retrieved from the api
-  const [studentInfo, setStudentInfo] = useState({ //This is the data
-    student_description: 'Here student description will go',
-    studentGraduationDate: '2020-10-20',
-    major:'CS',
-    studentResume: 'Resume',
-    student_skill: [{label:'C++', value:0}, {label:'Java', value:1}]
+  const [studentInfo, setStudentInfo] = useState({ //This is the data from api
+    student_id: null,
+    full_name: null,
+    date_of_birth: null,
+    graduation_date: null,
+    major: null,
+    degree: null,
+    student_skill: null,
+    student_description: null,
   })
   //this is the booleans for opening or closing edit fields
   const [studentEdit, showStudentEdit] = useState({ //This tells whether to show input fields. 
-    student_description: false,
-    studentAcademic:false,
-    studentResume:false,
-    student_skill:false
+    studentEditBool: false,
   });
   //this is the copy of the original data that will be manipulated
   const [studentInput, setStudentInput] = useState({ //This is the data
-    student_description: 'Here student description will go',
-    studentGraduationDate: '2020-10-20',
-    major:'CS',
-    studentResume: 'Resume',
-    student_skill: [{label:'C++', value:0}, {label:'Java', value:1}]
+    student_id: null,
+    full_name: null,
+    date_of_birth: null,
+    graduation_date: null,
+    major: null,
+    degree: null,
+    student_skill: null,
+    student_description: null,
   })
+  useEffect(() => {
+    if (Object.entries(profile).length !== 0) {
+      //continue only if after you fetch the data.
+      setStudentInfo(profile);
+      setStudentInput(profile);
+    }
+  }, [profile]);
+
   //opening the edit field
   const handleOpenEdit = (key) => {
   showStudentEdit({
@@ -126,15 +153,75 @@ export default function StudentProfile (){
     });
   }
   //saving the edited data
-  const handleSave = (key) => { //Make api call to save data. 
+  const handleSave = () => { //Make api call to save data. 
     setStudentInfo(studentInput)
-    handleCloseEdit(key);
+    handleCloseEdit("studentEditBool");
+    setDialogOpen(true);
   }
   //not saving the edited data if the user does not want to change
-  const handleCancel = (key) =>{
+  const handleCancel = () =>{
     setStudentInput(studentInfo)
-    handleCloseEdit(key);
+    handleCloseEdit("studentEditBool");
   }
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const handleDialogClose = () => {
+    setEmail("");
+    setPassword("");
+    setDialogOpen(false);
+  };
+
+  const [authError, setAuthError] = useState("");
+
+  const handleConfirm = () => {
+    axios
+      .post("http://18.213.74.196:8000/api/token/", {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        //first remove local storage
+        localStorage.setItem("token", res.data.access);
+        localStorage.setItem("role_id", res.data.role_id);
+        localStorage.setItem("email_id", res.data.email_id);
+        localStorage.setItem("slug", res.data.slug);
+        let slug = res.data.slug;
+        axios
+          .put(
+            `http://18.213.74.196:8000/api/student_profile/${slug}/update`,
+            {
+              student_id: localStorage.getItem("email_id"),
+              full_name: studentInfo.full_name,
+              date_of_birth: studentInfo.date_of_birth,
+              graduation_date: studentInfo.graduation_date,
+              major: studentInfo.major,
+              degree: studentInfo.degree,
+              student_skill: studentInfo.student_skill,
+              student_description: studentInfo.student_description,
+            },
+            getConfig()
+          )
+          .then((res) => {
+            localStorage.setItem("slug", res.data.slug);
+            dispatch({ type: "UPDATE_PROFILE", payload: res.data });
+            setDialogOpen(false);
+            showStudentEdit(false);
+            handleCloseEdit("studentEditBool");
+          })
+          .catch((err) => {
+            setDialogOpen(false);
+          });
+      })
+      .catch((err) => {
+        setAuthError(
+          err.response.data.detail +
+            ". Make sure your email and password is correct."
+        );
+      });
+  };
 
   return (
     <div>
@@ -150,7 +237,7 @@ export default function StudentProfile (){
               <Box component={'span'} className={classes.sectionHeader}>Student Description</Box>
             }
             secondary={ 
-              studentEdit.student_description === false ? (<Box
+              studentEdit.studentEditBool === false ? (<Box
               component="span"
               variant="body2"
               className={`${classes.inline} ${classes.sectionContent}`}
@@ -161,11 +248,11 @@ export default function StudentProfile (){
               <TextField multiline={true} name="student_description" onChange={(e)=>{setStudentInput({...studentInput,student_description:e.target.value})}} value={studentInput.student_description} />
             )}
           />
-          { studentEdit.student_description === false ? (
-              <IconButton className={classes.icon} onClick={() => {handleOpenEdit('student_description')}}><EditTwoToneIcon/></IconButton>
+          { studentEdit.studentEditBool === false ? (
+              <IconButton className={classes.icon} onClick={() => {handleOpenEdit('studentEditBool')}}><EditTwoToneIcon/></IconButton>
             ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCancel('student_description')}}><ClearRoundedIcon/></IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('student_description')}}><CheckRoundedIcon style={{ color: 'green'}}/></IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleCancel()}}><ClearRoundedIcon/></IconButton>
+            <IconButton className={classes.icon} onClick={() => {handleSave()}}><CheckRoundedIcon style={{ color: 'green'}}/></IconButton>
             </>)}
         </ListItem>
         <Divider variant="inset" component="li" />
@@ -185,34 +272,39 @@ export default function StudentProfile (){
                       color="textPrimary"
                       className={classes.sectionContent}
                     >
-                      Graduation Date : 
+                      Graduation Date : &nbsp;
                     </Box>{ 
-                    studentEdit.studentAcademic === false ? (<Box
+                    studentEdit.studentEditBool === false ? (<Box
                     component={'span'}
                     variant="body2"
                     className={`${classes.inline} ${classes.sectionContent}`}
                     color="textPrimary"
                   >
-                      {studentInfo.studentGraduationDate}
+                    {studentInfo.graduation_date}
                   </Box>): (
-                      <TextField type="date" name="studentGraduationDate" onChange={(e)=>{setStudentInput({...studentInput,studentGraduationDate:e.target.value})}} value={studentInput.studentGraduationDate} />
+                      <TextField type="date" name="graduation_date" onChange={(e)=>{setStudentInput({...studentInput,graduation_date:e.target.value})}} value={studentInput.graduation_date} />
                   )}
                      <br/>
-                    <Box
+                    {studentEdit.studentEditBool === false ?
+                    (<Box
                       component={'span'}
                       variant="body2"
                       color="textPrimary"
                       className={classes.sectionContent}
-                    >
-                      Bachelor's (BS) : 
-                    </Box>
-                    {studentEdit.studentAcademic === false ? (<Box
+                    > 
+                    {studentInfo.degree} :
+                    </Box>): (
+                     <select name="degree" className={classes.degree} value={studentInput.degree} onChange={(e)=>{setStudentInput({...studentInput,degree:e.target.value})}}>
+                       <option value="Bachelor">Bachelor</option>
+                       <option value="Master">Master</option>
+                     </select>
+                    )}
+                    {studentEdit.studentEditBool === false ? (<Box
                     component="span"
                     variant="body2"
                     className={`${classes.sectionContent}`}
                     color="textPrimary"
-                  >
-                      {studentInfo.major}
+                  > {studentInfo.major}
                   </Box>): (
                   <select name="major" className={classes.major} value={studentInput.major} onChange={(e)=>{setStudentInput({...studentInput,major:e.target.value})}}>  
                       <optgroup label="Gerald D. Hines College of Architecture and Design">
@@ -351,46 +443,7 @@ export default function StudentProfile (){
                   )}
               </React.Fragment>
             }
-          />
-            { studentEdit.studentAcademic === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('studentAcademic')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCancel('studentAcademic')}}>
-                <ClearRoundedIcon/>
-            </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('studentAcademic')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
-        </ListItem>
-        <Divider variant="inset" component="li" />
-        <ListItem alignItems="flex-start">
-          <ListItemIcon>
-            <DescriptionRoundedIcon/>
-          </ListItemIcon>
-          <ListItemText
-             primary={
-                <Box component={'span'} className={classes.sectionHeader}>
-                  Resume
-                </Box>
-            }
-            secondary={
-                <Box
-                  component={'span'}
-                  variant="body2"
-                  className={classes.sectionContent}
-                  style={{textDecoration:"underline"}}
-                  color="textPrimary"
-                >
-                Document:{studentInfo.studentResume}
-                </Box>
-            }
-          />
-          <IconButton className={classes.download}>
-            <GetAppRoundedIcon/>
-          </IconButton>
+          />            
         </ListItem>
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
@@ -408,13 +461,13 @@ export default function StudentProfile (){
                 className={classes.sectionContent}
                 color="textPrimary"
               >
-                {studentEdit.student_skill === false ? (<Box
+                {studentEdit.studentEditBool === false ? (<Box
                   component="span"
                   variant="body2"
                   className={`${classes.skillsContainer}`}
                   color="textPrimary"
                 >
-                  {studentInfo.student_skill.map((skill, index) => (
+                  {list.map((skill, index) => (
                     <Button key={skill.value} className={classes.skills} value={skill.name}>{skill.label}</Button>
                   ))}
                 </Box>): (<Box>
@@ -422,28 +475,16 @@ export default function StudentProfile (){
                       AutoSize={true}
                       closeMenuOnSelect={true}
                       components={animatedComponents}
-                      defaultValue={studentInfo.student_skill}
+                      defaultValue={list}
                       isMulti
                       isSearchable
-                      onChange={(e)=>{setStudentInput({...studentInput,student_skill:e})}}
+                      /*onChange={(e)=>{setStudentInput({...studentInput,student_skilltemp:e})}}*/
                       options={options}
                     />
                 </Box>)}
               </Box>
             }
           />
-            { studentEdit.student_skill === false ? (
-                <IconButton className={classes.icon} onClick={() => {handleOpenEdit('student_skill')}}>
-                    <EditTwoToneIcon/>
-                </IconButton>
-            ) : (<>
-            <IconButton className={classes.icon} onClick={() => {handleCancel('student_skill')}}>
-                <ClearRoundedIcon/>
-            </IconButton>
-            <IconButton className={classes.icon} onClick={() => {handleSave('student_skill')}}>
-                <CheckRoundedIcon style={{ color: 'green'}}/>
-            </IconButton>
-            </>)}
         </ListItem>
         <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
@@ -456,6 +497,54 @@ export default function StudentProfile (){
               </ListItemText>
         </ListItem>
       </List>
+      <Dialog
+        onClose={handleDialogClose}
+        open={dialogOpen}
+        className={classes.dialog}>
+        <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
+        {authError ? (
+          <Alert
+            className={classes.loginAlert}
+            variant="filled"
+            severity="error">
+            {authError}
+          </Alert>
+        ) : null}
+        <DialogContent>
+          <TextField
+            variant="outlined"
+            fullWidth
+            id="email"
+            label="Email"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            required
+            className={classes.dialogInput}
+          />
+          <TextField
+            variant="outlined"
+            fullWidth
+            id="password"
+            label="password"
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            required
+            type="password"
+            className={classes.dialogInput}
+          />
+        </DialogContent>
+        <DialogActions className={classes.dialogConfirm}>
+          <Button
+            onClick={handleConfirm}
+            color="secondary"
+            variant="outlined"
+            className={classes.dialogConfirm}>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
       <StudentProject />
       <StudentProjectTimeline />
     </div>
