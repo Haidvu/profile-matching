@@ -193,7 +193,7 @@ export default function StudentProfile (){
           .put(
             `http://18.213.74.196:8000/api/student_profile/${slug}/update`,
             {
-              student_id: localStorage.getItem("email_id"),
+              username: localStorage.getItem("email_id"),
               full_name: studentInfo.full_name,
               date_of_birth: studentInfo.date_of_birth,
               graduation_date: studentInfo.graduation_date,
@@ -205,8 +205,22 @@ export default function StudentProfile (){
             getConfig()
           )
           .then((res) => {
-            localStorage.setItem("slug", res.data.slug);
             dispatch({ type: "UPDATE_PROFILE", payload: res.data });
+            console.log("Update Successful");
+            axios
+            .post("http://18.213.74.196:8000/api/token/", {
+              email: email,
+              password: password,
+            })
+            .then((res)=>{
+              console.log("Login Again Successful");
+              localStorage.setItem("token", res.data.access);
+              localStorage.setItem("role_id", res.data.role_id);
+              localStorage.setItem("email_id", res.data.email_id);
+              localStorage.setItem("slug", res.data.slug);
+              setEmail(null);
+              setPassword(null);
+            })
             setDialogOpen(false);
             showStudentEdit(false);
             handleCloseEdit("studentEditBool");
