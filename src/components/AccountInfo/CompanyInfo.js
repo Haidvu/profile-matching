@@ -17,9 +17,7 @@ import {
   Radio,
   FormHelperText,
 } from "@material-ui/core";
-import * as yup from "yup";
 import { makeStyles } from "@material-ui/core/styles";
-import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
@@ -295,7 +293,7 @@ const CompanyInfo = () => {
           });
       }
     }
-  }, [errorsSecond, companyFirst, companySecond]);
+  }, [errorsSecond, companyFirst, companySecond, history]);
 
   const goBack = () => {
     setFirstStep(true);

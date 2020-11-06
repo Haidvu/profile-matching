@@ -29,6 +29,7 @@ import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
+import PeopleRoundedIcon from "@material-ui/icons/PeopleRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
@@ -601,7 +602,7 @@ export default function CompanyProfile() {
           {!showEditFields ? <Divider variant="inset" component="li" /> : null}
           <ListItem alignItems="flex-start">
             <ListItemIcon>
-              <LanguageRoundedIcon />
+              <BusinessRoundedIcon />
             </ListItemIcon>
             {showEditFields === false ? (
               <ListItemText
@@ -715,7 +716,7 @@ export default function CompanyProfile() {
           {!showEditFields ? <Divider variant="inset" component="li" /> : null}
           <ListItem alignItems="flex-start">
             <ListItemIcon>
-              <PhoneRoundedIcon />
+              <PeopleRoundedIcon />
             </ListItemIcon>
             {showEditFields === false ? (
               <ListItemText
@@ -744,13 +745,11 @@ export default function CompanyProfile() {
                     value="1"
                     control={<Radio />}
                     label="Yes (1)"
-                    checked={profileInfo.isSolo === 1}
                   />
                   <FormControlLabel
                     value="0"
                     control={<Radio />}
                     label="No (>=2)"
-                    checked={profileInfo.isSolo === 0}
                   />
                 </RadioGroup>
               </div>
