@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
     // display: "flex",
     position: "relative",
-    maxHeight: "250px",
+    maxHeight: "300px",
   },
   inline: {
     display: "inline",
@@ -339,6 +339,7 @@ export default function CompanyProfile() {
       })
       .then((res) => {
         //first remove local storage
+        console.log("login successful");
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
@@ -364,7 +365,21 @@ export default function CompanyProfile() {
             getConfig()
           )
           .then((res) => {
-            localStorage.setItem("slug", res.data.slug);
+            console.log("update successful");
+            axios
+              .post("http://18.213.74.196:8000/api/token/", {
+                email: email,
+                password: password,
+              })
+              .then((res) => {
+                console.log("login again sucessful");
+                localStorage.setItem("token", res.data.access);
+                localStorage.setItem("role_id", res.data.role_id);
+                localStorage.setItem("email_id", res.data.email_id);
+                localStorage.setItem("slug", res.data.slug);
+                setEmail(null);
+                setPassword(null);
+              });
             dispatch({ type: "UPDATE_PROFILE", payload: res.data });
             setDialogOpen(false);
             setShowEditFields(false);
@@ -729,11 +744,13 @@ export default function CompanyProfile() {
                     value="1"
                     control={<Radio />}
                     label="Yes (1)"
+                    checked={profileInfo.isSolo === 1}
                   />
                   <FormControlLabel
                     value="0"
                     control={<Radio />}
                     label="No (>=2)"
+                    checked={profileInfo.isSolo === 0}
                   />
                 </RadioGroup>
               </div>
