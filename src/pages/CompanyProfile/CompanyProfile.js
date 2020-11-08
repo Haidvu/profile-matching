@@ -29,6 +29,7 @@ import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
+import PeopleRoundedIcon from "@material-ui/icons/PeopleRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
 import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
     // display: "flex",
     position: "relative",
-    maxHeight: "250px",
+    maxHeight: "300px",
   },
   inline: {
     display: "inline",
@@ -339,6 +340,7 @@ export default function CompanyProfile() {
       })
       .then((res) => {
         //first remove local storage
+        console.log("login successful");
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
@@ -364,7 +366,21 @@ export default function CompanyProfile() {
             getConfig()
           )
           .then((res) => {
-            localStorage.setItem("slug", res.data.slug);
+            console.log("update successful");
+            axios
+              .post("http://18.213.74.196:8000/api/token/", {
+                email: email,
+                password: password,
+              })
+              .then((res) => {
+                console.log("login again sucessful");
+                localStorage.setItem("token", res.data.access);
+                localStorage.setItem("role_id", res.data.role_id);
+                localStorage.setItem("email_id", res.data.email_id);
+                localStorage.setItem("slug", res.data.slug);
+                setEmail(null);
+                setPassword(null);
+              });
             dispatch({ type: "UPDATE_PROFILE", payload: res.data });
             setDialogOpen(false);
             setShowEditFields(false);
@@ -586,7 +602,7 @@ export default function CompanyProfile() {
           {!showEditFields ? <Divider variant="inset" component="li" /> : null}
           <ListItem alignItems="flex-start">
             <ListItemIcon>
-              <LanguageRoundedIcon />
+              <BusinessRoundedIcon />
             </ListItemIcon>
             {showEditFields === false ? (
               <ListItemText
@@ -700,7 +716,7 @@ export default function CompanyProfile() {
           {!showEditFields ? <Divider variant="inset" component="li" /> : null}
           <ListItem alignItems="flex-start">
             <ListItemIcon>
-              <PhoneRoundedIcon />
+              <PeopleRoundedIcon />
             </ListItemIcon>
             {showEditFields === false ? (
               <ListItemText

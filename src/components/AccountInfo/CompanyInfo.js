@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   Grid,
@@ -15,9 +15,9 @@ import {
   Button,
   RadioGroup,
   Radio,
+  FormHelperText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
@@ -130,7 +130,8 @@ const CompanyInfo = () => {
   const classes = useStyles();
   const [firstStep, setFirstStep] = useState(true);
   const [disable, setDisable] = useState(false);
-  const initialValues = {
+
+  const [companyFirst, setCompanyFirst] = useState({
     name: "",
     industryType: "",
     phoneNumber: "",
@@ -140,13 +141,50 @@ const CompanyInfo = () => {
     mailingAddress: "",
     city2: "",
     state2: "",
-    checkedAddress: null,
+    checkedAddress: false,
+    isSolo: "",
+  });
+
+  const [errorsFirst, setErrorsFirst] = useState({});
+  const [errorsSecond, setErrorsSecond] = useState({});
+  const [errors, setErrors] = useState();
+
+  const [companySecond, setCompanySecond] = useState({
     companyRep: "",
     companyType: "",
     website: "",
     mission: "",
     description: "",
-    isSolo: null,
+  });
+
+  const handleChangeFirst = (e) => {
+    setCompanyFirst({
+      ...companyFirst,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleChangeSecond = (e) => {
+    setCompanySecond({
+      ...companySecond,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const checkMailingAddress = () => {
+    if (companyFirst.checkedAddress === true) {
+      setCompanyFirst({
+        ...companyFirst,
+        checkedAddress: false,
+      });
+      setDisable(!disable);
+    } else {
+      setCompanyFirst({
+        ...companyFirst,
+        checkedAddress: true,
+      });
+      setDisable(!disable);
+    }
   };
 
   const getAddress = (values) => {
@@ -163,56 +201,106 @@ const CompanyInfo = () => {
     return "";
   };
 
-  const onSubmit = (values) => {
-    const data = {
-      company_name: values.name,
-      company_phone_no: values.phoneNumber,
-      industry_type: values.industryType,
-      representative_name: values.companyRep,
-      company_representative_type: parseInt(values.isSolo),
-      company_type: parseInt(values.companyType),
-      company_address: getAddress(values),
-      mailing_address: values.checkedAddress
-        ? getAddress(values)
-        : getMailingAddress(values),
-      company_website: values.website,
-      company_mission: values.mission,
-      company_description: values.description,
-      username: parseInt(localStorage.getItem("email_id")),
-    };
-
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/company_profile/create",
-        data,
-        getConfig()
-      )
-      .then((res) => {
-        localStorage.setItem("slug", res.data.slug);
-        history.push("/dashboard");
-      })
-      .catch((err) => {});
-  };
-
-  const formik = useFormik({
-    initialValues,
-    onSubmit,
-  });
-
   const nextStep = () => {
-    setFirstStep(false);
+    setErrorsFirst({
+      name: companyFirst.name === "" ? "Required" : null,
+      industryType: companyFirst.industryType === "" ? "Required" : null,
+      phoneNumber: companyFirst.phoneNumber === "" ? "Required" : null,
+      address: companyFirst.address === "" ? "Required" : null,
+      city: companyFirst.city === "" ? "Required" : null,
+      state: companyFirst.state === "" ? "Required" : null,
+      mailingAddress: companyFirst.checkedAddress
+        ? null
+        : companyFirst.mailingAddress === ""
+        ? "Required"
+        : null,
+      city2: companyFirst.checkedAddress
+        ? null
+        : companyFirst.city2 === ""
+        ? "Required"
+        : null,
+      state2: companyFirst.checkedAddress
+        ? null
+        : companyFirst.state2 === ""
+        ? "Required"
+        : null,
+      isSolo: companyFirst.isSolo === "" ? "Please select one" : null,
+    });
   };
+
+  const handleSubmit = () => {
+    setErrorsSecond({
+      companyRep: companySecond.companyRep === "" ? "Required" : null,
+      companyType: companySecond.companyType === "" ? "Required" : null,
+      website: companySecond.website === "" ? "Required" : null,
+      description: companySecond.description === "" ? "Required" : null,
+    });
+  };
+
+  useEffect(() => {
+    if (Object.entries(errorsFirst).length !== 0) {
+      let errors = false;
+      Object.keys(errorsFirst).forEach((key) => {
+        if (errorsFirst[key] !== null) {
+          errors = true;
+        }
+      });
+      if (errors) {
+        setFirstStep(true);
+      } else {
+        setFirstStep(false);
+      }
+    }
+  }, [errorsFirst]);
+
+  useEffect(() => {
+    if (Object.entries(errorsSecond).length !== 0) {
+      let errors = false;
+      errors = Object.keys(errorsSecond).some((key) => {
+        if (errorsSecond[key] !== null) {
+          return true;
+        }
+      });
+      if (!errors) {
+        console.log("No errors");
+        const data = {
+          company_name: companyFirst.name,
+          company_phone_no: companyFirst.phoneNumber,
+          industry_type: companyFirst.industryType,
+          representative_name: companySecond.companyRep,
+          company_representative_type: parseInt(companyFirst.isSolo),
+          company_type: parseInt(companySecond.companyType),
+          company_address: getAddress(companyFirst),
+          mailing_address: companyFirst.checkedAddress
+            ? getAddress(companyFirst)
+            : getMailingAddress(companyFirst),
+          company_website: companySecond.website,
+          company_mission: companySecond.mission,
+          company_description: companySecond.description,
+          username: localStorage.getItem("email_id"),
+        };
+        console.log(data);
+        axios
+          .post(
+            "http://18.213.74.196:8000/api/company_profile/create",
+            data,
+            getConfig()
+          )
+          .then((res) => {
+            localStorage.setItem("slug", res.data.slug);
+            history.push("/dashboard");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        console.log(errorsSecond);
+      }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorsSecond]);
 
   const goBack = () => {
     setFirstStep(true);
-  };
-
-  const checkMailingAddress = () => {
-    if (formik.values.checkedAddress) {
-      setDisable(!disable);
-    } else {
-      setDisable(!disable);
-    }
   };
 
   return (
@@ -222,7 +310,7 @@ const CompanyInfo = () => {
           Company Account Information
         </Typography>
         <Divider />
-        <form className={classes.form} onSubmit={formik.handleSubmit}>
+        <form className={classes.form} onSubmit={handleSubmit}>
           {firstStep === true ? (
             <>
               <Grid
@@ -242,24 +330,35 @@ const CompanyInfo = () => {
                   direction="column">
                   <Grid item>
                     <TextField
+                      error={errorsFirst.name && companyFirst.name === ""}
                       variant="outlined"
                       fullWidth
                       id="name"
                       label="Company Name"
                       name="name"
-                      onChange={formik.handleChange}
-                      value={formik.values.name}
+                      onChange={handleChangeFirst}
+                      value={companyFirst.name}
                     />
+                    {errorsFirst.name && companyFirst.name === "" ? (
+                      <FormHelperText
+                        error={errorsFirst.name && companyFirst.name === ""}>
+                        {errorsFirst.name}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <FormControl
+                      error={
+                        errorsFirst.industryType &&
+                        companyFirst.industryType === ""
+                      }
                       variant="outlined"
                       className={classes.formControl}>
                       <InputLabel>Industry Type</InputLabel>
                       <Select
                         label="Industry Type"
-                        value={formik.values.industryType}
-                        onChange={formik.handleChange}
+                        value={companyFirst.industryType}
+                        onChange={handleChangeFirst}
                         name="industryType">
                         {industryTypes.map((item) => (
                           <MenuItem key={item} value={item}>
@@ -267,29 +366,51 @@ const CompanyInfo = () => {
                           </MenuItem>
                         ))}
                       </Select>
+                      {errorsFirst.industryType &&
+                      companyFirst.industryType === "" ? (
+                        <FormHelperText>
+                          {errorsFirst.industryType}
+                        </FormHelperText>
+                      ) : null}
                     </FormControl>
                   </Grid>
                   <Grid item>
                     <TextField
+                      error={
+                        (errorsFirst.phoneNumber &&
+                          companyFirst.phoneNumber === "") ||
+                        errorsFirst.phoneNumber === "Enter valid Phone Number"
+                      }
                       variant="outlined"
                       fullWidth
                       id="phoneNumber"
                       label="Phone Number"
                       name="phoneNumber"
-                      onChange={formik.handleChange}
-                      value={formik.values.phoneNumber}
+                      onChange={handleChangeFirst}
+                      value={companyFirst.phoneNumber}
                     />
+                    {errorsFirst.phoneNumber &&
+                    companyFirst.phoneNumber === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.phoneNumber &&
+                          companyFirst.phoneNumber === ""
+                        }>
+                        {errorsFirst.phoneNumber}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <Typography>Is this a one person company?</Typography>
                     <FormControl
+                      error={errorsFirst.isSolo && companyFirst.isSolo === ""}
                       variant="outlined"
                       className={classes.formControl}>
                       <RadioGroup
                         aria-label="Are you single member company"
                         name="isSolo"
-                        value={formik.values.isSolo}
-                        onChange={formik.handleChange}>
+                        value={companyFirst.isSolo}
+                        onChange={handleChangeFirst}>
                         <FormControlLabel
                           value="1"
                           control={<Radio />}
@@ -301,6 +422,9 @@ const CompanyInfo = () => {
                           label="No (>=2)"
                         />
                       </RadioGroup>
+                      {errorsFirst.isSolo && companyFirst.isSolo === "" ? (
+                        <FormHelperText>{errorsFirst.isSolo}</FormHelperText>
+                      ) : null}
                     </FormControl>
                   </Grid>
                 </Grid>
@@ -315,14 +439,23 @@ const CompanyInfo = () => {
                   direction="column">
                   <Grid item>
                     <TextField
+                      error={errorsFirst.address && companyFirst.address === ""}
                       variant="outlined"
                       fullWidth
                       id="address"
                       label="Company Address"
                       name="address"
-                      onChange={formik.handleChange}
-                      value={formik.values.address}
+                      onChange={handleChangeFirst}
+                      value={companyFirst.address}
                     />
+                    {errorsFirst.address && companyFirst.address === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.address && companyFirst.address === ""
+                        }>
+                        {errorsFirst.address}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid
                     container
@@ -332,54 +465,83 @@ const CompanyInfo = () => {
                     spacing={10}>
                     <Grid item xs={6}>
                       <TextField
+                        error={errorsFirst.city && companyFirst.city === ""}
                         variant="outlined"
                         fullWidth
                         id="city"
                         label="City"
                         name="city"
-                        onChange={formik.handleChange}
-                        value={formik.values.city}
+                        onChange={handleChangeFirst}
+                        value={companyFirst.city}
                       />
+                      {errorsFirst.city && companyFirst.city === "" ? (
+                        <FormHelperText
+                          error={errorsFirst.city && companyFirst.city === ""}>
+                          {errorsFirst.address}
+                        </FormHelperText>
+                      ) : null}
                     </Grid>
                     <Grid item xs={4}>
                       <FormControl
+                        error={errorsFirst.state && companyFirst.state === ""}
                         variant="outlined"
                         className={classes.formControl}>
                         <InputLabel>ST</InputLabel>
                         <Select
                           label="State"
-                          value={formik.values.state}
-                          onChange={formik.handleChange}
+                          value={companySecond.state}
+                          onChange={handleChangeFirst}
+                          defaultValue=""
                           name="state">
                           {states.map((state) => (
-                            <MenuItem key={state} value={state}>
+                            <MenuItem value={state} key={state}>
                               {state}
                             </MenuItem>
                           ))}
                         </Select>
+                        {errorsFirst.state && companyFirst.state === "" ? (
+                          <FormHelperText>{errorsFirst.state}</FormHelperText>
+                        ) : null}
                       </FormControl>
                     </Grid>
                   </Grid>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsFirst.mailingAddress &&
+                        !companyFirst.checkedAddress &&
+                        companyFirst.mailingAddress === ""
+                      }
                       variant="outlined"
                       fullWidth
                       id="mailingAddress"
                       label="Mailing Address"
                       name="mailingAddress"
                       disabled={disable}
-                      onChange={formik.handleChange}
-                      value={formik.values.mailingAddress}
+                      onChange={handleChangeFirst}
+                      value={companyFirst.mailingAddress}
                     />
+                    {errorsFirst.mailingAddress &&
+                    !companyFirst.checkedAddress &&
+                    companyFirst.mailingAddress === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.mailingAddress &&
+                          !companyFirst.checkedAddress &&
+                          companyFirst.mailingAddress === ""
+                        }>
+                        {errorsFirst.mailingAddress}
+                      </FormHelperText>
+                    ) : null}
                     <FormControlLabel
                       className={classes.checkLabel}
-                      value="true"
+                      value={!disable}
                       control={
                         <Checkbox
                           name="checkedAddress"
                           color="secondary"
-                          onClick={checkMailingAddress}
-                          onChange={formik.handleChange}
+                          onChange={checkMailingAddress}
+                          checked={companyFirst.checkedAddress}
                         />
                       }
                       label="Mailing address same as company Address"
@@ -394,18 +556,40 @@ const CompanyInfo = () => {
                     spacing={10}>
                     <Grid item xs={6}>
                       <TextField
+                        error={
+                          errorsFirst.city2 &&
+                          !companyFirst.checkedAddress &&
+                          companyFirst.city2 === ""
+                        }
                         variant="outlined"
                         fullWidth
                         id="city2"
                         label="City"
                         name="city2"
                         disabled={disable}
-                        onChange={formik.handleChange}
-                        value={formik.values.city2}
+                        onChange={handleChangeFirst}
+                        value={companyFirst.city2}
                       />
+                      {errorsFirst.city2 &&
+                      !companyFirst.checkedAddress &&
+                      companyFirst.city2 === "" ? (
+                        <FormHelperText
+                          error={
+                            errorsFirst.city2 &&
+                            !companyFirst.city2 &&
+                            companyFirst.city2 === ""
+                          }>
+                          {errorsFirst.city2}
+                        </FormHelperText>
+                      ) : null}
                     </Grid>
                     <Grid item xs={4}>
                       <FormControl
+                        error={
+                          errorsFirst.state2 &&
+                          companyFirst.state2 === "" &&
+                          !companyFirst.checkedAddress
+                        }
                         variant="outlined"
                         className={classes.formControl}
                         disabled={disable}>
@@ -414,14 +598,19 @@ const CompanyInfo = () => {
                           label="State"
                           name="state2"
                           id="state2"
-                          value={formik.values.state2}
-                          onChange={formik.handleChange}>
+                          value={companyFirst.state2}
+                          onChange={handleChangeFirst}>
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
                             </MenuItem>
                           ))}
                         </Select>
+                        {errorsFirst.state2 &&
+                        companyFirst.state2 === "" &&
+                        !companyFirst.checkedAddress ? (
+                          <FormHelperText>{errorsFirst.state2}</FormHelperText>
+                        ) : null}
                       </FormControl>
                     </Grid>
                   </Grid>
@@ -459,17 +648,35 @@ const CompanyInfo = () => {
                   spacing={3}>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.companyRep &&
+                        companySecond.companyRep === ""
+                      }
                       variant="outlined"
                       fullWidth
                       id="companyRep"
                       label="Organization Representative"
                       name="companyRep"
-                      onChange={formik.handleChange}
-                      value={formik.values.companyRep}
+                      onChange={handleChangeSecond}
+                      value={companySecond.companyRep}
                     />
+                    {errorsSecond.companyRep &&
+                    companySecond.companyRep === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.companyRep &&
+                          companySecond.companyRep === ""
+                        }>
+                        {errorsSecond.companyRep}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item xs={4}>
                     <FormControl
+                      error={
+                        errorsSecond.companyType &&
+                        companySecond.companyType === ""
+                      }
                       variant="outlined"
                       className={classes.formControl}>
                       <InputLabel>Comapany Type</InputLabel>
@@ -477,25 +684,42 @@ const CompanyInfo = () => {
                         label="Company Type"
                         name="companyType"
                         id="companyType"
-                        onChange={formik.handleChange}
-                        value={formik.values.companyType}>
+                        onChange={handleChangeSecond}
+                        value={companySecond.companyType}>
                         <MenuItem value="1">Private</MenuItem>
                         <MenuItem value="2">Non-Profit</MenuItem>
                         <MenuItem value="0">Social Business</MenuItem>
                       </Select>
+                      {errorsSecond.companyRep &&
+                      companySecond.companyRep === "" ? (
+                        <FormHelperText>
+                          {errorsSecond.companyRep}
+                        </FormHelperText>
+                      ) : null}
                     </FormControl>
                   </Grid>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.website && companySecond.website === ""
+                      }
                       variant="outlined"
                       fullWidth
                       id="website"
                       label="Company Website"
                       name="website"
                       placeholder="wwww.example.com"
-                      onChange={formik.handleChange}
-                      value={formik.values.website}
+                      onChange={handleChangeSecond}
+                      value={companySecond.website}
                     />
+                    {errorsSecond.webiste && companySecond.website === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.website && companySecond.website === ""
+                        }>
+                        {errorsSecond.website}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                 </Grid>
 
@@ -516,12 +740,16 @@ const CompanyInfo = () => {
                       id="mission"
                       label="Company Mission"
                       name="mission"
-                      onChange={formik.handleChange}
-                      value={formik.values.mission}
+                      onChange={handleChangeSecond}
+                      value={companySecond.mission}
                     />
                   </Grid>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.description &&
+                        companySecond.description === ""
+                      }
                       variant="outlined"
                       multiline
                       rows={5}
@@ -529,9 +757,19 @@ const CompanyInfo = () => {
                       id="description"
                       label="Company Description"
                       name="description"
-                      onChange={formik.handleChange}
-                      value={formik.values.description}
+                      onChange={handleChangeSecond}
+                      value={companySecond.description}
                     />
+                    {errorsSecond.description &&
+                    companySecond.description === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.description &&
+                          companySecond.description === ""
+                        }>
+                        {errorsSecond.description}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                 </Grid>
               </Grid>
@@ -557,7 +795,7 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    type="submit">
+                    onClick={handleSubmit}>
                     Submit
                   </Button>
                 </Grid>
