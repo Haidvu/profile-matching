@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { DataContext } from "../../contexts/dataContext";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -150,7 +149,8 @@ export default function SignUp() {
                   name="role_id"
                   row
                   color="secondary"
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <FormControlLabel
                     value="0"
                     control={<Radio />}
@@ -170,7 +170,8 @@ export default function SignUp() {
             fullWidth
             variant="contained"
             color="secondary"
-            className={classes.submit}>
+            className={classes.submit}
+          >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
