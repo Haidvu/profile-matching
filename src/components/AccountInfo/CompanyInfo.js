@@ -147,6 +147,7 @@ const CompanyInfo = () => {
 
   const [errorsFirst, setErrorsFirst] = useState({});
   const [errorsSecond, setErrorsSecond] = useState({});
+  const [errors, setErrors] = useState();
 
   const [companySecond, setCompanySecond] = useState({
     companyRep: "",
@@ -200,15 +201,6 @@ const CompanyInfo = () => {
     return "";
   };
 
-  const handleSubmit = () => {
-    setErrorsSecond({
-      companyRep: companySecond.companyRep === "" ? "Required" : null,
-      companyType: companySecond.companyType === "" ? "Required" : null,
-      website: companySecond.website === "" ? "Required" : null,
-      description: companySecond.description === "" ? "Required" : null,
-    });
-  };
-
   const nextStep = () => {
     setErrorsFirst({
       name: companyFirst.name === "" ? "Required" : null,
@@ -236,6 +228,15 @@ const CompanyInfo = () => {
     });
   };
 
+  const handleSubmit = () => {
+    setErrorsSecond({
+      companyRep: companySecond.companyRep === "" ? "Required" : null,
+      companyType: companySecond.companyType === "" ? "Required" : null,
+      website: companySecond.website === "" ? "Required" : null,
+      description: companySecond.description === "" ? "Required" : null,
+    });
+  };
+
   useEffect(() => {
     if (Object.entries(errorsFirst).length !== 0) {
       let errors = false;
@@ -255,12 +256,13 @@ const CompanyInfo = () => {
   useEffect(() => {
     if (Object.entries(errorsSecond).length !== 0) {
       let errors = false;
-      Object.keys(errorsSecond).forEach((key) => {
+      errors = Object.keys(errorsSecond).some((key) => {
         if (errorsSecond[key] !== null) {
-          errors = true;
+          return true;
         }
       });
       if (!errors) {
+        console.log("No errors");
         const data = {
           company_name: companyFirst.name,
           company_phone_no: companyFirst.phoneNumber,
@@ -275,7 +277,7 @@ const CompanyInfo = () => {
           company_website: companySecond.website,
           company_mission: companySecond.mission,
           company_description: companySecond.description,
-          username: parseInt(localStorage.getItem("email_id")),
+          username: localStorage.getItem("email_id"),
         };
         console.log(data);
         axios
@@ -291,9 +293,11 @@ const CompanyInfo = () => {
           .catch((err) => {
             console.log(err);
           });
+      } else {
+        console.log(errorsSecond);
       }
-    }
-  }, [errorsSecond, companyFirst, companySecond, history]);
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorsSecond]);
 
   const goBack = () => {
     setFirstStep(true);
@@ -800,9 +804,6 @@ const CompanyInfo = () => {
           )}
         </form>
       </div>
-      <pre>{JSON.stringify(companyFirst, null, 2)}</pre>
-      <pre>{JSON.stringify(companySecond, null, 2)}</pre>
-      <pre>{JSON.stringify(firstStep, null, 2)}</pre>
     </Container>
   );
 };
