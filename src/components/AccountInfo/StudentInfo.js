@@ -146,7 +146,7 @@ function StudentInfo() {
     const [currentPage, setCurrentPage] = useState(1);
     const [resume, setResume] = useState("");
 
-   // const onSubmit = (values) => {};
+    // const onSubmit = (values) => {};
     // data and axios will go here
     // Change the _ on the major to a space
     // Change the dates
@@ -156,16 +156,14 @@ function StudentInfo() {
 
             student_id: parseInt(values.studentId),
             full_name: values.firstName + " " + values.lastName,
-            date_of_birth: values.dateOfBirth.toString(),
-            graduation_date: "2020-08-08", /*values.graduationDate.toString()*/
+            date_of_birth: values.dateOfBirth.toJSON().substring(0, 10),
+            graduation_date: values.graduationDate.toJSON().substring(0, 10),
             major: values.major,
             degree: values.degree + " " + values.degreeType,
             student_skill: "Test",
             student_description: values.description,
             username: parseInt(localStorage.getItem("email_id")),
         };
-
-        console.log("onsubmit",data)
 
         axios
             .post(
@@ -261,9 +259,10 @@ function StudentInfo() {
                 Student Account Information
             </Typography>
             <Divider variant="inset" />
-            <form className={classes.form} onSubmit={(e)=>{
+            <form className={classes.form} onSubmit={(e) => {
                 e.preventDefault();
-                onSubmit(formik.values)}}>
+                onSubmit(formik.values)
+            }}>
                 {firstStep === true ? (<>
                     <Grid container id="master" direction="row" justify="space-between" spacing={2} alignItems="flex-start">
                         {/* Left Grid */}
@@ -293,7 +292,6 @@ function StudentInfo() {
                                     onChange={(valueDateOfBirth) => {
                                         setDateOfBirth(valueDateOfBirth);
                                         formik.values.dateOfBirth = valueDateOfBirth;
-                                        console.log(valueDateOfBirth)
                                     }}
                                     value={valueDateOfBirth}
                                     yearAriaLabel="Year"
@@ -321,7 +319,6 @@ function StudentInfo() {
                                     onChange={(valueGraduationDate) => {
                                         setGraduationDate(valueGraduationDate);
                                         formik.values.graduationDate = valueGraduationDate;
-                                        console.log(valueGraduationDate)
                                     }}
                                     value={valueGraduationDate}
                                     yearAriaLabel="Year"
@@ -334,16 +331,16 @@ function StudentInfo() {
                                     <Select native label="Major" name="major" id="major" value={formik.values.major} onChange={formik.handleChange}>
                                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                                             <option value="Architecture">Architecture</option>
-                                            <option value="Environmental_Design">Environmental Design</option>
-                                            <option value="Industrial_Design">Industrial Design</option>
-                                            <option value="Interior_Architecture">Interior Architecture</option>
+                                            <option value="Environmental Design">Environmental Design</option>
+                                            <option value="Industrial Design">Industrial Design</option>
+                                            <option value="Interior Architecture">Interior Architecture</option>
                                         </optgroup>
                                         <optgroup label="Kathrine G. McGovern College of the Arts">
-                                            <option value="Applied_Music">Applied Music</option>
+                                            <option value="Applied Music">Applied Music</option>
                                             <option value="Art">Art</option>
-                                            <option value="Art_History">Art History</option>
+                                            <option value="Art History">Art History</option>
                                             <option value="Dance">Dance</option>
-                                            <option value="Graphic_Design">Graphic Design</option>
+                                            <option value="Graphic Design">Graphic Design</option>
                                             <option value="Music">Music</option>
                                             <option value="Painting">Painting</option>
                                             <option value="Photography">Photography/Digital Media</option>
@@ -355,81 +352,81 @@ function StudentInfo() {
                                             <option value="Entrepreneurship">Entrepreneurship</option>
                                             <option value="Finance">Finance</option>
                                             <option value="Management">Management</option>
-                                            <option value="Management_Information_Systems">Management Information Systems</option>
+                                            <option value="Management Information Systems">Management Information Systems</option>
                                             <option value="Marketing">Marketing</option>
-                                            <option value="Suppy_Chain_Management">Suppy Chain Management</option>
+                                            <option value="Suppy Chain Management">Suppy Chain Management</option>
                                         </optgroup>
                                         <optgroup label="College of Education">
                                             <option value="Health">Health</option>
-                                            <option value="Human_Development_and_Family_Studies">Human Development and Family Studies</option>
-                                            <option value="Teaching_and_Learning">Teaching and Learning</option>
+                                            <option value="Human Development and Family Studies">Human Development and Family Studies</option>
+                                            <option value="Teaching and Learning">Teaching and Learning</option>
                                         </optgroup>
                                         <optgroup label="Cullen College of Engineering">
 
-                                            <option value="Biomedical_Engineering">Biomedical Engineering</option>
+                                            <option value="Biomedical Engineering">Biomedical Engineering</option>
 
-                                            <option value="Chemical_Engineering">Chemical Engineering</option>
+                                            <option value="Chemical Engineering">Chemical Engineering</option>
 
-                                            <option value="Civil_Engineering">Civil Engineering</option>
+                                            <option value="Civil Engineering">Civil Engineering</option>
 
-                                            <option value="Computer_Engineering">Computer Engineering</option>
+                                            <option value="Computer Engineering">Computer Engineering</option>
 
-                                            <option value="Computer_Engineering_and_Analytics">Computer Engineering and Analytics</option>
-                                            <option value="Construction_Engineering">Construction Engineering</option>
-                                            <option value="Electrical_Engineering">Electrical Engineering</option>
-                                            <option value="Industrial_Engineering">Industrial Engineering</option>
-                                            <option value="Mechanical_Engineering">Mechanical Engineering</option>
-                                            <option value="Petroleum_Engineering">Petroleum Engineering</option>
-                                            <option value="Systems_Engineering">Systems Engineering</option>
+                                            <option value="Computer Engineering and Analytics">Computer Engineering and Analytics</option>
+                                            <option value="Construction Engineering">Construction Engineering</option>
+                                            <option value="Electrical Engineering">Electrical Engineering</option>
+                                            <option value="Industrial Engineering">Industrial Engineering</option>
+                                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                            <option value="Petroleum Engineering">Petroleum Engineering</option>
+                                            <option value="Systems Engineering">Systems Engineering</option>
                                         </optgroup>
                                         <optgroup label="Conrad N. Hilton College of Hotel and Restaurant Management">
 
-                                            <option value="Hotel_and_Restaurant_Management">Hotel and Restaurant Management</option>
+                                            <option value="Hotel and Restaurant Management">Hotel and Restaurant Management</option>
                                         </optgroup>
                                         <optgroup label="College of Liberal Arts and Social Sciences">
 
-                                            <option value="African_American_Studies">African American Studies</option>
-                                            <option value="American_Sign_Language_Interpreting">American Sign Language Interpreting</option>
+                                            <option value="African American Studies">African American Studies</option>
+                                            <option value="American Sign Language Interpreting">American Sign Language Interpreting</option>
                                             <option value="Anthropology">Anthropology</option>
-                                            <option value="Chinese_Studies">Chinese Studies</option>
-                                            <option value="Communication_Sciences_and_Disorders">Communication Sciences and Disorders</option>
-                                            <option value="Communication_Studies">Communication Studies</option>
+                                            <option value="Chinese Studies">Chinese Studies</option>
+                                            <option value="Communication Sciences and Disorders">Communication Sciences and Disorders</option>
+                                            <option value="Communication Studies">Communication Studies</option>
                                             <option value="Economics">Economics</option>
                                             <option value="English">English</option>
-                                            <option value="Exercise_Science">Exercise Science</option>
-                                            <option value="Fitness_and_Sports">Fitness and Sports</option>
+                                            <option value="Exercise Science">Exercise Science</option>
+                                            <option value="Fitness and Sports">Fitness and Sports</option>
 
                                             <option value="French">French</option>
-                                            <option value="Health_Communication">Health Communication</option>
+                                            <option value="Health Communication">Health Communication</option>
                                             <option value="History">History</option>
-                                            <option value="Human_Nutrition_and_Foods">Human Nutrition and Foods</option>
+                                            <option value="Human Nutrition and Foods">Human Nutrition and Foods</option>
                                             <option value="Journalism">Journalism</option>
-                                            <option value="Liberal_Studies">Liberal Studies</option>
-                                            <option value="Media_Production">Media Production</option>
+                                            <option value="Liberal Studies">Liberal Studies</option>
+                                            <option value="Media Production">Media Production</option>
                                             <option value="Philosophy">Philosophy</option>
                                             <option value="Political Science">Political Science</option>
                                             <option value="Psychology">Psychology</option>
-                                            <option value="Religious_Studies">Religious Studies</option>
+                                            <option value="Religious Studies">Religious Studies</option>
                                             <option value="Sociology">Sociology</option>
                                             <option value="Spanish">Spanish</option>
-                                            <option value="Sports_Administration">Sports Administration</option>
-                                            <option value="Strategic_Communication">Strategic Communication</option>
+                                            <option value="Sports Administration">Sports Administration</option>
+                                            <option value="Strategic Communication">Strategic Communication</option>
 
                                             <option value="Women’s,_Gender,_and_Sexuality_Studies">Women’s, Gender, and Sexuality Studies</option>
-                                            <option value="World_Cultures_and_Literatures">World Cultures and Literatures</option>
+                                            <option value="World Cultures and Literatures">World Cultures and Literatures</option>
                                         </optgroup>
                                         <optgroup label="College of Natural Sciences and Mathematics">
 
-                                            <option value="Biochemical_and_Biophysical_Sciences">Biochemical and Biophysical Sciences</option>
+                                            <option value="Biochemical and Biophysical Sciences">Biochemical and Biophysical Sciences</option>
                                             <option value="Biology">Biology</option>
                                             <option value="Chemistry">Chemistry</option>
-                                            <option value="Computer_Science">Computer Science</option>
-                                            <option value="Earth_Science">Earth Science</option>
-                                            <option value="Environmental_Sciences">Environmental Sciences</option>
+                                            <option value="Computer Science">Computer Science</option>
+                                            <option value="Earth Science">Earth Science</option>
+                                            <option value="Environmental Sciences">Environmental Sciences</option>
                                             <option value="Geology">Geology</option>
                                             <option value="Geophysics">Geophysics</option>
-                                            <option value="Honors_Biomedical_Sciences">Honors Biomedical Sciences</option>
-                                            <option value="Mathematical_Biology">Mathematical Biology</option>
+                                            <option value="Honors Biomedical Sciences">Honors Biomedical Sciences</option>
+                                            <option value="Mathematical Biology">Mathematical Biology</option>
                                             <option value="Mathematics">Mathematics</option>
 
                                             <option value="Physics">Physics</option>
@@ -437,23 +434,23 @@ function StudentInfo() {
                                         <optgroup label="College of Nursing">
 
                                             <option value="Pre-Nursing">Pre-Nursing</option>
-                                            <option value="Nursing,_BSN_(RN-BSN)">Nursing, BSN (RN-BSN)</option>
-                                            <option value="Nursing,_BSN_(Second_Degree)">Nursing, BSN (Second Degree)</option>
+                                            <option value="Nursing, BSN (RN-BSN)">Nursing, BSN (RN-BSN)</option>
+                                            <option value="Nursing, BSN (Second_Degree)">Nursing, BSN (Second Degree)</option>
                                         </optgroup>
                                         <optgroup label="College of Technology">
 
                                             <option value="Biotechnology">Biotechnology</option>
 
-                                            <option value="Computer_Engineering_Technology">Computer Engineering Technology</option>
-                                            <option value="Computer_Information_Systems">Computer Information Systems</option>
-                                            <option value="Construction_Management">Construction Management</option>
-                                            <option value="Digital_Media">Digital Media</option>
-                                            <option value="Electrical_Power_Engineering_Technology">Electrical Power Engineering Technology</option>
-                                            <option value="Human_Resources_Development">Human Resources Development</option>
-                                            <option value="Mechanical_Engineering_Technology">Mechanical Engineering Technology</option>
-                                            <option value="Retailing_and_Consumer_Science">Retailing and Consumer Science </option>
-                                            <option value="Supply_Chain_and_Logistics_Technology">Supply Chain and Logistics Technology</option>
-                                            <option value="Technology_Leadership_and_Innovation_Management ">Technology Leadership and Innovation Management </option>
+                                            <option value="Computer Engineering Technology">Computer Engineering Technology</option>
+                                            <option value="Computer Information Systems">Computer Information Systems</option>
+                                            <option value="Construction Management">Construction Management</option>
+                                            <option value="Digital Media">Digital Media</option>
+                                            <option value="Electrical Power Engineering Technology">Electrical Power Engineering Technology</option>
+                                            <option value="Human Resources Development">Human Resources Development</option>
+                                            <option value="Mechanical Engineering Technology">Mechanical Engineering Technology</option>
+                                            <option value="Retailing and Consumer Science">Retailing and Consumer Science </option>
+                                            <option value="Supply Chain and Logistics Technology">Supply Chain and Logistics Technology</option>
+                                            <option value="Technology Leadership and Innovation Management ">Technology Leadership and Innovation Management </option>
                                         </optgroup>
                                         <optgroup label="Pre-Professional Tracks">
 
@@ -462,8 +459,8 @@ function StudentInfo() {
                                             <option value="Pre-Medicine">Pre-Medicine</option>
                                             <option value="Pre-Optometry">Pre-Optometry</option>
                                             <option value="Pre-Pharmacy">Pre-Pharmacy</option>
-                                            <option value="Pre-Physical_Therapy">Pre-Physical Therapy</option>
-                                            <option value="Pre-Veterinary_Medicine">Pre-Veterinary Medicine</option>
+                                            <option value="Pre-Physical Therapy">Pre-Physical Therapy</option>
+                                            <option value="Pre-Veterinary Medicine">Pre-Veterinary Medicine</option>
                                         </optgroup>
                                     </Select>
                                 </FormControl>
@@ -473,10 +470,10 @@ function StudentInfo() {
                                     <FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel>Degree</InputLabel>
                                         <Select native label="Degree" name="degree" id="degree" value={formik.values.degree} onChange={formik.handleChange}>
-                                            <option value="BA">B.A.</option>
-                                            <option value="BS">B.S.</option>
-                                            <option value="BFA">B.F.A.</option>
-                                            <option value="BAS">B.A.S.</option>
+                                            <option value="B.A.">B.A.</option>
+                                            <option value="B.S.">B.S.</option>
+                                            <option value="B.F.A.">B.F.A.</option>
+                                            <option value="B.A.S.">B.A.S.</option>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -484,8 +481,8 @@ function StudentInfo() {
                                     <FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel>Degree type</InputLabel>
                                         <Select native label="Degree Type" name="degreeType" id="degreeType" value={formik.values.degreeType} onChange={formik.handleChange}>
-                                            <option value="undergrad">Undergraduate</option>
-                                            <option value="grad">Graduate</option>
+                                            <option value="Undergraduate">Undergraduate</option>
+                                            <option value="Graduate">Graduate</option>
 
                                         </Select>
                                     </FormControl>
@@ -500,7 +497,7 @@ function StudentInfo() {
                             <Button variant="contained" color="secondary" className={classes.submit} onClick={nextStep} size="large">Continue</Button>
                         </Grid>
                     </Grid>
-                    <pre>{JSON.stringify(formik.values, null, 2)}</pre>
+               
 
                 </>) : (
                         <>
@@ -594,7 +591,6 @@ function StudentInfo() {
                                     <Button variant="contained" color="secondary" className={classes.submit} size="large" type="submit">Submit</Button>
                                 </Grid>
                             </Grid>
-                            <pre>{JSON.stringify(formik.values, null, 2)}</pre>
                         </>)}
             </form>
         </div>
