@@ -1,6 +1,7 @@
 import React, {useState,useContext, useEffect} from "react";
 import StudentProject from "../../components/StudentProject/StudentProject";
-import StudentProjectTimeline from "../../components/StudentProject/StudentProjectTimeline";
+import StudentProjectAdd from "../../components/StudentProject/StudentProjectAdd";
+import StudentProjectScroll from "../../components/StudentProject/StudentProjectScroll";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
@@ -559,8 +560,9 @@ export default function StudentProfile (){
           </Button>
         </DialogActions>
       </Dialog>
+      <StudentProjectAdd />
       <StudentProject />
-      <StudentProjectTimeline />
+      <StudentProjectScroll showBelow={250} />
     </div>
   );
 };

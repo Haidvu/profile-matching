@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +15,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
+
+import axios from 'axios';
+import { getConfig } from '../../authConfig';
+
+import { useHistory } from "react-router-dom";
+
 
 
 // A list of projects and some description is needed here
@@ -83,17 +89,18 @@ const useStyles = makeStyles((theme) => ({
     padding: "15px"
   },
   companyProjectCards: {
-    padding: "70px",
+    paddingLeft: "70px",
+    paddingRight: "70px",
+    paddingTop: "20px",
+
+
     // width: "100%"
 
   },
   root: {
     flexGrow: 1,
   },
-  cardActionArea: {
-    height: "245px",
-    //overflow: "hidden"
-  },
+
   cardText: {
     fontSize: "13px"
   },
@@ -108,6 +115,17 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     padding: "8px"
+  },
+  addProject: {
+    '&:hover': {
+      backgroundColor: '#C8102E',
+    },
+    margin: theme.spacing(2)
+  },
+
+
+  media: {
+    height: 140
   }
 }));
 
@@ -115,15 +133,42 @@ export default function CompanyProject() {
 
   const classes = useStyles();
 
+  const [companyProjects, setCompanyProjects] = useState([])
+
+  const history = useHistory();
+
+
+
+  const createProject = () =>{ 
+    let path = `projects/create`; 
+    history.push(path);
+  }
+
+  useEffect(() => {
+    console.log(getConfig())
+    axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
+
+      {
+        username_id: 49 // 	company@eli.eli | Company 1 Eli | 49
+      }
+      , getConfig()).then(res => {
+        console.log(res.data)
+        setCompanyProjects(res.data)
+      })
+      .catch(err => {
+        console.log(err.response.data)
+      })
+  }, [])
+
   // Here will be the submit function to create the project
   // and the axios integration
 
-  
+
 
   return (
     <div className="root">
       <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
-      <Avatar alt="profile image" src={AvatarImage} className={classes.profileImage} />
+
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/" /*onClick={handleClick}*/>
           Home
@@ -133,215 +178,59 @@ export default function CompanyProject() {
         </Link>
         <Typography color="textPrimary">My Projects</Typography>
       </Breadcrumbs>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', }}>
+        <Button variant="contained" component="span" className={classes.addProject} onClick={createProject}>
+          Add Project
+       </Button>
+      </div>
 
       <div className={classes.companyProjectCards}>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
+
+          {companyProjects.map((project, index) =>
+
+            <Grid item xs={12} md={4} key={index}>
+              <Card className={classes.root}>
+                <CardActionArea className={classes.cardActionArea}>
+                  <CardMedia
+                    component="img"
+                    alt="Contemplative Reptile"
+                    height="80"
+                    image={AvatarImage}
+                    title="Contemplative Reptile"
+                    className={classes.media}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
+                      {project.project_name}
                     </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
+                    <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                      Deadline:  {project.project_deadline.substring(0, 10)}
                     </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
-                  </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                  </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
-                    </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
-                    </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
-                  </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                  </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
-                    </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
-                    </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
-                  </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                  </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
+                    {project.project_tech.split(',').map((skill, index) =>
+                      <Chip label={skill} className={classes.chips} key={index} />
+                    )}
+
+
+
+                  </CardContent>
+                </CardActionArea>
+
+
+                <CardActions>
+                  <Button size="small" color="primary">
+                    VIEW
                 </Button>
-                <Button size="small" color="primary">
-                  Learn More
+                  <Button size="small" color="primary">
+                    Learn More
                 </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
-                </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card className={classes.root}>
-              <CardActionArea className={classes.cardActionArea}>
-                <CardMedia
-                  component="img"
-                  alt="Contemplative Reptile"
-                  height="80"
-                  image={AvatarImage}
-                  title="Contemplative Reptile"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                    Project 1
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.cardText}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standar...
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                    Deadline: Sept 31, 2022
-                   </Typography>
-                  <Chip label="React" className={classes.chips} />
-                  <Chip label="Django" className={classes.chips} />
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  VIEW
-                </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+                </CardActions>
+              </Card>
+            </Grid>
+
+
+
+          )}
         </Grid>
       </div>
 

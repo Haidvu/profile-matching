@@ -15,10 +15,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: "no-repeat",
     width: "100vw",
     height: "100vh",
+    maskImage: "linear-gradient(to bottom, transparent 2%, black 75%)",
+    filter: "brightness(60%)",
   },
   title: {
     position: "absolute",
-    top: "25%",
+    top: "35%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     fontFamily: "lato",
@@ -39,14 +41,15 @@ const useStyles = makeStyles((theme) => ({
 
   content: {
     position: "absolute",
-    top: "40%",
+    top: "50%",
     left: "50%",
     fontFamily: "Lato",
     transform: "translate(-50%, -50%)",
     fontStyle: "normal",
-    fontWeight: "bold",
+    fontWeight: "900",
     fontSize: "larger",
     color: "white",
+    textShadow: '1px 1px 5px #C8102E',
   },
 }));
 
@@ -66,8 +69,9 @@ function Home() {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6} className={classes.content}>
-          Apply for jobs using FutureStart. Get in touch with 1000's of
-          companies. Take the next step for your future
+          <h3>Apply for jobs using FutureStart. Get in touch with 1000's of
+          companies. Take the next step for your future</h3>
+
         </Grid>
       </Grid>
     </div>

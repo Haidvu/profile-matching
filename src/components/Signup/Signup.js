@@ -149,7 +149,8 @@ export default function SignUp() {
                   name="role_id"
                   row
                   color="secondary"
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <FormControlLabel
                     value="0"
                     control={<Radio />}
@@ -169,7 +170,8 @@ export default function SignUp() {
             fullWidth
             variant="contained"
             color="secondary"
-            className={classes.submit}>
+            className={classes.submit}
+          >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
