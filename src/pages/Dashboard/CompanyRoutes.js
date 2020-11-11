@@ -9,7 +9,7 @@ const CompanyRoutes = () => {
     <div>
       <Switch>
         <Route path={path} exact component={CompanyProfile} />
-        <Route path={`${path}/projects`} exact component={CompanyProject} />
+        <Route path={`${path}/projects/`} exact component={CompanyProject} />
         {/* <Route
           path={`${path}/*`}
           render={() => (
