@@ -3,7 +3,7 @@ import { Route, useRouteMatch, Switch } from "react-router-dom";
 import CompanyProfile from "../CompanyProfile/CompanyProfile";
 import CompanyProjectList from "../CompanyProject/CompanyProjectList";
 import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
-
+import CompanySearch from "../CompanySearch/CompanySearch";
 import CompanyProjectCreate from "../CompanyProject/CompanyProjectCreate";
 
 
@@ -19,6 +19,7 @@ const CompanyRoutes = () => {
         <Route path={`${path}/projects/create`} exact component={CompanyProjectCreate} />
 
         <Route path={`${path}/projects/project1`} exact component={CompanyProjectTemplate} />
+        <Route path={`${path}/search`} exact component={CompanySearch} />
 
 
         {/* <Route
