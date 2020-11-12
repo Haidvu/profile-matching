@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, Box, Avatar, List, ListItem, Divider, ListItemText, ListItemIcon, IconButton, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+//import Link from '@material-ui/core/Link';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -20,10 +20,11 @@ import axios from 'axios';
 import { getConfig } from '../../authConfig';
 
 import { useHistory } from "react-router-dom";
+import { DataContext } from "../../contexts/dataContext";
 
+import { Route, useRouteMatch, Switch, Link } from "react-router-dom";
 
-
-// A list of projects and some description is needed here
+import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -92,10 +93,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
-
-
-    // width: "100%"
-
   },
   root: {
     flexGrow: 1,
@@ -129,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 export default function CompanyProject() {
 
   const classes = useStyles();
@@ -137,43 +135,52 @@ export default function CompanyProject() {
 
   const history = useHistory();
 
+  const { data } = useContext(DataContext);
+  const { profile } = data;
 
-
-  const createProject = () =>{ 
-    let path = `projects/create`; 
+  const createProject = () => {
+    let path = `projects/create`;
     history.push(path);
   }
 
+
+  // move the integration out of here
   useEffect(() => {
-    console.log(getConfig())
     axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
 
       {
-        username_id: 49 // 	company@eli.eli | Company 1 Eli | 49
+        username_id: profile.id
       }
       , getConfig()).then(res => {
-        console.log(res.data)
         setCompanyProjects(res.data)
+
       })
       .catch(err => {
-        console.log(err.response.data)
+        console.log(err)
       })
   }, [])
 
   // Here will be the submit function to create the project
   // and the axios integration
 
+  let { url } = useRouteMatch();
+
 
 
   return (
     <div className="root">
+
+
+
       <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
 
+
+
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
-        <Link color="inherit" href="/" /*onClick={handleClick}*/>
+        <Link style={{ textDecoration: 'none' }} color="inherit" to="/" /*onClick={handleClick}*/>
           Home
         </Link>
-        <Link color="inherit" href="/dashboard" /*onClick={handleClick}*/>
+        <Link style={{ textDecoration: 'none' }} color="inherit" to="/dashboard" /*onClick={handleClick}*/>
           Profile
         </Link>
         <Typography color="textPrimary">My Projects</Typography>
@@ -187,49 +194,52 @@ export default function CompanyProject() {
       <div className={classes.companyProjectCards}>
         <Grid container spacing={3}>
 
-          {companyProjects.map((project, index) =>
-
-            <Grid item xs={12} md={4} key={index}>
-              <Card className={classes.root}>
-                <CardActionArea className={classes.cardActionArea}>
-                  <CardMedia
-                    component="img"
-                    alt="Contemplative Reptile"
-                    height="80"
-                    image={AvatarImage}
-                    title="Contemplative Reptile"
-                    className={classes.media}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                      {project.project_name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                      Deadline:  {project.project_deadline.substring(0, 10)}
-                    </Typography>
-                    {project.project_tech.split(',').map((skill, index) =>
-                      <Chip label={skill} className={classes.chips} key={index} />
-                    )}
-
-
-
-                  </CardContent>
-                </CardActionArea>
+          {companyProjects.map((project, index) => {
+            return (
+              <Grid item xs={12} md={4} key={index}>
+                <Link style={{ textDecoration: 'none' }} to={`${url}/${project.project_name}`} >
+                  <Card className={classes.root}>
+                    <CardActionArea className={classes.cardActionArea}>
+                      <CardMedia
+                        component="img"
+                        alt="Contemplative Reptile"
+                        height="80"
+                        image={AvatarImage}
+                        title="Contemplative Reptile"
+                        className={classes.media}
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
+                          {project.project_name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                          Deadline:  {project.project_deadline.substring(0, 10)}
+                        </Typography>
+                        {project.project_tech.split(',').map((skill, index) =>
+                          <Chip label={skill} className={classes.chips} key={index} />
+                        )}
 
 
-                <CardActions>
-                  <Button size="small" color="primary">
-                    VIEW
+
+                      </CardContent>
+                    </CardActionArea>
+
+
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        VIEW
                 </Button>
-                  <Button size="small" color="primary">
-                    Learn More
+                      <Button size="small" color="primary">
+                        Learn More
                 </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+                    </CardActions>
+                  </Card>
+                </Link>
+              </Grid>
 
 
-
+            );
+          }
           )}
         </Grid>
       </div>
@@ -237,6 +247,8 @@ export default function CompanyProject() {
     </div>
   );
 };
+
+
 
 
 

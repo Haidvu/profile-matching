@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
@@ -37,6 +37,9 @@ import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import CheckRoundedIcon from '@material-ui/icons/CheckRounded';
 
 import Select from 'react-select';
+
+import { useHistory } from "react-router-dom";
+import { DataContext } from "../../contexts/dataContext";
 
 
 // A list of projects and some description is needed here
@@ -191,7 +194,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={'span'}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -214,7 +217,8 @@ function a11yProps(index) {
 
 
 
-export default function CompanyProject() {
+export default function CompanyProject({projects, match}) {
+
 
   const classes = useStyles();
 
@@ -228,6 +232,12 @@ export default function CompanyProject() {
 
   //options of skills that will be sent to the select statement
   const options = [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }, { label: 'C#', value: 2 }, { label: 'React', value: 3 }]
+
+  /*const companyInfoData = */
+
+  //If project is a valid project show, if not then 404
+  console.log(match.params.project);
+
 
   // Initial Info
   const [companyInfo, setCompanyInfo] = useState({ //This is the data
@@ -286,10 +296,9 @@ export default function CompanyProject() {
     handleCloseEdit(key);
   }
 
-
-
   return (
     <div className="root">
+      
       <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
       <Avatar alt="profile image" src={AvatarImage} className={classes.profileImage} />
 
@@ -304,8 +313,10 @@ export default function CompanyProject() {
         <Link color="inherit" href="/dashboard/projects" /*onClick={handleClick}*/>
           My Projects
       </Link>
-        <Typography color="textPrimary">Projects 1</Typography>
+        <Typography component={'span'} color="textPrimary">Projects 1</Typography>
       </Breadcrumbs>
+
+     
 
       <Tabs
         value={value}

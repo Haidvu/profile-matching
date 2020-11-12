@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, FormControl, FormGroup, FormControlLabel, Checkbox, ListItem } from "@material-ui/core";
@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
+import { DataContext } from "../../contexts/dataContext";
 
 
 // A list of projects and some description is needed here
@@ -214,18 +215,43 @@ export default function CompanyProjectCreate() {
     },
   ];
 
+  var userNameId;
+
+  const { data } = useContext(DataContext);
+  const { profile } = data;
+
+  
+
+  axios.get("http://18.213.74.196:8000/api/company_profile/" + localStorage.getItem("slug") 
+
+    , getConfig()).then(res => {
+      
+     
+
+     
+     console.log(userNameId)
+
+
+    })
+    .catch(err => {
+      console.log(err.response.data)
+    });
+
+
   const [companyInput, setCompanyInput] = useState({ //This is the data
     project_description: '',
     project_name: '',
     project_type: '',
     project_tech: '',
     project_deadline: '',
+    is_published: false
 
   /*  company_project_team_capacity: '10',
     company_project_students_selected: [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }]*/
      })
 
      const handleSave = (key) => { //Make api call to save data here. 
+      console.log(companyInput)
       setCompanyInput(companyInput);
       saveToDB(companyInput)
 
@@ -240,8 +266,9 @@ export default function CompanyProjectCreate() {
         project_name: values.project_name,
         project_type: values.project_type,
         project_tech: values.project_tech,
-        project_deadline: '2020-10-24T02:30:48Z',
-        username: 49
+        project_deadline: values.project_deadline,
+        is_published: values.is_published,
+        username: profile.id
       };
 
       axios
@@ -251,7 +278,8 @@ export default function CompanyProjectCreate() {
               getConfig()
           )
           .then((res) => {
-              localStorage.setItem("slug", res.data.slug);
+            console.log(res)
+             
               history.push("/dashboard/projects");
           })
           .catch((err) => console.log(err.response.data));
@@ -262,14 +290,14 @@ export default function CompanyProjectCreate() {
     axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
 
       {
-        username_id: 49 // 	company@eli.eli | Company 1 Eli | 49
+        username_id: userNameId 
       }
       , getConfig()).then(res => {
         console.log(res.data)
         setCompanyProjects(res.data)
       })
       .catch(err => {
-        console.log(err.response.data)
+        console.log(err)
       })
   }, [])
 
@@ -372,7 +400,7 @@ export default function CompanyProjectCreate() {
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                control={<Checkbox style={{ color: '#C8102E' }} />}
+                control={<Checkbox style={{ color: '#C8102E' }} onChange={(e) => { setCompanyInput({ ...companyInput, is_published: e.target.checked }) }} />}
                 label={<Typography style={{ fontSize: 15 }}>Check if you want to publish this project</Typography>}
                
 
