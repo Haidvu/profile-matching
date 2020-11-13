@@ -60,28 +60,36 @@ export default function SignUp() {
 
   let history = useHistory();
   const signUp = (e) => {
-    setError("");
-    axios
-      .post("http://18.213.74.196:8000/api/user_accounts/signup", signUpInfo)
-      .then((res) => {
-        if (res.data.error) {
-          setError(res.data.error);
-        } else {
-          //authenticate again after the user is created
-          const email = signUpInfo.email;
-          const password = signUpInfo.password1;
-          axios
-            .post("http://18.213.74.196:8000/api/token/", { email, password })
-            .then((res) => {
-              localStorage.setItem("token", res.data.access);
-              localStorage.setItem("role_id", res.data.role_id);
-              localStorage.setItem("email_id", res.data.email_id);
-              history.push("/accountInfo");
-            });
-        }
-      })
-      .catch((err) => console.log(err));
+    const len = signUpInfo.email.length;
+    const domain = signUpInfo.email.substring(len - 6); //must be @uh.edu
 
+    if (signUpInfo.role_id === "") {
+      setError("Please select an account type");
+    } else if (signUpInfo.role_id === "0" && domain !== "uh.edu") {
+      setError('You must use a "username@uh.edu email" for a student account');
+    } else {
+      setError("");
+      axios
+        .post("http://18.213.74.196:8000/api/user_accounts/signup", signUpInfo)
+        .then((res) => {
+          if (res.data.error) {
+            setError(res.data.error);
+          } else {
+            //authenticate again after the user is created
+            const email = signUpInfo.email;
+            const password = signUpInfo.password1;
+            axios
+              .post("http://18.213.74.196:8000/api/token/", { email, password })
+              .then((res) => {
+                localStorage.setItem("token", res.data.access);
+                localStorage.setItem("role_id", res.data.role_id);
+                localStorage.setItem("email_id", res.data.email_id);
+                history.push("/accountInfo");
+              });
+          }
+        })
+        .catch((err) => console.log(err));
+    }
     e.preventDefault();
   };
 

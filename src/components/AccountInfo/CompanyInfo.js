@@ -255,13 +255,12 @@ const CompanyInfo = () => {
   useEffect(() => {
     if (Object.entries(errorsSecond).length !== 0) {
       let errors = false;
-      errors = Object.keys(errorsSecond).some((key) => {
+      Object.keys(errorsSecond).forEach((key) => {
         if (errorsSecond[key] !== null) {
-          return true;
+          errors = true;
         }
       });
       if (!errors) {
-        console.log("No errors");
         const data = {
           company_name: companyFirst.name,
           company_phone_no: companyFirst.phoneNumber,

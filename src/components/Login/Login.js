@@ -71,7 +71,6 @@ function Login() {
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
-
         if (res.data.slug) {
           localStorage.setItem("slug", res.data.slug);
           history.push("/dashboard");
