@@ -105,7 +105,8 @@ function Login() {
               <Alert
                 className={classes.loginAlert}
                 variant="filled"
-                severity="error">
+                severity="error"
+              >
                 {error}
               </Alert>
             ) : null}
@@ -146,7 +147,8 @@ function Login() {
                 fullWidth
                 variant="contained"
                 color="secondary"
-                className={classes.submit}>
+                className={classes.submit}
+              >
                 Sign In
               </Button>
               <Grid container>
