@@ -10,6 +10,12 @@ export const dataReducer = (state, action) => {
           ...action.payload,
         },
       };
+    case "SET_STUDENTS":
+      console.log(action.payload);
+      return {
+        ...state,
+        students: action.payload,
+      };
     default:
       return state;
   }

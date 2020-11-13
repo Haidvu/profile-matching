@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,7 +13,9 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  CircularProgress,
 } from "@material-ui/core";
+import Skeleton from "@material-ui/lab/Skeleton";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "./StudentRoutes";
@@ -23,6 +25,8 @@ import CompanyMenu from "./CompanyMenu";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { getConfig } from "../../authConfig";
+import CompanyProfile from "../CompanyProfile/CompanyProfile";
+import StudentProfile from "../StudentProfile/StudentProfile";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontFamily: "Lato",
   },
+  spinner: {
+    position: "absolute",
+    top: "30%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
 }));
 
 export default function Dashboard() {
@@ -67,6 +77,7 @@ export default function Dashboard() {
   const slug = localStorage.getItem("slug");
   const role_id = localStorage.getItem("role_id");
   let history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -76,40 +87,15 @@ export default function Dashboard() {
     history.push("/login");
   };
 
-  useEffect(() => {
-    if (slug) {
-      const url =
-        role_id === "0"
-          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
-          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
-
-      axios
-        .get(url, getConfig())
-        .then((res) => {
-          dispatch({ type: "SET_PROFILE", payload: res.data });
-        })
-        .catch((err) => {
-          // to prevent user from changing their roles
-          // would keep commented while in developement
-          // console.log(err.response);
-          // if (err.response.status === 404) {
-          //   logout();
-          // }
-        });
-    }
-  }, [role_id, slug, dispatch]);
-
   const userOptions = () => {
     switch (role_id) {
       case "0":
         return {
-          name: data.profile.full_name,
           menu: <StudentMenu />,
           routes: <StudentRoutes />,
         };
       case "1":
         return {
-          name: data.profile.company_name,
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
@@ -133,9 +119,13 @@ export default function Dashboard() {
             color="inherit"
             className={classes.rightToolbar}
           />
-          <Typography p={2}>{`Welcome! ${
-            userOptions() ? userOptions().name : ""
-          }`}</Typography>
+          <Typography p={2}>
+            {data.profile
+              ? role_id === "1"
+                ? data.profile.company_name
+                : data.profile.student_name
+              : null}
+          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -146,7 +136,6 @@ export default function Dashboard() {
         <div className={classes.drawerContainer}>
           <List>
             {userOptions() ? userOptions().menu : null}
-
             <Link to="/login" className={classes.link}>
               <ListItem onClick={logout}>
                 <ListItemIcon>

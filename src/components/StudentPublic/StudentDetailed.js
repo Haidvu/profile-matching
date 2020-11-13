@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Paper, Typography, Grid, Button, Chip } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
+import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   right: {
@@ -22,44 +23,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentDetailed = ({ studentsList, match }) => {
-  const classes = useStyles();
-  const {
-    params: { userId },
-  } = match;
-
+const StudentDetailed = ({ match }) => {
+  // console.log("students: " + students);
+  const { data, dispatch } = useContext(DataContext);
   useEffect(() => {
-    console.log("Detailed view: " + studentsList);
+    console.log(match);
+    console.log(match.params.id);
+    console.log(data);
+    axios
+      .get(
+        `http://18.213.74.196:8000/api/student_profile/${match.params.id}`,
+        getConfig()
+      )
+      .then((res) => {
+        console.log(res.data);
+        // let data = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log(students[id]);
   }, []);
-  return (
-    <>
-      <Grid item xs={8} className={classes.right}>
-        <Paper className={classes.root}>
-          <Typography>Student's Profile</Typography>
-          <Typography variant="h6">{studentsList[userId].full_name}</Typography>
-          {/* <Typography variant="subtitle2">{`${student.degree} ${student.major}`}</Typography>
-          <Typography variant="subtitle2">{`Graduation Date: ${student.graduation_date}`}</Typography>
-          <div className={classes.skillsRoot}>
-            <Typography variant="subtitle2">Skills</Typography>
-            {student.student_skill.map((skill, index) => (
-              <Chip
-                key={index}
-                label={skill}
-                className={classes.chip}
-                color="secondary"
-                size="small"
-                variant="outlined"
-              />
-            ))}
-          </div> */}
-          <Button variant="outlined" color="secondary">
-            Add Student to Project
-          </Button>
-        </Paper>
-        {/* <pre>{JSON.stringify(studentsList, null, 2)}</pre> */}
-      </Grid>
-    </>
-  );
+  return <p>Student Detailed</p>;
 };
 
 export default StudentDetailed;
