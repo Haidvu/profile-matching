@@ -79,6 +79,7 @@ function Login() {
         }
       })
       .catch((err) => {
+        console.log(err);
         setError(
           err.response.data.detail +
             ". Make sure your email and password is correct."
