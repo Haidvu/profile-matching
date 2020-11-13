@@ -232,6 +232,7 @@ const CompanyInfo = () => {
       companyRep: companySecond.companyRep === "" ? "Required" : null,
       companyType: companySecond.companyType === "" ? "Required" : null,
       website: companySecond.website === "" ? "Required" : null,
+      mission: companySecond.mission === "" ? "Required" : null,
       description: companySecond.description === "" ? "Required" : null,
     });
   };
@@ -277,7 +278,6 @@ const CompanyInfo = () => {
           company_description: companySecond.description,
           username: localStorage.getItem("email_id"),
         };
-        console.log(data);
         axios
           .post(
             "http://18.213.74.196:8000/api/company_profile/create",
@@ -291,8 +291,6 @@ const CompanyInfo = () => {
           .catch((err) => {
             console.log(err);
           });
-      } else {
-        console.log(errorsSecond);
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorsSecond]);
@@ -504,6 +502,20 @@ const CompanyInfo = () => {
                     </Grid>
                   </Grid>
                   <Grid item>
+                    <FormControlLabel
+                      className={classes.checkLabel}
+                      value={!disable}
+                      control={
+                        <Checkbox
+                          name="checkedAddress"
+                          color="secondary"
+                          onChange={checkMailingAddress}
+                          checked={companyFirst.checkedAddress}
+                        />
+                      }
+                      label="Mailing address same as company Address"
+                      labelPlacement="end"
+                    />
                     <TextField
                       error={
                         errorsFirst.mailingAddress &&
@@ -531,20 +543,6 @@ const CompanyInfo = () => {
                         {errorsFirst.mailingAddress}
                       </FormHelperText>
                     ) : null}
-                    <FormControlLabel
-                      className={classes.checkLabel}
-                      value={!disable}
-                      control={
-                        <Checkbox
-                          name="checkedAddress"
-                          color="secondary"
-                          onChange={checkMailingAddress}
-                          checked={companyFirst.checkedAddress}
-                        />
-                      }
-                      label="Mailing address same as company Address"
-                      labelPlacement="end"
-                    />
                   </Grid>
                   <Grid
                     container
@@ -731,6 +729,9 @@ const CompanyInfo = () => {
                   spacing={3}>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.mission && companySecond.mission === ""
+                      }
                       variant="outlined"
                       multiline
                       rows={5}
@@ -741,6 +742,14 @@ const CompanyInfo = () => {
                       onChange={handleChangeSecond}
                       value={companySecond.mission}
                     />
+                    {errorsSecond.mission && companySecond.mission === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.mission && companySecond.mission === ""
+                        }>
+                        {errorsSecond.mission}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <TextField
