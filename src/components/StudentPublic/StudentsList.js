@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Typography,
   Grid,
@@ -15,13 +15,14 @@ import {
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import { DataContext } from "../../contexts/dataContext";
 import { useLocation } from "react-router-dom";
+import { DataContext } from "../../contexts/dataContext";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
     fontWeight: "bold",
-    fontSize: "1.3rem",
+    fontSize: "1rem",
   },
   subheader: {
     color: theme.palette.text.primary,
@@ -89,25 +90,26 @@ const useStyles = makeStyles((theme) => ({
 
 const StudentsList = () => {
   let location = useLocation();
-  let currentPath = location.pathname;
+  console.log(`${location.pathname}/`);
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
+  const [studentsList, setStudentsList] = useState();
   const { data, dispatch } = useContext(DataContext);
-  const { students } = data;
   //   const formatGraduationDate = (date) => {
   //     const dateElements = date.split("-");
   //     const date = dateElements[dateElements.length - 1];
   //   };
-  const getProfile = async () => {
+  const getStudents = async () => {
     try {
       const response = await axios.get(
         `http://18.213.74.196:8000/api/student_profile/`,
         getConfig()
       );
-      response.data.forEach((student) => {
-        student.student_skill = student.student_skill.split(" ");
-      });
+      // response.data.forEach((student) => {
+      //   student.student_skill = student.student_skill.split(" ");
+      // });
       dispatch({ type: "SET_STUDENTS", payload: response.data });
+      setStudentsList(response.data);
     } catch (e) {
       console.log(e);
     }
@@ -115,7 +117,7 @@ const StudentsList = () => {
   };
 
   useEffect(() => {
-    getProfile();
+    getStudents();
   }, []);
 
   return (
@@ -124,8 +126,8 @@ const StudentsList = () => {
         <CircularProgress color="secondary" className={classes.spinner} />
       ) : (
         <Grid container spacing={4} className={classes.gridRoot}>
-          {students
-            ? students.map((student) => (
+          {studentsList
+            ? studentsList.map((student) => (
                 <Grid item key={student.username_id}>
                   <Card className={classes.card}>
                     <CardHeader
@@ -161,7 +163,7 @@ const StudentsList = () => {
                         className={classes.fieldTitle}>
                         Skills
                       </Typography>
-                      <div className={classes.skillsRoot}>
+                      {/* <div className={classes.skillsRoot}>
                         {student.student_skill.map((skill, index) => (
                           <Chip
                             key={index}
@@ -175,19 +177,21 @@ const StudentsList = () => {
                             variant="outlined"
                           />
                         ))}
-                      </div>
+                      </div> */}
                     </CardContent>
                     <Divider></Divider>
                     <CardContent>
-                      <Button
-                        component={Link}
-                        to={`${currentPath}/${student.username_id}`}
-                        color="secondary"
-                        size="small"
-                        variant="contained"
-                        className={classes.button}>
-                        View Profile
-                      </Button>
+                      <Link
+                        to={`${location.pathname}/${student.username_id}`}
+                        style={{ textDecoration: "none" }}>
+                        <Button
+                          color="secondary"
+                          size="small"
+                          variant="contained"
+                          className={classes.button}>
+                          View Profile
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 </Grid>
