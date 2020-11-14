@@ -13,9 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-  CircularProgress,
 } from "@material-ui/core";
-import Skeleton from "@material-ui/lab/Skeleton";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "./StudentRoutes";
@@ -25,8 +23,6 @@ import CompanyMenu from "./CompanyMenu";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { getConfig } from "../../authConfig";
-import CompanyProfile from "../CompanyProfile/CompanyProfile";
-import StudentProfile from "../StudentProfile/StudentProfile";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -63,12 +59,6 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontFamily: "Lato",
   },
-  spinner: {
-    position: "absolute",
-    top: "30%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-  },
 }));
 
 export default function Dashboard() {
@@ -87,15 +77,41 @@ export default function Dashboard() {
     history.push("/login");
   };
 
+  useEffect(() => {
+    if (slug) {
+      const url =
+        role_id === "0"
+          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
+          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
+
+      axios
+        .get(url, getConfig())
+        .then((res) => {
+          dispatch({ type: "SET_PROFILE", payload: res.data });
+          setLoading(false);
+        })
+        .catch((err) => {
+          // to prevent user from changing their roles
+          // would keep commented while in developement
+          // console.log(err.response);
+          // if (err.response.status === 404) {
+          //   logout();
+          // }
+        });
+    }
+  }, []);
+
   const userOptions = () => {
     switch (role_id) {
       case "0":
         return {
+          name: data.profile.full_name ? data.profile.full_name : null,
           menu: <StudentMenu />,
           routes: <StudentRoutes />,
         };
       case "1":
         return {
+          name: data.profile.company_name ? data.profile.company_name : null,
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
@@ -110,48 +126,49 @@ export default function Dashboard() {
   //logs out if no profile found 404
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6">| Future Start |</Typography>
-          <AccountCircleRoundedIcon
-            color="inherit"
-            className={classes.rightToolbar}
-          />
-          <Typography p={2}>
-            {data.profile
-              ? role_id === "1"
-                ? data.profile.company_name
-                : data.profile.student_name
-              : null}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{ paper: classes.drawerPaper }}>
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <List>
-            {userOptions() ? userOptions().menu : null}
-            <Link to="/login" className={classes.link}>
-              <ListItem onClick={logout}>
-                <ListItemIcon>
-                  <ExitToAppRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary="Logout" />
-              </ListItem>
-            </Link>
-          </List>
-          <Divider />
+    <>
+      {loading ? null : (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6">| Future Start |</Typography>
+              <AccountCircleRoundedIcon
+                color="inherit"
+                className={classes.rightToolbar}
+              />
+              <Typography p={2}>{`Welcome! ${
+                userOptions() ? userOptions().name : ""
+              }`}</Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{ paper: classes.drawerPaper }}>
+            <Toolbar />
+            <div className={classes.drawerContainer}>
+              <List>
+                {userOptions() ? userOptions().menu : null}
+
+                <Link to="/login" className={classes.link}>
+                  <ListItem onClick={logout}>
+                    <ListItemIcon>
+                      <ExitToAppRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </ListItem>
+                </Link>
+              </List>
+              <Divider />
+            </div>
+          </Drawer>
+          <main className={classes.content}>
+            <Toolbar />
+            {userOptions() ? userOptions().routes : null}
+          </main>
         </div>
-      </Drawer>
-      <main className={classes.content}>
-        <Toolbar />
-        {userOptions() ? userOptions().routes : null}
-      </main>
-    </div>
+      )}
+    </>
   );
 }
