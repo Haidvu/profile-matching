@@ -26,10 +26,7 @@ const CompanyRoutes = () => {
           component={CompanyProjectTemplate}
         />
         <Route path={`${path}/search`} exact component={StudentsList} />
-        <Route
-          path={`${path}/search/students/:id`}
-          component={StudentDetailed}
-        />
+        <Route path={`${path}/search/:id`} component={StudentDetailed} />
         {/* <Route
           path={`${path}/*`}
           render={() => (

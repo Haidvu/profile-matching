@@ -58,18 +58,18 @@ const StudentDetailed = ({ match }) => {
             <Typography>{student.degree}</Typography>
             <Typography>{student.graduation_date}</Typography>
             <Typography>{student.student_description}</Typography>
-            {/* <div>
-              {student.student_skill.map((skill, index) => (
+            <div>
+              {student.student_skills.map((skill, index) => (
                 <Chip
                   icon={<IconPython />}
                   key={index}
-                  label={skill}
+                  label={skill.skill_name}
                   color="primary"
                   size="small"
                   variant="outlined"
                 />
               ))}
-            </div> */}
+            </div>
           </Grid>
         </Grid>
       )}

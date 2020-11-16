@@ -239,13 +239,13 @@ const CompanyInfo = () => {
 
   useEffect(() => {
     if (Object.entries(errorsFirst).length !== 0) {
-      let errors = false;
+      let errorExists = false;
       Object.keys(errorsFirst).forEach((key) => {
         if (errorsFirst[key] !== null) {
-          errors = true;
+          errorExists = true;
         }
       });
-      if (errors) {
+      if (errorExists) {
         setFirstStep(true);
       } else {
         setFirstStep(false);
@@ -255,13 +255,13 @@ const CompanyInfo = () => {
 
   useEffect(() => {
     if (Object.entries(errorsSecond).length !== 0) {
-      let errors = false;
+      let errorExists = false;
       Object.keys(errorsSecond).forEach((key) => {
         if (errorsSecond[key] !== null) {
-          errors = true;
+          errorExists = true;
         }
       });
-      if (!errors) {
+      if (!errorExists) {
         const data = {
           company_name: companyFirst.name,
           company_phone_no: companyFirst.phoneNumber,
