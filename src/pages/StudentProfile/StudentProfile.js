@@ -1,11 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import StudentProject from "../../components/StudentProject/StudentProject";
 import StudentProjectAdd from "../../components/StudentProject/StudentProjectAdd";
 import StudentProjectScroll from "../../components/StudentProject/StudentProjectScroll";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import {
   TextField,
@@ -23,6 +22,15 @@ import {
   IconButton,
   Button,
   CircularProgress,
+  Typography,
+  Input,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Grid,
+  Chip,
+  Select,
+  FormHelperText,
 } from "@material-ui/core";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
 import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
@@ -35,6 +43,7 @@ import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
 import { Alert } from "@material-ui/lab";
+import StudentsList from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -93,41 +102,81 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1,
     objectFit: "contain",
   },
-  major: {
+  select: {
     width: "30vh",
     fontSize: "small",
-    background: "white",
-  },
-  degree: {
-    width: "30vh",
-    fontSize: "small",
-    background: "white",
   },
   myProjects: {
     fontWeight: "bold",
     color: "#606060",
     padding: "0 auto",
   },
+  flexColumn: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  flexRow: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  skillRoot: {
+    display: "flex",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    listStyle: "none",
+    padding: theme.spacing(0.5),
+    margin: 0,
+    "& > * ": {
+      margin: theme.spacing(0.5),
+    },
+  },
+  beginnerChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.text.primary,
+  },
+  intermediateChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.warning.main,
+    borderColor: theme.palette.warning.main,
+  },
+  expertChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.success.main,
+    borderColor: theme.palette.success.main,
+  },
+  beginnerDeleteIcon: {
+    fill: theme.palette.text.main,
+  },
+  intermediateDeleteIcon: {
+    fill: theme.palette.warning.main,
+  },
+  expertDeleteIcon: {
+    fill: theme.palette.success.main,
+  },
 }));
 
 export default function StudentProfile() {
+  //options of skills that will be sent to the select statement
+  //this is the animated component for the react-select library
+  const animatedComponents = makeAnimated();
+
+  //this is the for the stylings of the page
+  const classes = useStyles();
   //initially get the data from DataContext
   const { data, dispatch } = useContext(DataContext);
   const { profile } = data;
-  //this is the animated component for the react-select library
-  const animatedComponents = makeAnimated();
-  //this is the for the stylings of the page
-  const classes = useStyles();
-  //options of skills that will be sent to the select statement
-  const options = [
-    { label: "C++", value: 0 },
-    { label: "Java", value: 1 },
-    { label: "C#", value: 2 },
-  ];
-  const list = [
-    { label: "C++", value: 0 },
-    { label: "Java", value: 1 },
-  ];
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  //This is when user selects from the select component
+  const [skillName, setSkillName] = useState("");
+  const [experience, setExperience] = useState("");
+  //This is for list of skills from database
+  const [skills, setSkills] = useState(null);
+
   //this is the original data retrieved from the api
   const [studentInfo, setStudentInfo] = useState({
     //This is the data from api
@@ -137,9 +186,15 @@ export default function StudentProfile() {
     graduation_date: null,
     major: null,
     degree: null,
-    student_skill: null,
+    student_skills: [],
     student_description: null,
   });
+  const [mySkillsInfo, setMySkillsInfo] = useState([
+    {
+      skill_name: null,
+      experience: null,
+    },
+  ]);
   //this is the booleans for opening or closing edit fields
   const [studentEdit, showStudentEdit] = useState({
     //This tells whether to show input fields.
@@ -154,41 +209,48 @@ export default function StudentProfile() {
     graduation_date: null,
     major: null,
     degree: null,
-    student_skill: null,
+    student_skills: [],
     student_description: null,
   });
 
-  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({
+    student_description: null,
+    student_skills: null,
+  });
 
-  const slug = localStorage.getItem("slug");
+  const firstRender = useRef(true);
 
-  const getProfile = async () => {
-    if (slug) {
-      try {
-        const url = `http://18.213.74.196:8000/api/student_profile/${slug}`;
-        const res = await axios.get(url, getConfig());
-        dispatch({ type: "SET_PROFILE", payload: res.data }); //Set the data in dataContext
-        setStudentInput({
-          //Set data locally, in case use change, he changes this.
-          student_id: res.data.student_id,
-          full_name: res.data.full_name,
-          date_of_birth: res.data.date_of_birth,
-          graduation_date: res.data.graduation_date,
-          major: res.data.major,
-          degree: res.data.degree,
-          student_skill: res.data.student_skill,
-          student_description: res.data.student_description,
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    setLoading(false);
+  const getSkillsRepo = async () => {
+    const response = await axios.get(
+      `http://18.213.74.196:8000/api/skill`,
+      getConfig()
+    );
+    setSkills(response.data);
   };
 
   useEffect(() => {
-    getProfile();
-  }, []);
+    getSkillsRepo();
+    setStudentInfo({
+      student_id: profile.student_id,
+      full_name: profile.full_name,
+      date_of_birth: profile.date_of_birth,
+      graduation_date: profile.graduation_date,
+      major: profile.major,
+      degree: profile.degree,
+      student_skills: profile.student_skills,
+      student_description: profile.student_description,
+    });
+    setStudentInput({
+      student_id: profile.student_id,
+      full_name: profile.full_name,
+      date_of_birth: profile.date_of_birth,
+      graduation_date: profile.graduation_date,
+      major: profile.major,
+      degree: profile.degree,
+      student_skills: profile.student_skills,
+      student_description: profile.student_description,
+    });
+  }, [profile]);
 
   //opening the edit field
   const handleOpenEdit = (key) => {
@@ -204,82 +266,118 @@ export default function StudentProfile() {
       [key]: false,
     });
   };
+
+  //selecting a skill
+  const handleSkillChange = (e) => {
+    setSkillName(e.target.value);
+  };
+
+  //selecting experience
+  const handleExpChange = (e) => {
+    setExperience(e.target.value);
+  };
+
+  //adding skill to list
+  const addSkill = () => {
+    if (skillName && experience) {
+      let unique = true;
+      for (let i = 0; i < studentInput.student_skills.length; i++) {
+        if (studentInput.student_skills[i].skill_name === skillName) {
+          unique = false;
+          alert(`${skillName} already exists`);
+          break;
+        }
+      }
+      if (unique) {
+        setStudentInput((prevStudentInput) => {
+          return {
+            ...prevStudentInput,
+            student_skills: [
+              ...prevStudentInput.student_skills,
+              {
+                skill_name: skillName,
+                experience_level: experience,
+              },
+            ],
+          };
+        });
+      }
+    }
+  };
+
+  //deleting a skill
+  const deleteSkill = (skllToDelete) => {
+    setStudentInput((prevStudentInput) => {
+      return {
+        ...prevStudentInput,
+        student_skills: prevStudentInput.student_skills.filter(
+          (skill) => skill.skill_name !== skllToDelete.skill_name
+        ),
+      };
+    });
+  };
+
+  const validate = () => {
+    let errors = {};
+    if (studentInput.student_description === "") {
+      errors.student_description = "Required";
+    } else if (studentInput.student_description.length > 500) {
+      errors.student_description = "Max length of 500 characters reached";
+    } else {
+      errors.student_description = null;
+    }
+
+    if (studentInput.student_skills.length <= 0) {
+      errors.student_skills = "At least one skill is required";
+    } else {
+      errors.student_skills = null;
+    }
+    return errors;
+  };
+
   //saving the edited data
   const handleSave = () => {
-    //Make api call to save data.
-    setStudentInfo(studentInput);
-    handleCloseEdit("studentEditBool");
-    setDialogOpen(true);
-  };
-  //not saving the edited data if the user does not want to change
-  const handleCancel = () => {
-    setStudentInput(studentInfo);
-    handleCloseEdit("studentEditBool");
+    setErrors(validate());
   };
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleDialogClose = () => {
-    setEmail("");
-    setPassword("");
-    setDialogOpen(false);
-  };
-
-  const [authError, setAuthError] = useState("");
-
-  const handleConfirm = () => {
+  const updateProfile = async () => {
     axios
       .post("http://18.213.74.196:8000/api/token/", {
         email: email,
         password: password,
       })
       .then((res) => {
-        //first remove local storage
-        localStorage.setItem("token", res.data.access);
-        localStorage.setItem("role_id", res.data.role_id);
-        localStorage.setItem("email_id", res.data.email_id);
         localStorage.setItem("slug", res.data.slug);
-        let slug = res.data.slug;
+        let slug = localStorage.getItem("slug");
         axios
           .put(
             `http://18.213.74.196:8000/api/student_profile/${slug}/update`,
             {
               username: localStorage.getItem("email_id"),
-              full_name: studentInfo.full_name,
-              date_of_birth: studentInfo.date_of_birth,
-              graduation_date: studentInfo.graduation_date,
-              major: studentInfo.major,
-              degree: studentInfo.degree,
-              student_skill: studentInfo.student_skill,
-              student_description: studentInfo.student_description,
+              full_name: studentInput.full_name,
+              date_of_birth: studentInput.date_of_birth,
+              graduation_date: studentInput.graduation_date,
+              student_skills: studentInput.student_skills,
+              major: studentInput.major,
+              degree: studentInput.degree,
+              student_description: studentInput.student_description,
             },
             getConfig()
           )
           .then((res) => {
             dispatch({ type: "UPDATE_PROFILE", payload: res.data });
-            console.log("Update Successful");
+            handleCloseEdit("studentEditBool");
+            setDialogOpen(false);
             axios
               .post("http://18.213.74.196:8000/api/token/", {
                 email: email,
                 password: password,
               })
               .then((res) => {
-                console.log("Login Again Successful");
-                localStorage.setItem("token", res.data.access);
-                localStorage.setItem("role_id", res.data.role_id);
-                localStorage.setItem("email_id", res.data.email_id);
                 localStorage.setItem("slug", res.data.slug);
-                setEmail(null);
-                setPassword(null);
+                setEmail("");
+                setPassword("");
               });
-            setDialogOpen(false);
-            showStudentEdit(false);
-            handleCloseEdit("studentEditBool");
-          })
-          .catch((err) => {
-            setDialogOpen(false);
           });
       })
       .catch((err) => {
@@ -290,34 +388,72 @@ export default function StudentProfile() {
       });
   };
 
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    } else {
+      if (Object.entries(errors).length !== 0) {
+        let errorExists = false;
+        Object.keys(errors).forEach((key) => {
+          if (errors[key] !== null) {
+            errorExists = true;
+          }
+        });
+        if (!errorExists) {
+          setDialogOpen(true);
+        }
+      }
+    }
+  }, [errors]);
+
+  //not saving the edited data if the user does not want to change
+  const handleCancel = () => {
+    setStudentInput(studentInfo);
+    handleCloseEdit("studentEditBool");
+  };
+
+  const handleDialogClose = () => {
+    setEmail("");
+    setPassword("");
+    setDialogOpen(false);
+  };
+
+  const handleConfirm = () => {
+    updateProfile();
+  };
+
   return (
     <>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <div>
-          <img
-            alt="profile background"
-            className={classes.profileLogo}
-            src={ProfileLogo}></img>
-          <Avatar
-            alt="profile image"
-            src={AvatarImage}
-            className={classes.profileImage}
-          />
-          <List>
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <FormatListBulletedTwoToneIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Box component={"span"} className={classes.sectionHeader}>
+      <div>
+        <img
+          alt="profile background"
+          className={classes.profileLogo}
+          src={ProfileLogo}></img>
+        <List>
+          <ListItem alignItems="flex-start">
+            <ListItemIcon>
+              <FormatListBulletedTwoToneIcon />
+            </ListItemIcon>
+            {studentEdit.studentEditBool === false ? (
+              <div
+                className={classes.flexRow}
+                style={{ justifyContent: "space-between" }}>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
                     Student Description
-                  </Box>
-                }
-                secondary={
-                  studentEdit.studentEditBool === false ? (
+                  </Typography>
+                  <Typography className={classes.sectionContent}>
+                    {studentInfo.student_description}
+                  </Typography>
+                </div>
+
+                {/* <ListItemText
+                  primary={
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Student Description
+                    </Box>
+                  }
+                  secondary={
                     <Box
                       component="span"
                       variant="body2"
@@ -325,77 +461,87 @@ export default function StudentProfile() {
                       color="textPrimary">
                       {studentInfo.student_description}
                     </Box>
-                  ) : (
-                    <TextField
-                      multiline={true}
-                      name="student_description"
-                      onChange={(e) => {
-                        setStudentInput({
-                          ...studentInput,
-                          student_description: e.target.value,
-                        });
-                      }}
-                      value={studentInput.student_description}
-                    />
-                  )
-                }
-              />
-              {studentEdit.studentEditBool === false ? (
+                  }
+                /> */}
                 <IconButton
+                  style={{ float: "right" }}
                   className={classes.icon}
                   onClick={() => {
                     handleOpenEdit("studentEditBool");
                   }}>
                   <EditTwoToneIcon />
                 </IconButton>
-              ) : (
-                <>
-                  <IconButton
-                    className={classes.icon}
-                    onClick={() => {
-                      handleCancel();
-                    }}>
-                    <ClearRoundedIcon />
-                  </IconButton>
-                  <IconButton
-                    className={classes.icon}
-                    onClick={() => {
-                      handleSave();
-                    }}>
-                    <CheckRoundedIcon style={{ color: "green" }} />
-                  </IconButton>
-                </>
-              )}
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <SchoolRoundedIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Box component={"span"} className={classes.sectionHeader}>
-                    Academic
-                  </Box>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Box
-                      component={"span"}
-                      variant="body2"
-                      color="textPrimary"
-                      className={classes.sectionContent}>
-                      Graduation Date : &nbsp;
-                    </Box>
-                    {studentEdit.studentEditBool === false ? (
-                      <Box
-                        component={"span"}
-                        variant="body2"
-                        className={`${classes.inline} ${classes.sectionContent}`}
-                        color="textPrimary">
-                        {studentInfo.graduation_date}
-                      </Box>
-                    ) : (
+              </div>
+            ) : (
+              <>
+                <FormControl
+                  error={errors.student_description && studentInput === ""}>
+                  <Typography className={classes.sectionHeader}>
+                    Student Description
+                  </Typography>
+                  <Input
+                    multiline
+                    value={studentInput.student_description}
+                    name="student_description"
+                    onChange={(e) => {
+                      setStudentInput({
+                        ...studentInput,
+                        student_description: e.target.value,
+                      });
+                    }}></Input>
+                  {errors.student_description &&
+                  studentInput.student_description === "" ? (
+                    <FormHelperText>
+                      {errors.student_description}
+                    </FormHelperText>
+                  ) : null}
+                </FormControl>
+
+                <IconButton
+                  className={classes.icon}
+                  onClick={() => {
+                    handleCancel();
+                  }}>
+                  <ClearRoundedIcon />
+                </IconButton>
+                <IconButton
+                  className={classes.icon}
+                  onClick={() => {
+                    handleSave();
+                  }}>
+                  <CheckRoundedIcon style={{ color: "green" }} />
+                </IconButton>
+              </>
+            )}
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <ListItemIcon>
+              <SchoolRoundedIcon />
+            </ListItemIcon>
+            {studentEdit.studentEditBool === false ? (
+              <div className={classes.flexColumn}>
+                <Typography className={classes.sectionHeader}>
+                  Academic
+                </Typography>
+                <Typography
+                  className={
+                    classes.sectionContent
+                  }>{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
+                <Typography
+                  className={
+                    classes.sectionContent
+                  }>{`${studentInfo.degree} ${studentInfo.major}`}</Typography>
+              </div>
+            ) : (
+              <div>
+                <Typography className={classes.sectionHeader}>
+                  Academic
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <FormControl>
+                      <Typography>Graduation Date</Typography>
                       <TextField
                         type="date"
                         name="graduation_date"
@@ -407,21 +553,15 @@ export default function StudentProfile() {
                         }}
                         value={studentInput.graduation_date}
                       />
-                    )}
-                    <br />
-                    {studentEdit.studentEditBool === false ? (
-                      <Box
-                        component={"span"}
-                        variant="body2"
-                        color="textPrimary"
-                        className={classes.sectionContent}>
-                        {studentInfo.degree} :
-                      </Box>
-                    ) : (
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <FormControl>
+                      <Typography>Degree</Typography>
                       <select
                         name="degree"
+                        value={studentInput.select}
                         className={classes.degree}
-                        value={studentInput.degree}
                         onChange={(e) => {
                           setStudentInput({
                             ...studentInput,
@@ -431,20 +571,14 @@ export default function StudentProfile() {
                         <option value="Bachelor">Bachelor</option>
                         <option value="Master">Master</option>
                       </select>
-                    )}
-                    {studentEdit.studentEditBool === false ? (
-                      <Box
-                        component="span"
-                        variant="body2"
-                        className={`${classes.sectionContent}`}
-                        color="textPrimary">
-                        {" "}
-                        {studentInfo.major}
-                      </Box>
-                    ) : (
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <FormControl>
+                      <Typography>Major</Typography>
                       <select
                         name="major"
-                        className={classes.major}
+                        className={classes.select}
                         value={studentInput.major}
                         onChange={(e) => {
                           setStudentInput({
@@ -454,22 +588,22 @@ export default function StudentProfile() {
                         }}>
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
-                          <option value="Environmental_Design">
+                          <option value="Environmental Design">
                             Environmental Design
                           </option>
-                          <option value="Industrial_Design">
+                          <option value="Industrial Design">
                             Industrial Design
                           </option>
-                          <option value="Interior_Architecture">
+                          <option value="Interior Architecture">
                             Interior Architecture
                           </option>
                         </optgroup>
                         <optgroup label="Kathrine G. McGovern College of the Arts">
-                          <option value="Applied_Music">Applied Music</option>
+                          <option value="Applied Music">Applied Music</option>
                           <option value="Art">Art</option>
-                          <option value="Art_History">Art History</option>
+                          <option value="Art History">Art History</option>
                           <option value="Dance">Dance</option>
-                          <option value="Graphic_Design">Graphic Design</option>
+                          <option value="Graphic Design">Graphic Design</option>
                           <option value="Music">Music</option>
                           <option value="Painting">Painting</option>
                           <option value="Photography">
@@ -485,79 +619,79 @@ export default function StudentProfile() {
                           </option>
                           <option value="Finance">Finance</option>
                           <option value="Management">Management</option>
-                          <option value="Management_Information_Systems">
+                          <option value="Management Information Systems">
                             Management Information Systems
                           </option>
                           <option value="Marketing">Marketing</option>
-                          <option value="Suppy_Chain_Management">
+                          <option value="Suppy Chain Management">
                             Suppy Chain Management
                           </option>
                         </optgroup>
                         <optgroup label="College of Education">
                           <option value="Health">Health</option>
-                          <option value="Human_Development_and_Family_Studies">
+                          <option value="Human Development and Family Studies">
                             Human Development and Family Studies
                           </option>
-                          <option value="Teaching_and_Learning">
+                          <option value="Teaching and Learning">
                             Teaching and Learning
                           </option>
                         </optgroup>
                         <optgroup label="Cullen College of Engineering">
-                          <option value="Biomedical_Engineering">
+                          <option value="Biomedical Engineering">
                             Biomedical Engineering
                           </option>
 
-                          <option value="Chemical_Engineering">
+                          <option value="Chemical Engineering">
                             Chemical Engineering
                           </option>
 
-                          <option value="Civil_Engineering">
+                          <option value="Civil Engineering">
                             Civil Engineering
                           </option>
 
-                          <option value="Computer_Engineering">
+                          <option value="Computer Engineering">
                             Computer Engineering
                           </option>
 
-                          <option value="Computer_Engineering_and_Analytics">
+                          <option value="Computer Engineering and Analytics">
                             Computer Engineering and Analytics
                           </option>
-                          <option value="Construction_Engineering">
+                          <option value="Construction Engineering">
                             Construction Engineering
                           </option>
-                          <option value="Electrical_Engineering">
+                          <option value="Electrical Engineering">
                             Electrical Engineering
                           </option>
-                          <option value="Industrial_Engineering">
+                          <option value="Industrial Engineering">
                             Industrial Engineering
                           </option>
-                          <option value="Mechanical_Engineering">
+                          <option value="Mechanical Engineering">
                             Mechanical Engineering
                           </option>
-                          <option value="Petroleum_Engineering">
+                          <option value="Petroleum Engineering">
                             Petroleum Engineering
                           </option>
-                          <option value="Systems_Engineering">
+                          <option value="Systems Engineering">
                             Systems Engineering
                           </option>
                         </optgroup>
                         <optgroup label="Conrad N. Hilton College of Hotel and Restaurant Management">
-                          <option value="Hotel_and_Restaurant_Management">
+                          <option value="Hotel and Restaurant Management">
                             Hotel and Restaurant Management
                           </option>
                         </optgroup>
                         <optgroup label="College of Liberal Arts and Social Sciences">
-                          <option value="African_American_Studies">
+                          <option value="African American Studies">
                             African American Studies
                           </option>
                           <option value="American_Sign_Language_Interpreting">
                             American Sign Language Interpreting
                           </option>
                           <option value="Anthropology">Anthropology</option>
-                          <option value="Chinese_Studies">
+                          <option value="Chinese Studies">
                             Chinese Studies
                           </option>
-                          <option value="Communication_Sciences_and_Disorders">
+                          <option value="Communication Sciences and Disorders">
                             Communication Sciences and Disorders
                           </option>
                           <option value="Communication_Studies">
@@ -565,26 +699,26 @@ export default function StudentProfile() {
                           </option>
                           <option value="Economics">Economics</option>
                           <option value="English">English</option>
-                          <option value="Exercise_Science">
+                          <option value="Exercise Science">
                             Exercise Science
                           </option>
-                          <option value="Fitness_and_Sports">
+                          <option value="Fitness and Sports">
                             Fitness and Sports
                           </option>
 
                           <option value="French">French</option>
-                          <option value="Health_Communication">
+                          <option value="Health Communication">
                             Health Communication
                           </option>
                           <option value="History">History</option>
-                          <option value="Human_Nutrition_and_Foods">
+                          <option value="Human Nutrition and Foods">
                             Human Nutrition and Foods
                           </option>
                           <option value="Journalism">Journalism</option>
-                          <option value="Liberal_Studies">
+                          <option value="Liberal Studies">
                             Liberal Studies
                           </option>
-                          <option value="Media_Production">
+                          <option value="Media Production">
                             Media Production
                           </option>
                           <option value="Philosophy">Philosophy</option>
@@ -592,44 +726,44 @@ export default function StudentProfile() {
                             Political Science
                           </option>
                           <option value="Psychology">Psychology</option>
-                          <option value="Religious_Studies">
+                          <option value="Religious Studies">
                             Religious Studies
                           </option>
                           <option value="Sociology">Sociology</option>
                           <option value="Spanish">Spanish</option>
-                          <option value="Sports_Administration">
+                          <option value="Sports Administration">
                             Sports Administration
                           </option>
-                          <option value="Strategic_Communication">
+                          <option value="Strategic Communication">
                             Strategic Communication
                           </option>
 
-                          <option value="Women’s,_Gender,_and_Sexuality_Studies">
+                          <option value="Women’s, Gender, and Sexuality Studies">
                             Women’s, Gender, and Sexuality Studies
                           </option>
-                          <option value="World_Cultures_and_Literatures">
+                          <option value="World Cultures and Literatures">
                             World Cultures and Literatures
                           </option>
                         </optgroup>
                         <optgroup label="College of Natural Sciences and Mathematics">
-                          <option value="Biochemical_and_Biophysical_Sciences">
+                          <option value="Biochemical and Biophysical Sciences">
                             Biochemical and Biophysical Sciences
                           </option>
                           <option value="Biology">Biology</option>
                           <option value="Chemistry">Chemistry</option>
-                          <option value="Computer_Science">
+                          <option value="Computer Science">
                             Computer Science
                           </option>
                           <option value="Earth_Science">Earth Science</option>
-                          <option value="Environmental_Sciences">
+                          <option value="Environmental Sciences">
                             Environmental Sciences
                           </option>
                           <option value="Geology">Geology</option>
                           <option value="Geophysics">Geophysics</option>
-                          <option value="Honors_Biomedical_Sciences">
+                          <option value="Honors Biomedical Sciences">
                             Honors Biomedical Sciences
                           </option>
-                          <option value="Mathematical_Biology">
+                          <option value="Mathematical Biology">
                             Mathematical Biology
                           </option>
                           <option value="Mathematics">Mathematics</option>
@@ -638,42 +772,42 @@ export default function StudentProfile() {
                         </optgroup>
                         <optgroup label="College of Nursing">
                           <option value="Pre-Nursing">Pre-Nursing</option>
-                          <option value="Nursing,_BSN_(RN-BSN)">
+                          <option value="Nursing, BSN (RN-BSN)">
                             Nursing, BSN (RN-BSN)
                           </option>
-                          <option value="Nursing,_BSN_(Second_Degree)">
+                          <option value="Nursing, BSN (Second_Degree)">
                             Nursing, BSN (Second Degree)
                           </option>
                         </optgroup>
                         <optgroup label="College of Technology">
                           <option value="Biotechnology">Biotechnology</option>
 
-                          <option value="Computer_Engineering_Technology">
+                          <option value="Computer Engineering Technology">
                             Computer Engineering Technology
                           </option>
-                          <option value="Computer_Information_Systems">
+                          <option value="Computer Information Systems">
                             Computer Information Systems
                           </option>
-                          <option value="Construction_Management">
+                          <option value="Construction Management">
                             Construction Management
                           </option>
-                          <option value="Digital_Media">Digital Media</option>
-                          <option value="Electrical_Power_Engineering_Technology">
+                          <option value="Digital Media">Digital Media</option>
+                          <option value="Electrical Power Engineering Technology">
                             Electrical Power Engineering Technology
                           </option>
-                          <option value="Human_Resources_Development">
+                          <option value="Human Resources Development">
                             Human Resources Development
                           </option>
-                          <option value="Mechanical_Engineering_Technology">
+                          <option value="Mechanical Engineering Technology">
                             Mechanical Engineering Technology
                           </option>
-                          <option value="Retailing_and_Consumer_Science">
+                          <option value="Retailing and_Consumer Science">
                             Retailing and Consumer Science{" "}
                           </option>
-                          <option value="Supply_Chain_and_Logistics_Technology">
+                          <option value="Supply Chain and Logistics Technology">
                             Supply Chain and Logistics Technology
                           </option>
-                          <option value="Technology_Leadership_and_Innovation_Management ">
+                          <option value="Technology Leadership and Innovation Management">
                             Technology Leadership and Innovation Management{" "}
                           </option>
                         </optgroup>
@@ -683,135 +817,226 @@ export default function StudentProfile() {
                           <option value="Pre-Medicine">Pre-Medicine</option>
                           <option value="Pre-Optometry">Pre-Optometry</option>
                           <option value="Pre-Pharmacy">Pre-Pharmacy</option>
-                          <option value="Pre-Physical_Therapy">
+                          <option value="Pre-Physical Therapy">
                             Pre-Physical Therapy
                           </option>
-                          <option value="Pre-Veterinary_Medicine">
+                          <option value="Pre-Veterinary Medicine">
                             Pre-Veterinary Medicine
                           </option>
                         </optgroup>
                       </select>
-                    )}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <StarsIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Box component={"span"} className={classes.sectionHeader}>
-                    Skills
-                  </Box>
-                }
-                secondary={
-                  <Box
-                    component={"span"}
-                    variant="body2"
-                    className={classes.sectionContent}
-                    color="textPrimary">
-                    {studentEdit.studentEditBool === false ? (
-                      <Box
-                        component="span"
-                        variant="body2"
-                        className={`${classes.skillsContainer}`}
-                        color="textPrimary">
-                        {list.map((skill, index) => (
-                          <Button
-                            key={skill.value}
-                            className={classes.skills}
-                            value={skill.name}>
-                            {skill.label}
-                          </Button>
-                        ))}
-                      </Box>
-                    ) : (
-                      <Box>
-                        <Select
-                          AutoSize={true}
-                          closeMenuOnSelect={true}
-                          components={animatedComponents}
-                          defaultValue={list}
-                          isMulti
-                          isSearchable
-                          /*onChange={(e)=>{setStudentInput({...studentInput,student_skilltemp:e})}}*/
-                          options={options}
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </div>
+            )}
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <ListItemIcon>
+              <StarsIcon />
+            </ListItemIcon>
+            {studentEdit.studentEditBool === false ? (
+              <div className={classes.flexColumn}>
+                <Typography className={classes.sectionHeader}>
+                  Skills
+                </Typography>
+                <ul className={classes.skillRoot}>
+                  {studentInfo.student_skills.map((skill) => {
+                    return (
+                      <li key={skill.skill_name}>
+                        <Chip
+                          variant="outlined"
+                          classes={
+                            skill.experience_level === 1
+                              ? {
+                                  root: classes.beginnerChip,
+                                  deleteIcon: classes.beginnerDeleteIcon,
+                                }
+                              : skill.experience_level === 2
+                              ? {
+                                  root: classes.intermediateChip,
+                                  deleteIcon: classes.intermediateDeleteIcon,
+                                }
+                              : {
+                                  root: classes.expertChip,
+                                  deleteIcon: classes.expertDeleteIcon,
+                                }
+                          }
+                          label={skill.skill_name}
                         />
-                      </Box>
-                    )}
-                  </Box>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <HorizontalSplitIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Box component={"span"} className={classes.myProjects}>
-                    My Projects
-                  </Box>
-                }></ListItemText>
-            </ListItem>
-          </List>
-          <Dialog
-            onClose={handleDialogClose}
-            open={dialogOpen}
-            className={classes.dialog}>
-            <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
-            {authError ? (
-              <Alert
-                className={classes.loginAlert}
-                variant="filled"
-                severity="error">
-                {authError}
-              </Alert>
-            ) : null}
-            <DialogContent>
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                required
-                className={classes.dialogInput}
-              />
-              <TextField
-                variant="outlined"
-                fullWidth
-                id="password"
-                label="password"
-                name="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                required
-                type="password"
-                className={classes.dialogInput}
-              />
-            </DialogContent>
-            <DialogActions className={classes.dialogConfirm}>
-              <Button
-                onClick={handleConfirm}
-                color="secondary"
-                variant="outlined"
-                className={classes.dialogConfirm}>
-                Confirm
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <StudentProjectAdd />
-          <StudentProject />
-          <StudentProjectScroll showBelow={250} />
-        </div>
-      )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : (
+              <div>
+                <Typography className={classes.sectionHeader}>
+                  Skills
+                </Typography>
+                <ul className={classes.skillRoot}>
+                  {studentInput.student_skills.map((skill) => {
+                    return (
+                      <li key={skill.skill_name}>
+                        <Chip
+                          variant="outlined"
+                          classes={
+                            skill.experience_level === 1
+                              ? {
+                                  root: classes.beginnerChip,
+                                  deleteIcon: classes.beginnerDeleteIcon,
+                                }
+                              : skill.experience_level === 2
+                              ? {
+                                  root: classes.intermediateChip,
+                                  deleteIcon: classes.intermediateDeleteIcon,
+                                }
+                              : {
+                                  root: classes.expertChip,
+                                  deleteIcon: classes.expertDeleteIcon,
+                                }
+                          }
+                          label={skill.skill_name}
+                          onDelete={() => deleteSkill(skill)}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+                {errors.student_skills &&
+                studentInput.student_skills.length === 0 ? (
+                  <FormHelperText
+                    error={
+                      errors.student_skills &&
+                      studentInput.student_skills.length === 0
+                    }>
+                    {errors.student_skills}
+                  </FormHelperText>
+                ) : null}
+
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <Box>
+                      <Typography>Skill</Typography>
+                      <FormControl>
+                        <Select
+                          onChange={handleSkillChange}
+                          className={classes.select}
+                          value={skillName}
+                          /*onChange={(e)=>{setStudentInput({...studentInput,student_skilltemp:e})}}*/
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {skills.map((skill) => (
+                            <MenuItem key={skill.id} value={skill.skill_name}>
+                              {skill.skill_name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
+                  <Grid item>
+                    <FormControl>
+                      <Typography>Experience</Typography>
+                      <Select
+                        value={experience}
+                        className={classes.select}
+                        onChange={handleExpChange}>
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={1}>Beginner</MenuItem>
+                        <MenuItem value={2}>Novice</MenuItem>
+                        <MenuItem value={3}>Expert</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={addSkill}
+                      disabled={skillName === "" || experience === ""}>
+                      Add Skill
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+            )}
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <Grid container>
+              <Grid item>
+                <ListItemIcon>
+                  <HorizontalSplitIcon />
+                </ListItemIcon>
+              </Grid>
+              <Grid item>
+                <Typography className={classes.sectionHeader}>
+                  My Projects
+                </Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+        </List>
+        <Dialog
+          onClose={handleDialogClose}
+          open={dialogOpen}
+          className={classes.dialog}>
+          <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
+          {authError ? (
+            <Alert
+              className={classes.loginAlert}
+              variant="filled"
+              severity="error">
+              {authError}
+            </Alert>
+          ) : null}
+          <DialogContent>
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+              className={classes.dialogInput}
+            />
+            <TextField
+              variant="outlined"
+              fullWidth
+              id="password"
+              label="password"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+              type="password"
+              className={classes.dialogInput}
+            />
+          </DialogContent>
+          <DialogActions className={classes.dialogConfirm}>
+            <Button
+              onClick={handleConfirm}
+              color="secondary"
+              variant="outlined"
+              className={classes.dialogConfirm}>
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Grid container justify="flex-end">
+          <StudentProjectAdd skills={skills} />
+        </Grid>
+        <StudentProject />
+        <StudentProjectScroll showBelow={250} />
+      </div>
     </>
   );
 }

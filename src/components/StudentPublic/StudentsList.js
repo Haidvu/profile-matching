@@ -11,13 +11,14 @@ import {
   Avatar,
   Divider,
   CircularProgress,
+  CardActions,
+  LinearProgress,
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import { useLocation } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
-import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
@@ -86,15 +87,21 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translate(-50%, -50%)",
   },
+  buttonContainer: {
+    justifyContent: "center",
+  },
+  loader: {
+    position: "relative",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
 }));
 
 const StudentsList = () => {
-  let location = useLocation();
-  console.log(`${location.pathname}/`);
+  let { url } = useRouteMatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [studentsList, setStudentsList] = useState();
-  const { data, dispatch } = useContext(DataContext);
   //   const formatGraduationDate = (date) => {
   //     const dateElements = date.split("-");
   //     const date = dateElements[dateElements.length - 1];
@@ -108,7 +115,6 @@ const StudentsList = () => {
       // response.data.forEach((student) => {
       //   student.student_skill = student.student_skill.split(" ");
       // });
-      dispatch({ type: "SET_STUDENTS", payload: response.data });
       setStudentsList(response.data);
     } catch (e) {
       console.log(e);
@@ -123,82 +129,80 @@ const StudentsList = () => {
   return (
     <>
       {loading ? (
-        <CircularProgress color="secondary" className={classes.spinner} />
+        <LinearProgress
+          color="secondary"
+          style={{ margin: "20px" }}></LinearProgress>
       ) : (
         <Grid container spacing={4} className={classes.gridRoot}>
-          {studentsList
-            ? studentsList.map((student) => (
-                <Grid item key={student.username_id}>
-                  <Card className={classes.card}>
-                    <CardHeader
-                      classes={{
-                        root: classes.cardHeader,
-                        title: classes.studentName,
-                        subheader: classes.subheader,
-                      }}
-                      avatar={<Avatar className={classes.avatar}></Avatar>}
-                      title={student.full_name}
-                      subheader={`${student.degree} - ${student.major}`}></CardHeader>
-                    <CardContent className={classes.cardContent}>
-                      <Typography className={classes.fieldTitle}>
-                        Graduation Date
-                      </Typography>
-                      <Typography className={classes.fieldValue}>
-                        {student.graduation_date}
-                      </Typography>
-                    </CardContent>
-                    <CardContent
-                      className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                      <Typography className={classes.fieldTitle}>
-                        Description
-                      </Typography>
-                      <Typography className={classes.fieldValue}>
-                        {student.student_description}
-                      </Typography>
-                    </CardContent>
-                    <CardContent
-                      className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                      <Typography
-                        variant="subtitle2"
-                        className={classes.fieldTitle}>
-                        Skills
-                      </Typography>
-                      {/* <div className={classes.skillsRoot}>
-                        {student.student_skill.map((skill, index) => (
-                          <Chip
-                            key={index}
-                            label={skill}
-                            classes={{
-                              root: classes.chip,
-                              label: classes.chipLabel,
-                            }}
-                            color="primary"
-                            size="small"
-                            variant="outlined"
-                          />
-                        ))}
-                      </div> */}
-                    </CardContent>
-                    <Divider></Divider>
-                    <CardContent>
-                      <Link
-                        to={`${location.pathname}/${student.username_id}`}
-                        style={{ textDecoration: "none" }}>
-                        <Button
-                          color="secondary"
-                          size="small"
-                          variant="contained"
-                          className={classes.button}>
-                          View Profile
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))
-            : null}
-          {/* <pre>{JSON.stringify(students, null, 2)}</pre> */}
-          {/* {singleStudent ? <StudentDetailed student={singleStudent} /> : null} */}
+          {studentsList.map((student) => (
+            <Grid item key={student.username_id}>
+              <Card className={classes.card}>
+                <CardHeader
+                  classes={{
+                    root: classes.cardHeader,
+                    title: classes.studentName,
+                    subheader: classes.subheader,
+                  }}
+                  avatar={<Avatar className={classes.avatar}></Avatar>}
+                  title={student.full_name}
+                  subheader={`${student.degree} - ${student.major}`}></CardHeader>
+                <CardContent className={classes.cardContent}>
+                  <Typography className={classes.fieldTitle}>
+                    Graduation Date
+                  </Typography>
+                  <Typography className={classes.fieldValue}>
+                    {student.graduation_date}
+                  </Typography>
+                </CardContent>
+                <CardContent
+                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                  <Typography className={classes.fieldTitle}>
+                    Description
+                  </Typography>
+                  <Typography className={classes.fieldValue}>
+                    {student.student_description}
+                  </Typography>
+                </CardContent>
+                <CardContent
+                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                  <Typography
+                    variant="subtitle2"
+                    className={classes.fieldTitle}>
+                    Skills
+                  </Typography>
+                  <div className={classes.skillsRoot}>
+                    {student.student_skills.map((skill, index) => (
+                      <Chip
+                        key={index}
+                        label={skill.skill_name}
+                        classes={{
+                          root: classes.chip,
+                          label: classes.chipLabel,
+                        }}
+                        color="primary"
+                        size="small"
+                        variant="outlined"
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+                <Divider></Divider>
+                <CardContent>
+                  <Link
+                    href={`${url}/${student.username_id}`}
+                    style={{ textDecoration: "none" }}>
+                    <Button
+                      color="secondary"
+                      size="small"
+                      variant="contained"
+                      className={classes.button}>
+                      View Profile
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
       )}
     </>

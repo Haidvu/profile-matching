@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useFormik } from "formik";
 import "./StudentInfo.css";
 import DatePicker from "react-date-picker";
 import {
@@ -14,8 +13,10 @@ import {
   FormControl,
   Divider,
   Button,
+  FormHelperText,
 } from "@material-ui/core";
-import studentImage from "../../assets/StudentImagePlaceholder.png";
+import { useHistory } from "react-router-dom";
+// import studentImage from "../../assets/StudentImagePlaceholder.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
@@ -33,12 +34,11 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   form: {
-    width: "100%",
+    width: "650px",
     marginTop: theme.spacing(6),
-    justifyContent: "center",
   },
   formControl: {
-    width: "100%",
+    width: "300px",
   },
   checkLabel: {
     color: theme.palette.secondary,
@@ -49,12 +49,12 @@ const useStyles = makeStyles((theme) => ({
   datepicker: {
     zIndex: "1000",
   },
-  icon: {
-    objectFit: "contain",
-    position: "relative",
-    width: "5%",
-    color: theme.palette.secondary.main,
-  },
+  // icon: {
+  //   objectFit: "contain",
+  //   position: "relative",
+  //   width:g "5px",
+  //   color: theme.palette.secondary.main,
+  // },
   skills: {
     color: "rgba(0, 0, 0, 0.87)",
     border: "none",
@@ -142,34 +142,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/*for now */
-
 function StudentInfo() {
   const classes = useStyles();
-
+  let history = useHistory();
   const [firstStep, setFirstStep] = useState(true);
+  const [studentFirst, setStudentFirst] = useState({
+    first_name: "",
+    last_name: "",
+    student_id: "",
+    date_of_birth: "",
+    graduation_date: "",
+    major: "Architecture",
+    degree: "Undergraduate",
+    username: parseInt(localStorage.getItem("email_id")),
+  });
+  const [errorsFirst, setErrorsFirst] = useState({});
+  const [errorsSecond, setErrorsSecond] = useState({});
 
+  const [studentSecond, setStudentSecond] = useState({
+    student_description: "",
+  });
+
+  const handleChangeFirst = (e) => {
+    setStudentFirst({
+      ...studentFirst,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleChangeSecond = (e) => {
+    setStudentSecond({
+      ...studentSecond,
+      [e.target.name]: e.target.value,
+    });
+  };
   const [valueDateOfBirth, setDateOfBirth] = useState(new Date());
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
-  const [image, setImage] = useState("");
-  const [resume, setResume] = useState("");
-
+  // const [image, setImage] = useState("");
+  // const [resume, setResume] = useState("");
   const [skills, setSkills] = useState();
-
   const [tempSkill, setTempSkill] = useState("");
   const [experience, setExperience] = useState("");
   const [mySkills, setMySkills] = useState([]);
-
-  const initialValues = {
-    firstName: "",
-    lastName: "",
-    studentEmail: "",
-    studentId: "",
-    major: "",
-    degree: "BS",
-    degreeType: "undergrad",
-    description: "",
-  };
 
   const getSkills = async () => {
     const response = await axios.get(
@@ -183,100 +197,119 @@ function StudentInfo() {
     getSkills();
   }, []);
 
-  // const onSubmit = (values) => {};
-  // data and axios will go here
-  // Change the _ on the major to a space
-  // Change the dates
-  const onSubmit = (values) => {
-    console.log("submit button clicked");
-    const data = {
-      student_id: parseInt(values.studentId),
-      full_name: values.firstName + " " + values.lastName,
-      date_of_birth: valueDateOfBirth.toJSON().substring(0, 10),
-      graduation_date: valueGraduationDate.toJSON().substring(0, 10),
-      major: values.major,
-      degree: values.degree + " " + values.degreeType,
-      student_skill: mySkills,
-      student_description: values.description,
-      username: parseInt(localStorage.getItem("email_id")),
-    };
-    console.log(data);
-    // axios
-    //   .post(
-    //     "http://18.213.74.196:8000/api/student_profile/create",
-    //     data,
-    //     getConfig()
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //     localStorage.setItem("slug", res.data.slug);
-    //   })
-    //   .catch((err) => console.log(err));
+  const handleSubmit = () => {
+    if (mySkills.length === 0) {
+      alert("Please enter at least one skill with experience");
+    } else {
+      setErrorsSecond({
+        student_description:
+          studentSecond.student_description === "" ? "Required" : null,
+      });
+    }
   };
 
-  const validate = (values) => {
-    let errors = {};
-
-    if (!values.firstName) {
-      errors.firstName = "Required";
+  function validateStudentId(studentID) {
+    if (studentID === "") {
+      return "Required";
     }
-
-    if (!values.lastName) {
-      errors.lastName = "Required";
+    if (!parseInt(studentID) || studentID.length < 7) {
+      alert("Please enter valid PeopleSoft ID!");
+      return "Required";
     }
-
-    if (!values.studentEmail) {
-      errors.studentEmail = "Required";
-    }
-
-    if (!values.dateOfBirth || values.dateOfBirth === null) {
-      errors.dateOfBirth = "Required";
-    }
-
-    if (!values.studentId) {
-      errors.studentId = "Required";
-    }
-
-    if (!values.graduationDate || values.graduationDate === null) {
-      errors.graduationDate = "Required";
-    }
-
-    if (!values.major) {
-      errors.major = "Required";
-    }
-
-    if (!values.degree) {
-      errors.degree = "Required";
-    }
-
-    if (!values.degreeType) {
-      errors.degreeType = "Required";
-    }
-
-    if (!values.resumeUrl) {
-      errors.resumeUrl = "Required";
-    }
-
-    if (!values.description) {
-      errors.description = "Required";
-    }
-
-    return errors;
-  };
-
-  const formik = useFormik({
-    initialValues,
-    validate,
-    onSubmit,
-  });
-
+    return null;
+  }
   const nextStep = () => {
-    setFirstStep(false);
+    studentFirst.date_of_birth = valueDateOfBirth.toJSON().substring(0, 10);
+    studentFirst.graduation_date = valueGraduationDate
+      .toJSON()
+      .substring(0, 10);
+    setErrorsFirst({
+      first_name: studentFirst.first_name === "" ? "Required" : null,
+      last_name: studentFirst.last_name === "" ? "Required" : null,
+      student_id: validateStudentId(studentFirst.student_id),
+    });
+    // if(studentFirst.student_id !== parseInt(studentFirst.studentId, 10
   };
+
+  function replaceSkillIdWithName() {
+    let returnArray = [];
+    for (let i = 0; i < mySkills.length; i++) {
+      for (let j = 0; j < skills.length; j++) {
+        if (mySkills[i].skill_name === skills[j].skill_name) {
+          returnArray.push({
+            student_id: mySkills[i].student_id,
+            skill_id: parseInt(skills[j].id),
+            experience_level: parseInt(mySkills[i].experience_level),
+          });
+        }
+      }
+    }
+    return returnArray;
+  }
+  useEffect(() => {
+    if (Object.entries(errorsFirst).length !== 0) {
+      let errors = false;
+      Object.keys(errorsFirst).forEach((key) => {
+        if (errorsFirst[key] !== null) {
+          errors = true;
+        }
+      });
+      if (errors) {
+        setFirstStep(true);
+      } else {
+        setFirstStep(false);
+      }
+    }
+  }, [errorsFirst]);
 
   const goBack = () => {
     setFirstStep(true);
   };
+
+  useEffect(() => {
+    if (Object.entries(errorsSecond).length !== 0) {
+      let errors = false;
+      Object.keys(errorsSecond).forEach((key) => {
+        if (errorsSecond[key] !== null) {
+          errors = true;
+        }
+      });
+      if (!errors) {
+        const data = {
+          student_id: studentFirst.student_id,
+          full_name: studentFirst.first_name + " " + studentFirst.last_name,
+          date_of_birth: studentFirst.date_of_birth,
+          graduation_date: studentFirst.graduation_date,
+          major: studentFirst.major,
+          degree: studentFirst.degree,
+          student_description: studentSecond.student_description,
+          username: parseInt(localStorage.getItem("email_id")),
+        };
+        //console.log(replaceSkillIdWithName());
+        axios
+          .post(
+            "http://18.213.74.196:8000/api/student_profile/create",
+            data,
+            getConfig()
+          )
+          .then((res) => {
+            localStorage.setItem("slug", res.data.slug);
+            axios
+              .post(
+                "http://18.213.74.196:8000/api/student_skill/add",
+                replaceSkillIdWithName(),
+                getConfig()
+              )
+              .then((res) => {
+                history.push("/dashboard");
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorsSecond]);
 
   const addSkill = () => {
     if (tempSkill && experience) {
@@ -292,6 +325,7 @@ function StudentInfo() {
         setMySkills([
           ...mySkills,
           {
+            student_id: studentFirst.student_id,
             skill_name: tempSkill,
             experience_level: experience,
           },
@@ -333,41 +367,54 @@ function StudentInfo() {
                 spacing={2}
                 alignItems="flex-start">
                 {/* Left Grid */}
-                <Grid container item xs={6} spacing={3} direction="column">
+                <Grid container item xs={4} spacing={3} direction="column">
                   <Grid item>
                     <TextField
+                      error={
+                        errorsFirst.first_name && studentFirst.first_name === ""
+                      }
                       variant="outlined"
-                      fullWidth
-                      id="firstName"
+                      id="first_name"
                       label="First Name"
-                      name="firstName"
-                      onChange={formik.handleChange}
-                      value={formik.values.firstName}
+                      name="first_name"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.first_name}
+                      required={true}
+                      inputProps={{ maxLength: 25 }}
                     />
+                    {errorsFirst.first_name &&
+                    studentFirst.first_name === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.first_name &&
+                          studentFirst.first_name === ""
+                        }>
+                        {errorsFirst.first_name}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <TextField
+                      error={
+                        errorsFirst.last_name && studentFirst.last_name === ""
+                      }
                       variant="outlined"
-                      fullWidth
-                      id="lastName"
+                      id="last_name"
                       label="Last Name"
-                      name="lastName"
-                      onChange={formik.handleChange}
-                      value={formik.values.lastName}
+                      name="last_name"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.last_name}
+                      required={true}
+                      inputProps={{ maxLength: 24 }}
                     />
-                  </Grid>
-
-                  <Grid item>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      id="studentEmail"
-                      label="Student Email"
-                      type="email"
-                      name="studentEmail"
-                      onChange={formik.handleChange}
-                      value={formik.values.studentEmail}
-                    />
+                    {errorsFirst.last_name && studentFirst.last_name === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.last_name && studentFirst.last_name === ""
+                        }>
+                        {errorsFirst.last_name}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
 
                   <Grid item>
@@ -383,21 +430,37 @@ function StudentInfo() {
                       }}
                       value={valueDateOfBirth}
                       yearAriaLabel="Year"
+                      defaultValue={valueDateOfBirth}
+                      maxDate={valueDateOfBirth}
                     />
                   </Grid>
                 </Grid>
 
                 <Grid container item xs={6} spacing={3} direction="column">
-                  <Grid item xs={6}>
+                  <Grid item>
                     <TextField
+                      error={
+                        errorsFirst.student_id && studentFirst.student_id === ""
+                      }
+                      inputProps={{ maxLength: 7 }}
                       variant="outlined"
-                      fullWidth
-                      id="studentId"
-                      label="Student ID"
-                      name="studentId"
-                      onChange={formik.handleChange}
-                      value={formik.values.studentId}
+                      id="student_id"
+                      label="PeopleSoft ID"
+                      name="student_id"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.student_id}
+                      required={true}
                     />
+                    {errorsFirst.student_id &&
+                    studentFirst.student_id === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.student_id &&
+                          studentFirst.student_id === ""
+                        }>
+                        {errorsFirst.student_id}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <Typography component="p">Graduation Date</Typography>
@@ -413,6 +476,7 @@ function StudentInfo() {
                       value={valueGraduationDate}
                       yearAriaLabel="Year"
                       className={classes.datepicker}
+                      defaultValue={valueGraduationDate}
                     />
                   </Grid>
                   <Grid item>
@@ -425,8 +489,9 @@ function StudentInfo() {
                         label="Major"
                         name="major"
                         id="major"
-                        value={formik.values.major}
-                        onChange={formik.handleChange}>
+                        value={studentFirst.major}
+                        onChange={handleChangeFirst}>
+                        type={"search"}
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
                           <option value="Environmental Design">
@@ -673,33 +738,14 @@ function StudentInfo() {
                       <FormControl
                         variant="outlined"
                         className={classes.formControl}>
-                        <InputLabel>Degree</InputLabel>
-                        <Select
-                          native
-                          label="Degree"
-                          name="degree"
-                          id="degree"
-                          value={formik.values.degree}
-                          onChange={formik.handleChange}>
-                          <option value="B.A.">B.A.</option>
-                          <option value="B.S.">B.S.</option>
-                          <option value="B.F.A.">B.F.A.</option>
-                          <option value="B.A.S.">B.A.S.</option>
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl
-                        variant="outlined"
-                        className={classes.formControl}>
                         <InputLabel>Degree type</InputLabel>
                         <Select
                           native
                           label="Degree Type"
-                          name="degreeType"
-                          id="degreeType"
-                          value={formik.values.degreeType}
-                          onChange={formik.handleChange}>
+                          name="degree"
+                          id="degree"
+                          value={studentFirst.degree}
+                          onChange={handleChangeFirst}>
                           <option value="Undergraduate">Undergraduate</option>
                           <option value="Graduate">Graduate</option>
                         </Select>
@@ -731,11 +777,11 @@ function StudentInfo() {
                 spacing={2}
                 justify="space-between"
                 alignItems="flex-start">
-                <Grid container item xs={6} direction="column" spacing={2}>
-                  <Grid item xs={12}>
+                {/*<Grid container item xs={6} direction="column" spacing={2}>
+                 <Grid item xs={12}>
                     <img className="logo-image" src={studentImage} alt="Logo" />
                   </Grid>
-                  <Grid item>
+                   <Grid item>
                     <label htmlFor="upload-image">
                       <input
                         style={{ display: "none" }}
@@ -753,10 +799,10 @@ function StudentInfo() {
                         Upload Image
                       </Button>
                     </label>
-                  </Grid>
-                </Grid>
+                  </Grid> 
+                </Grid>*/}
                 {/* Right part */}
-                <Grid container item xs={6} direction="column" spacing={3}>
+                <Grid container item direction="column" spacing={3}>
                   {mySkills.length > 0 ? (
                     <Grid item>
                       <Typography>My Skills: </Typography>
@@ -803,6 +849,7 @@ function StudentInfo() {
                           id="tempskill"
                           onChange={handleSkillChange}
                           value={tempSkill}>
+                          type={"search"}
                           <MenuItem value="">
                             <em>None</em>
                           </MenuItem>
@@ -838,48 +885,11 @@ function StudentInfo() {
                       variant="outlined"
                       color="secondary"
                       onClick={addSkill}
-                      disabled={!tempSkill || !experience}>
+                      disabled={tempSkill === "" || experience === ""}>
                       Add Skill
                     </Button>
                   </Grid>
-
                   {/* <Grid item>
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="demo-mutiple-chip-label">
-                        Skills
-                      </InputLabel>
-                      <Select
-                        labelId="demo-mutiple-chip-label"
-                        id="demo-mutiple-chip"
-                        multiple
-                        value={formik.values.skills}
-                        onChange={(event) => {
-                          setSkills(event.target.value);
-                          formik.values.skills = event.target.value;
-                        }}
-                        value={skills}
-                        input={<Input id="select-multiple-chip" />}
-                        renderValue={(selected) => (
-                          <div className={classes.chips}>
-                            {selected.map((value) => (
-                              <Chip
-                                key={value}
-                                label={value}
-                                className={classes.chip}
-                              />
-                            ))}
-                          </div>
-                        )}
-                        MenuProps={MenuProps}>
-                        {options.map((data) => (
-                          <MenuItem key={data.value} value={data.label}>
-                            {data.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid> */}
-                  <Grid item>
                     <label htmlFor="upload-resume">
                       <input
                         style={{ display: "none" }}
@@ -899,18 +909,23 @@ function StudentInfo() {
                       <br />
                       <p className={classes.resumeName}> {resume}</p>
                     </label>
-                  </Grid>
+                  </Grid> */}
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.student_description &&
+                        studentSecond.student_description === ""
+                      }
                       variant="outlined"
                       multiline
                       rows={5}
                       fullWidth
-                      id="description"
+                      id="student_description"
                       label="Description"
-                      name="description"
-                      onChange={formik.handleChange}
-                      value={formik.values.description}
+                      name="student_description"
+                      onChange={handleChangeSecond}
+                      value={studentSecond.student_description}
+                      inputProps={{ maxLength: 500 }}
                     />
                   </Grid>
                 </Grid>
@@ -932,8 +947,7 @@ function StudentInfo() {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    onClick={formik.handleSubmit}
-                    type="submit">
+                    onClick={handleSubmit}>
                     Submit
                   </Button>
                 </Grid>
