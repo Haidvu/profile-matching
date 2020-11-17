@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
   root: {
-    width: '100%',
+    width: "100%",
     backgroundColor: theme.palette.background.paper,
   },
   icon: {
@@ -209,7 +209,7 @@ export default function StudentProfile() {
 
   const getSkillsRepo = async () => {
     const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill`,
+      `http://18.213.74.196:8000/api/skill/`,
       getConfig()
     );
     setSkills(response.data);
@@ -415,8 +415,8 @@ export default function StudentProfile() {
         <img
           alt="profile background"
           className={classes.profileLogo}
-          src={ProfileLogo}>
-        </img>
+          src={ProfileLogo}
+        ></img>
         <List className={classes.root}>
           <ListItem>
             <ListItemIcon edge="start">
@@ -426,7 +426,8 @@ export default function StudentProfile() {
               {studentEdit.studentEditBool === false ? (
                 <div
                   className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}>
+                  style={{ justifyContent: "space-between" }}
+                >
                   <div className={classes.flexColumn}>
                     <Typography className={classes.sectionHeader}>
                       Student Description
@@ -440,14 +441,16 @@ export default function StudentProfile() {
                     className={classes.icon}
                     onClick={() => {
                       handleOpenEdit("studentEditBool");
-                    }}>
-                    <EditTwoToneIcon />
+                    }}
+                  >
+                    {/* <EditTwoToneIcon /> */}
                   </IconButton>
                 </div>
               ) : (
                 <>
                   <FormControl
-                    error={errors.student_description && studentInput === ""}>
+                    error={errors.student_description && studentInput === ""}
+                  >
                     <Typography className={classes.sectionHeader}>
                       Student Description
                     </Typography>
@@ -460,7 +463,8 @@ export default function StudentProfile() {
                           ...studentInput,
                           student_description: e.target.value,
                         });
-                      }}></Input>
+                      }}
+                    ></Input>
                     {errors.student_description &&
                     studentInput.student_description === "" ? (
                       <FormHelperText>
@@ -474,7 +478,8 @@ export default function StudentProfile() {
                       className={classes.icon}
                       onClick={() => {
                         handleCancel();
-                      }}>
+                      }}
+                    >
                       <ClearRoundedIcon />
                     </IconButton>
                     <IconButton
@@ -482,13 +487,14 @@ export default function StudentProfile() {
                       className={classes.icon}
                       onClick={() => {
                         handleSave();
-                      }}>
+                      }}
+                    >
                       <CheckRoundedIcon style={{ color: "green" }} />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </>
               )}
-              </ListItemText>
+            </ListItemText>
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
@@ -501,18 +507,15 @@ export default function StudentProfile() {
                   Academic
                 </Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
+                  className={classes.sectionContent}
+                >{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Degree: ${studentInfo.degree}`}</Typography>
-                  <Typography
-                  className={
-                    classes.sectionContent}
-                    > {`Major: ${studentInfo.major}`}
-                  </Typography>
+                  className={classes.sectionContent}
+                >{`Degree: ${studentInfo.degree}`}</Typography>
+                <Typography className={classes.sectionContent}>
+                  {" "}
+                  {`Major: ${studentInfo.major}`}
+                </Typography>
               </div>
             ) : (
               <div>
@@ -548,7 +551,8 @@ export default function StudentProfile() {
                             ...studentInput,
                             degree: e.target.value,
                           });
-                        }}>
+                        }}
+                      >
                         <option value="Undergraduate">Undergraduate</option>
                         <option value="Graduate">Graduate</option>
                       </select>
@@ -566,7 +570,8 @@ export default function StudentProfile() {
                             ...studentInput,
                             major: e.target.value,
                           });
-                        }}>
+                        }}
+                      >
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
                           <option value="Environmental Design">
@@ -891,7 +896,8 @@ export default function StudentProfile() {
                     error={
                       errors.student_skills &&
                       studentInput.student_skills.length === 0
-                    }>
+                    }
+                  >
                     {errors.student_skills}
                   </FormHelperText>
                 ) : null}
@@ -925,7 +931,8 @@ export default function StudentProfile() {
                       <Select
                         value={experience}
                         className={classes.select}
-                        onChange={handleExpChange}>
+                        onChange={handleExpChange}
+                      >
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
@@ -940,7 +947,8 @@ export default function StudentProfile() {
                       variant="outlined"
                       color="secondary"
                       onClick={addSkill}
-                      disabled={skillName === "" || experience === ""}>
+                      disabled={skillName === "" || experience === ""}
+                    >
                       Add Skill
                     </Button>
                   </Grid>
@@ -967,13 +975,15 @@ export default function StudentProfile() {
         <Dialog
           onClose={handleDialogClose}
           open={dialogOpen}
-          className={classes.dialog}>
+          className={classes.dialog}
+        >
           <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
           {authError ? (
             <Alert
               className={classes.loginAlert}
               variant="filled"
-              severity="error">
+              severity="error"
+            >
               {authError}
             </Alert>
           ) : null}
@@ -1007,7 +1017,8 @@ export default function StudentProfile() {
               onClick={handleConfirm}
               color="secondary"
               variant="outlined"
-              className={classes.dialogConfirm}>
+              className={classes.dialogConfirm}
+            >
               Confirm
             </Button>
           </DialogActions>
