@@ -11,19 +11,21 @@ import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
 
 const CompanyRoutes = () => {
   let { path } = useRouteMatch();
+
+  
   return (
     <div>
       <Switch>
         <Route path={path} exact component={CompanyProfile} />
-        <Route path={`${path}/projects`} exact component={CompanyProjectList} />
-
-        <Route path={`${path}/projects/:project`} render={(props) => <CompanyProjectTemplate projects={"companyProjects"} {...props}/>}/>
+        <Route path={`${path}/projects`} exact render={(props) => <CompanyProjectList {...props} />}/>
 
 
+       
+        <Route path={`${path}/projects/:project`} render={(props) => <CompanyProjectTemplate {...props}/>}/>
+   
 
-        <Route path={`${path}/projects/create`} exact component={CompanyProjectCreate} />
-      
-
+        <Route path={`${path}/project/create`} exact component={CompanyProjectCreate} />
+     
 
         {/* <Route
           path={`${path}/*`}

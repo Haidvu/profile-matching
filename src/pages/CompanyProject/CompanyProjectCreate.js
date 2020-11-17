@@ -7,7 +7,6 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 
 import Grid from '@material-ui/core/Grid';
-import Chip from '@material-ui/core/Chip';
 
 import axios from 'axios';
 import { getConfig } from '../../authConfig';
@@ -18,9 +17,6 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import { DataContext } from "../../contexts/dataContext";
-
-
-// A list of projects and some description is needed here
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -147,8 +143,6 @@ export default function CompanyProjectCreate() {
 
   const classes = useStyles();
 
-  const [companyProjects, setCompanyProjects] = useState([])
-
   const history = useHistory();
 
   const animatedComponents = makeAnimated();
@@ -220,23 +214,7 @@ export default function CompanyProjectCreate() {
   const { data } = useContext(DataContext);
   const { profile } = data;
 
-  
-
-  axios.get("http://18.213.74.196:8000/api/company_profile/" + localStorage.getItem("slug") 
-
-    , getConfig()).then(res => {
-      
-     
-
-     
-     console.log(userNameId)
-
-
-    })
-    .catch(err => {
-      console.log(err.response.data)
-    });
-
+  userNameId = profile.id;
 
   const [companyInput, setCompanyInput] = useState({ //This is the data
     project_description: '',
@@ -245,22 +223,15 @@ export default function CompanyProjectCreate() {
     project_tech: '',
     project_deadline: '',
     is_published: false
-
-  /*  company_project_team_capacity: '10',
-    company_project_students_selected: [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }]*/
      })
 
-     const handleSave = (key) => { //Make api call to save data here. 
-      console.log(companyInput)
-      setCompanyInput(companyInput);
-      saveToDB(companyInput)
+  const [skills, setSkills] = useState({});
 
-     
-    //  handleCloseEdit(key);
+     const handleSave = (key) => { 
+      saveToDB(companyInput)
     }
 
     const saveToDB = (values) => {
-
       const data = {
         project_description: values.project_description,
         project_name: values.project_name,
@@ -278,30 +249,29 @@ export default function CompanyProjectCreate() {
               getConfig()
           )
           .then((res) => {
-            console.log(res)
+            console.log('res save',res)
              
               history.push("/dashboard/projects");
           })
-          .catch((err) => console.log(err.response.data));
+          .catch((err) => console.log(err.response.message));
   };
 
   useEffect(() => {
-    console.log(getConfig())
-    axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
+    axios.get("http://18.213.74.196:8000/api/skill",
+      getConfig()).then(res => {
 
-      {
-        username_id: userNameId 
-      }
-      , getConfig()).then(res => {
-        console.log(res.data)
-        setCompanyProjects(res.data)
+        const data = res.data.map((skill) => {
+          return { label: skill.skill_name, value: skill.id }
+        })
+
+        setSkills(data)
+
       })
       .catch(err => {
-        console.log(err)
-      })
+        console.log(err.response.data)
+      });
+
   }, [])
-
-
 
   // Here will be the submit function to create the project
   // and the axios integration
@@ -375,7 +345,7 @@ export default function CompanyProjectCreate() {
             components={animatedComponents}
             isMulti
             isSearchable
-            options={options}
+            options={skills}
             onChange={(e) => { 
 
              var skillsSeparatedByCommas = Array.prototype.map.call(e, s => s.label).toString(); // "A,B,C"

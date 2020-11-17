@@ -97,7 +97,7 @@ export default function Dashboard() {
           // }
         });
     }
-  }, [role_id, slug, dispatch]);
+  }, []);
 
   const userOptions = () => {
     switch (role_id) {

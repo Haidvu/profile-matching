@@ -151,6 +151,8 @@ function StudentInfo() {
     // Change the _ on the major to a space
     // Change the dates
     const onSubmit = (values) => {
+        
+        console.log('Check for skills', values)
 
         const data = {
 
@@ -538,6 +540,8 @@ function StudentInfo() {
                                                 onChange={(event) => {
                                                     setSkills(event.target.value);
                                                     formik.values.skills = event.target.value;
+
+                                                    
                                                 }}
                                                 value={skills}
                                                 input={<Input id="select-multiple-chip" />}

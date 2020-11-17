@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { makeStyles } from "@material-ui/core/styles";
@@ -9,6 +9,8 @@ import clsx from 'clsx';
 import axios from 'axios';
 import { getConfig } from '../../authConfig';
 import WebRoundedIcon from '@material-ui/icons/WebRounded';
+
+import { DataContext } from "../../contexts/dataContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +41,12 @@ function StudentProject() {
   const classes = useStyles();
 
   const [projects, setProjects] = useState([])
+
+  const { data } = useContext(DataContext);
+
+  const { profile } = data;
+
+ console.log('profile',profile);
   // const [editProject, setEditProject] = useState({
   //   project_name: ""
   // }) NEED TO FINISH THIS API
@@ -75,7 +83,10 @@ function StudentProject() {
           contentArrowStyle={{ borderRight: '7px solid #C8102E' }}
           date={project.project_start_date}
           key={index}
-          icon={<WebRoundedIcon />}
+          {...console.log(project)}
+          icon={<WebRoundedIcon />
+         
+          }
         >
 
           <h3 className={classes.verticalElementTitle}>{project.project_name}</h3>

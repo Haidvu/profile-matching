@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
-import AvatarImage from "../../assets/AvatarImage.jpg";
+import AvatarImage from "../../assets/image.jpg";
+import Spinner from "../../assets/Spinner.gif";
+
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { TextField, Box, Avatar, List, ListItem, Divider, ListItemText, ListItemIcon, IconButton, Button } from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 //import Link from '@material-ui/core/Link';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -19,12 +26,22 @@ import Chip from '@material-ui/core/Chip';
 import axios from 'axios';
 import { getConfig } from '../../authConfig';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams,
+  useRouteMatch
+} from "react-router-dom";
+
 import { useHistory } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
 
-import { Route, useRouteMatch, Switch, Link } from "react-router-dom";
-
 import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
+import { render } from "@testing-library/react";
+
+// A list of projects and some description is needed here
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -93,6 +110,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
+
+
+    // width: "100%"
+
   },
   root: {
     flexGrow: 1,
@@ -119,13 +140,23 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: theme.spacing(2)
   },
-
+  delete: {
+    '&:hover': {
+      backgroundColor: '#C8102E',
+      color: '#ffffff'
+    },
+    margin: theme.spacing(2),
+    fontSize: '0.8125rem !important'
+  },
 
   media: {
     height: 140
+  },
+  spinner: {
+    width: '30%',
+    height: '30%'
   }
 }));
-
 
 export default function CompanyProject() {
 
@@ -133,45 +164,75 @@ export default function CompanyProject() {
 
   const [companyProjects, setCompanyProjects] = useState([])
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [deleted, setDelete] = useState(false);
+
+
+
   const history = useHistory();
 
+
   const { data } = useContext(DataContext);
+
   const { profile } = data;
 
+  const id = profile.id;
+
+  let { url } = useRouteMatch();
+
   const createProject = () => {
-    let path = `projects/create`;
+    let path = `project/create`;
     history.push(path);
   }
 
+  const handleDelete = (id) => {
+    axios
+      .delete(
+        "http://18.213.74.196:8000/api/company_project/" + id + "/delete",
 
-  // move the integration out of here
+        getConfig()
+      )
+      .then((res) => {
+
+        const deletedProject = companyProjects.filter(project => id !== project.project_id)
+        setCompanyProjects(deletedProject)
+
+      })
+      .catch((err) => console.log(err.response.message));
+
+  }
+
   useEffect(() => {
+
+    console.log(id)
+
+    setIsLoading(true);
+
     axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
 
       {
-        username_id: profile.id
+        username_id: parseInt(id) // 	company@eli.eli | Company 1 Eli | 49
       }
       , getConfig()).then(res => {
+        console.log(res.data)
+        setIsLoading(false);
         setCompanyProjects(res.data)
-
       })
       .catch(err => {
-        console.log(err)
+        console.log(err.response.data)
       })
-  }, [])
+
+
+  }, [id])
 
   // Here will be the submit function to create the project
   // and the axios integration
 
-  let { url } = useRouteMatch();
-
-
+  console.log(companyProjects)
 
   return (
     <div className="root">
-
-
-
       <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
 
 
@@ -191,64 +252,86 @@ export default function CompanyProject() {
        </Button>
       </div>
 
-      <div className={classes.companyProjectCards}>
-        <Grid container spacing={3}>
+      {isLoading ? (
+        <div>
+          <Grid container justify="center" alignItems="center" direction="row">
+            <Grid item md={4}>
+              <Avatar src={Spinner} className={classes.spinner} />
+            </Grid>
+          </Grid>
+        </div>
+      ) : (
+          <div className={classes.companyProjectCards}>
+            <Grid container spacing={3}>
 
-          {companyProjects.map((project, index) => {
-            return (
-              <Grid item xs={12} md={4} key={index}>
-                <Link style={{ textDecoration: 'none' }} to={`${url}/${project.project_name}`} >
+              {companyProjects.map((project, index) =>
+
+                <Grid item xs={12} md={4} key={index}>
+
                   <Card className={classes.root}>
-                    <CardActionArea className={classes.cardActionArea}>
-                      <CardMedia
-                        component="img"
-                        alt="Contemplative Reptile"
-                        height="80"
-                        image={AvatarImage}
-                        title="Contemplative Reptile"
-                        className={classes.media}
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                          {project.project_name}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                          Deadline:  {project.project_deadline.substring(0, 10)}
-                        </Typography>
-                        {project.project_tech.split(',').map((skill, index) =>
-                          <Chip label={skill} className={classes.chips} key={index} />
-                        )}
+                    <Link style={{ textDecoration: 'none', color: 'black' }} to={{
+                      pathname: `${url}/${project.project_id}`
+                    }} >
+                      <CardActionArea className={classes.cardActionArea}>
+                        <CardMedia
+                          component="img"
+                          alt="Contemplative Reptile"
+                          height="80"
+                          image={AvatarImage}
+                          title="Contemplative Reptile"
+                          className={classes.media}
+                        />
+                        <CardContent className={classes.cardContent}>
+                          <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
+                            {project.project_name}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                            Deadline:  {project.project_deadline.substring(0, 10)}
+                          </Typography>
+                          {project.project_tech.split(',').map((skill, index) =>
+                            <Chip label={skill} className={classes.chips} key={index} />
+                          )}
 
 
 
-                      </CardContent>
-                    </CardActionArea>
+                        </CardContent>
+                      </CardActionArea>
 
-
+                    </Link>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        VIEW
-                </Button>
-                      <Button size="small" color="primary">
-                        Learn More
+                      <Button size="small" color="primary" >
+                        {project.is_published === true ?
+                          (<>
+                          <VisibilityIcon />
+                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                              PUBLIC
+                        </Typography>
+                          </>) : (<>
+                          <VisibilityOffIcon />
+                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                              DRAFT
+                          </Typography>
+                          </>)}
+                      </Button>
+
+                      <Button size="small" variant="contained" className={classes.delete} onClick={() => { handleDelete(project.project_id) }}>
+                        <DeleteIcon />
+                   DELETE PROJECT
+
                 </Button>
                     </CardActions>
                   </Card>
-                </Link>
-              </Grid>
+
+                </Grid>
 
 
-            );
-          }
-          )}
-        </Grid>
-      </div>
+
+              )}
+            </Grid>
+          </div>
+        )}
 
     </div>
+
   );
 };
-
-
-
-
-
