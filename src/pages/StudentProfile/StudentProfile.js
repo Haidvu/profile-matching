@@ -3,9 +3,7 @@ import StudentProject from "../../components/StudentProject/StudentProject";
 import StudentProjectAdd from "../../components/StudentProject/StudentProjectAdd";
 import StudentProjectScroll from "../../components/StudentProject/StudentProjectScroll";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
-import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import makeAnimated from "react-select/animated";
 import {
   TextField,
   Box,
@@ -13,24 +11,22 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Avatar,
   List,
   ListItem,
+  ListItemSecondaryAction,
   Divider,
-  ListItemText,
   ListItemIcon,
   IconButton,
   Button,
-  CircularProgress,
   Typography,
   Input,
-  InputLabel,
   FormControl,
   MenuItem,
   Grid,
   Chip,
   Select,
   FormHelperText,
+  ListItemText,
 } from "@material-ui/core";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
 import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
@@ -43,7 +39,6 @@ import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
 import { Alert } from "@material-ui/lab";
-import StudentsList from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -66,10 +61,11 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1,
     objectFit: "cover",
   },
+  root: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
   icon: {
-    objectFit: "contain",
-    position: "relative",
-    width: "5%",
     color: theme.palette.secondary.main,
   },
   skills: {
@@ -78,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     color: "#5B5B5B",
     padding: "1%",
-    width: "5%",
+    width: "20px",
   },
   skillsContainer: {
     "& > *": {
@@ -93,15 +89,15 @@ const useStyles = makeStyles((theme) => ({
     color: "#5B5B5B",
     display: "inline",
   },
-  profileImage: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-    position: "absolute",
-    top: "15%",
-    right: "4%",
-    zIndex: 1,
-    objectFit: "contain",
-  },
+  // profileImage: {
+  //   width: theme.spacing(20),
+  //   height: theme.spacing(20),
+  //   position: "absolute",
+  //   top: "15%",
+  //   right: "4%",
+  //   zIndex: 1,
+  //   objectFit: "contain",
+  // },
   select: {
     width: "30vh",
     fontSize: "small",
@@ -157,10 +153,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentProfile() {
-  //options of skills that will be sent to the select statement
-  //this is the animated component for the react-select library
-  const animatedComponents = makeAnimated();
-
   //this is the for the stylings of the page
   const classes = useStyles();
   //initially get the data from DataContext
@@ -189,12 +181,7 @@ export default function StudentProfile() {
     student_skills: [],
     student_description: null,
   });
-  const [mySkillsInfo, setMySkillsInfo] = useState([
-    {
-      skill_name: null,
-      experience: null,
-    },
-  ]);
+
   //this is the booleans for opening or closing edit fields
   const [studentEdit, showStudentEdit] = useState({
     //This tells whether to show input fields.
@@ -428,91 +415,80 @@ export default function StudentProfile() {
         <img
           alt="profile background"
           className={classes.profileLogo}
-          src={ProfileLogo}></img>
-        <List>
-          <ListItem alignItems="flex-start">
-            <ListItemIcon>
+          src={ProfileLogo}>
+        </img>
+        <List className={classes.root}>
+          <ListItem>
+            <ListItemIcon edge="start">
               <FormatListBulletedTwoToneIcon />
             </ListItemIcon>
-            {studentEdit.studentEditBool === false ? (
-              <div
-                className={classes.flexRow}
-                style={{ justifyContent: "space-between" }}>
-                <div className={classes.flexColumn}>
-                  <Typography className={classes.sectionHeader}>
-                    Student Description
-                  </Typography>
-                  <Typography className={classes.sectionContent}>
-                    {studentInfo.student_description}
-                  </Typography>
-                </div>
-
-                {/* <ListItemText
-                  primary={
-                    <Box component={"span"} className={classes.sectionHeader}>
+            <ListItemText>
+              {studentEdit.studentEditBool === false ? (
+                <div
+                  className={classes.flexRow}
+                  style={{ justifyContent: "space-between" }}>
+                  <div className={classes.flexColumn}>
+                    <Typography className={classes.sectionHeader}>
                       Student Description
-                    </Box>
-                  }
-                  secondary={
-                    <Box
-                      component="span"
-                      variant="body2"
-                      className={`${classes.inline} ${classes.sectionContent}`}
-                      color="textPrimary">
+                    </Typography>
+                    <Typography className={classes.sectionContent}>
                       {studentInfo.student_description}
-                    </Box>
-                  }
-                /> */}
-                <IconButton
-                  style={{ float: "right" }}
-                  className={classes.icon}
-                  onClick={() => {
-                    handleOpenEdit("studentEditBool");
-                  }}>
-                  <EditTwoToneIcon />
-                </IconButton>
-              </div>
-            ) : (
-              <>
-                <FormControl
-                  error={errors.student_description && studentInput === ""}>
-                  <Typography className={classes.sectionHeader}>
-                    Student Description
-                  </Typography>
-                  <Input
-                    multiline
-                    value={studentInput.student_description}
-                    name="student_description"
-                    onChange={(e) => {
-                      setStudentInput({
-                        ...studentInput,
-                        student_description: e.target.value,
-                      });
-                    }}></Input>
-                  {errors.student_description &&
-                  studentInput.student_description === "" ? (
-                    <FormHelperText>
-                      {errors.student_description}
-                    </FormHelperText>
-                  ) : null}
-                </FormControl>
-
-                <IconButton
-                  className={classes.icon}
-                  onClick={() => {
-                    handleCancel();
-                  }}>
-                  <ClearRoundedIcon />
-                </IconButton>
-                <IconButton
-                  className={classes.icon}
-                  onClick={() => {
-                    handleSave();
-                  }}>
-                  <CheckRoundedIcon style={{ color: "green" }} />
-                </IconButton>
-              </>
-            )}
+                    </Typography>
+                  </div>
+                  <IconButton
+                    edge="end"
+                    className={classes.icon}
+                    onClick={() => {
+                      handleOpenEdit("studentEditBool");
+                    }}>
+                    <EditTwoToneIcon />
+                  </IconButton>
+                </div>
+              ) : (
+                <>
+                  <FormControl
+                    error={errors.student_description && studentInput === ""}>
+                    <Typography className={classes.sectionHeader}>
+                      Student Description
+                    </Typography>
+                    <Input
+                      multiline
+                      value={studentInput.student_description}
+                      name="student_description"
+                      onChange={(e) => {
+                        setStudentInput({
+                          ...studentInput,
+                          student_description: e.target.value,
+                        });
+                      }}></Input>
+                    {errors.student_description &&
+                    studentInput.student_description === "" ? (
+                      <FormHelperText>
+                        {errors.student_description}
+                      </FormHelperText>
+                    ) : null}
+                  </FormControl>
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      className={classes.icon}
+                      onClick={() => {
+                        handleCancel();
+                      }}>
+                      <ClearRoundedIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      className={classes.icon}
+                      onClick={() => {
+                        handleSave();
+                      }}>
+                      <CheckRoundedIcon style={{ color: "green" }} />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </>
+              )}
+              </ListItemText>
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
@@ -531,7 +507,12 @@ export default function StudentProfile() {
                 <Typography
                   className={
                     classes.sectionContent
-                  }>{`${studentInfo.degree} ${studentInfo.major}`}</Typography>
+                  }>{`Degree: ${studentInfo.degree}`}</Typography>
+                  <Typography
+                  className={
+                    classes.sectionContent}
+                    > {`Major: ${studentInfo.major}`}
+                  </Typography>
               </div>
             ) : (
               <div>
@@ -568,8 +549,8 @@ export default function StudentProfile() {
                             degree: e.target.value,
                           });
                         }}>
-                        <option value="Bachelor">Bachelor</option>
-                        <option value="Master">Master</option>
+                        <option value="Undergraduate">Undergraduate</option>
+                        <option value="Graduate">Graduate</option>
                       </select>
                     </FormControl>
                   </Grid>
