@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Background from "../../assets/HomePageBackground.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
