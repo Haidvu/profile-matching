@@ -412,7 +412,7 @@ export default function CompanyProject({ match }) {
         console.log(err.response.data)
       });
 
-    axios.get("http://18.213.74.196:8000/api/skill",
+    axios.get("http://18.213.74.196:8000/api/skill/",
       getConfig()).then(res => {
 
         const data = res.data.map((skill) => {

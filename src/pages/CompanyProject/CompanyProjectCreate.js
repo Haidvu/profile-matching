@@ -251,9 +251,10 @@ export default function CompanyProjectCreate() {
   };
 
   useEffect(() => {
-    axios.get("http://18.213.74.196:8000/api/skill",
+    axios.get("http://18.213.74.196:8000/api/skill/",
       getConfig()).then(res => {
 
+        console.log(res)
         const data = res.data.map((skill) => {
           return { label: skill.skill_name, value: skill.id }
         })
@@ -262,7 +263,7 @@ export default function CompanyProjectCreate() {
 
       })
       .catch(err => {
-        console.log(err.response.data)
+        console.log(err)
       });
 
   }, [])
