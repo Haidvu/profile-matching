@@ -9,7 +9,6 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
-  Input,
   Select,
   MenuItem,
   Grid,
@@ -763,7 +762,7 @@ export default function CompanyProfile() {
                       value={profileInfo.phoneNumber}
                       onChange={handleChange}
                       name="phoneNumber"
-                      inputProps={{ maxLength: 11 }}
+                      inputProps={{ maxLength: 10 }}
                       error={updateErrors.company_phone_no !== ""}
                     ></TextField>
                     {updateErrors.company_phone_no ? (
@@ -946,7 +945,7 @@ export default function CompanyProfile() {
                           className={classes.fullWidth}
                           value={profileInfo.city2}
                           onChange={handleChange}
-                          inputProps={{ maxLength: 0 }}
+                          inputProps={{ maxLength: 20 }}
                           name="city2"
                         ></TextField>
                         {profileInfo.city2 === "" ? (

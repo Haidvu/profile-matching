@@ -443,7 +443,7 @@ export default function StudentProfile() {
                       handleOpenEdit("studentEditBool");
                     }}
                   >
-                    {/* <EditTwoToneIcon /> */}
+                    <EditTwoToneIcon />
                   </IconButton>
                 </div>
               ) : (

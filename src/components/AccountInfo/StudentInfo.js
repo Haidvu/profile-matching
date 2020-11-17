@@ -293,6 +293,7 @@ function StudentInfo() {
             getConfig()
           )
           .then((res) => {
+            console.log(replaceSkillIdWithName());
             localStorage.setItem("slug", res.data.slug);
             axios
               .post(
