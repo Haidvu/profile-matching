@@ -20,7 +20,7 @@ import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    width: "100%"
+    width: "100%",
   },
   profileLogo: {
     backgroundRepeat: "no-repeat",
@@ -30,13 +30,13 @@ const useStyles = makeStyles((theme) => ({
     height: "15vw",
     maxWidth: "100%",
     zIndex: 1,
-    objectFit: "cover"
+    objectFit: "cover",
   },
   icon: {
     objectFit: "contain",
     position: "relative",
     width: "5%",
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   download: {
     objectFit: "contain",
@@ -49,10 +49,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     color: "#5B5B5B",
     padding: "2%",
-    width: "5%"
+    width: "5%",
   },
   skillsContainer: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionContent: {
     color: "#5B5B5B",
-    display: 'inline',
+    display: "inline",
   },
   profileImage: {
     width: theme.spacing(20),
@@ -75,50 +75,47 @@ const useStyles = makeStyles((theme) => ({
   },
 
   breadcrumbs: {
-    padding: "10px"
+    padding: "10px",
   },
   column: {
-    flexBasis: '33.33%',
-    padding: "15px"
+    flexBasis: "33.33%",
+    padding: "15px",
   },
   companyProjectCards: {
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
 
-
     // width: "100%"
-
   },
   root: {
     flexGrow: 1,
   },
 
   cardText: {
-    fontSize: "13px"
+    fontSize: "13px",
   },
   cardHeader: {
-    fontSize: "20px"
+    fontSize: "20px",
   },
   chips: {
-    margin: "5px"
+    margin: "5px",
   },
   deadline: {
-    padding: "5px"
+    padding: "5px",
   },
   cardContent: {
-    padding: "8px"
+    padding: "8px",
   },
   addProject: {
-    '&:hover': {
-      backgroundColor: '#C8102E',
+    "&:hover": {
+      backgroundColor: "#C8102E",
     },
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
   },
 
-
   media: {
-    height: 140
+    height: 140,
   },
   selectProjectType: {
     width: "30%",
@@ -126,21 +123,18 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "10px",
     paddingRight: "10px",
     paddingLeft: "10px",
-
   },
   selectCompanySkills: {
     width: "100%",
     padding: "10px",
     zIndex: 1,
-
   },
   addCompanyProjectFields: {
     padding: "10px",
-  }
+  },
 }));
 
 export default function CompanyProjectCreate() {
-
   const classes = useStyles();
 
   const history = useHistory();
@@ -149,63 +143,63 @@ export default function CompanyProjectCreate() {
 
   const projectType = [
     {
-      value: '1',
-      label: 'Cloud Development',
+      value: "1",
+      label: "Cloud Development",
     },
     {
-      value: '2',
-      label: 'Frontend',
+      value: "2",
+      label: "Frontend",
     },
     {
-      value: '3',
-      label: 'Backend',
+      value: "3",
+      label: "Backend",
     },
     {
-      value: '4',
-      label: 'Mobile Development',
+      value: "4",
+      label: "Mobile Development",
     },
     {
-      value: '5',
-      label: 'Data Management',
-    }
+      value: "5",
+      label: "Data Management",
+    },
   ];
 
   const options = [
     {
-      value: '1',
-      label: 'Angular',
+      value: "1",
+      label: "Angular",
     },
     {
-      value: '2',
-      label: '.NET',
+      value: "2",
+      label: ".NET",
     },
     {
-      value: '3',
-      label: 'Python',
+      value: "3",
+      label: "Python",
     },
     {
-      value: '4',
-      label: 'React',
+      value: "4",
+      label: "React",
     },
     {
-      value: '5',
-      label: 'C++',
+      value: "5",
+      label: "C++",
     },
     {
-      value: '6',
-      label: 'Python',
+      value: "6",
+      label: "Python",
     },
     {
-      value: '7',
-      label: 'JavaScript',
+      value: "7",
+      label: "JavaScript",
     },
     {
-      value: '8',
-      label: 'Flash',
+      value: "8",
+      label: "Flash",
     },
     {
-      value: '9',
-      label: 'Selenium',
+      value: "9",
+      label: "Selenium",
     },
   ];
 
@@ -278,7 +272,10 @@ export default function CompanyProjectCreate() {
 
   return (
     <div className="root">
-      <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
+      <img
+        alt="profile background"
+        className={classes.profileLogo}
+        src={ProfileLogo}></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/" /*onClick={handleClick}*/>
@@ -287,14 +284,16 @@ export default function CompanyProjectCreate() {
         <Link color="inherit" href="/dashboard" /*onClick={handleClick}*/>
           Profile
         </Link>
-        <Link color="inherit" href="/dashboard/projects" /*onClick={handleClick}*/>
+        <Link
+          color="inherit"
+          href="/dashboard/projects" /*onClick={handleClick}*/
+        >
           My Projects
         </Link>
         <Typography color="textPrimary">Add New Project</Typography>
       </Breadcrumbs>
 
-
-      <div >
+      <div>
         <Grid container>
           <TextField
             className={classes.addCompanyProjectFields}
@@ -302,13 +301,16 @@ export default function CompanyProjectCreate() {
             margin="dense"
             id="name"
             label="Project Name"
-        
             fullWidth
             variant="outlined"
-
-            name="project_name" 
-            onChange={(e) => { setCompanyInput({ ...companyInput, project_name: e.target.value }) }} 
-            value={companyInput.project_name || ''}
+            name="project_name"
+            onChange={(e) => {
+              setCompanyInput({
+                ...companyInput,
+                project_name: e.target.value,
+              });
+            }}
+            value={companyInput.project_name || ""}
           />
           <TextField
             className={classes.addCompanyProjectFields}
@@ -321,21 +323,23 @@ export default function CompanyProjectCreate() {
             variant="outlined"
             fullWidth
             inputProps={{ maxLength: 350 }}
-
-            name="project_description" 
-            onChange={(e) => { setCompanyInput({ ...companyInput, project_description: e.target.value }) }} 
-           
+            name="project_description"
+            onChange={(e) => {
+              setCompanyInput({
+                ...companyInput,
+                project_description: e.target.value,
+              });
+            }}
           />
 
           <Select
             className={classes.selectProjectType}
             closeMenuOnSelect={true}
-      
             options={projectType}
-
-            name="project_type" 
-            onChange={(e) => { setCompanyInput({ ...companyInput, project_type: e.label }) }} 
-        
+            name="project_type"
+            onChange={(e) => {
+              setCompanyInput({ ...companyInput, project_type: e.label });
+            }}
           />
 
           <Select
@@ -363,10 +367,20 @@ export default function CompanyProjectCreate() {
             }}
             variant="outlined"
             label="Deadline"
-            onChange={(e) => { setCompanyInput({ ...companyInput, project_deadline: e.target.value }) }} 
-            
+            onChange={(e) => {
+              setCompanyInput({
+                ...companyInput,
+                project_deadline: e.target.value,
+              });
+            }}
           />
-          <FormControl component="fieldset"  style={{ width: '100%', paddingRight: '10px', paddingLeft: '10px' }}>
+          <FormControl
+            component="fieldset"
+            style={{
+              width: "100%",
+              paddingRight: "10px",
+              paddingLeft: "10px",
+            }}>
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
@@ -377,35 +391,21 @@ export default function CompanyProjectCreate() {
               />
             </FormGroup>
           </FormControl>
-
-
-
         </Grid>
         <ListItem>
-          <Grid
-            container
-            id="buttons-container"
-            justify="flex-end"
-            spacing={1}>
-
+          <Grid container id="buttons-container" justify="flex-end" spacing={1}>
             <Grid item>
-
               <Button
                 variant="contained"
                 color="secondary"
                 size="large"
-                onClick={handleSave}
-              >
+                onClick={handleSave}>
                 Save
-                  </Button>
+              </Button>
             </Grid>
           </Grid>
         </ListItem>
       </div>
-
     </div>
   );
-};
-
-
-
+}

@@ -7,15 +7,15 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 const useStyles = makeStyles((theme) => ({
   logo: {
     objectFit: "contain",
-    width: "5%",
+    width: "70px",
     float: "left",
-    height: "5%",
+    height: "70px",
   },
   AppBar: {
     background: "rgba(200,16,46,1)",
     display: "flex",
     width: "98%",
-    borderRadius: "3%",
+    borderRadius: "10px",
     margin: "10px 10px 10px 10px",
   },
   Login: {
@@ -34,7 +34,7 @@ export default function Navbar() {
       <React.Fragment>
         <AppBar className={classes.AppBar} position="fixed">
           <Toolbar>
-            <Grid item>
+            <Grid item xs={10}>
               <img alt="uh logo" className={classes.logo} src={UHLogo} />
             </Grid>
             <Grid item>
@@ -45,8 +45,7 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 className={classes.Login}
-                href="/login"
-              >
+                href="/login">
                 Login
               </Button>
             </Grid>
@@ -55,8 +54,7 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 className={classes.SignUp}
-                href="/signup"
-              >
+                href="/signup">
                 Sign Up
               </Button>
             </Grid>

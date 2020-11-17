@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   Drawer,
   AppBar,
@@ -13,7 +13,10 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  IconButton,
+  Hidden 
 } from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "./StudentRoutes";
@@ -29,13 +32,25 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: drawerWidth,
+    },
     background: "rgba(200,16,46,1)",
   },
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
   drawerPaper: {
     width: drawerWidth,
@@ -49,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
   Logout: {
     objectFit: "contain",
   },
+  toolbar: theme.mixins.toolbar,
   rightToolbar: {
     marginLeft: "auto",
     objectFit: "contain",
@@ -67,6 +83,13 @@ export default function Dashboard() {
   const slug = localStorage.getItem("slug");
   const role_id = localStorage.getItem("role_id");
   let history = useHistory();
+  const [loading, setLoading] = useState(true);
+
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -87,6 +110,7 @@ export default function Dashboard() {
         .get(url, getConfig())
         .then((res) => {
           dispatch({ type: "SET_PROFILE", payload: res.data });
+          setLoading(false);
         })
         .catch((err) => {
           // to prevent user from changing their roles
@@ -103,13 +127,13 @@ export default function Dashboard() {
     switch (role_id) {
       case "0":
         return {
-          name: data.profile.full_name,
+          name: data.profile.full_name ? data.profile.full_name : null,
           menu: <StudentMenu />,
           routes: <StudentRoutes />,
         };
       case "1":
         return {
-          name: data.profile.company_name,
+          name: data.profile.company_name ? data.profile.company_name : null,
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
@@ -124,45 +148,94 @@ export default function Dashboard() {
   //logs out if no profile found 404
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6">| Future Start |</Typography>
-          <AccountCircleRoundedIcon
-            color="inherit"
-            className={classes.rightToolbar}
-          />
-          <Typography p={2}>{`Welcome! ${
-            userOptions() ? userOptions().name : ""
-          }`}</Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{ paper: classes.drawerPaper }}>
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <List>
-            {userOptions() ? userOptions().menu : null}
-
-            <Link to="/login" className={classes.link}>
-              <ListItem onClick={logout}>
-                <ListItemIcon>
-                  <ExitToAppRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary="Logout" />
-              </ListItem>
-            </Link>
-          </List>
-          <Divider />
+    <>
+      {loading ? null : (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6">| Future Start |</Typography>
+              <AccountCircleRoundedIcon
+                color="inherit"
+                className={classes.rightToolbar}
+              />
+              <Typography p={2}>{`Welcome! ${
+                userOptions() ? userOptions().name : ""
+              }`}</Typography>
+            </Toolbar>
+          </AppBar>
+          <nav className={classes.drawer}>
+            <Hidden smUp implementation="css">
+              <Drawer
+                variant="temporary"
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+              >
+                <Toolbar />
+                <div className={classes.drawerContainer}>
+                  <List>
+                      {userOptions() ? userOptions().menu : null}
+                      <Link to="/login" className={classes.link}>
+                        <ListItem onClick={logout}>
+                          <ListItemIcon>
+                            <ExitToAppRoundedIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Logout" />
+                        </ListItem>
+                      </Link>
+                  </List>
+                </div>
+                <Divider />
+                </Drawer>
+              </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                <Toolbar />
+                <div className={classes.drawerContainer}>
+                  <List>
+                    {userOptions() ? userOptions().menu : null}
+                    <Link to="/login" className={classes.link}>
+                      <ListItem onClick={logout}>
+                        <ListItemIcon>
+                          <ExitToAppRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                      </ListItem>
+                    </Link>
+                  </List>
+                  <Divider />
+                </div>
+              </Drawer>
+            </Hidden>
+          </nav>
+          <main className={classes.content}>
+            <Toolbar />
+            {userOptions() ? userOptions().routes : null}
+          </main>
         </div>
-      </Drawer>
-      <main className={classes.content}>
-        <Toolbar />
-        {userOptions() ? userOptions().routes : null}
-      </main>
-    </div>
+      )}
+    </>
   );
 }

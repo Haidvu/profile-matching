@@ -49,7 +49,7 @@ import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    width: "100%"
+    width: "100%",
   },
   formControl: {
     width: "100%"
@@ -62,13 +62,13 @@ const useStyles = makeStyles((theme) => ({
     height: "15vw",
     maxWidth: "100%",
     zIndex: 1,
-    objectFit: "cover"
+    objectFit: "cover",
   },
   icon: {
     objectFit: "contain",
     position: "relative",
     width: "5%",
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   download: {
     objectFit: "contain",
@@ -85,7 +85,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "0",
     fontSize: "0.8125rem",
     boxSizing: "border-box",
-    transition: "background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    transition:
+      "background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
     alignItems: "center",
     whiteSpace: "nowrap",
     borderRadius: "16px",
@@ -94,10 +95,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     backgroundColor: "#e0e0e0",
     position: "relative",
-
   },
   skillsContainer: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionContent: {
     color: "#5B5B5B",
-    display: 'inline',
+    display: "inline",
   },
   profileImage: {
     width: theme.spacing(20),
@@ -119,19 +119,17 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
   },
 
-
   // Elisa's styles
   breadcrumbs: {
-    padding: "10px"
+    padding: "10px",
   },
   column: {
-    flexBasis: '33.33%',
-    padding: "15px"
+    flexBasis: "33.33%",
+    padding: "15px",
   },
   companyProjectCards: {
     padding: "70px",
     // width: "100%"
-
   },
   root: {
     flexGrow: 1,
@@ -141,31 +139,31 @@ const useStyles = makeStyles((theme) => ({
     //overflow: "hidden"
   },
   cardText: {
-    fontSize: "13px"
+    fontSize: "13px",
   },
   cardHeader: {
-    fontSize: "20px"
+    fontSize: "20px",
   },
   chips: {
-    margin: "5px"
+    margin: "5px",
   },
   deadline: {
-    padding: "5px"
+    padding: "5px",
   },
   customTabRoot: {
     color: "#C8102E",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   customTabIndicator: {
-
-    backgroundColor: "#C8102E"
+    backgroundColor: "#C8102E",
   },
   tabs: {
     marginTop: "15px",
     marginRight: "15px",
     marginLeft: "15px",
 
-    boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
+    boxShadow:
+      "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)",
   },
   active_tab: {
     color: "#C8102E",
@@ -174,7 +172,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#000000",
   },
   textForm: {
-    width: "100%"
+    width: "100%",
   },
   tabsPanel: {
     backgroundColor: "#ffffff",
@@ -204,8 +202,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`scrollable-prevent-tabpanel-${index}`}
       aria-labelledby={`scrollable-prevent-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box >
           <Typography component={'span'}>{children}</Typography>
@@ -224,7 +221,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `scrollable-prevent-tab-${index}`,
-    'aria-controls': `scrollable-prevent-tabpanel-${index}`,
+    "aria-controls": `scrollable-prevent-tabpanel-${index}`,
   };
 }
 
@@ -280,7 +277,12 @@ export default function CompanyProject({ match }) {
   ];
 
   //options of skills that will be sent to the select statement
-  const options = [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }, { label: 'C#', value: 2 }, { label: 'React', value: 3 }]
+  const options = [
+    { label: "C++", value: 0 },
+    { label: "Java", value: 1 },
+    { label: "C#", value: 2 },
+    { label: "React", value: 3 },
+  ];
 
   //If project is a valid project show, if not then 404
 
@@ -318,22 +320,12 @@ export default function CompanyProject({ match }) {
 
   const [companyInput, setCompanyInput] = useState({});
 
-  // Filter Array of Skills To Show Skills no currently in the Company Project
-  if (Object.keys(companyInput).length && Object.keys(skills).length) {
-
-    //  console.log('project tech', companyInput.project_tech)
-    //  console.log('skills?', skills)
-
-  } else {
-    // console.log('no skills or companyInput')
-  }
-
   //opening the edit field
   const handleOpenEdit = (key) => {
 
     showCompanyEdit({
       ...companyEdit,
-      [key]: true
+      [key]: true,
     });
 
   }
@@ -341,9 +333,9 @@ export default function CompanyProject({ match }) {
   const handleCloseEdit = (key) => {
     showCompanyEdit({
       ...companyEdit,
-      [key]: false
+      [key]: false,
     });
-  }
+  };
   //saving the edited data
   const handleSave = (key) => { //Make api call to save data here. 
     setCompanyInfo(companyInput)
@@ -381,7 +373,7 @@ export default function CompanyProject({ match }) {
   }
   //not saving the edited data if the user does not want to change
   const handleCancel = (key) => {
-    setCompanyInput(companyInfo)
+    setCompanyInput(companyInfo);
     handleCloseEdit(key);
 
   }
@@ -446,11 +438,14 @@ export default function CompanyProject({ match }) {
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/" /*onClick={handleClick}*/>
           Home
-      </Link>
+        </Link>
         <Link color="inherit" href="/dashboard" /*onClick={handleClick}*/>
           Profile
-      </Link>
-        <Link color="inherit" href="/dashboard/projects" /*onClick={handleClick}*/>
+        </Link>
+        <Link
+          color="inherit"
+          href="/dashboard/projects" /*onClick={handleClick}*/
+        >
           My Projects
       </Link>
         <Typography component={'span'} color="textPrimary">{companyInfo.project_name}</Typography>
@@ -831,7 +826,4 @@ export default function CompanyProject({ match }) {
 
     </div>
   );
-};
-
-
-
+}

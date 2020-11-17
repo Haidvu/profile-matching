@@ -232,19 +232,20 @@ const CompanyInfo = () => {
       companyRep: companySecond.companyRep === "" ? "Required" : null,
       companyType: companySecond.companyType === "" ? "Required" : null,
       website: companySecond.website === "" ? "Required" : null,
+      mission: companySecond.mission === "" ? "Required" : null,
       description: companySecond.description === "" ? "Required" : null,
     });
   };
 
   useEffect(() => {
     if (Object.entries(errorsFirst).length !== 0) {
-      let errors = false;
+      let errorExists = false;
       Object.keys(errorsFirst).forEach((key) => {
         if (errorsFirst[key] !== null) {
-          errors = true;
+          errorExists = true;
         }
       });
-      if (errors) {
+      if (errorExists) {
         setFirstStep(true);
       } else {
         setFirstStep(false);
@@ -254,13 +255,13 @@ const CompanyInfo = () => {
 
   useEffect(() => {
     if (Object.entries(errorsSecond).length !== 0) {
-      let errors = false;
+      let errorExists = false;
       Object.keys(errorsSecond).forEach((key) => {
         if (errorsSecond[key] !== null) {
-          errors = true;
+          errorExists = true;
         }
       });
-      if (!errors) {
+      if (!errorExists) {
         const data = {
           company_name: companyFirst.name,
           company_phone_no: companyFirst.phoneNumber,
@@ -277,7 +278,6 @@ const CompanyInfo = () => {
           company_description: companySecond.description,
           username: localStorage.getItem("email_id"),
         };
-        console.log(data);
         axios
           .post(
             "http://18.213.74.196:8000/api/company_profile/create",
@@ -291,8 +291,6 @@ const CompanyInfo = () => {
           .catch((err) => {
             console.log(err);
           });
-      } else {
-        console.log(errorsSecond);
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorsSecond]);
@@ -317,15 +315,18 @@ const CompanyInfo = () => {
                 direction="row"
                 justify="space-between"
                 spacing={2}
-                alignItems="flex-start">
+                alignItems="flex-start"
+              >
                 {/* Left Grid */}
                 <Grid
                   container
                   id="first-left"
                   item
-                  xs={6}
+                  xs={12}
+                  md={6}
                   spacing={3}
-                  direction="column">
+                  direction="column"
+                >
                   <Grid item>
                     <TextField
                       error={errorsFirst.name && companyFirst.name === ""}
@@ -336,10 +337,12 @@ const CompanyInfo = () => {
                       name="name"
                       onChange={handleChangeFirst}
                       value={companyFirst.name}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsFirst.name && companyFirst.name === "" ? (
                       <FormHelperText
-                        error={errorsFirst.name && companyFirst.name === ""}>
+                        error={errorsFirst.name && companyFirst.name === ""}
+                      >
                         {errorsFirst.name}
                       </FormHelperText>
                     ) : null}
@@ -351,13 +354,15 @@ const CompanyInfo = () => {
                         companyFirst.industryType === ""
                       }
                       variant="outlined"
-                      className={classes.formControl}>
+                      className={classes.formControl}
+                    >
                       <InputLabel>Industry Type</InputLabel>
                       <Select
                         label="Industry Type"
                         value={companyFirst.industryType}
                         onChange={handleChangeFirst}
-                        name="industryType">
+                        name="industryType"
+                      >
                         {industryTypes.map((item) => (
                           <MenuItem key={item} value={item}>
                             {item}
@@ -386,6 +391,7 @@ const CompanyInfo = () => {
                       name="phoneNumber"
                       onChange={handleChangeFirst}
                       value={companyFirst.phoneNumber}
+                      inputProps={{ maxLength: 10 }}
                     />
                     {errorsFirst.phoneNumber &&
                     companyFirst.phoneNumber === "" ? (
@@ -393,7 +399,8 @@ const CompanyInfo = () => {
                         error={
                           errorsFirst.phoneNumber &&
                           companyFirst.phoneNumber === ""
-                        }>
+                        }
+                      >
                         {errorsFirst.phoneNumber}
                       </FormHelperText>
                     ) : null}
@@ -403,12 +410,14 @@ const CompanyInfo = () => {
                     <FormControl
                       error={errorsFirst.isSolo && companyFirst.isSolo === ""}
                       variant="outlined"
-                      className={classes.formControl}>
+                      className={classes.formControl}
+                    >
                       <RadioGroup
                         aria-label="Are you single member company"
                         name="isSolo"
                         value={companyFirst.isSolo}
-                        onChange={handleChangeFirst}>
+                        onChange={handleChangeFirst}
+                      >
                         <FormControlLabel
                           value="1"
                           control={<Radio />}
@@ -432,9 +441,11 @@ const CompanyInfo = () => {
                   container
                   id="first-right"
                   item
-                  xs={6}
+                  xs={12}
+                  md={6}
                   spacing={3}
-                  direction="column">
+                  direction="column"
+                >
                   <Grid item>
                     <TextField
                       error={errorsFirst.address && companyFirst.address === ""}
@@ -445,12 +456,14 @@ const CompanyInfo = () => {
                       name="address"
                       onChange={handleChangeFirst}
                       value={companyFirst.address}
+                      inputProps={{ maxLength: 40 }}
                     />
                     {errorsFirst.address && companyFirst.address === "" ? (
                       <FormHelperText
                         error={
                           errorsFirst.address && companyFirst.address === ""
-                        }>
+                        }
+                      >
                         {errorsFirst.address}
                       </FormHelperText>
                     ) : null}
@@ -460,8 +473,9 @@ const CompanyInfo = () => {
                     id="address-container-1"
                     item
                     direction="row"
-                    spacing={10}>
-                    <Grid item xs={6}>
+                    spacing={10}
+                  >
+                    <Grid item xs={7}>
                       <TextField
                         error={errorsFirst.city && companyFirst.city === ""}
                         variant="outlined"
@@ -471,26 +485,30 @@ const CompanyInfo = () => {
                         name="city"
                         onChange={handleChangeFirst}
                         value={companyFirst.city}
+                        inputProps={{ maxLength: 20 }}
                       />
                       {errorsFirst.city && companyFirst.city === "" ? (
                         <FormHelperText
-                          error={errorsFirst.city && companyFirst.city === ""}>
+                          error={errorsFirst.city && companyFirst.city === ""}
+                        >
                           {errorsFirst.address}
                         </FormHelperText>
                       ) : null}
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={5}>
                       <FormControl
                         error={errorsFirst.state && companyFirst.state === ""}
                         variant="outlined"
-                        className={classes.formControl}>
+                        className={classes.formControl}
+                      >
                         <InputLabel>ST</InputLabel>
                         <Select
                           label="State"
                           value={companySecond.state}
                           onChange={handleChangeFirst}
                           defaultValue=""
-                          name="state">
+                          name="state"
+                        >
                           {states.map((state) => (
                             <MenuItem value={state} key={state}>
                               {state}
@@ -504,33 +522,6 @@ const CompanyInfo = () => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <TextField
-                      error={
-                        errorsFirst.mailingAddress &&
-                        !companyFirst.checkedAddress &&
-                        companyFirst.mailingAddress === ""
-                      }
-                      variant="outlined"
-                      fullWidth
-                      id="mailingAddress"
-                      label="Mailing Address"
-                      name="mailingAddress"
-                      disabled={disable}
-                      onChange={handleChangeFirst}
-                      value={companyFirst.mailingAddress}
-                    />
-                    {errorsFirst.mailingAddress &&
-                    !companyFirst.checkedAddress &&
-                    companyFirst.mailingAddress === "" ? (
-                      <FormHelperText
-                        error={
-                          errorsFirst.mailingAddress &&
-                          !companyFirst.checkedAddress &&
-                          companyFirst.mailingAddress === ""
-                        }>
-                        {errorsFirst.mailingAddress}
-                      </FormHelperText>
-                    ) : null}
                     <FormControlLabel
                       className={classes.checkLabel}
                       value={!disable}
@@ -545,14 +536,44 @@ const CompanyInfo = () => {
                       label="Mailing address same as company Address"
                       labelPlacement="end"
                     />
+                    <TextField
+                      error={
+                        errorsFirst.mailingAddress &&
+                        !companyFirst.checkedAddress &&
+                        companyFirst.mailingAddress === ""
+                      }
+                      variant="outlined"
+                      fullWidth
+                      id="mailingAddress"
+                      label="Mailing Address"
+                      name="mailingAddress"
+                      disabled={disable}
+                      onChange={handleChangeFirst}
+                      value={companyFirst.mailingAddress}
+                      inputProps={{ maxLength: 40 }}
+                    />
+                    {errorsFirst.mailingAddress &&
+                    !companyFirst.checkedAddress &&
+                    companyFirst.mailingAddress === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.mailingAddress &&
+                          !companyFirst.checkedAddress &&
+                          companyFirst.mailingAddress === ""
+                        }
+                      >
+                        {errorsFirst.mailingAddress}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid
                     container
                     id="address-container-2"
                     item
                     direction="row"
-                    spacing={10}>
-                    <Grid item xs={6}>
+                    spacing={10}
+                  >
+                    <Grid item xs={7}>
                       <TextField
                         error={
                           errorsFirst.city2 &&
@@ -567,6 +588,7 @@ const CompanyInfo = () => {
                         disabled={disable}
                         onChange={handleChangeFirst}
                         value={companyFirst.city2}
+                        inputProps={{ maxLength: 20 }}
                       />
                       {errorsFirst.city2 &&
                       !companyFirst.checkedAddress &&
@@ -576,12 +598,13 @@ const CompanyInfo = () => {
                             errorsFirst.city2 &&
                             !companyFirst.city2 &&
                             companyFirst.city2 === ""
-                          }>
+                          }
+                        >
                           {errorsFirst.city2}
                         </FormHelperText>
                       ) : null}
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={5}>
                       <FormControl
                         error={
                           errorsFirst.state2 &&
@@ -590,14 +613,16 @@ const CompanyInfo = () => {
                         }
                         variant="outlined"
                         className={classes.formControl}
-                        disabled={disable}>
+                        disabled={disable}
+                      >
                         <InputLabel>ST</InputLabel>
                         <Select
                           label="State"
                           name="state2"
                           id="state2"
                           value={companyFirst.state2}
-                          onChange={handleChangeFirst}>
+                          onChange={handleChangeFirst}
+                        >
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -622,7 +647,8 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     onClick={nextStep}
-                    size="large">
+                    size="large"
+                  >
                     Continue
                   </Button>
                 </Grid>
@@ -635,15 +661,18 @@ const CompanyInfo = () => {
                 direction="row"
                 spacing={2}
                 justify="space-between"
-                alignItems="flex-start">
+                alignItems="flex-start"
+              >
                 {/* Left part of form */}
                 <Grid
                   container
                   item
                   id="second-left"
-                  xs={6}
+                  xs={12}
+                  md={6}
                   direction="column"
-                  spacing={3}>
+                  spacing={3}
+                >
                   <Grid item>
                     <TextField
                       error={
@@ -657,6 +686,7 @@ const CompanyInfo = () => {
                       name="companyRep"
                       onChange={handleChangeSecond}
                       value={companySecond.companyRep}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsSecond.companyRep &&
                     companySecond.companyRep === "" ? (
@@ -664,26 +694,29 @@ const CompanyInfo = () => {
                         error={
                           errorsSecond.companyRep &&
                           companySecond.companyRep === ""
-                        }>
+                        }
+                      >
                         {errorsSecond.companyRep}
                       </FormHelperText>
                     ) : null}
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} md={4}>
                     <FormControl
                       error={
                         errorsSecond.companyType &&
                         companySecond.companyType === ""
                       }
                       variant="outlined"
-                      className={classes.formControl}>
+                      className={classes.formControl}
+                    >
                       <InputLabel>Comapany Type</InputLabel>
                       <Select
                         label="Company Type"
                         name="companyType"
                         id="companyType"
                         onChange={handleChangeSecond}
-                        value={companySecond.companyType}>
+                        value={companySecond.companyType}
+                      >
                         <MenuItem value="1">Private</MenuItem>
                         <MenuItem value="2">Non-Profit</MenuItem>
                         <MenuItem value="0">Social Business</MenuItem>
@@ -709,12 +742,14 @@ const CompanyInfo = () => {
                       placeholder="wwww.example.com"
                       onChange={handleChangeSecond}
                       value={companySecond.website}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsSecond.webiste && companySecond.website === "" ? (
                       <FormHelperText
                         error={
                           errorsSecond.website && companySecond.website === ""
-                        }>
+                        }
+                      >
                         {errorsSecond.website}
                       </FormHelperText>
                     ) : null}
@@ -726,11 +761,16 @@ const CompanyInfo = () => {
                   container
                   item
                   id="second-right"
-                  xs={6}
+                  xs={12}
+                  md={6}
                   direction="column"
-                  spacing={3}>
+                  spacing={3}
+                >
                   <Grid item>
                     <TextField
+                      error={
+                        errorsSecond.mission && companySecond.mission === ""
+                      }
                       variant="outlined"
                       multiline
                       rows={5}
@@ -740,7 +780,17 @@ const CompanyInfo = () => {
                       name="mission"
                       onChange={handleChangeSecond}
                       value={companySecond.mission}
+                      inputProps={{ maxLength: 225 }}
                     />
+                    {errorsSecond.mission && companySecond.mission === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.mission && companySecond.mission === ""
+                        }
+                      >
+                        {errorsSecond.mission}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <TextField
@@ -757,6 +807,7 @@ const CompanyInfo = () => {
                       name="description"
                       onChange={handleChangeSecond}
                       value={companySecond.description}
+                      inputProps={{ maxLength: 500 }}
                     />
                     {errorsSecond.description &&
                     companySecond.description === "" ? (
@@ -764,7 +815,8 @@ const CompanyInfo = () => {
                         error={
                           errorsSecond.description &&
                           companySecond.description === ""
-                        }>
+                        }
+                      >
                         {errorsSecond.description}
                       </FormHelperText>
                     ) : null}
@@ -776,14 +828,16 @@ const CompanyInfo = () => {
                 container
                 id="buttons-container"
                 justify="flex-end"
-                spacing={3}>
+                spacing={3}
+              >
                 <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
                     className={classes.submit}
                     onClick={goBack}
-                    size="large">
+                    size="large"
+                  >
                     Go Back
                   </Button>
                 </Grid>
@@ -793,7 +847,8 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    onClick={handleSubmit}>
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </Button>
                 </Grid>

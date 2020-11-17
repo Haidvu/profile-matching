@@ -14,17 +14,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
 
-import Grid from '@material-ui/core/Grid';
-import Chip from '@material-ui/core/Chip';
+import Grid from "@material-ui/core/Grid";
+import Chip from "@material-ui/core/Chip";
 
-import axios from 'axios';
-import { getConfig } from '../../authConfig';
+import axios from "axios";
+import { getConfig } from "../../authConfig";
 
 import {
   BrowserRouter as Router,
@@ -38,14 +38,11 @@ import {
 import { useHistory } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
 
-import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
-import { render } from "@testing-library/react";
-
 // A list of projects and some description is needed here
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    width: "100%"
+    width: "100%",
   },
   profileLogo: {
     backgroundRepeat: "no-repeat",
@@ -55,13 +52,13 @@ const useStyles = makeStyles((theme) => ({
     height: "15vw",
     maxWidth: "100%",
     zIndex: 1,
-    objectFit: "cover"
+    objectFit: "cover",
   },
   icon: {
     objectFit: "contain",
     position: "relative",
     width: "5%",
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   download: {
     objectFit: "contain",
@@ -74,10 +71,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     color: "#5B5B5B",
     padding: "2%",
-    width: "5%"
+    width: "5%",
   },
   skillsContainer: {
-    '& > *': {
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
@@ -87,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionContent: {
     color: "#5B5B5B",
-    display: 'inline',
+    display: "inline",
   },
   profileImage: {
     width: theme.spacing(20),
@@ -100,45 +97,43 @@ const useStyles = makeStyles((theme) => ({
   },
 
   breadcrumbs: {
-    padding: "10px"
+    padding: "10px",
   },
   column: {
-    flexBasis: '33.33%',
-    padding: "15px"
+    flexBasis: "33.33%",
+    padding: "15px",
   },
   companyProjectCards: {
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
 
-
     // width: "100%"
-
   },
   root: {
     flexGrow: 1,
   },
 
   cardText: {
-    fontSize: "13px"
+    fontSize: "13px",
   },
   cardHeader: {
-    fontSize: "20px"
+    fontSize: "20px",
   },
   chips: {
-    margin: "5px"
+    margin: "5px",
   },
   deadline: {
-    padding: "5px"
+    padding: "5px",
   },
   cardContent: {
-    padding: "8px"
+    padding: "8px",
   },
   addProject: {
-    '&:hover': {
-      backgroundColor: '#C8102E',
+    "&:hover": {
+      backgroundColor: "#C8102E",
     },
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
   },
   delete: {
     '&:hover': {
@@ -159,10 +154,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CompanyProject() {
-
   const classes = useStyles();
 
-  const [companyProjects, setCompanyProjects] = useState([])
+  const [companyProjects, setCompanyProjects] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -184,7 +178,7 @@ export default function CompanyProject() {
   const createProject = () => {
     let path = `project/create`;
     history.push(path);
-  }
+  };
 
   const handleDelete = (id) => {
     axios
@@ -233,7 +227,10 @@ export default function CompanyProject() {
 
   return (
     <div className="root">
-      <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
+      <img
+        alt="profile background"
+        className={classes.profileLogo}
+        src={ProfileLogo}></img>
 
 
 
@@ -246,10 +243,19 @@ export default function CompanyProject() {
         </Link>
         <Typography color="textPrimary">My Projects</Typography>
       </Breadcrumbs>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', }}>
-        <Button variant="contained" component="span" className={classes.addProject} onClick={createProject}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}>
+        <Button
+          variant="contained"
+          component="span"
+          className={classes.addProject}
+          onClick={createProject}>
           Add Project
-       </Button>
+        </Button>
       </div>
 
       {isLoading ? (
