@@ -175,7 +175,8 @@ export default function StudentProfile() {
   const [skillName, setSkillName] = useState("");
   const [experience, setExperience] = useState("");
   //This is for list of skills from database
-  const [skills, setSkills] = useState(null);
+  const [skills, setSkills] = useState();
+  const [projects, setProjects] = useState();
 
   //this is the original data retrieved from the api
   const [studentInfo, setStudentInfo] = useState({
@@ -189,12 +190,6 @@ export default function StudentProfile() {
     student_skills: [],
     student_description: null,
   });
-  const [mySkillsInfo, setMySkillsInfo] = useState([
-    {
-      skill_name: null,
-      experience: null,
-    },
-  ]);
   //this is the booleans for opening or closing edit fields
   const [studentEdit, showStudentEdit] = useState({
     //This tells whether to show input fields.
@@ -228,8 +223,21 @@ export default function StudentProfile() {
     setSkills(response.data);
   };
 
+  const getStudentProjects = async () => {
+    const response = await axios.post(
+      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      {
+        student_id: profile.student_id,
+      },
+      getConfig()
+    );
+    console.log(response);
+    setProjects(response.data);
+  };
+
   useEffect(() => {
     getSkillsRepo();
+    getStudentProjects();
     setStudentInfo({
       student_id: profile.student_id,
       full_name: profile.full_name,
@@ -1034,7 +1042,14 @@ export default function StudentProfile() {
         <Grid container justify="flex-end">
           <StudentProjectAdd skills={skills} />
         </Grid>
-        <StudentProject />
+
+        {projects && skills ? (
+          <StudentProject
+            projects={projects}
+            setProjects={setProjects}
+            skills={skills}
+          />
+        ) : null}
         <StudentProjectScroll showBelow={250} />
       </div>
     </>
