@@ -67,10 +67,14 @@ const industryTypes = [
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
-    objectFit: "contain",
-    // display: "flex",
+    backgroundRepeat: "no-repeat",
     position: "relative",
-    maxHeight: "300px",
+    objectPosition: "20% 30%",
+    width: "100vw",
+    height: "15vw",
+    maxWidth: "100%",
+    zIndex: 1,
+    objectFit: "cover",
   },
   inline: {
     display: "inline",

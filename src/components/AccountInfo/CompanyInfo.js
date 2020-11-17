@@ -334,6 +334,7 @@ const CompanyInfo = () => {
                       name="name"
                       onChange={handleChangeFirst}
                       value={companyFirst.name}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsFirst.name && companyFirst.name === "" ? (
                       <FormHelperText
@@ -384,6 +385,7 @@ const CompanyInfo = () => {
                       name="phoneNumber"
                       onChange={handleChangeFirst}
                       value={companyFirst.phoneNumber}
+                      inputProps={{maxLength:12}}
                     />
                     {errorsFirst.phoneNumber &&
                     companyFirst.phoneNumber === "" ? (
@@ -443,6 +445,7 @@ const CompanyInfo = () => {
                       name="address"
                       onChange={handleChangeFirst}
                       value={companyFirst.address}
+                      inputProps={{ maxLength: 40 }}
                     />
                     {errorsFirst.address && companyFirst.address === "" ? (
                       <FormHelperText
@@ -469,6 +472,7 @@ const CompanyInfo = () => {
                         name="city"
                         onChange={handleChangeFirst}
                         value={companyFirst.city}
+                        inputProps={{ maxLength: 20 }}
                       />
                       {errorsFirst.city && companyFirst.city === "" ? (
                         <FormHelperText
@@ -530,6 +534,7 @@ const CompanyInfo = () => {
                       disabled={disable}
                       onChange={handleChangeFirst}
                       value={companyFirst.mailingAddress}
+                      inputProps={{ maxLength: 40 }}
                     />
                     {errorsFirst.mailingAddress &&
                     !companyFirst.checkedAddress &&
@@ -565,6 +570,7 @@ const CompanyInfo = () => {
                         disabled={disable}
                         onChange={handleChangeFirst}
                         value={companyFirst.city2}
+                        inputProps={{ maxLength: 20 }}
                       />
                       {errorsFirst.city2 &&
                       !companyFirst.checkedAddress &&
@@ -655,6 +661,7 @@ const CompanyInfo = () => {
                       name="companyRep"
                       onChange={handleChangeSecond}
                       value={companySecond.companyRep}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsSecond.companyRep &&
                     companySecond.companyRep === "" ? (
@@ -707,6 +714,7 @@ const CompanyInfo = () => {
                       placeholder="wwww.example.com"
                       onChange={handleChangeSecond}
                       value={companySecond.website}
+                      inputProps={{ maxLength: 50 }}
                     />
                     {errorsSecond.webiste && companySecond.website === "" ? (
                       <FormHelperText
@@ -741,6 +749,7 @@ const CompanyInfo = () => {
                       name="mission"
                       onChange={handleChangeSecond}
                       value={companySecond.mission}
+                      inputProps={{ maxLength: 225 }}
                     />
                     {errorsSecond.mission && companySecond.mission === "" ? (
                       <FormHelperText
@@ -766,6 +775,7 @@ const CompanyInfo = () => {
                       name="description"
                       onChange={handleChangeSecond}
                       value={companySecond.description}
+                      inputProps={{ maxLength: 500 }}
                     />
                     {errorsSecond.description &&
                     companySecond.description === "" ? (
