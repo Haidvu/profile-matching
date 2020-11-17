@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  TextField,
-  Button,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  ListItem,
-} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+import { TextField, Button, FormControl, FormGroup, FormControlLabel, Checkbox, ListItem } from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
 
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
 
-import axios from "axios";
-import { getConfig } from "../../authConfig";
+import axios from 'axios';
+import { getConfig } from '../../authConfig';
 
 import { useHistory } from "react-router-dom";
 
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
-// A list of projects and some description is needed here
+import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -145,8 +137,6 @@ const useStyles = makeStyles((theme) => ({
 export default function CompanyProjectCreate() {
   const classes = useStyles();
 
-  // const [companyProjects, setCompanyProjects] = useState([]);
-
   const history = useHistory();
 
   const animatedComponents = makeAnimated();
@@ -213,68 +203,70 @@ export default function CompanyProjectCreate() {
     },
   ];
 
-  const [companyInput, setCompanyInput] = useState({
-    //This is the data
-    project_description: "",
-    project_name: "",
-    project_type: "",
-    project_tech: "",
-    project_deadline: "",
+  var userNameId;
 
-    /*  company_project_team_capacity: '10',
-    company_project_students_selected: [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }]*/
-  });
+  const { data } = useContext(DataContext);
+  const { profile } = data;
 
-  const handleSave = (key) => {
-    //Make api call to save data here.
-    setCompanyInput(companyInput);
-    saveToDB(companyInput);
+  userNameId = profile.id;
 
-    //  handleCloseEdit(key);
-  };
+  const [companyInput, setCompanyInput] = useState({ //This is the data
+    project_description: '',
+    project_name: '',
+    project_type: '',
+    project_tech: '',
+    project_deadline: '',
+    is_published: false
+     })
 
-  const saveToDB = (values) => {
-    const data = {
-      project_description: values.project_description,
-      project_name: values.project_name,
-      project_type: values.project_type,
-      project_tech: values.project_tech,
-      project_deadline: "2020-10-24T02:30:48Z",
-      username: 49,
-    };
+  const [skills, setSkills] = useState({});
 
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/create",
-        data,
-        getConfig()
-      )
-      .then((res) => {
-        localStorage.setItem("slug", res.data.slug);
-        history.push("/dashboard/projects");
-      })
-      .catch((err) => console.log(err.response.data));
+     const handleSave = (key) => { 
+      saveToDB(companyInput)
+    }
+
+    const saveToDB = (values) => {
+      const data = {
+        project_description: values.project_description,
+        project_name: values.project_name,
+        project_type: values.project_type,
+        project_tech: values.project_tech,
+        project_deadline: values.project_deadline,
+        is_published: values.is_published,
+        username: profile.id
+      };
+
+      axios
+          .post(
+              "http://18.213.74.196:8000/api/company_project/create",
+              data,
+              getConfig()
+          )
+          .then((res) => {
+            console.log('res save',res)
+             
+              history.push("/dashboard/projects");
+          })
+          .catch((err) => console.log(err.response.message));
   };
 
   useEffect(() => {
-    console.log(getConfig());
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/list_by_company",
+    axios.get("http://18.213.74.196:8000/api/skill/",
+      getConfig()).then(res => {
 
-        {
-          username_id: 49, // 	company@eli.eli | Company 1 Eli | 49
-        },
-        getConfig()
-      )
-      .then((res) => {
-        console.log(res.data);
-        // setCompanyProjects(res.data);
+        console.log(res)
+        const data = res.data.map((skill) => {
+          return { label: skill.skill_name, value: skill.id }
+        })
+
+        setSkills(data)
+
       })
-      .catch((err) => {
-        console.log(err.response.data);
+      .catch(err => {
+        console.log(err)
       });
-  }, []);
+
+  }, [])
 
   // Here will be the submit function to create the project
   // and the axios integration
@@ -358,17 +350,13 @@ export default function CompanyProjectCreate() {
             components={animatedComponents}
             isMulti
             isSearchable
-            options={options}
-            onChange={(e) => {
-              var skillsSeparatedByCommas = Array.prototype.map
-                .call(e, (s) => s.label)
-                .toString(); // "A,B,C"
+            options={skills}
+            onChange={(e) => { 
 
-              setCompanyInput({
-                ...companyInput,
-                project_tech: skillsSeparatedByCommas,
-              });
-            }}
+             var skillsSeparatedByCommas = Array.prototype.map.call(e, s => s.label).toString(); // "A,B,C"
+
+              setCompanyInput({ ...companyInput, project_tech: skillsSeparatedByCommas }) 
+            }} 
           />
           <TextField
             className={classes.addCompanyProjectFields}
@@ -397,12 +385,10 @@ export default function CompanyProjectCreate() {
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                control={<Checkbox style={{ color: "#C8102E" }} />}
-                label={
-                  <Typography style={{ fontSize: 15 }}>
-                    Check if you want to publish this project
-                  </Typography>
-                }
+                control={<Checkbox style={{ color: '#C8102E' }} onChange={(e) => { setCompanyInput({ ...companyInput, is_published: e.target.checked }) }} />}
+                label={<Typography style={{ fontSize: 15 }}>Check if you want to publish this project</Typography>}
+               
+
               />
             </FormGroup>
           </FormControl>

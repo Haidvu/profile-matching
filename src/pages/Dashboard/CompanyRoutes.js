@@ -14,17 +14,13 @@ const CompanyRoutes = () => {
     <div>
       <Switch>
         <Route path={`${path}`} exact component={CompanyProfile} />
-        <Route path={`${path}/projects`} exact component={CompanyProjectList} />
-        <Route
-          path={`${path}/projects/create`}
-          exact
-          component={CompanyProjectCreate}
-        />
-        <Route
-          path={`${path}/projects/project1`}
-          exact
-          component={CompanyProjectTemplate}
-        />
+
+        <Route path={`${path}/projects`} exact render={(props) => <CompanyProjectList {...props} />}/>
+
+        <Route path={`${path}/projects/:project`} render={(props) => <CompanyProjectTemplate {...props}/>}/>
+  
+        <Route path={`${path}/project/create`} exact component={CompanyProjectCreate} />
+     
         <Route path={`${path}/search`} exact component={StudentsList} />
         <Route path={`${path}/search/:id`} component={StudentDetailed} />
         {/* <Route
