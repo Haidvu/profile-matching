@@ -4,15 +4,32 @@ import AvatarImage from "../../assets/image.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, Box, Avatar, List, ListItem, Divider, ListItemText, ListItemIcon, IconButton, Button } from "@material-ui/core";
+import {
+  TextField,
+  Box,
+  Avatar,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+  ListItemIcon,
+  IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContentText,
+  DialogContent
+} from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-//import Link from '@material-ui/core/Link';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import AddIcon from "@material-ui/icons/Add";
+import classNames from "classnames";
 
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -37,8 +54,6 @@ import {
 
 import { useHistory } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
-
-// A list of projects and some description is needed here
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -107,8 +122,21 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
-
-    // width: "100%"
+    [theme.breakpoints.down('xm')]:{
+      paddingLeft: "10px",
+      paddingRight: "10px",
+      paddingTop: "10px",
+    },
+    [theme.breakpoints.down('sm')]:{
+      paddingLeft: "10px",
+      paddingRight: "10px",
+      paddingTop: "10px",
+    },
+    [theme.breakpoints.down('md')]:{
+      paddingLeft: "20px",
+      paddingRight: "20px",
+      paddingTop: "20px",
+    }
   },
   root: {
     flexGrow: 1,
@@ -150,6 +178,17 @@ const useStyles = makeStyles((theme) => ({
   spinner: {
     width: '30%',
     height: '30%'
+  },
+  cardAction: {
+    justifyContent: 'flex-end'
+  },
+  projectAdd:{
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    [theme.breakpoints.down('sm')]:{
+      justifyContent: "center"
+    }
   }
 }));
 
@@ -160,9 +199,9 @@ export default function CompanyProject() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [deleted, setDelete] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
-
+  const [projectToDelete, setProjectToDelete] = useState({});
 
   const history = useHistory();
 
@@ -180,36 +219,36 @@ export default function CompanyProject() {
     history.push(path);
   };
 
+  const handleOpenDeleteDialog = (project) => {
+    setOpenDeleteDialog(true)
+    setProjectToDelete(project);
+  }
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false)
+  }
+
   const handleDelete = (id) => {
     axios
       .delete(
         "http://18.213.74.196:8000/api/company_project/" + id + "/delete",
-
         getConfig()
       )
       .then((res) => {
-
         const deletedProject = companyProjects.filter(project => id !== project.project_id)
         setCompanyProjects(deletedProject)
-
       })
       .catch((err) => console.log(err.response.message));
-
+    setOpenDeleteDialog(false)
   }
 
   useEffect(() => {
-
-    console.log(id)
-
     setIsLoading(true);
-
     axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
-
       {
-        username_id: parseInt(id) // 	company@eli.eli | Company 1 Eli | 49
+        username_id: parseInt(id)
       }
       , getConfig()).then(res => {
-        console.log(res.data)
         setIsLoading(false);
         setCompanyProjects(res.data)
       })
@@ -220,11 +259,6 @@ export default function CompanyProject() {
 
   }, [id])
 
-  // Here will be the submit function to create the project
-  // and the axios integration
-
-  console.log(companyProjects)
-
   return (
     <div className="root">
       <img
@@ -232,30 +266,34 @@ export default function CompanyProject() {
         className={classes.profileLogo}
         src={ProfileLogo}></img>
 
-
-
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
-        <Link style={{ textDecoration: 'none' }} color="inherit" to="/" /*onClick={handleClick}*/>
+        <Link style={{ textDecoration: 'none', color: '#000' }}  to="/" >
           Home
         </Link>
-        <Link style={{ textDecoration: 'none' }} color="inherit" to="/dashboard" /*onClick={handleClick}*/>
+        <Link style={{ textDecoration: 'none', color: '#000' }} to="/dashboard" >
           Profile
         </Link>
-        <Typography color="textPrimary">My Projects</Typography>
+        <Typography  style={{ color: '#c8102e' }} >My Projects</Typography>
       </Breadcrumbs>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}>
+        className={classes.projectAdd}
+        >
+    
         <Button
-          variant="contained"
-          component="span"
-          className={classes.addProject}
-          onClick={createProject}>
-          Add Project
-        </Button>
+            onClick={createProject}
+            size="medium"
+            variant="outlined"
+            
+            style={{
+              backgroundColor: "#C8102E",
+              color: "#FFFFFF",
+              margin: "20px",
+            }}>
+            <AddIcon
+              className={classNames(classes.leftIcon, classes.iconSmall)}
+            />
+            ADD NEW PROJECT
+          </Button>
       </div>
 
       {isLoading ? (
@@ -272,7 +310,7 @@ export default function CompanyProject() {
 
               {companyProjects.map((project, index) =>
 
-                <Grid item xs={12} md={4} key={index}>
+                <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
 
                   <Card className={classes.root}>
                     <Link style={{ textDecoration: 'none', color: 'black' }} to={{
@@ -281,10 +319,10 @@ export default function CompanyProject() {
                       <CardActionArea className={classes.cardActionArea}>
                         <CardMedia
                           component="img"
-                          alt="Contemplative Reptile"
+                          alt="Project Photo"
                           height="80"
                           image={AvatarImage}
-                          title="Contemplative Reptile"
+                          title="Project Photo"
                           className={classes.media}
                         />
                         <CardContent className={classes.cardContent}>
@@ -298,41 +336,68 @@ export default function CompanyProject() {
                             <Chip label={skill} className={classes.chips} key={index} />
                           )}
 
-
-
                         </CardContent>
                       </CardActionArea>
 
                     </Link>
-                    <CardActions>
+                    <CardActions className={classes.cardAction}>
                       <Button size="small" color="primary" >
                         {project.is_published === true ?
                           (<>
-                          <VisibilityIcon />
-                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                            <VisibilityIcon />
+                            <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
                               PUBLIC
                         </Typography>
                           </>) : (<>
-                          <VisibilityOffIcon />
-                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
+                            <VisibilityOffIcon />
+                            <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
                               DRAFT
                           </Typography>
                           </>)}
                       </Button>
 
-                      <Button size="small" variant="contained" className={classes.delete} onClick={() => { handleDelete(project.project_id) }}>
+                      <Button size="small" variant="contained" className={classes.delete} onClick={() => { handleOpenDeleteDialog(project) }}>
                         <DeleteIcon />
-                   DELETE PROJECT
-
-                </Button>
+                          DELETE PROJECT
+                      </Button>
                     </CardActions>
+
                   </Card>
 
                 </Grid>
 
-
-
               )}
+
+              <Dialog
+                onClose={handleCloseDeleteDialog}
+                open={openDeleteDialog}
+                className={classes.dialog}
+              >
+                <DialogTitle>Are you sure you want to delete the project: {projectToDelete.project_name}?</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    This project will be permanently removed
+               </DialogContentText>
+                </DialogContent>
+                <DialogActions className={classes.dialogConfirm}>
+                  <Button
+                    onClick={() => { handleDelete(projectToDelete.project_id) }}
+                    color="primary"
+                    variant="outlined"
+                    className={classes.dialogConfirm}
+                  >
+                    DELETE
+            </Button>
+                  <Button
+                    onClick={handleCloseDeleteDialog}
+                    color="secondary"
+                    variant="outlined"
+                    className={classes.dialogConfirm}
+                  >
+                    CANCEL
+            </Button>
+                </DialogActions>
+              </Dialog>
             </Grid>
           </div>
         )}
