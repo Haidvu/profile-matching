@@ -306,7 +306,7 @@ function StudentInfo() {
               });
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response.data);
           });
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
