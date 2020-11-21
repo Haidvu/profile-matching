@@ -187,7 +187,7 @@ function StudentInfo() {
 
   const getSkills = async () => {
     const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill`,
+      `http://18.213.74.196:8000/api/skill/`,
       getConfig()
     );
     setSkills(response.data);
@@ -306,7 +306,7 @@ function StudentInfo() {
               });
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response.data);
           });
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps

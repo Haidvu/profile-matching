@@ -407,6 +407,7 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
 
       getConfig()).then(res => {
 
+
         setIsLoading(false);
 
         setCompanyInfo({

@@ -199,7 +199,7 @@ export default function CompanyProjectCreate() {
       project_description: values.project_description,
       project_name: values.project_name,
       project_type: values.project_type,
-      project_tech: values.project_tech,
+      project_tech: values.project_tech ? values.project_tech : "",
       project_deadline: values.project_deadline,
       is_published: values.is_published,
       username: profile.id
