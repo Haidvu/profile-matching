@@ -1,8 +1,9 @@
-import React,{useState, useEffect,useRef} from "react";
+import React,{useState, useEffect} from "react";
 import Select from 'react-select';
-import {Grid, Box, TextField, Card, CardContent, Button, Chip, Paper} from '@material-ui/core/';
+import {Grid, Box, TextField, Button, Chip} from '@material-ui/core/';
 import { makeStyles } from "@material-ui/core/styles";
 import makeAnimated from 'react-select/animated';
+import StudentsLists from '../../components/StudentPublic/StudentsList';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +69,6 @@ export default function CompanySearch(){
         student_skills:[]
       })
     const handleClick = () =>{
-        console.log(searchInput)
     }
     const handleChange = (e) =>{
         if (e.key === 'Enter') {
@@ -78,7 +78,6 @@ export default function CompanySearch(){
     }
 
     useEffect(() => {
-        console.log(searchInput);
       }, [searchInput]);
 
     const handleDelete = (chipToDelete) => () => {
@@ -255,8 +254,8 @@ export default function CompanySearch(){
                     <Box className={classes.SearchLabels} variant="h8" >Degree Type</Box>
                     <select defaultValue={""} name="degree" onChange={(e)=>{setSearchInput({...searchInput,degree:e.target.value})}} className={classes.DegreeSearch}>
                         <option value="">Select an option</option>
-                        <option value="Bachelor">Bachelor</option>
-                        <option value="Master">Master</option>
+                        <option value="Undergraduate">Undergraduate</option>
+                        <option value="Graduate">Graduate</option>
                     </select> 
                 </Grid>
                 <Grid item xs={2}>
@@ -278,6 +277,7 @@ export default function CompanySearch(){
                 </Grid>
             </Grid> 
         </Grid>
+        <StudentsLists/>
     </div>;
 };
 

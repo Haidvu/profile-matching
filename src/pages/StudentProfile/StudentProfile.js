@@ -168,7 +168,7 @@ export default function StudentProfile() {
   const [experience, setExperience] = useState("");
   //This is for list of skills from database
   const [skills, setSkills] = useState(null);
-
+  const [projects, setProjects] = useState();
   //this is the original data retrieved from the api
   const [studentInfo, setStudentInfo] = useState({
     //This is the data from api
@@ -214,9 +214,19 @@ export default function StudentProfile() {
     );
     setSkills(response.data);
   };
-
+  const getStudentProjects = async () => {
+    const response = await axios.post(
+      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      {
+        student_id: profile.student_id,
+      },
+      getConfig()
+    );
+    setProjects(response.data);
+  };
   useEffect(() => {
     getSkillsRepo();
+    getStudentProjects();
     setStudentInfo({
       student_id: profile.student_id,
       full_name: profile.full_name,
@@ -911,7 +921,6 @@ export default function StudentProfile() {
                           onChange={handleSkillChange}
                           className={classes.select}
                           value={skillName}
-                          /*onChange={(e)=>{setStudentInput({...studentInput,student_skilltemp:e})}}*/
                         >
                           <MenuItem value="">
                             <em>None</em>
@@ -1023,10 +1032,22 @@ export default function StudentProfile() {
             </Button>
           </DialogActions>
         </Dialog>
-        <Grid container justify="flex-end">
-          <StudentProjectAdd skills={skills} />
-        </Grid>
-        <StudentProject />
+        {projects && skills ? (
+          <>
+            <Grid container justify="flex-end">
+              <StudentProjectAdd
+                skills={skills}
+                setProjects={setProjects}
+                projects={projects}
+              />
+            </Grid>
+            <StudentProject
+              projects={projects}
+              setProjects={setProjects}
+              skills={skills}
+            />
+          </>
+        ) : null}
         <StudentProjectScroll showBelow={250} />
       </div>
     </>
