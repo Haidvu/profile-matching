@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   TextField,
@@ -16,7 +16,9 @@ import AddIcon from "@material-ui/icons/Add";
 import classNames from "classnames";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import { getConfig } from "../../authConfig";
+import { DataContext } from "../../contexts/dataContext";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: "25ch",
     },
+  },
+  addDiv: {
+    height: "0px",
   },
   projectAdd: {
     "&:hover": {
@@ -39,18 +44,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "wrap",
   },
+  projectRole: {
+    marginTop: "5",
+  },
+  selectTech: {
+    marginTop: "5px",
+    marginBottom: "5px",
+  },
+
 }));
 
-export default function FormDialog(props) {
+export default function StudentProjectAdd({ projects, setProjects, skills }){
   const classes = useStyles();
-  // const [value, setValue] = React.useState('Controlled');
-
-  // const handleChange = (event) => {
-  //   setValue(event.target.value);                 //changes values of the boxes on change
-  //   // setCurrency(event.target.value);            //changes values of Menu box for ProjectTech
-  // }; NEED TO FINISH THIS
-
   const [open, setOpen] = React.useState(false);
+  const { data } = useContext(DataContext);
+  const { profile } = data;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -61,58 +69,117 @@ export default function FormDialog(props) {
   };
 
   const animatedComponents = makeAnimated();
-  const options = [
-    {
-      value: "1",
-      label: "Angular",
-    },
-    {
-      value: "2",
-      label: ".NET",
-    },
-    {
-      value: "3",
-      label: "Python",
-    },
-    {
-      value: "4",
-      label: "React",
-    },
-    {
-      value: "5",
-      label: "C++",
-    },
-    {
-      value: "6",
-      label: "Python",
-    },
-    {
-      value: "7",
-      label: "JavaScript",
-    },
-    {
-      value: "8",
-      label: "Flash",
-    },
-    {
-      value: "9",
-      label: "Selenium",
-    },
-  ];
-  const list = [
-    { label: "C++", value: 0 },
-    { label: "Java", value: 1 },
-  ];
 
+  const options = skills.map((skill) => {
+    return {
+      label: skill.skill_name,
+      value: skill.id,
+    };
+  });
+
+  const [studentInput, setStudentInput] = useState({
+    //This is the data
+    project_description: "",
+    project_name: "",
+    project_link: "",
+    project_tech: "",
+    project_start_date: "",
+    project_end_date: "",
+    project_in_progress: false,
+    project_role: "",
+  });
+
+  const validate = () =>{
+    if(studentInput.project_name==="")
+    {
+      alert("Please enter a name for the project");
+      return false;
+    }
+    else if(studentInput.project_role===""){
+      alert("Please enter a role for the project");
+      return false;
+    }
+    else if(studentInput.project_description===""){
+      alert("Please enter a description for the project");
+      return false;
+    }
+    else if(studentInput.project_start_date===""){
+      alert("Please enter a start date for the project");
+      return false;
+    }
+    else if(studentInput.project_end_date===""){
+      alert("Please enter a end date for the project");
+      return false;
+    }
+    else if(studentInput.project_start_date>studentInput.project_end_date){
+      alert("Project end date cannot be before project start date");
+    }
+    return true;
+  }
+
+  const  resetAllFields = () =>{
+    studentInput.project_name = "";
+    studentInput.project_description = "";
+    studentInput.project_link = "";
+    studentInput.project_tech = "";
+    studentInput.project_start_date = "";
+    studentInput.project_end_date = "";
+    studentInput.project_in_progress = false;
+    studentInput.project_role = "";
+  }
+
+  const handleSave = () => {
+    if(validate()){
+    const data = {
+      student_id: profile.student_id,
+      project_name: studentInput.project_name,
+      project_description: studentInput.project_description,
+      project_link: studentInput.project_link,
+      project_tech: studentInput.project_tech,
+      project_start_date: studentInput.project_start_date,
+      project_end_date: studentInput.project_end_date,
+      project_in_progress: studentInput.project_in_progress,
+      project_role: studentInput.project_role,
+    };
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/student_project/create",
+        data,
+        getConfig()
+      )
+      .then((res) => {
+        const newProject = {
+          project_id: res.data.project_id,
+          project_name: res.data.project_name,
+          project_description: res.data.project_description,
+          project_link: res.data.project_link,
+          project_tech: res.data.project_tech,
+          project_start_date: res.data.project_start_date,
+          project_end_data: res.data.project_end_data,
+          project_in_progress: res.data.project_in_progress,
+          project_role: res.data.project_role,
+        };
+        setProjects([...projects, newProject]);
+        resetAllFields();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setOpen(false);
+    }
+  };
   return (
     <div>
       <div className={classes.root}>
         <div
+          className={classes.addDiv}
           style={{
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Button
             onClick={handleClickOpen}
             size="medium"
@@ -122,7 +189,8 @@ export default function FormDialog(props) {
               backgroundColor: "#C8102E",
               color: "#FFFFFF",
               margin: "20px",
-            }}>
+            }}
+          >
             <AddIcon
               className={classNames(classes.leftIcon, classes.iconSmall)}
             />
@@ -133,93 +201,170 @@ export default function FormDialog(props) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
-        <DialogTitle className={classes.addNewTitle} id="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">
           ADD NEW PROJECT
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            id="projectName"
+            id="project_name"
             label="Project Name"
-            type="text"
+            fullWidth
+            required
+            variant="outlined"
+            name="project_name"
+            helperText="Please enter an unique project name"
+            inputProps={{ maxLength: 500 }}
+            value={studentInput.project_name || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_name: e.target.value,
+              });
+            }}
+          />
+          <TextField
+            className={classes.projectRole}
+            autoFocus
+            margin="dense"
+            id="project_role"
+            label="Project Role"
             fullWidth
             variant="outlined"
+            name="project_role"
+            inputProps={{ maxLength: 50 }}
+            value={studentInput.project_role || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_role: e.target.value,
+              });
+            }}
+          />
+          <Select
+            className={classes.selectTech}
+            AutoSize={true}
+            closeMenuOnSelect={true}
+            components={animatedComponents}
+            isMulti
+            placeholder="Project Tech"
+            isSearchable
+            options={options}
+            onChange={(e) => {
+              var skillsSeparatedByCommas = "";
+              if(e!==null){
+                skillsSeparatedByCommas = Array.prototype.map
+                .call(e, (s) => s.label)
+                .toString(); // "A,B,C"
+                if(skillsSeparatedByCommas.length>0)
+                  skillsSeparatedByCommas = skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length);
+              }
+              setStudentInput({
+                ...studentInput,
+                project_tech: skillsSeparatedByCommas,
+              });
+            }}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="projectRole"
-            label="Project Role"
-            type="text"
-            fullWidth
-            variant="outlined"
-          />
-          <Select
-            AutoSize={true}
-            closeMenuOnSelect={true}
-            components={animatedComponents}
-            defaultValue={list}
-            isMulti
-            isSearchable
-            options={props.skills}
-          />
-
-          <TextField
-            margin="dense"
-            id="outlined-multiline-static"
+            id="filled-multiline-static"
             multiline
             rows={4}
-            defaultValue="Project Description"
+            helperText="Project Description"
+            required
             variant="outlined"
             fullWidth
-            inputProps={{ maxLength: 350 }}
+            inputProps={{ maxLength: 500 }}
+            name="project_description"
+            value={studentInput.project_description || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_description: e.target.value,
+              });
+            }}
           />
           <TextField
             margin="dense"
             id="outlined-static"
-            helperText="Source Link"
-            defaultValue="ex) www.myproject.com"
-            type="email"
+            helperText="Comapny's Website"
             fullWidth
             variant="outlined"
+            name="project_link"
+            inputProps={{ maxLength: 200 }}
+            value={studentInput.project_link || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_link: e.target.value,
+              });
+            }}
           />
           <TextField
             margin="dense"
             id="date"
             type="date"
-            defaultValue="2020-11-01"
             className={classes.projectDate}
             InputLabelProps={{
               shrink: true,
             }}
             variant="outlined"
+            required
             helperText="Start Date"
+            name="project_start_date"
+            value={studentInput.project_start_date || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_start_date: e.target.value,
+              });
+            }}
           />
           <TextField
             margin="dense"
             id="date"
             type="date"
-            defaultValue="2020-11-01"
             className={classes.projectDate}
             InputLabelProps={{
               shrink: true,
             }}
             variant="outlined"
             helperText="End Date"
+            name="project_end_date"
+            required
+            value={studentInput.project_end_date || ""}
+            onChange={(e) => {
+              setStudentInput({
+                ...studentInput,
+                project_end_date: e.target.value,
+              });
+            }}
           />
           <FormControl component="fieldset">
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                control={<Checkbox style={{ color: "#C8102E" }} />}
+                control={
+                  <Checkbox
+                  checked={studentInput.project_in_progress}
+                    style={{ color: "#C8102E" }}
+                    onChange={(e) => {
+                      setStudentInput({
+                        ...studentInput,
+                        project_in_progress: e.target.checked,
+                      });
+                    }}
+                  />
+                }
                 label={
                   <Typography style={{ fontSize: 15 }}>
                     Check if project "In Progress"
                   </Typography>
                 }
-                labelPlacement="end"
               />
             </FormGroup>
           </FormControl>
@@ -227,13 +372,15 @@ export default function FormDialog(props) {
         <DialogActions>
           <Button
             onClick={handleClose}
-            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}>
+            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}
+          >
             Cancel
           </Button>
           <Button
-            onClick={handleClose}
+            onClick={handleSave}
             style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
-            className={classes.projectAdd}>
+            className={classes.projectAdd}
+          >
             Add Project
           </Button>
         </DialogActions>

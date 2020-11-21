@@ -1,12 +1,11 @@
 import React from "react";
 import { Route, useRouteMatch, Switch } from "react-router-dom";
 import CompanyProfile from "../CompanyProfile/CompanyProfile";
-import StudentsList from "../../components/StudentPublic/StudentsList";
 import CompanyProjectList from "../CompanyProject/CompanyProjectList";
 import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
 import CompanyProjectCreate from "../CompanyProject/CompanyProjectCreate";
 import StudentDetailed from "../../components/StudentPublic/StudentDetailed";
-import Dashboard from "./Dashboard";
+import CompanySearch from "../CompanySearch/CompanySearch";
 
 const CompanyRoutes = () => {
   let { path } = useRouteMatch();
@@ -21,7 +20,7 @@ const CompanyRoutes = () => {
   
         <Route path={`${path}/project/create`} exact component={CompanyProjectCreate} />
      
-        <Route path={`${path}/search`} exact component={StudentsList} />
+        <Route path={`${path}/search`} exact component={CompanySearch} />
         <Route path={`${path}/search/:id`} component={StudentDetailed} />
         {/* <Route
           path={`${path}/*`}

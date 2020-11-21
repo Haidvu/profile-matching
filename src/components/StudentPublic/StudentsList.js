@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Grid,
@@ -10,15 +10,12 @@ import {
   CardContent,
   Avatar,
   Divider,
-  CircularProgress,
-  CardActions,
   LinearProgress,
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import { useRouteMatch } from "react-router-dom";
-import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
@@ -117,7 +114,6 @@ const StudentsList = () => {
       // });
       setStudentsList(response.data);
     } catch (e) {
-      console.log(e);
     }
     setLoading(false);
   };
