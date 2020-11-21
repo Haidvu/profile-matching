@@ -6,7 +6,6 @@ import CompanyProjectList from "../CompanyProject/CompanyProjectList";
 import CompanyProjectTemplate from "../CompanyProject/CompanyProjectTemplate";
 import CompanyProjectCreate from "../CompanyProject/CompanyProjectCreate";
 import StudentDetailed from "../../components/StudentPublic/StudentDetailed";
-import Dashboard from "./Dashboard";
 
 const CompanyRoutes = () => {
   let { path } = useRouteMatch();

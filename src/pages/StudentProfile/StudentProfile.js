@@ -3,9 +3,8 @@ import StudentProject from "../../components/StudentProject/StudentProject";
 import StudentProjectAdd from "../../components/StudentProject/StudentProjectAdd";
 import StudentProjectScroll from "../../components/StudentProject/StudentProjectScroll";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
-import AvatarImage from "../../assets/AvatarImage.jpg";
+// import AvatarImage from "../../assets/AvatarImage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import makeAnimated from "react-select/animated";
 import {
   TextField,
   Box,
@@ -13,18 +12,14 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Avatar,
   List,
   ListItem,
   Divider,
-  ListItemText,
   ListItemIcon,
   IconButton,
   Button,
-  CircularProgress,
   Typography,
   Input,
-  InputLabel,
   FormControl,
   MenuItem,
   Grid,
@@ -43,7 +38,6 @@ import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
 import { Alert } from "@material-ui/lab";
-import StudentsList from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -159,7 +153,6 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentProfile() {
   //options of skills that will be sent to the select statement
   //this is the animated component for the react-select library
-  const animatedComponents = makeAnimated();
 
   //this is the for the stylings of the page
   const classes = useStyles();
@@ -217,7 +210,7 @@ export default function StudentProfile() {
 
   const getSkillsRepo = async () => {
     const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill`,
+      `http://18.213.74.196:8000/api/skill/`,
       getConfig()
     );
     setSkills(response.data);
@@ -1039,16 +1032,22 @@ export default function StudentProfile() {
             </Button>
           </DialogActions>
         </Dialog>
-        <Grid container justify="flex-end">
-          <StudentProjectAdd skills={skills} />
-        </Grid>
 
         {projects && skills ? (
-          <StudentProject
-            projects={projects}
-            setProjects={setProjects}
-            skills={skills}
-          />
+          <>
+            <Grid container justify="flex-end">
+              <StudentProjectAdd
+                skills={skills}
+                setProjects={setProjects}
+                projects={projects}
+              />
+            </Grid>
+            <StudentProject
+              projects={projects}
+              setProjects={setProjects}
+              skills={skills}
+            />
+          </>
         ) : null}
         <StudentProjectScroll showBelow={250} />
       </div>

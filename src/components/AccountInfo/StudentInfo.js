@@ -180,14 +180,14 @@ function StudentInfo() {
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
   // const [image, setImage] = useState("");
   // const [resume, setResume] = useState("");
-  const [skills, setSkills] = useState();
+  const [skills, setSkills] = useState([]);
   const [tempSkill, setTempSkill] = useState("");
   const [experience, setExperience] = useState("");
   const [mySkills, setMySkills] = useState([]);
 
   const getSkills = async () => {
     const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill`,
+      `http://18.213.74.196:8000/api/skill/`,
       getConfig()
     );
     setSkills(response.data);
