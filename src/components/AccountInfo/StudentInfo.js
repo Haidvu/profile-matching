@@ -177,6 +177,7 @@ function StudentInfo() {
     });
   };
   const [valueDateOfBirth, setDateOfBirth] = useState(new Date());
+  const valueTodaysDate = new Date();
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
   // const [image, setImage] = useState("");
   // const [resume, setResume] = useState("");
@@ -285,7 +286,6 @@ function StudentInfo() {
           student_description: studentSecond.student_description,
           username: parseInt(localStorage.getItem("email_id")),
         };
-        //console.log(replaceSkillIdWithName());
         axios
           .post(
             "http://18.213.74.196:8000/api/student_profile/create",
@@ -293,6 +293,7 @@ function StudentInfo() {
             getConfig()
           )
           .then((res) => {
+            console.log(replaceSkillIdWithName());
             localStorage.setItem("slug", res.data.slug);
             axios
               .post(
@@ -365,7 +366,8 @@ function StudentInfo() {
                 direction="row"
                 justify="space-between"
                 spacing={2}
-                alignItems="flex-start">
+                alignItems="flex-start"
+              >
                 {/* Left Grid */}
                 <Grid container item xs={4} spacing={3} direction="column">
                   <Grid item>
@@ -388,7 +390,8 @@ function StudentInfo() {
                         error={
                           errorsFirst.first_name &&
                           studentFirst.first_name === ""
-                        }>
+                        }
+                      >
                         {errorsFirst.first_name}
                       </FormHelperText>
                     ) : null}
@@ -411,7 +414,8 @@ function StudentInfo() {
                       <FormHelperText
                         error={
                           errorsFirst.last_name && studentFirst.last_name === ""
-                        }>
+                        }
+                      >
                         {errorsFirst.last_name}
                       </FormHelperText>
                     ) : null}
@@ -431,7 +435,7 @@ function StudentInfo() {
                       value={valueDateOfBirth}
                       yearAriaLabel="Year"
                       defaultValue={valueDateOfBirth}
-                      maxDate={valueDateOfBirth}
+                      maxDate={valueTodaysDate}
                     />
                   </Grid>
                 </Grid>
@@ -457,7 +461,8 @@ function StudentInfo() {
                         error={
                           errorsFirst.student_id &&
                           studentFirst.student_id === ""
-                        }>
+                        }
+                      >
                         {errorsFirst.student_id}
                       </FormHelperText>
                     ) : null}
@@ -482,7 +487,8 @@ function StudentInfo() {
                   <Grid item>
                     <FormControl
                       variant="outlined"
-                      className={classes.formControl}>
+                      className={classes.formControl}
+                    >
                       <InputLabel>Major</InputLabel>
                       <Select
                         native
@@ -490,7 +496,8 @@ function StudentInfo() {
                         name="major"
                         id="major"
                         value={studentFirst.major}
-                        onChange={handleChangeFirst}>
+                        onChange={handleChangeFirst}
+                      >
                         type={"search"}
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
@@ -737,7 +744,8 @@ function StudentInfo() {
                     <Grid item xs={6}>
                       <FormControl
                         variant="outlined"
-                        className={classes.formControl}>
+                        className={classes.formControl}
+                      >
                         <InputLabel>Degree type</InputLabel>
                         <Select
                           native
@@ -745,7 +753,8 @@ function StudentInfo() {
                           name="degree"
                           id="degree"
                           value={studentFirst.degree}
-                          onChange={handleChangeFirst}>
+                          onChange={handleChangeFirst}
+                        >
                           <option value="Undergraduate">Undergraduate</option>
                           <option value="Graduate">Graduate</option>
                         </Select>
@@ -763,7 +772,8 @@ function StudentInfo() {
                     color="secondary"
                     className={classes.submit}
                     onClick={nextStep}
-                    size="large">
+                    size="large"
+                  >
                     Continue
                   </Button>
                 </Grid>
@@ -776,7 +786,8 @@ function StudentInfo() {
                 direction="row"
                 spacing={2}
                 justify="space-between"
-                alignItems="flex-start">
+                alignItems="flex-start"
+              >
                 {/*<Grid container item xs={6} direction="column" spacing={2}>
                  <Grid item xs={12}>
                     <img className="logo-image" src={studentImage} alt="Logo" />
@@ -848,7 +859,8 @@ function StudentInfo() {
                           label="Skill"
                           id="tempskill"
                           onChange={handleSkillChange}
-                          value={tempSkill}>
+                          value={tempSkill}
+                        >
                           type={"search"}
                           <MenuItem value="">
                             <em>None</em>
@@ -868,7 +880,8 @@ function StudentInfo() {
                           label="experience"
                           id="experience"
                           onChange={handleExperienceChange}
-                          value={experience}>
+                          value={experience}
+                        >
                           <MenuItem value="">
                             <em>None</em>
                           </MenuItem>
@@ -885,7 +898,8 @@ function StudentInfo() {
                       variant="outlined"
                       color="secondary"
                       onClick={addSkill}
-                      disabled={tempSkill === "" || experience === ""}>
+                      disabled={tempSkill === "" || experience === ""}
+                    >
                       Add Skill
                     </Button>
                   </Grid>
@@ -937,7 +951,8 @@ function StudentInfo() {
                     color="secondary"
                     className={classes.submit}
                     onClick={goBack}
-                    size="large">
+                    size="large"
+                  >
                     Go Back
                   </Button>
                 </Grid>
@@ -947,7 +962,8 @@ function StudentInfo() {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    onClick={handleSubmit}>
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </Button>
                 </Grid>

@@ -9,7 +9,6 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
-  Input,
   Select,
   MenuItem,
   Grid,
@@ -67,10 +66,14 @@ const industryTypes = [
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
-    objectFit: "contain",
-    // display: "flex",
+    backgroundRepeat: "no-repeat",
     position: "relative",
-    maxHeight: "300px",
+    objectPosition: "20% 30%",
+    width: "100vw",
+    height: "15vw",
+    maxWidth: "100%",
+    zIndex: 1,
+    objectFit: "cover",
   },
   inline: {
     display: "inline",
@@ -426,14 +429,8 @@ export default function CompanyProfile() {
             <img
               alt="profile logo"
               className={classes.profileLogo}
-              src={ProfileLogo}></img>
-            <ListItem>
-              <Tooltip title="Edit Profile" placement="top">
-                <IconButton className={classes.icon} onClick={handleOpenEdit}>
-                  <EditTwoToneIcon />
-                </IconButton>
-              </Tooltip>
-            </ListItem>
+              src={ProfileLogo}
+            ></img>
           </div>
           <form>
             <List>
@@ -450,7 +447,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.name}
                         </Typography>
                       </React.Fragment>
@@ -459,13 +457,15 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Company Name</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.name}
                       onChange={handleChange}
                       placeholder={profileInfo.name}
                       name="name"
-                      error={updateErrors.company_name !== ""}></Input>
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.company_name !== ""}
+                    ></TextField>
                     {updateErrors.company_name ? (
                       <Typography color="error">
                         {updateErrors.company_name}
@@ -473,6 +473,11 @@ export default function CompanyProfile() {
                     ) : null}
                   </div>
                 )}
+                <Tooltip title="Edit Profile" placement="top">
+                  <IconButton className={classes.icon} onClick={handleOpenEdit}>
+                    <EditTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
               </ListItem>
               {!showEditFields ? (
                 <Divider variant="inset" component="li" />
@@ -490,7 +495,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyMission}
                         </Typography>
                       </React.Fragment>
@@ -499,13 +505,15 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Company Mission</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.companyMission}
                       onChange={handleChange}
                       placeholder={profileInfo.companyMission}
                       name="companyMission"
-                      error={updateErrors.company_mission !== ""}></Input>
+                      inputProps={{ maxLength: 225 }}
+                      error={updateErrors.company_mission !== ""}
+                    ></TextField>
                     {updateErrors.company_mission ? (
                       <Typography>{updateErrors.company_mission}</Typography>
                     ) : null}
@@ -528,7 +536,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyDescription}
                         </Typography>
                       </React.Fragment>
@@ -537,12 +546,14 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Company Description</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.companyDescription}
                       onChange={handleChange}
                       name="companyDescription"
-                      error={updateErrors.company_description !== ""}></Input>
+                      inputProps={{ maxLength: 500 }}
+                      error={updateErrors.company_description !== ""}
+                    ></TextField>
                     {updateErrors.company_description ? (
                       <Typography color="error">
                         {updateErrors.company_description}
@@ -567,7 +578,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyRep}
                         </Typography>
                       </React.Fragment>
@@ -576,12 +588,14 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Company Representative</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.companyRep}
                       onChange={handleChange}
                       name="companyRep"
-                      error={updateErrors.representative_name !== ""}></Input>
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.representative_name !== ""}
+                    ></TextField>
                     {updateErrors.representative_name ? (
                       <Typography color="error">
                         {updateErrors.representative_name}
@@ -606,7 +620,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyWebsite}
                         </Typography>
                       </React.Fragment>
@@ -615,12 +630,14 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Company Website</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.companyWebsite}
                       onChange={handleChange}
                       name="companyWebsite"
-                      error={updateErrors.company_website !== ""}></Input>
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.company_website !== ""}
+                    ></TextField>
                     {updateErrors.company_website ? (
                       <Typography color="error">
                         {updateErrors.company_website}
@@ -645,7 +662,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyType === 0
                             ? "Social Business"
                             : profileInfo.companyType === 1
@@ -662,7 +680,8 @@ export default function CompanyProfile() {
                       value={profileInfo.companyType}
                       name="companyType"
                       className={classes.formInput}
-                      onChange={handleChange}>
+                      onChange={handleChange}
+                    >
                       <MenuItem value="1">Private</MenuItem>
                       <MenuItem value="2">Non-Profit</MenuItem>
                       <MenuItem value="0">Social Business</MenuItem>
@@ -686,7 +705,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.industryType}
                         </Typography>
                       </React.Fragment>
@@ -700,7 +720,8 @@ export default function CompanyProfile() {
                       value={profileInfo.industryType}
                       onChange={handleChange}
                       name="industryType"
-                      component="span">
+                      component="span"
+                    >
                       {industryTypes.map((industryType) => (
                         <MenuItem key={industryType} value={industryType}>
                           {industryType}
@@ -726,7 +747,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.phoneNumber}
                         </Typography>
                       </React.Fragment>
@@ -735,12 +757,14 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.halfWidth}>
                     <Typography>Phone Number</Typography>
-                    <Input
+                    <TextField
                       className={classes.formInput}
                       value={profileInfo.phoneNumber}
                       onChange={handleChange}
                       name="phoneNumber"
-                      error={updateErrors.company_phone_no !== ""}></Input>
+                      inputProps={{ maxLength: 10 }}
+                      error={updateErrors.company_phone_no !== ""}
+                    ></TextField>
                     {updateErrors.company_phone_no ? (
                       <Typography color="error">
                         {updateErrors.company_phone_no}
@@ -765,7 +789,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.isSolo === 1 ? "Yes" : "No"}
                         </Typography>
                       </React.Fragment>
@@ -778,7 +803,8 @@ export default function CompanyProfile() {
                       aria-label="Are you one person company"
                       name="isSolo"
                       value={profileInfo.isSolo}
-                      onChange={handleChange}>
+                      onChange={handleChange}
+                    >
                       <FormControlLabel
                         value="1"
                         control={<Radio />}
@@ -809,7 +835,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}`}
                         </Typography>
                       </React.Fragment>
@@ -820,12 +847,14 @@ export default function CompanyProfile() {
                     <Grid container spacing={2}>
                       <Grid item xs={2}>
                         <Typography>Company Address</Typography>
-                        <Input
+                        <TextField
                           className={classes.fullWidth}
                           value={profileInfo.streetAddress}
                           onChange={handleChange}
                           name="streetAddress"
-                          placeholder="Street Address"></Input>
+                          inputProps={{ maxLength: 40 }}
+                          placeholder="Street Address"
+                        ></TextField>
                         {profileInfo.streetAddress === "" ? (
                           <Typography color="error">
                             {updateErrors.company_address}
@@ -834,11 +863,13 @@ export default function CompanyProfile() {
                       </Grid>
                       <Grid item xs={2}>
                         <Typography>City</Typography>
-                        <Input
+                        <TextField
                           className={classes.fullWidth}
                           value={profileInfo.city}
                           onChange={handleChange}
-                          name="city"></Input>
+                          inputProps={{ maxLength: 20 }}
+                          name="city"
+                        ></TextField>
                         {profileInfo.city === "" ? (
                           <Typography color="error">
                             {updateErrors.company_address}
@@ -853,7 +884,8 @@ export default function CompanyProfile() {
                           value={profileInfo.state}
                           onChange={handleChange}
                           name="state"
-                          placeholder="state">
+                          placeholder="state"
+                        >
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -881,7 +913,8 @@ export default function CompanyProfile() {
                           component="span"
                           variant="body2"
                           className={classes.inline}
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}`}
                         </Typography>
                       </React.Fragment>
@@ -892,12 +925,14 @@ export default function CompanyProfile() {
                     <Grid container spacing={2}>
                       <Grid item xs={2}>
                         <Typography>Mailing Address</Typography>
-                        <Input
+                        <TextField
                           className={classes.fullWidth}
                           value={profileInfo.streetAddress2}
                           onChange={handleChange}
                           name="streetAddress2"
-                          placeholder="Street Address"></Input>
+                          inputProps={{ maxLength: 40 }}
+                          placeholder="Street Address"
+                        ></TextField>
                         {profileInfo.streetAddress2 === "" ? (
                           <Typography color="error">
                             {updateErrors.mailing_address}
@@ -906,11 +941,13 @@ export default function CompanyProfile() {
                       </Grid>
                       <Grid item xs={2}>
                         <Typography>City</Typography>
-                        <Input
+                        <TextField
                           className={classes.fullWidth}
                           value={profileInfo.city2}
                           onChange={handleChange}
-                          name="city2"></Input>
+                          inputProps={{ maxLength: 20 }}
+                          name="city2"
+                        ></TextField>
                         {profileInfo.city2 === "" ? (
                           <Typography color="error">
                             {updateErrors.mailing_address}
@@ -924,7 +961,8 @@ export default function CompanyProfile() {
                           label="State"
                           value={profileInfo.state2}
                           onChange={handleChange}
-                          name="state2">
+                          name="state2"
+                        >
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -942,13 +980,15 @@ export default function CompanyProfile() {
                     container
                     id="buttons-container"
                     justify="flex-end"
-                    spacing={4}>
+                    spacing={4}
+                  >
                     <Grid item>
                       <Button
                         variant="outlined"
                         color="secondary"
                         size="large"
-                        onClick={handleCancel}>
+                        onClick={handleCancel}
+                      >
                         Cancel
                       </Button>
                     </Grid>
@@ -957,7 +997,8 @@ export default function CompanyProfile() {
                         variant="contained"
                         color="secondary"
                         size="large"
-                        onClick={handleSave}>
+                        onClick={handleSave}
+                      >
                         Save
                       </Button>
                     </Grid>
@@ -972,13 +1013,15 @@ export default function CompanyProfile() {
       <Dialog
         onClose={handleDialogClose}
         open={dialogOpen}
-        className={classes.dialog}>
+        className={classes.dialog}
+      >
         <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
         {authError ? (
           <Alert
             className={classes.loginAlert}
             variant="filled"
-            severity="error">
+            severity="error"
+          >
             {authError}
           </Alert>
         ) : null}
@@ -1012,7 +1055,8 @@ export default function CompanyProfile() {
             onClick={handleConfirm}
             color="secondary"
             variant="outlined"
-            className={classes.dialogConfirm}>
+            className={classes.dialogConfirm}
+          >
             Confirm
           </Button>
         </DialogActions>

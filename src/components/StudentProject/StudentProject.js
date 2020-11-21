@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useContext } from "react";
+=======
+import React, {useState, useContext } from "react";
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -70,12 +74,15 @@ const useStyles = makeStyles((theme) => ({
   edit: {
     color: "#C8102E",
   },
+<<<<<<< HEAD
   skillsContainer: {
     display: "flex",
     "& > *": {
       marginRight: theme.spacing(1),
     },
   },
+=======
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
 }));
 
 //Skills denotes to all the skills in the database
@@ -89,7 +96,11 @@ function StudentProject({ projects, setProjects, skills }) {
 
   const { data } = useContext(DataContext);
   const { profile } = data;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
   const classes = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -112,7 +123,11 @@ function StudentProject({ projects, setProjects, skills }) {
   // function handleProjectSkillChange(e){setCurrentProjectSkills}
 
   const [openDelete, setOpenDelete] = useState(false);
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
   const [currentProject, setCurrentProject] = useState({
     student_id: profile.student_id,
     project_description: "",
@@ -125,6 +140,7 @@ function StudentProject({ projects, setProjects, skills }) {
     project_tech: "",
     project_in_progress: false,
   });
+<<<<<<< HEAD
   const [currentProjectSkills, setCurrentProjectSkills] = useState([]);
 
   // const checkProjectInProgress = () => {
@@ -146,6 +162,10 @@ function StudentProject({ projects, setProjects, skills }) {
   // function checkProjectInProgress(e) {
   //   setInProgress(e.target.checked);
   // } PAIR THIS CODE WITH LINES 426 & 427. UNCOMMENT THIS WITH 426 & 427.
+=======
+  const [currentProjectSkills, setCurrentProjectSkills] = useState([    
+  ]);
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
 
   const handleClickOpenDelete = (project) => {
     setOpenDelete(true);
@@ -166,6 +186,7 @@ function StudentProject({ projects, setProjects, skills }) {
     axios
       .delete(
         "http://18.213.74.196:8000/api/student_project/" + id + "/delete",
+<<<<<<< HEAD
 
         getConfig()
       )
@@ -219,6 +240,91 @@ function StudentProject({ projects, setProjects, skills }) {
       .catch((err) => {
         console.log(err);
       });
+=======
+
+        getConfig()
+      )
+      .then((res) => {
+        const studentProjectsCurrent = projects.filter(
+          (project) => id !== project.project_id
+        );
+        setProjects(studentProjectsCurrent);
+      })
+      .catch((err) => console.log(err.response.message));
+    setOpenDelete(false);
+  };
+
+  const validate = () =>{
+    if(currentProject.project_name==="")
+    {
+      alert("Please enter a name for the project");
+      return false;
+    }
+    else if(currentProject.project_role===""){
+      alert("Please enter a role for the project");
+      return false;
+    }
+    else if(currentProject.project_description===""){
+      alert("Please enter a description for the project");
+      return false;
+    }
+    else if(currentProject.project_start_date===""){
+      alert("Please enter a start date for the project");
+      return false;
+    }
+    else if(currentProject.project_end_date===""){
+      alert("Please enter a end date for the project");
+      return false;
+    }
+    else if(currentProject.project_start_date>currentProject.project_end_date){
+      alert("Project end date cannot be before project start date");
+    }
+    return true;
+  }
+
+  const handleSave = (id) => {
+    if(validate()){
+      var project_id = id;
+      axios
+        .put(
+          `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
+          {
+            student_id: profile.student_id,
+            project_name: currentProject.project_name,
+            project_description: currentProject.project_description,
+            project_link: currentProject.project_link,
+            project_tech: currentProject.project_tech,
+            project_start_date: currentProject.project_start_date,
+            project_end_date: currentProject.project_end_date,
+            project_in_progress: currentProject.project_in_progress,
+            project_role: currentProject.project_role,
+          },
+          getConfig()
+        )
+        .then((res) => {
+          let updated_projects = projects.map((item) => {
+            let updatedItem = { ...item };
+            if (project_id === item.project_id) {
+              updatedItem.project_id = item.project_id;
+              updatedItem.project_name = res.data.project_name;
+              updatedItem.project_description = res.data.project_description;
+              updatedItem.project_link = res.data.project_link;
+              updatedItem.project_tech = res.data.project_tech;
+              updatedItem.project_start_date = res.data.project_start_date;
+              updatedItem.project_end_date = res.data.project_end_date;
+              updatedItem.project_in_progress = res.data.project_in_progress;
+              updatedItem.project_role = res.data.project_role;
+            }
+            return updatedItem;
+          });
+          setProjects(updated_projects);
+          handleCloseEdit();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
   };
 
   return (
@@ -238,6 +344,7 @@ function StudentProject({ projects, setProjects, skills }) {
             <h4 className={classes.verticalElementSubtitle}>
               {project.project_role}
             </h4>
+<<<<<<< HEAD
             <div className={classes.skillsContainer}>
               {project.project_tech.split(",").map((skill, index) => (
                 <Chip label={skill} className={classes.chips} key={index} />
@@ -247,6 +354,13 @@ function StudentProject({ projects, setProjects, skills }) {
             <p>
               {project.project_description} {project.student_id}
             </p>
+=======
+            {project.project_tech.split(",").map((skill, index) => (
+              <Chip label={skill} className={classes.chips} key={index} />
+            ))}
+
+            <p>{project.project_description} {project.student_id}</p>
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
             <div className={clsx(classes.column, classes.helper)}>
               <Typography variant="caption">
                 View source link
@@ -299,6 +413,10 @@ function StudentProject({ projects, setProjects, skills }) {
                     label="Project Name"
                     name="project_name"
                     type="string"
+<<<<<<< HEAD
+=======
+                    inputProps={{ maxLength: 200 }}
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                     fullWidth
                     variant="outlined"
                     value={currentProject.project_name}
@@ -313,6 +431,10 @@ function StudentProject({ projects, setProjects, skills }) {
                     name="project_role"
                     fullWidth
                     variant="outlined"
+<<<<<<< HEAD
+=======
+                    inputProps={{ maxLength: 50 }}
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                     value={currentProject.project_role}
                     onChange={handleCurrentProjectChange}
                   />
@@ -325,6 +447,7 @@ function StudentProject({ projects, setProjects, skills }) {
                     isMulti
                     isSearchable
                     onChange={(e) => {
+<<<<<<< HEAD
                       if (e !== null) {
                         var skillsSeparatedByCommas = Array.prototype.map
                           .call(e, (s) => s.label)
@@ -334,6 +457,14 @@ function StudentProject({ projects, setProjects, skills }) {
                             0,
                             skillsSeparatedByCommas.length
                           );
+=======
+                      if(e!==null){
+                        var skillsSeparatedByCommas = Array.prototype.map
+                        .call(e, (s) => s.label)
+                        .toString(); // "A,B,C"
+                        if(skillsSeparatedByCommas.length>0)
+                          skillsSeparatedByCommas = skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length);
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                       }
                       setCurrentProject({
                         ...currentProject,
@@ -352,8 +483,13 @@ function StudentProject({ projects, setProjects, skills }) {
                     value={currentProject.project_description}
                     fullWidth
                     name="project_description"
+<<<<<<< HEAD
                     type="string"
                     inputProps={{ maxLength: 350 }}
+=======
+                    type= "string"
+                    inputProps={{ maxLength: 500 }}
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                     onChange={handleCurrentProjectChange}
                   />
                   <TextField
@@ -365,6 +501,10 @@ function StudentProject({ projects, setProjects, skills }) {
                     type="string"
                     fullWidth
                     variant="outlined"
+<<<<<<< HEAD
+=======
+                    inputProps={{ maxLength: 200 }}
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                     onChange={handleCurrentProjectChange}
                   />
                   <TextField
@@ -397,6 +537,7 @@ function StudentProject({ projects, setProjects, skills }) {
                   />
                   <FormControl component="fieldset">
                     <FormGroup aria-label="position" row>
+<<<<<<< HEAD
                       <FormControlLabel
                         value="end"
                         control={
@@ -416,6 +557,27 @@ function StudentProject({ projects, setProjects, skills }) {
                           </Typography>
                         }
                       />
+=======
+                    <FormControlLabel
+                    value="end"
+                    control={
+                      <Checkbox
+                        style={{ color: "#C8102E" }}
+                        onChange={(e) => {
+                          setCurrentProject({
+                            ...currentProject,
+                            project_in_progress: e.target.checked,
+                          });
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography style={{ fontSize: 15 }}>
+                        Check if project "In Progress"
+                      </Typography>
+                    }
+                  />
+>>>>>>> b70b4b7f733e1fedaea5886674646c610e6db0b3
                     </FormGroup>
                   </FormControl>
                 </DialogContent>

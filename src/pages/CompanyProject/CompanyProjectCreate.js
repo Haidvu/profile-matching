@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  TextField,
-  Button,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  ListItem,
-} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+import { TextField, Button, FormControl, FormGroup, FormControlLabel, Checkbox, ListItem, FormHelperText } from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
 
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
 
-import axios from "axios";
-import { getConfig } from "../../authConfig";
+import axios from 'axios';
+import { getConfig } from '../../authConfig';
 
 import { useHistory } from "react-router-dom";
 
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
-// A list of projects and some description is needed here
+import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -93,8 +85,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
-
-    // width: "100%"
   },
   root: {
     flexGrow: 1,
@@ -126,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     height: 140,
   },
   selectProjectType: {
-    width: "30%",
+    width: "100%",
     zIndex: 1000,
     paddingTop: "10px",
     paddingRight: "10px",
@@ -135,17 +125,21 @@ const useStyles = makeStyles((theme) => ({
   selectCompanySkills: {
     width: "100%",
     padding: "10px",
-    zIndex: 1,
+    zIndex: 100,
   },
   addCompanyProjectFields: {
-    padding: "10px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
   },
+  error:{
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    fontSize: "15px"
+  }
 }));
 
 export default function CompanyProjectCreate() {
   const classes = useStyles();
-
-  // const [companyProjects, setCompanyProjects] = useState([]);
 
   const history = useHistory();
 
@@ -174,64 +168,31 @@ export default function CompanyProjectCreate() {
     },
   ];
 
-  const options = [
-    {
-      value: "1",
-      label: "Angular",
-    },
-    {
-      value: "2",
-      label: ".NET",
-    },
-    {
-      value: "3",
-      label: "Python",
-    },
-    {
-      value: "4",
-      label: "React",
-    },
-    {
-      value: "5",
-      label: "C++",
-    },
-    {
-      value: "6",
-      label: "Python",
-    },
-    {
-      value: "7",
-      label: "JavaScript",
-    },
-    {
-      value: "8",
-      label: "Flash",
-    },
-    {
-      value: "9",
-      label: "Selenium",
-    },
-  ];
+  const { data } = useContext(DataContext);
+  const { profile } = data;
 
-  const [companyInput, setCompanyInput] = useState({
-    //This is the data
-    project_description: "",
-    project_name: "",
-    project_type: "",
-    project_tech: "",
-    project_deadline: "",
+  const [companyInput, setCompanyInput] = useState({ 
+    project_description: '',
+    project_name: '',
+    project_type: '',
+    project_tech: '',
+    project_deadline: '',
+    is_published: false
+  })
 
-    /*  company_project_team_capacity: '10',
-    company_project_students_selected: [{ label: 'C++', value: 0 }, { label: 'Java', value: 1 }]*/
-  });
+  const [skills, setSkills] = useState({});
 
   const handleSave = (key) => {
-    //Make api call to save data here.
-    setCompanyInput(companyInput);
-    saveToDB(companyInput);
+    saveToDB(companyInput)
+  }
 
-    //  handleCloseEdit(key);
-  };
+  const [updateErrors, setUpdateErrors] = useState({
+    project_description: null,
+    project_name: null,
+    project_type: null,
+    project_tech: null,
+    project_deadline: null,
+  });
 
   const saveToDB = (values) => {
     const data = {
@@ -239,8 +200,9 @@ export default function CompanyProjectCreate() {
       project_name: values.project_name,
       project_type: values.project_type,
       project_tech: values.project_tech,
-      project_deadline: "2020-10-24T02:30:48Z",
-      username: 49,
+      project_deadline: values.project_deadline,
+      is_published: values.is_published,
+      username: profile.id
     };
 
     axios
@@ -250,34 +212,30 @@ export default function CompanyProjectCreate() {
         getConfig()
       )
       .then((res) => {
-        localStorage.setItem("slug", res.data.slug);
         history.push("/dashboard/projects");
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => {
+        setUpdateErrors(err.response.data);
+        console.log(err.response.data)
+      });
   };
 
   useEffect(() => {
-    console.log(getConfig());
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/list_by_company",
+    axios.get("http://18.213.74.196:8000/api/skill/",
+      getConfig()).then(res => {
 
-        {
-          username_id: 49, // 	company@eli.eli | Company 1 Eli | 49
-        },
-        getConfig()
-      )
-      .then((res) => {
-        console.log(res.data);
-        // setCompanyProjects(res.data);
+        const data = res.data.map((skill) => {
+          return { label: skill.skill_name, value: skill.id }
+        })
+
+        setSkills(data)
+
       })
-      .catch((err) => {
-        console.log(err.response.data);
+      .catch(err => {
+        console.log(err)
       });
-  }, []);
 
-  // Here will be the submit function to create the project
-  // and the axios integration
+  }, [])
 
   return (
     <div className="root">
@@ -287,19 +245,19 @@ export default function CompanyProjectCreate() {
         src={ProfileLogo}></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
-        <Link color="inherit" href="/" /*onClick={handleClick}*/>
+        <Link color="inherit" href="/" >
           Home
         </Link>
-        <Link color="inherit" href="/dashboard" /*onClick={handleClick}*/>
+        <Link color="inherit" href="/dashboard" >
           Profile
         </Link>
         <Link
           color="inherit"
-          href="/dashboard/projects" /*onClick={handleClick}*/
+          href="/dashboard/projects" 
         >
           My Projects
         </Link>
-        <Typography color="textPrimary">Add New Project</Typography>
+        <Typography style={{ color: '#c8102e' }} >Add New Project</Typography>
       </Breadcrumbs>
 
       <div>
@@ -321,6 +279,12 @@ export default function CompanyProjectCreate() {
             }}
             value={companyInput.project_name || ""}
           />
+          {updateErrors.project_name ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.project_name}
+            </Typography>
+          ) : null}
+
           <TextField
             className={classes.addCompanyProjectFields}
             autoFocus
@@ -331,7 +295,7 @@ export default function CompanyProjectCreate() {
             label="Description"
             variant="outlined"
             fullWidth
-            inputProps={{ maxLength: 350 }}
+            inputProps={{ maxLength: 500 }}
             name="project_description"
             onChange={(e) => {
               setCompanyInput({
@@ -340,36 +304,58 @@ export default function CompanyProjectCreate() {
               });
             }}
           />
+            {updateErrors.project_description ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.project_description}
+            </Typography>
+          ) : null}
 
-          <Select
-            className={classes.selectProjectType}
-            closeMenuOnSelect={true}
-            options={projectType}
-            name="project_type"
-            onChange={(e) => {
-              setCompanyInput({ ...companyInput, project_type: e.label });
-            }}
-          />
+          <FormControl className={classes.selectProjectType}>
+            <FormHelperText>Project Type</FormHelperText>
+            <Select
+              className={classes.selectProjectType}
+              closeMenuOnSelect={true}
+              label="Project Type"
+              options={projectType}
+              name="project_type"
+              onChange={(e) => {
+                setCompanyInput({ ...companyInput, project_type: e.label });
+              }}
+            />
+              {updateErrors.project_type ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.project_type}
+            </Typography>
+          ) : null}
 
-          <Select
-            className={classes.selectCompanySkills}
-            fullWidth
-            closeMenuOnSelect={true}
-            components={animatedComponents}
-            isMulti
-            isSearchable
-            options={options}
-            onChange={(e) => {
-              var skillsSeparatedByCommas = Array.prototype.map
-                .call(e, (s) => s.label)
-                .toString(); // "A,B,C"
+          </FormControl>
+          <FormControl className={classes.selectCompanySkills}>
+            <FormHelperText>Skills</FormHelperText>
+            <Select
+              className={classes.selectCompanySkills}
+              fullWidth
+              closeMenuOnSelect={true}
+              components={animatedComponents}
+              isMulti
+              isSearchable
+              options={skills}
+              onChange={(e) => {
 
-              setCompanyInput({
-                ...companyInput,
-                project_tech: skillsSeparatedByCommas,
-              });
-            }}
-          />
+                e = e ? e : [];
+
+                var skillsSeparatedByCommas = Array.prototype.map.call(e, s => s.label).toString(); 
+
+                setCompanyInput({ ...companyInput, project_tech: skillsSeparatedByCommas })
+              }}
+            />
+             {updateErrors.project_tech ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.project_tech}
+            </Typography>
+          ) : null}
+          </FormControl>
+         
+          
           <TextField
             className={classes.addCompanyProjectFields}
             margin="dense"
@@ -387,6 +373,12 @@ export default function CompanyProjectCreate() {
               });
             }}
           />
+           {updateErrors.project_deadline ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.project_deadline}
+            </Typography>
+          ) : null}
+
           <FormControl
             component="fieldset"
             style={{
@@ -397,12 +389,8 @@ export default function CompanyProjectCreate() {
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
-                control={<Checkbox style={{ color: "#C8102E" }} />}
-                label={
-                  <Typography style={{ fontSize: 15 }}>
-                    Check if you want to publish this project
-                  </Typography>
-                }
+                control={<Checkbox style={{ color: '#C8102E' }} onChange={(e) => { setCompanyInput({ ...companyInput, is_published: e.target.checked }) }} />}
+                label={<Typography style={{ fontSize: 15 }}>Check if you want to publish this project</Typography>}
               />
             </FormGroup>
           </FormControl>

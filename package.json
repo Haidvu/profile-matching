@@ -16,6 +16,8 @@
     "react-date-picker": "^8.0.3",
     "react-devicon": "^0.1.9",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^6.11.3",
+    "react-phone-number-input": "^3.1.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "react-select": "^3.1.0",
