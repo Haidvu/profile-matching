@@ -177,7 +177,7 @@ function StudentInfo() {
     });
   };
   const [valueDateOfBirth, setDateOfBirth] = useState(new Date());
-  const [valueTodaysDate, setTodaysDate] = useState(new Date());
+  const valueTodaysDate = new Date();
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
   // const [image, setImage] = useState("");
   // const [resume, setResume] = useState("");

@@ -34,7 +34,7 @@ export default function Navbar() {
       <React.Fragment>
         <AppBar className={classes.AppBar} position="fixed">
           <Toolbar>
-            <Grid item xs={10}>
+            <Grid item xs={11}>
               <img alt="uh logo" className={classes.logo} src={UHLogo} />
             </Grid>
             <Grid item>
@@ -44,6 +44,7 @@ export default function Navbar() {
               <Button
                 size="small"
                 color="inherit"
+    
                 className={classes.Login}
                 href="/login">
                 Login
