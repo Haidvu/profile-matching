@@ -113,6 +113,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
     }
     else if(studentInput.project_start_date>studentInput.project_end_date){
       alert("Project end date cannot be before project start date");
+      return false;
     }
     return true;
   }
@@ -155,7 +156,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
           project_link: res.data.project_link,
           project_tech: res.data.project_tech,
           project_start_date: res.data.project_start_date,
-          project_end_data: res.data.project_end_data,
+          project_end_date: res.data.project_end_date,
           project_in_progress: res.data.project_in_progress,
           project_role: res.data.project_role,
         };
@@ -291,7 +292,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
           <TextField
             margin="dense"
             id="outlined-static"
-            helperText="Comapny's Website"
+            helperText="Student Project Link"
             fullWidth
             variant="outlined"
             name="project_link"

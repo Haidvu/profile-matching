@@ -5,15 +5,7 @@ import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  TextField,
-  Box,
   Avatar,
-  List,
-  ListItem,
-  Divider,
-  ListItemText,
-  ListItemIcon,
-  IconButton,
   Button,
   Dialog,
   DialogTitle,
@@ -44,11 +36,7 @@ import axios from "axios";
 import { getConfig } from "../../authConfig";
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams,
   useRouteMatch
 } from "react-router-dom";
 

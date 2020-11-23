@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProfileLogo from "../../assets/ProfilePage.jpg";
-import AvatarImage from "../../assets/AvatarImage.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Input, FormControl, Checkbox, FormControlLabel, FormGroup, InputLabel, MenuItem, Grid, TextField, Box, Avatar, List, ListItem, Divider, ListItemText, ListItemIcon, IconButton, Button } from "@material-ui/core";
+import { FormControl, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Box, Avatar, List, ListItem, Divider, ListItemText, ListItemIcon, IconButton } from "@material-ui/core";
 
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -28,12 +27,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import BusinessCenterRoundedIcon from '@material-ui/icons/BusinessCenterRounded';
 import SubjectRoundedIcon from '@material-ui/icons/SubjectRounded';
-import ImageRoundedIcon from '@material-ui/icons/ImageRounded';
 import LaptopRoundedIcon from '@material-ui/icons/LaptopRounded';
 import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded';
-import BackupRoundedIcon from '@material-ui/icons/BackupRounded';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
@@ -44,8 +39,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import Select from 'react-select';
-
-import { useHistory } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
