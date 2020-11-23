@@ -122,8 +122,11 @@ function StudentProject({ projects, setProjects, skills }) {
   const [currentProjectSkills, setCurrentProjectSkills] = useState([    
   ]);
 
+  const [projectToDelete, setProjectToDelete] = useState({});
+
   const handleClickOpenDelete = (project) => {
     setOpenDelete(true);
+    setProjectToDelete(project);
   };
 
   const handleCurrentProjectChange = (e) => {
@@ -178,6 +181,7 @@ function StudentProject({ projects, setProjects, skills }) {
     }
     else if(currentProject.project_start_date>currentProject.project_end_date){
       alert("Project end date cannot be before project start date");
+      return false;
     }
     return true;
   }
@@ -234,18 +238,15 @@ function StudentProject({ projects, setProjects, skills }) {
             className={classes.IconStyle}
             iconStyle={{ background: "#C8102E", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid #C8102E" }}
-            // date={project.project_start_date}
             key={index}
-            icon={<WebRoundedIcon />}>
-            <h3 className={classes.verticalElementTitle}>
-              {project.project_name}{" "}
-            </h3>
-            <h4 className={classes.verticalElementSubtitle}>
-              {project.project_role}
-            </h4>
-            {project.project_tech.split(",").map((skill, index) => (
-              <Chip label={skill} className={classes.chips} key={index} />
-            ))}
+            icon={<WebRoundedIcon />}> 
+              <Typography className={classes.verticalElementTitle} variant="h2" >Project Name: {project.project_name}{" "}</Typography>
+              <br/>
+              <Typography className={classes.verticalElementSubtitle} variant="h2">Project Role: {project.project_role}</Typography>
+              <br/>
+              {project.project_tech.split(",").map((skill, index) => (
+                <Chip label={skill} className={classes.chips} key={index} /> 
+              ))}
 
             <p>{project.project_description} {project.student_id}</p>
             <div className={clsx(classes.column, classes.helper)}>
@@ -258,12 +259,9 @@ function StudentProject({ projects, setProjects, skills }) {
               </Typography>
             </div>
             <div>
-              <Typography>
-                <h5>
+              <Typography variant="h5">
                   Date: {project.project_start_date} -{" "}
                   {project.project_end_date}
-                </h5>
-                {/* <h5>End: {project.project_end_date}</h5> */}
               </Typography>
             </div>
             <div
@@ -444,7 +442,7 @@ function StudentProject({ projects, setProjects, skills }) {
           THIS IS DELETE BUTTON BELOW
           ---------------- */}
               <IconButton
-                onClick={handleClickOpenDelete}
+                onClick={()=>{handleClickOpenDelete(project)}}
                 aria-label="delete"
                 fontSize="small"
                 className={classes.delete}>
@@ -463,7 +461,7 @@ function StudentProject({ projects, setProjects, skills }) {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are about to delete a project. Project will be removed
+                    You are about to delete {projectToDelete.project_name} project. Project will be removed
                     permanently and action cannot be undone. Do you wish to
                     continue?
                   </DialogContentText>
@@ -476,7 +474,7 @@ function StudentProject({ projects, setProjects, skills }) {
                   </Button>
                   <Button
                     onClick={() => {
-                      handleDelete(project.project_id);
+                      handleDelete(projectToDelete.project_id);
                     }}
                     style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
                     className={classes.projectAdd}>

@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
-import StarsIcon from "@material-ui/icons/Stars";
 import { Link, useRouteMatch } from "react-router-dom";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
@@ -26,7 +25,6 @@ const StudentMenu = () => {
       url: `${url}/projects`,
       icon: <BusinessRoundedIcon />,
     },
-    { text: "My Teams", url: `${url}/teams`, icon: <StarsIcon /> },
     {
       text: "Search",
       url: `${url}/search`,

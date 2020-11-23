@@ -114,6 +114,7 @@ const StudentsList = () => {
       // });
       setStudentsList(response.data);
     } catch (e) {
+      console.log(e);
     }
     setLoading(false);
   };
