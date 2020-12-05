@@ -240,10 +240,8 @@ function StudentProject({ projects, setProjects, skills }) {
             contentArrowStyle={{ borderRight: "7px solid #C8102E" }}
             key={index}
             icon={<WebRoundedIcon />}> 
-              <Typography className={classes.verticalElementTitle} variant="h2" >Project Name: {project.project_name}{" "}</Typography>
-              <br/>
-              <Typography className={classes.verticalElementSubtitle} variant="h2">Project Role: {project.project_role}</Typography>
-              <br/>
+              <h3 className={classes.verticalElementTitle}>"{project.project_name}"</h3>
+              <h4 className={classes.verticalElementSubtitle}>{project.project_role}</h4>
               {project.project_tech.split(",").map((skill, index) => (
                 <Chip label={skill} className={classes.chips} key={index} /> 
               ))}
@@ -259,10 +257,10 @@ function StudentProject({ projects, setProjects, skills }) {
               </Typography>
             </div>
             <div>
-              <Typography variant="h5">
+              <h5>
                   Date: {project.project_start_date} -{" "}
                   {project.project_end_date}
-              </Typography>
+              </h5>
             </div>
             <div
               style={{
