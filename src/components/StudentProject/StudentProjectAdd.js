@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addDiv: {
     height: "0px",
+    paddingTop: "40px",
   },
   projectAdd: {
     "&:hover": {
