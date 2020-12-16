@@ -147,8 +147,11 @@ function StudentProject({ projects, setProjects, skills }) {
   //   setInProgress(e.target.checked);
   // } PAIR THIS CODE WITH LINES 426 & 427. UNCOMMENT THIS WITH 426 & 427.
 
+  const [projectToDelete, setProjectToDelete] = useState({});
+
   const handleClickOpenDelete = (project) => {
     setOpenDelete(true);
+    setProjectToDelete(project);
   };
 
   const handleCurrentProjectChange = (e) => {
@@ -177,6 +180,31 @@ function StudentProject({ projects, setProjects, skills }) {
       })
       .catch((err) => console.log(err.response.message));
     setOpenDelete(false);
+  };
+
+  const validate = () => {
+    if (currentProject.project_name === "") {
+      alert("Please enter a name for the project");
+      return false;
+    } else if (currentProject.project_role === "") {
+      alert("Please enter a role for the project");
+      return false;
+    } else if (currentProject.project_description === "") {
+      alert("Please enter a description for the project");
+      return false;
+    } else if (currentProject.project_start_date === "") {
+      alert("Please enter a start date for the project");
+      return false;
+    } else if (currentProject.project_end_date === "") {
+      alert("Please enter a end date for the project");
+      return false;
+    } else if (
+      currentProject.project_start_date > currentProject.project_end_date
+    ) {
+      alert("Project end date cannot be before project start date");
+      return false;
+    }
+    return true;
   };
 
   const handleSave = (id) => {
@@ -229,20 +257,17 @@ function StudentProject({ projects, setProjects, skills }) {
             className={classes.IconStyle}
             iconStyle={{ background: "#C8102E", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid #C8102E" }}
-            // date={project.project_start_date}
             key={index}
             icon={<WebRoundedIcon />}>
             <h3 className={classes.verticalElementTitle}>
-              {project.project_name}{" "}
+              "{project.project_name}"
             </h3>
             <h4 className={classes.verticalElementSubtitle}>
               {project.project_role}
             </h4>
-            <div className={classes.skillsContainer}>
-              {project.project_tech.split(",").map((skill, index) => (
-                <Chip label={skill} className={classes.chips} key={index} />
-              ))}
-            </div>
+            {project.project_tech.split(",").map((skill, index) => (
+              <Chip label={skill} className={classes.chips} key={index} />
+            ))}
 
             <p>
               {project.project_description} {project.student_id}
@@ -257,13 +282,9 @@ function StudentProject({ projects, setProjects, skills }) {
               </Typography>
             </div>
             <div>
-              <Typography>
-                <h5>
-                  Date: {project.project_start_date} -{" "}
-                  {project.project_end_date}
-                </h5>
-                {/* <h5>End: {project.project_end_date}</h5> */}
-              </Typography>
+              <h5>
+                Date: {project.project_start_date} - {project.project_end_date}
+              </h5>
             </div>
             <div
               style={{
@@ -443,7 +464,9 @@ function StudentProject({ projects, setProjects, skills }) {
           THIS IS DELETE BUTTON BELOW
           ---------------- */}
               <IconButton
-                onClick={handleClickOpenDelete}
+                onClick={() => {
+                  handleClickOpenDelete(project);
+                }}
                 aria-label="delete"
                 fontSize="small"
                 className={classes.delete}>
@@ -462,9 +485,9 @@ function StudentProject({ projects, setProjects, skills }) {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are about to delete a project. Project will be removed
-                    permanently and action cannot be undone. Do you wish to
-                    continue?
+                    You are about to delete {projectToDelete.project_name}{" "}
+                    project. Project will be removed permanently and action
+                    cannot be undone. Do you wish to continue?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -475,7 +498,7 @@ function StudentProject({ projects, setProjects, skills }) {
                   </Button>
                   <Button
                     onClick={() => {
-                      handleDelete(project.project_id);
+                      handleDelete(projectToDelete.project_id);
                     }}
                     style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
                     className={classes.projectAdd}>
