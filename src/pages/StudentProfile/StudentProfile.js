@@ -159,6 +159,9 @@ export default function StudentProfile() {
   const { data, dispatch } = useContext(DataContext);
   const { profile } = data;
 
+  //Get role id,
+  const roleId = localStorage.getItem("role_id");
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -443,6 +446,7 @@ export default function StudentProfile() {
                       {studentInfo.student_description}
                     </Typography>
                   </div>
+
                   <IconButton
                     edge="end"
                     className={classes.icon}

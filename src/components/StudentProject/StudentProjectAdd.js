@@ -68,46 +68,6 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
     setOpen(false);
   };
 
-  const handleSave = () => {
-    const data = {
-      student_id: profile.student_id,
-      project_name: studentInput.project_name,
-      project_description: studentInput.project_description,
-      project_link: studentInput.project_link,
-      project_tech: studentInput.project_tech,
-      project_start_date: studentInput.project_start_date,
-      project_end_date: studentInput.project_end_date,
-      project_in_progress: studentInput.project_in_progress,
-      project_role: studentInput.project_role,
-    };
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/student_project/create",
-        data,
-        getConfig()
-      )
-      .then((res) => {
-        console.log(res.data);
-        const newProject = {
-          project_id: res.data.project_id,
-          project_name: res.data.project_name,
-          project_description: res.data.project_description,
-          project_link: res.data.project_link,
-          project_tech: res.data.project_tech,
-          project_start_date: res.data.project_start_date,
-          project_end_data: res.data.project_end_data,
-          project_in_progress: res.data.project_in_progress,
-          project_role: res.data.project_role,
-        };
-        setProjects([...projects, newProject]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    setOpen(false);
-  };
-
   const animatedComponents = makeAnimated();
 
   const options = skills.map((skill) => {
