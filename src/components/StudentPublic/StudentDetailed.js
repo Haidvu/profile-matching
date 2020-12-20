@@ -64,8 +64,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     fontSize: "0.8rem",
   },
+  projectDetails: {
+    fontSize: "0.8rem",
+  },
   starIcon: {
     float: "right",
+  },
+  projectContainer: {
+    marginBottom: theme.spacing(5),
+  },
+  projectTitle: {
+    textTransform: "uppercase",
   },
 }));
 
@@ -74,6 +83,7 @@ const StudentDetailed = ({ match }) => {
   // console.log("students: " + students);
   const [loading, setLoading] = useState(true);
   const [student, setStudent] = useState();
+  const [studentProjects, setStudentProjects] = useState([]);
   const [modal, setModal] = useState(false);
 
   const getStudent = async () => {
@@ -92,13 +102,16 @@ const StudentDetailed = ({ match }) => {
 
   const getStudentProjects = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `http://18.213.74.196:8000/api/student_project/list_by_student`,
-        getConfig(),
+
         {
-          student_id: match.params.id,
-        }
+          username_id: match.params.id,
+        },
+        getConfig()
       );
+      setStudentProjects(response.data);
+      console.log(response);
     } catch (e) {
       console.log(e);
     }
@@ -113,6 +126,7 @@ const StudentDetailed = ({ match }) => {
 
   useEffect(() => {
     getStudent();
+    getStudentProjects();
     // console.log(students[id]);
   }, []);
   return (
@@ -164,6 +178,36 @@ const StudentDetailed = ({ match }) => {
                 />
               ))}
             </div>
+          </Grid>
+          <Grid item>
+            <Typography className={classes.capsLightLabel}>Projects</Typography>
+            {studentProjects.map((project) => (
+              <Grid
+                item
+                container
+                key={project.project_id}
+                direction="column"
+                className={classes.projectContainer}>
+                <Grid item container column="row">
+                  <Grid item xs={9}>
+                    <Typography className={classes.projectTitle}>
+                      {project.project_name}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography
+                      className={
+                        classes.projectDetails
+                      }>{`${project.project_start_date} - ${project.project_end_date}`}</Typography>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Typography className={classes.projectDetails}>
+                    {project.project_description}
+                  </Typography>
+                </Grid>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
       )}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   Dialog,
-  Paper,
   DialogTitle,
   FormControlLabel,
   Checkbox,
@@ -14,9 +13,6 @@ import {
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import IconPython from "react-devicon/python/original";
-import profileImage from "../../assets/StudentImagePlaceholder.png";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -86,7 +82,7 @@ const SaveStudentModal = ({ modal, setModal }) => {
         ) : (
           <Grid container>
             {companyProjects.map((project, index) => (
-              <Grid item xs={12}>
+              <Grid item xs={12} key={index}>
                 <FormControlLabel
                   className={classes.formControl}
                   control={
