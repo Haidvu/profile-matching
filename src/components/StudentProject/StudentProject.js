@@ -1,4 +1,4 @@
-import React, {useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -70,6 +70,12 @@ const useStyles = makeStyles((theme) => ({
   edit: {
     color: "#C8102E",
   },
+  skillsContainer: {
+    display: "flex",
+    "& > *": {
+      marginRight: theme.spacing(1),
+    },
+  },
 }));
 
 //Skills denotes to all the skills in the database
@@ -83,7 +89,7 @@ function StudentProject({ projects, setProjects, skills }) {
 
   const { data } = useContext(DataContext);
   const { profile } = data;
-  
+
   const classes = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -106,7 +112,7 @@ function StudentProject({ projects, setProjects, skills }) {
   // function handleProjectSkillChange(e){setCurrentProjectSkills}
 
   const [openDelete, setOpenDelete] = useState(false);
- 
+
   const [currentProject, setCurrentProject] = useState({
     student_id: profile.student_id,
     project_description: "",
@@ -119,8 +125,27 @@ function StudentProject({ projects, setProjects, skills }) {
     project_tech: "",
     project_in_progress: false,
   });
-  const [currentProjectSkills, setCurrentProjectSkills] = useState([    
-  ]);
+  const [currentProjectSkills, setCurrentProjectSkills] = useState([]);
+
+  // const checkProjectInProgress = () => {
+  //   if (currentProject.project_in_progress === true) {
+  //     setCurrentProject({
+  //       ...currentProject,
+  //       project_in_progress: false,
+  //     });
+  //     setDisable(!disable);
+  //   } else {
+  //     setCurrentProject({
+  //       ...currentProject,
+  //       project_in_progress: true,
+  //     })
+  //     setDisable(!disable);
+  //   }
+  // }; PAIR THIS CODE WITH LINES 424 & 425. UNCOMMENT THIS WTH 424 & 425
+
+  // function checkProjectInProgress(e) {
+  //   setInProgress(e.target.checked);
+  // } PAIR THIS CODE WITH LINES 426 & 427. UNCOMMENT THIS WITH 426 & 427.
 
   const [projectToDelete, setProjectToDelete] = useState({});
 
@@ -157,77 +182,71 @@ function StudentProject({ projects, setProjects, skills }) {
     setOpenDelete(false);
   };
 
-  const validate = () =>{
-    if(currentProject.project_name==="")
-    {
+  const validate = () => {
+    if (currentProject.project_name === "") {
       alert("Please enter a name for the project");
       return false;
-    }
-    else if(currentProject.project_role===""){
+    } else if (currentProject.project_role === "") {
       alert("Please enter a role for the project");
       return false;
-    }
-    else if(currentProject.project_description===""){
+    } else if (currentProject.project_description === "") {
       alert("Please enter a description for the project");
       return false;
-    }
-    else if(currentProject.project_start_date===""){
+    } else if (currentProject.project_start_date === "") {
       alert("Please enter a start date for the project");
       return false;
-    }
-    else if(currentProject.project_end_date===""){
+    } else if (currentProject.project_end_date === "") {
       alert("Please enter a end date for the project");
       return false;
-    }
-    else if(currentProject.project_start_date>currentProject.project_end_date){
+    } else if (
+      currentProject.project_start_date > currentProject.project_end_date
+    ) {
       alert("Project end date cannot be before project start date");
       return false;
     }
     return true;
-  }
+  };
 
   const handleSave = (id) => {
-    if(validate()){
-      var project_id = id;
-      axios
-        .put(
-          `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
-          {
-            student_id: profile.student_id,
-            project_name: currentProject.project_name,
-            project_description: currentProject.project_description,
-            project_link: currentProject.project_link,
-            project_tech: currentProject.project_tech,
-            project_start_date: currentProject.project_start_date,
-            project_end_date: currentProject.project_end_date,
-            project_in_progress: currentProject.project_in_progress,
-            project_role: currentProject.project_role,
-          },
-          getConfig()
-        )
-        .then((res) => {
-          let updated_projects = projects.map((item) => {
-            let updatedItem = { ...item };
-            if (project_id === item.project_id) {
-              updatedItem.project_id = item.project_id;
-              updatedItem.project_name = res.data.project_name;
-              updatedItem.project_description = res.data.project_description;
-              updatedItem.project_link = res.data.project_link;
-              updatedItem.project_tech = res.data.project_tech;
-              updatedItem.project_start_date = res.data.project_start_date;
-              updatedItem.project_end_date = res.data.project_end_date;
-              updatedItem.project_in_progress = res.data.project_in_progress;
-              updatedItem.project_role = res.data.project_role;
-            }
-            return updatedItem;
-          });
-          setProjects(updated_projects);
-          handleCloseEdit();
-        })
-        .catch((err) => {
-          console.log(err);
+    var project_id = id;
+    axios
+      .put(
+        `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
+        {
+          student_id: profile.student_id,
+          project_name: currentProject.project_name,
+          project_description: currentProject.project_description,
+          project_link: currentProject.project_link,
+          project_tech: currentProject.project_tech,
+          project_start_date: currentProject.project_start_date,
+          project_end_date: currentProject.project_end_date,
+          project_in_progress: currentProject.project_in_progress,
+          project_role: currentProject.project_role,
+        },
+        getConfig()
+      )
+      .then((res) => {
+        let updated_projects = projects.map((item) => {
+          let updatedItem = { ...item };
+          if (project_id === item.project_id) {
+            updatedItem.project_id = item.project_id;
+            updatedItem.project_name = res.data.project_name;
+            updatedItem.project_description = res.data.project_description;
+            updatedItem.project_link = res.data.project_link;
+            updatedItem.project_tech = res.data.project_tech;
+            updatedItem.project_start_date = res.data.project_start_date;
+            updatedItem.project_end_date = res.data.project_end_date;
+            updatedItem.project_in_progress = res.data.project_in_progress;
+            updatedItem.project_role = res.data.project_role;
+          }
+          return updatedItem;
         });
-      }
+        setProjects(updated_projects);
+        handleCloseEdit();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -239,14 +258,20 @@ function StudentProject({ projects, setProjects, skills }) {
             iconStyle={{ background: "#C8102E", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid #C8102E" }}
             key={index}
-            icon={<WebRoundedIcon />}> 
-              <h3 className={classes.verticalElementTitle}>"{project.project_name}"</h3>
-              <h4 className={classes.verticalElementSubtitle}>{project.project_role}</h4>
-              {project.project_tech.split(",").map((skill, index) => (
-                <Chip label={skill} className={classes.chips} key={index} /> 
-              ))}
+            icon={<WebRoundedIcon />}>
+            <h3 className={classes.verticalElementTitle}>
+              "{project.project_name}"
+            </h3>
+            <h4 className={classes.verticalElementSubtitle}>
+              {project.project_role}
+            </h4>
+            {project.project_tech.split(",").map((skill, index) => (
+              <Chip label={skill} className={classes.chips} key={index} />
+            ))}
 
-            <p>{project.project_description} {project.student_id}</p>
+            <p>
+              {project.project_description} {project.student_id}
+            </p>
             <div className={clsx(classes.column, classes.helper)}>
               <Typography variant="caption">
                 View source link
@@ -258,8 +283,7 @@ function StudentProject({ projects, setProjects, skills }) {
             </div>
             <div>
               <h5>
-                  Date: {project.project_start_date} -{" "}
-                  {project.project_end_date}
+                Date: {project.project_start_date} - {project.project_end_date}
               </h5>
             </div>
             <div
@@ -296,7 +320,6 @@ function StudentProject({ projects, setProjects, skills }) {
                     label="Project Name"
                     name="project_name"
                     type="string"
-                    inputProps={{ maxLength: 200 }}
                     fullWidth
                     variant="outlined"
                     value={currentProject.project_name}
@@ -311,7 +334,6 @@ function StudentProject({ projects, setProjects, skills }) {
                     name="project_role"
                     fullWidth
                     variant="outlined"
-                    inputProps={{ maxLength: 50 }}
                     value={currentProject.project_role}
                     onChange={handleCurrentProjectChange}
                   />
@@ -324,12 +346,15 @@ function StudentProject({ projects, setProjects, skills }) {
                     isMulti
                     isSearchable
                     onChange={(e) => {
-                      if(e!==null){
+                      if (e !== null) {
                         var skillsSeparatedByCommas = Array.prototype.map
-                        .call(e, (s) => s.label)
-                        .toString(); // "A,B,C"
-                        if(skillsSeparatedByCommas.length>0)
-                          skillsSeparatedByCommas = skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length);
+                          .call(e, (s) => s.label)
+                          .toString(); // "A,B,C"
+                        if (skillsSeparatedByCommas.length > 0)
+                          skillsSeparatedByCommas = skillsSeparatedByCommas.substring(
+                            0,
+                            skillsSeparatedByCommas.length
+                          );
                       }
                       setCurrentProject({
                         ...currentProject,
@@ -348,8 +373,8 @@ function StudentProject({ projects, setProjects, skills }) {
                     value={currentProject.project_description}
                     fullWidth
                     name="project_description"
-                    type= "string"
-                    inputProps={{ maxLength: 500 }}
+                    type="string"
+                    inputProps={{ maxLength: 350 }}
                     onChange={handleCurrentProjectChange}
                   />
                   <TextField
@@ -361,7 +386,6 @@ function StudentProject({ projects, setProjects, skills }) {
                     type="string"
                     fullWidth
                     variant="outlined"
-                    inputProps={{ maxLength: 200 }}
                     onChange={handleCurrentProjectChange}
                   />
                   <TextField
@@ -394,25 +418,25 @@ function StudentProject({ projects, setProjects, skills }) {
                   />
                   <FormControl component="fieldset">
                     <FormGroup aria-label="position" row>
-                    <FormControlLabel
-                    value="end"
-                    control={
-                      <Checkbox
-                        style={{ color: "#C8102E" }}
-                        onChange={(e) => {
-                          setCurrentProject({
-                            ...currentProject,
-                            project_in_progress: e.target.checked,
-                          });
-                        }}
+                      <FormControlLabel
+                        value="end"
+                        control={
+                          <Checkbox
+                            style={{ color: "#C8102E" }}
+                            onChange={(e) => {
+                              setCurrentProject({
+                                ...currentProject,
+                                project_in_progress: e.target.checked,
+                              });
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography style={{ fontSize: 15 }}>
+                            Check if project "In Progress"
+                          </Typography>
+                        }
                       />
-                    }
-                    label={
-                      <Typography style={{ fontSize: 15 }}>
-                        Check if project "In Progress"
-                      </Typography>
-                    }
-                  />
                     </FormGroup>
                   </FormControl>
                 </DialogContent>
@@ -440,7 +464,9 @@ function StudentProject({ projects, setProjects, skills }) {
           THIS IS DELETE BUTTON BELOW
           ---------------- */}
               <IconButton
-                onClick={()=>{handleClickOpenDelete(project)}}
+                onClick={() => {
+                  handleClickOpenDelete(project);
+                }}
                 aria-label="delete"
                 fontSize="small"
                 className={classes.delete}>
@@ -459,9 +485,9 @@ function StudentProject({ projects, setProjects, skills }) {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are about to delete {projectToDelete.project_name} project. Project will be removed
-                    permanently and action cannot be undone. Do you wish to
-                    continue?
+                    You are about to delete {projectToDelete.project_name}{" "}
+                    project. Project will be removed permanently and action
+                    cannot be undone. Do you wish to continue?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

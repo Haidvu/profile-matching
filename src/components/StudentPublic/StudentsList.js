@@ -106,12 +106,9 @@ const StudentsList = () => {
   const getStudents = async () => {
     try {
       const response = await axios.get(
-        `http://18.213.74.196:8000/api/student_profile/`,
+        `http://18.213.74.196:8000/api/student_profile/`, //get all student profiles.
         getConfig()
       );
-      // response.data.forEach((student) => {
-      //   student.student_skill = student.student_skill.split(" ");
-      // });
       setStudentsList(response.data);
     } catch (e) {
       console.log(e);

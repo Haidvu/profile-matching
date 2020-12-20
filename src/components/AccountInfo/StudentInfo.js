@@ -181,7 +181,7 @@ function StudentInfo() {
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
   // const [image, setImage] = useState("");
   // const [resume, setResume] = useState("");
-  const [skills, setSkills] = useState();
+  const [skills, setSkills] = useState([]);
   const [tempSkill, setTempSkill] = useState("");
   const [experience, setExperience] = useState("");
   const [mySkills, setMySkills] = useState([]);

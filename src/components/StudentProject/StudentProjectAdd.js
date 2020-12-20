@@ -52,10 +52,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "5px",
     marginBottom: "5px",
   },
-
 }));
 
-export default function StudentProjectAdd({ projects, setProjects, skills }){
+export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const { data } = useContext(DataContext);
@@ -90,36 +89,32 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
     project_role: "",
   });
 
-  const validate = () =>{
-    if(studentInput.project_name==="")
-    {
+  const validate = () => {
+    if (studentInput.project_name === "") {
       alert("Please enter a name for the project");
       return false;
-    }
-    else if(studentInput.project_role===""){
+    } else if (studentInput.project_role === "") {
       alert("Please enter a role for the project");
       return false;
-    }
-    else if(studentInput.project_description===""){
+    } else if (studentInput.project_description === "") {
       alert("Please enter a description for the project");
       return false;
-    }
-    else if(studentInput.project_start_date===""){
+    } else if (studentInput.project_start_date === "") {
       alert("Please enter a start date for the project");
       return false;
-    }
-    else if(studentInput.project_end_date===""){
+    } else if (studentInput.project_end_date === "") {
       alert("Please enter a end date for the project");
       return false;
-    }
-    else if(studentInput.project_start_date>studentInput.project_end_date){
+    } else if (
+      studentInput.project_start_date > studentInput.project_end_date
+    ) {
       alert("Project end date cannot be before project start date");
       return false;
     }
     return true;
-  }
+  };
 
-  const  resetAllFields = () =>{
+  const resetAllFields = () => {
     studentInput.project_name = "";
     studentInput.project_description = "";
     studentInput.project_link = "";
@@ -128,47 +123,47 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
     studentInput.project_end_date = "";
     studentInput.project_in_progress = false;
     studentInput.project_role = "";
-  }
+  };
 
   const handleSave = () => {
-    if(validate()){
-    const data = {
-      student_id: profile.student_id,
-      project_name: studentInput.project_name,
-      project_description: studentInput.project_description,
-      project_link: studentInput.project_link,
-      project_tech: studentInput.project_tech,
-      project_start_date: studentInput.project_start_date,
-      project_end_date: studentInput.project_end_date,
-      project_in_progress: studentInput.project_in_progress,
-      project_role: studentInput.project_role,
-    };
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/student_project/create",
-        data,
-        getConfig()
-      )
-      .then((res) => {
-        const newProject = {
-          project_id: res.data.project_id,
-          project_name: res.data.project_name,
-          project_description: res.data.project_description,
-          project_link: res.data.project_link,
-          project_tech: res.data.project_tech,
-          project_start_date: res.data.project_start_date,
-          project_end_date: res.data.project_end_date,
-          project_in_progress: res.data.project_in_progress,
-          project_role: res.data.project_role,
-        };
-        setProjects([...projects, newProject]);
-        resetAllFields();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (validate()) {
+      const data = {
+        student_id: profile.student_id,
+        project_name: studentInput.project_name,
+        project_description: studentInput.project_description,
+        project_link: studentInput.project_link,
+        project_tech: studentInput.project_tech,
+        project_start_date: studentInput.project_start_date,
+        project_end_date: studentInput.project_end_date,
+        project_in_progress: studentInput.project_in_progress,
+        project_role: studentInput.project_role,
+      };
+      axios
+        .post(
+          "http://18.213.74.196:8000/api/student_project/create",
+          data,
+          getConfig()
+        )
+        .then((res) => {
+          const newProject = {
+            project_id: res.data.project_id,
+            project_name: res.data.project_name,
+            project_description: res.data.project_description,
+            project_link: res.data.project_link,
+            project_tech: res.data.project_tech,
+            project_start_date: res.data.project_start_date,
+            project_end_date: res.data.project_end_date,
+            project_in_progress: res.data.project_in_progress,
+            project_role: res.data.project_role,
+          };
+          setProjects([...projects, newProject]);
+          resetAllFields();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    setOpen(false);
+      setOpen(false);
     }
   };
   return (
@@ -180,8 +175,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-          }}
-        >
+          }}>
           <Button
             onClick={handleClickOpen}
             size="medium"
@@ -191,8 +185,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
               backgroundColor: "#C8102E",
               color: "#FFFFFF",
               margin: "20px",
-            }}
-          >
+            }}>
             <AddIcon
               className={classNames(classes.leftIcon, classes.iconSmall)}
             />
@@ -203,11 +196,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">
-          ADD NEW PROJECT
-        </DialogTitle>
+        aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">ADD NEW PROJECT</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -257,12 +247,15 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
             options={options}
             onChange={(e) => {
               var skillsSeparatedByCommas = "";
-              if(e!==null){
+              if (e !== null) {
                 skillsSeparatedByCommas = Array.prototype.map
-                .call(e, (s) => s.label)
-                .toString(); // "A,B,C"
-                if(skillsSeparatedByCommas.length>0)
-                  skillsSeparatedByCommas = skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length);
+                  .call(e, (s) => s.label)
+                  .toString(); // "A,B,C"
+                if (skillsSeparatedByCommas.length > 0)
+                  skillsSeparatedByCommas = skillsSeparatedByCommas.substring(
+                    0,
+                    skillsSeparatedByCommas.length
+                  );
               }
               setStudentInput({
                 ...studentInput,
@@ -352,7 +345,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
                 value="end"
                 control={
                   <Checkbox
-                  checked={studentInput.project_in_progress}
+                    checked={studentInput.project_in_progress}
                     style={{ color: "#C8102E" }}
                     onChange={(e) => {
                       setStudentInput({
@@ -374,15 +367,13 @@ export default function StudentProjectAdd({ projects, setProjects, skills }){
         <DialogActions>
           <Button
             onClick={handleClose}
-            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}
-          >
+            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}>
             Cancel
           </Button>
           <Button
             onClick={handleSave}
             style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
-            className={classes.projectAdd}
-          >
+            className={classes.projectAdd}>
             Add Project
           </Button>
         </DialogActions>
