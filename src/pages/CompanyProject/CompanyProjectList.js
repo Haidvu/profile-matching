@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import ProfileLogo from "../../assets/ProfilePage.jpg";
+import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import AvatarImage from "../../assets/image.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
@@ -252,7 +252,7 @@ export default function CompanyProject() {
       <img
         alt="profile background"
         className={classes.profileLogo}
-        src={ProfileLogo}></img>
+        src={CompanyDashboard}></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link style={{ textDecoration: 'none', color: '#000' }}  to="/" >

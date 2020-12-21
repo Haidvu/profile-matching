@@ -11,7 +11,6 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  Divider,
   Button,
   FormHelperText,
 } from "@material-ui/core";
@@ -28,26 +27,24 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     marginTop: theme.spacing(7),
-    flexWrap: "wrap",
-    listStyle: "none",
-    padding: theme.spacing(0.5),
-    margin: 0,
+    // flexWrap: "wrap",
+    // listStyle: "none",
+    // padding: theme.spacing(0.5),
+    // margin: 0,
   },
   form: {
-    width: "650px",
+    width: "100%",
     marginTop: theme.spacing(6),
+    justifyContent: "center",
   },
   formControl: {
-    width: "300px",
+    width: "100%",
   },
   checkLabel: {
     color: theme.palette.secondary,
   },
   submit: {
     marginTop: theme.spacing(4),
-  },
-  datepicker: {
-    zIndex: "1000",
   },
   // icon: {
   //   objectFit: "contain",
@@ -141,7 +138,59 @@ const useStyles = makeStyles((theme) => ({
     fill: theme.palette.success.main,
   },
 }));
-
+const states = [
+  "AL",
+  "AK",
+  "AZ",
+  "AR",
+  "CA",
+  "CO",
+  "CT",
+  "DE",
+  "DC",
+  "FL",
+  "GA",
+  "HI",
+  "ID",
+  "IL",
+  "IN",
+  "IA",
+  "KS",
+  "KY",
+  "LA",
+  "ME",
+  "MD",
+  "MA",
+  "MI",
+  "MN",
+  "MS",
+  "MO",
+  "MT",
+  "NE",
+  "NV",
+  "NH",
+  "NJ",
+  "NM",
+  "NY",
+  "NC",
+  "ND",
+  "OH",
+  "OK",
+  "OR",
+  "PA",
+  "RI",
+  "SC",
+  "SD",
+  "TN",
+  "TX",
+  "UT",
+  "VT",
+  "VA",
+  "WA",
+  "WV",
+  "WI",
+  "WY",
+];
 function StudentInfo() {
   const classes = useStyles();
   let history = useHistory();
@@ -154,6 +203,12 @@ function StudentInfo() {
     graduation_date: "",
     major: "Architecture",
     degree: "Undergraduate",
+    contact_email: "",
+    phoneNumber: "",
+    address: "",
+    city: "",
+    state: "",
+    zipcode:"",
     username: parseInt(localStorage.getItem("email_id")),
   });
   const [errorsFirst, setErrorsFirst] = useState({});
@@ -181,7 +236,7 @@ function StudentInfo() {
   const [valueGraduationDate, setGraduationDate] = useState(new Date());
   // const [image, setImage] = useState("");
   // const [resume, setResume] = useState("");
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState();
   const [tempSkill, setTempSkill] = useState("");
   const [experience, setExperience] = useState("");
   const [mySkills, setMySkills] = useState([]);
@@ -219,6 +274,14 @@ function StudentInfo() {
     }
     return null;
   }
+
+  const getAddress = (values) => {
+    if (values.address && values.city && values.state) {
+      return `${values.address}|${values.city}|${values.state}`;
+    }
+    return "";
+  };
+
   const nextStep = () => {
     studentFirst.date_of_birth = valueDateOfBirth.toJSON().substring(0, 10);
     studentFirst.graduation_date = valueGraduationDate
@@ -228,17 +291,22 @@ function StudentInfo() {
       first_name: studentFirst.first_name === "" ? "Required" : null,
       last_name: studentFirst.last_name === "" ? "Required" : null,
       student_id: validateStudentId(studentFirst.student_id),
+      phoneNumber: studentFirst.phoneNumber === "" ? "Required" : null,
+      contact_email: studentFirst.contact_email === "" ? "Required" : null,
+      address: studentFirst.address === "" ? "Required" : null,
+      city: studentFirst.city === "" ? "Required" : null,
+      state: studentFirst.state === "" ? "Required" : null,
+      zipcode: studentFirst.zipcode === "" ? "Required" : null,
     });
-    // if(studentFirst.student_id !== parseInt(studentFirst.studentId, 10
   };
 
-  function replaceSkillIdWithName() {
+  function replaceSkillIdWithName(student_id) {
     let returnArray = [];
     for (let i = 0; i < mySkills.length; i++) {
       for (let j = 0; j < skills.length; j++) {
         if (mySkills[i].skill_name === skills[j].skill_name) {
           returnArray.push({
-            student_id: mySkills[i].student_id,
+            student_db_id: student_id,
             skill_id: parseInt(skills[j].id),
             experience_level: parseInt(mySkills[i].experience_level),
           });
@@ -280,9 +348,13 @@ function StudentInfo() {
           student_id: studentFirst.student_id,
           full_name: studentFirst.first_name + " " + studentFirst.last_name,
           date_of_birth: studentFirst.date_of_birth,
+          student_contact_email:studentFirst.contact_email,
+          student_phone_no: studentFirst.phoneNumber,
           graduation_date: studentFirst.graduation_date,
           major: studentFirst.major,
           degree: studentFirst.degree,
+          student_address: getAddress(studentFirst),
+          student_zip: studentFirst.zipcode,
           student_description: studentSecond.student_description,
           username: parseInt(localStorage.getItem("email_id")),
         };
@@ -294,10 +366,11 @@ function StudentInfo() {
           )
           .then((res) => {
             localStorage.setItem("slug", res.data.slug);
+            const student_db_id = res.data.student_db_id;
             axios
               .post(
                 "http://18.213.74.196:8000/api/student_skill/add",
-                replaceSkillIdWithName(),
+                replaceSkillIdWithName(student_db_id),
                 getConfig()
               )
               .then((res) => {
@@ -325,7 +398,6 @@ function StudentInfo() {
         setMySkills([
           ...mySkills,
           {
-            student_id: studentFirst.student_id,
             skill_name: tempSkill,
             experience_level: experience,
           },
@@ -355,7 +427,6 @@ function StudentInfo() {
         <Typography component="h1" variant="h5">
           Student Account Information
         </Typography>
-        <Divider variant="inset" />
         <form className={classes.form}>
           {firstStep === true ? (
             <>
@@ -366,9 +437,18 @@ function StudentInfo() {
                 justify="space-between"
                 spacing={2}
                 alignItems="flex-start"
-              >
+              > 
+           {/* column 1 ----------------------------------------------*/}
+              <Grid
+              container
+              id="first-left"
+              item
+              xs={12}
+              md={6}
+              spacing={3}
+              direction="column"
+            >
                 {/* Left Grid */}
-                <Grid container item xs={4} spacing={3} direction="column">
                   <Grid item>
                     <TextField
                       error={
@@ -379,6 +459,7 @@ function StudentInfo() {
                       label="First Name"
                       name="first_name"
                       onChange={handleChangeFirst}
+                      fullWidth
                       value={studentFirst.first_name}
                       required={true}
                       inputProps={{ maxLength: 25 }}
@@ -406,6 +487,7 @@ function StudentInfo() {
                       name="last_name"
                       onChange={handleChangeFirst}
                       value={studentFirst.last_name}
+                      fullWidth
                       required={true}
                       inputProps={{ maxLength: 24 }}
                     />
@@ -419,27 +501,137 @@ function StudentInfo() {
                       </FormHelperText>
                     ) : null}
                   </Grid>
-
                   <Grid item>
-                    <Typography component="p">Date of Birth</Typography>
-                    <DatePicker
-                      calendarAriaLabel="Toggle calendar"
-                      clearAriaLabel="Clear value"
-                      dayAriaLabel="Day"
-                      monthAriaLabel="Month"
-                      nativeInputAriaLabel="Date"
-                      onChange={(valueDateOfBirth) => {
-                        setDateOfBirth(valueDateOfBirth);
-                      }}
-                      value={valueDateOfBirth}
-                      yearAriaLabel="Year"
-                      defaultValue={valueDateOfBirth}
-                      maxDate={valueTodaysDate}
+                    <TextField
+                      error={
+                        errorsFirst.phoneNumber && studentFirst.phoneNumber === ""
+                      }
+                      variant="outlined"
+                      id="phoneNumber"
+                      label="Phone Number"
+                      name="phoneNumber"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.phoneNumber}
+                      fullWidth
+                      required={true}
+                      inputProps={{ maxLength: 11 }}
                     />
+                    {errorsFirst.phoneNumber && studentFirst.phoneNumber === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.phoneNumber && studentFirst.phoneNumber === ""
+                        }
+                      >
+                        {errorsFirst.phoneNumber}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
-                </Grid>
-
-                <Grid container item xs={6} spacing={3} direction="column">
+                  <Grid item>
+                    <TextField
+                      error={errorsFirst.address && studentFirst.address === ""}
+                      variant="outlined"
+                      fullWidth
+                      id="address"
+                      label="Street Address"
+                      name="address"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.address}
+                      inputProps={{ maxLength: 40 }}
+                    />
+                    {errorsFirst.address && studentFirst.address === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.address && studentFirst.address === ""
+                        }
+                      >
+                        {errorsFirst.address}
+                      </FormHelperText>
+                    ) : null}
+                  </Grid>
+                  <Grid item>
+                      <TextField
+                        error={errorsFirst.city && studentFirst.city === ""}
+                        variant="outlined"
+                        fullWidth
+                        id="city"
+                        label="City"
+                        name="city"
+                        onChange={handleChangeFirst}
+                        value={studentFirst.city}
+                        inputProps={{ maxLength: 20 }}
+                      />
+                      {errorsFirst.city && studentFirst.city === "" ? (
+                        <FormHelperText
+                          error={errorsFirst.city && studentFirst.city === ""}
+                        >
+                          {errorsFirst.address}
+                        </FormHelperText>
+                      ) : null}
+                    </Grid>
+                  <Grid
+                    container
+                    xs={12}
+                    id="address-container-1"
+                    item
+                    direction="row"
+                    spacing={2}
+                    >
+                    <Grid item>
+                      <FormControl
+                        error={errorsFirst.state && studentFirst.state === ""}
+                        variant="outlined"
+                        className={classes.formControl}
+                      >
+                        <InputLabel>ST</InputLabel>
+                        <Select
+                          label="State"
+                          value={studentFirst.state}
+                          onChange={handleChangeFirst}
+                          defaultValue=""
+                          name="state"
+                        >
+                          {states.map((state) => (
+                            <MenuItem value={state} key={state}>
+                              {state}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {errorsFirst.state && studentFirst.state === "" ? (
+                          <FormHelperText>{errorsFirst.state}</FormHelperText>
+                        ) : null}
+                      </FormControl>
+                    </Grid>
+                    <Grid item>
+                      <TextField
+                        error={errorsFirst.zipcode && studentFirst.zipcode === ""}
+                        variant="outlined"
+                        fullWidth
+                        id="zipcode"
+                        label="Zipcode"
+                        name="zipcode"
+                        onChange={handleChangeFirst}
+                        value={studentFirst.city}
+                        inputProps={{ maxLength: 5 }}
+                      />
+                      {errorsFirst.zipcode && studentFirst.zipcode === "" ? (
+                        <FormHelperText
+                          error={errorsFirst.zipcode && studentFirst.zipcode === ""}
+                        >
+                          {errorsFirst.zipcode}
+                        </FormHelperText>
+                      ) : null}
+                    </Grid>
+                  </Grid>
+              </Grid>
+              <Grid
+                  container
+                  id="first-right"
+                  item
+                  xs={12}
+                  md={6}
+                  spacing={3}
+                  direction="column"
+                >
                   <Grid item>
                     <TextField
                       error={
@@ -453,6 +645,7 @@ function StudentInfo() {
                       onChange={handleChangeFirst}
                       value={studentFirst.student_id}
                       required={true}
+                      fullWidth
                     />
                     {errorsFirst.student_id &&
                     studentFirst.student_id === "" ? (
@@ -463,6 +656,31 @@ function StudentInfo() {
                         }
                       >
                         {errorsFirst.student_id}
+                      </FormHelperText>
+                    ) : null}
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      error={
+                        errorsFirst.contact_email && studentFirst.contact_email === ""
+                      }
+                      variant="outlined"
+                      id="contact_email"
+                      label="Contact Email"
+                      name="contact_email"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.contact_email}
+                      fullWidth
+                      required={true}
+                      inputProps={{ maxLength: 50 }}
+                    />
+                    {errorsFirst.contact_email && studentFirst.contact_email === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsFirst.contact_email && studentFirst.contact_email === ""
+                        }
+                      >
+                        {errorsFirst.contact_email}
                       </FormHelperText>
                     ) : null}
                   </Grid>
@@ -479,7 +697,6 @@ function StudentInfo() {
                       }}
                       value={valueGraduationDate}
                       yearAriaLabel="Year"
-                      className={classes.datepicker}
                       defaultValue={valueGraduationDate}
                     />
                   </Grid>
@@ -740,7 +957,7 @@ function StudentInfo() {
                     </FormControl>
                   </Grid>
                   <Grid container item direction="row" spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item>
                       <FormControl
                         variant="outlined"
                         className={classes.formControl}
@@ -759,6 +976,23 @@ function StudentInfo() {
                         </Select>
                       </FormControl>
                     </Grid>
+                  </Grid>
+                  <Grid item>
+                    <Typography component="p">Date of Birth</Typography>
+                    <DatePicker
+                      calendarAriaLabel="Toggle calendar"
+                      clearAriaLabel="Clear value"
+                      dayAriaLabel="Day"
+                      monthAriaLabel="Month"
+                      nativeInputAriaLabel="Date"
+                      onChange={(valueDateOfBirth) => {
+                        setDateOfBirth(valueDateOfBirth);
+                      }}
+                      value={valueDateOfBirth}
+                      yearAriaLabel="Year"
+                      defaultValue={valueDateOfBirth}
+                      maxDate={valueTodaysDate}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
