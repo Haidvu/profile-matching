@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Typography,
   Grid,
@@ -12,9 +12,7 @@ import {
   Divider,
   LinearProgress,
 } from "@material-ui/core";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import { getConfig } from "../../authConfig";
 import { useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "280px",
+    height:"100%"
   },
   button: {
     width: "100%",
@@ -94,32 +93,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentsList = () => {
+const StudentsList = ({loading, studentsList}) => {
   let { url } = useRouteMatch();
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
-  const [studentsList, setStudentsList] = useState();
-  //   const formatGraduationDate = (date) => {
-  //     const dateElements = date.split("-");
-  //     const date = dateElements[dateElements.length - 1];
-  //   };
-  const getStudents = async () => {
-    try {
-      const response = await axios.get(
-        `http://18.213.74.196:8000/api/student_profile/`, //get all student profiles.
-        getConfig()
-      );
-      setStudentsList(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getStudents();
-  }, []);
-
+  
   return (
     <>
       {loading ? (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import ProfileLogo from "../../assets/ProfilePage.jpg";
+import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, FormControl, FormGroup, FormControlLabel, Checkbox, ListItem, FormHelperText } from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
@@ -24,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   profileLogo: {
     backgroundRepeat: "no-repeat",
-    position: "relative",
-    objectPosition: "20% 30%",
+    objectPosition: "10% 20%",
     width: "100vw",
     height: "15vw",
     maxWidth: "100%",
@@ -242,7 +241,7 @@ export default function CompanyProjectCreate() {
       <img
         alt="profile background"
         className={classes.profileLogo}
-        src={ProfileLogo}></img>
+        src={CompanyDashboard}></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/" >

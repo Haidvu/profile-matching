@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import ProfileLogo from "../../assets/ProfilePage.jpg";
+import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import StarsRoundedIcon from '@material-ui/icons/StarsRounded';
 import WorkOutlineOutlinedIcon from '@material-ui/icons/WorkOutlineOutlined';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
-import HelpRoundedIcon from '@material-ui/icons/HelpRounded';
+// import HelpRoundedIcon from '@material-ui/icons/HelpRounded';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
@@ -449,7 +449,7 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
 
   return (
     <div className="root">
-      <img alt="profile background" className={classes.profileLogo} src={ProfileLogo}></img>
+      <img alt="profile background" className={classes.profileLogo} src={CompanyDashboard}></img>
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/" >
           Home
@@ -488,7 +488,7 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
             <Tab className={classes.tabsItem} label="DESCRIPTION" icon={<StarsRoundedIcon />} {...a11yProps(0)} />
             <Tab className={classes.tabsItem} label="DETAILS" icon={<WorkOutlineOutlinedIcon />} {...a11yProps(1)} />
             <Tab className={classes.tabsItem} label="MY TEAM" icon={<AccountCircleRoundedIcon {...a11yProps(2)} />} />
-            <Tab className={classes.tabsItem} label="INFORMATION" icon={<HelpRoundedIcon />} {...a11yProps(3)} />
+            {/* <Tab className={classes.tabsItem} label="INFORMATION" icon={<HelpRoundedIcon />} {...a11yProps(3)} /> */}
 
           </Tabs>
           <TabPanel className={classes.tabsPanel} value={value} index={0}>
@@ -816,7 +816,7 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
               </ListItem>
             </List>
           </TabPanel>
-          <TabPanel className={classes.tabsPanel} value={value} index={3}>
+          {/* <TabPanel className={classes.tabsPanel} value={value} index={3}>
             <List>
               <ListItem alignItems="flex-start">
                 <ListItemIcon>
@@ -836,9 +836,9 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
                     </Box>
                   }
                 />
-              </ListItem>
+              </ListItem> 
             </List>
-          </TabPanel>
+          </TabPanel>*/}
         </div>
       </>)}
 
