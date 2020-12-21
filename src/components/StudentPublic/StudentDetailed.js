@@ -1,21 +1,39 @@
 import React, { useEffect, useState } from "react";
 import {
+  TextField,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  Divider,
+  ListItemIcon,
+  IconButton,
+  Button,
   Typography,
+  Input,
+  FormControl,
+  MenuItem,
   Grid,
   Chip,
+  Select,
+  FormHelperText,
+  ListItemText,
   CircularProgress,
-  Card,
-  CardMedia,
-  GridList,
-  Paper,
-  Tooltip,
-  IconButton,
-  ModalManager,
 } from "@material-ui/core";
+import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
+import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
+import StarsIcon from "@material-ui/icons/Stars";
+import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
+import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import IconPython from "react-devicon/python/original";
 import profileImage from "../../assets/StudentImagePlaceholder.png";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import SaveStudentModal from "./SaveStudentModal";
@@ -134,82 +152,105 @@ const StudentDetailed = ({ match }) => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <Grid container spacing={2} direction="column" className={classes.root}>
-          <Grid container direction="row" spacing={1} alignItems="center">
-            <Grid item>
-              <img className={classes.profileImage} src={profileImage} />
-            </Grid>
-            <Grid item container direction="column" spacing={1} xs={3}>
-              <Grid item>
-                <Typography className={classes.name}>
-                  {student.full_name}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography className={classes.degree}>
-                  {`${student.degree} - ${student.major}`}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid className={classes.starIcon}>
-              <Tooltip title="Save Student to Project">
-                <IconButton onClick={openSaveStudent}>
-                  <StarBorderIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>
-              Description
-            </Typography>
-            <Typography>{student.student_description}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>Skills</Typography>
-            <div className={classes.skillsContainer}>
-              {student.student_skills.map((skill, index) => (
-                <Chip
-                  key={index}
-                  label={skill.skill_name}
-                  color="primary"
-                  size="small"
-                  variant="outlined"
-                />
-              ))}
-            </div>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>Projects</Typography>
-            {studentProjects.map((project) => (
-              <Grid
-                item
-                container
-                key={project.project_id}
-                direction="column"
-                className={classes.projectContainer}>
-                <Grid item container column="row">
-                  <Grid item xs={9}>
-                    <Typography className={classes.projectTitle}>
-                      {project.project_name}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <Typography
-                      className={
-                        classes.projectDetails
-                      }>{`${project.project_start_date} - ${project.project_end_date}`}</Typography>
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <Typography className={classes.projectDetails}>
-                    {project.project_description}
+        <List className={classes.root}>
+          <ListItem>
+            <ListItemIcon edge="start">
+              <FormatListBulletedTwoToneIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <div
+                className={classes.flexRow}
+                style={{ justifyContent: "space-between" }}>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Student Description
                   </Typography>
-                </Grid>
+                  <Typography className={classes.sectionContent}>
+                    {student.student_description}
+                  </Typography>
+                </div>
+                <IconButton edge="end" className={classes.icon}>
+                  <EditTwoToneIcon />
+                </IconButton>
+              </div>
+            </ListItemText>
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <ListItemIcon>
+              <SchoolRoundedIcon />
+            </ListItemIcon>
+            <div className={classes.flexColumn}>
+              <Typography className={classes.sectionHeader}>
+                Academic
+              </Typography>
+              <Typography
+                className={
+                  classes.sectionContent
+                }>{`Graduation Date: ${student.graduation_date}`}</Typography>
+              <Typography
+                className={
+                  classes.sectionContent
+                }>{`Degree: ${student.degree}`}</Typography>
+              <Typography className={classes.sectionContent}>
+                {" "}
+                {`Major: ${student.major}`}
+              </Typography>
+            </div>
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <ListItemIcon>
+              <StarsIcon />
+            </ListItemIcon>
+            <div className={classes.flexColumn}>
+              <Typography className={classes.sectionHeader}>Skills</Typography>
+              <ul className={classes.skillRoot}>
+                {student.student_skills.map((skill) => {
+                  return (
+                    <li key={skill.skill_name}>
+                      <Chip
+                        variant="outlined"
+                        classes={
+                          skill.experience_level === 1
+                            ? {
+                                root: classes.beginnerChip,
+                                deleteIcon: classes.beginnerDeleteIcon,
+                              }
+                            : skill.experience_level === 2
+                            ? {
+                                root: classes.intermediateChip,
+                                deleteIcon: classes.intermediateDeleteIcon,
+                              }
+                            : {
+                                root: classes.expertChip,
+                                deleteIcon: classes.expertDeleteIcon,
+                              }
+                        }
+                        label={skill.skill_name}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </ListItem>
+          <Divider variant="inset" component="li" />
+          <ListItem alignItems="flex-start">
+            <Grid container>
+              <Grid item>
+                <ListItemIcon>
+                  <HorizontalSplitIcon />
+                </ListItemIcon>
               </Grid>
-            ))}
-          </Grid>
-        </Grid>
+              <Grid item>
+                <Typography className={classes.sectionHeader}>
+                  My Projects
+                </Typography>
+              </Grid>
+            </Grid>
+          </ListItem>
+        </List>
       )}
       {modal ? <SaveStudentModal modal={modal} setModal={setModal} /> : null}
     </>
