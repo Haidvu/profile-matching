@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import ProfileLogo from "../../assets/ProfilePage.jpg";
+import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -24,7 +24,6 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import Tooltip from "@material-ui/core/Tooltip";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
@@ -67,7 +66,6 @@ const industryTypes = [
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
     backgroundRepeat: "no-repeat",
-    position: "relative",
     objectPosition: "20% 30%",
     width: "100vw",
     height: "15vw",
@@ -93,9 +91,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     borderRadius: 200,
     backgroundColor: "#FFFFFF",
-  },
-  halfWidth: {
-    width: "50%",
   },
   fullWidth: {
     width: "100%",
@@ -208,6 +203,7 @@ export default function CompanyProfile() {
     streetAddress2: null,
     city2: null,
     state2: null,
+    contact_email:null,
     isSolo: null,
   });
 
@@ -274,6 +270,7 @@ export default function CompanyProfile() {
           city2: getCity(res.data.mailing_address),
           state2: getState(res.data.mailing_address),
           isSolo: res.data.company_representative_type,
+          contact_email:res.data.company_contact_email
         });
       } catch (e) {
         console.log(e);
@@ -316,6 +313,7 @@ export default function CompanyProfile() {
       city2: getCity(profile.mailing_address),
       state2: getState(profile.mailing_address),
       isSolo: profile.company_representative_type,
+      contact_email: profile.contact_email
     });
     setShowEditFields(!showEditFields);
   };
@@ -337,7 +335,6 @@ export default function CompanyProfile() {
 
   const [authError, setAuthError] = useState("");
   const [updateErrors, setUpdateErrors] = useState({
-    comapny_name: "",
     company_phone_no: "",
     company_name: "",
     industry_type: "",
@@ -346,9 +343,9 @@ export default function CompanyProfile() {
     company_type: "",
     company_address: "",
     mailing_address: "",
-    company_website: "",
     company_mission: "",
     company_description: "",
+    company_contact_email: ""
   });
 
   const handleConfirm = () => {
@@ -382,6 +379,7 @@ export default function CompanyProfile() {
               company_website: profileInfo.companyWebsite,
               company_mission: profileInfo.companyMission,
               company_description: profileInfo.companyDescription,
+              company_contact_email: profileInfo.contact_email
             },
             getConfig()
           )
@@ -429,7 +427,7 @@ export default function CompanyProfile() {
             <img
               alt="profile logo"
               className={classes.profileLogo}
-              src={ProfileLogo}
+              src={CompanyDashboard}
             ></img>
           </div>
           <form>
@@ -455,7 +453,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Name</Typography>
                     <TextField
                       className={classes.formInput}
@@ -473,11 +471,15 @@ export default function CompanyProfile() {
                     ) : null}
                   </div>
                 )}
-                <Tooltip title="Edit Profile" placement="top">
-                  <IconButton className={classes.icon} onClick={handleOpenEdit}>
+                 {showEditFields === false ? (
+                <IconButton
+                    edge="end"
+                    className={classes.icon}
+                    onClick={handleOpenEdit}
+                  >
                     <EditTwoToneIcon />
-                  </IconButton>
-                </Tooltip>
+                </IconButton>
+                ):null}
               </ListItem>
               {!showEditFields ? (
                 <Divider variant="inset" component="li" />
@@ -503,7 +505,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Mission</Typography>
                     <TextField
                       className={classes.formInput}
@@ -544,7 +546,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Description</Typography>
                     <TextField
                       className={classes.formInput}
@@ -571,7 +573,7 @@ export default function CompanyProfile() {
                 </ListItemIcon>
                 {showEditFields === false ? (
                   <ListItemText
-                    primary="Company Represntative"
+                    primary="Company Representative"
                     secondary={
                       <React.Fragment>
                         <Typography
@@ -586,7 +588,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Representative</Typography>
                     <TextField
                       className={classes.formInput}
@@ -628,7 +630,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Website</Typography>
                     <TextField
                       className={classes.formInput}
@@ -636,11 +638,48 @@ export default function CompanyProfile() {
                       onChange={handleChange}
                       name="companyWebsite"
                       inputProps={{ maxLength: 50 }}
-                      error={updateErrors.company_website !== ""}
                     ></TextField>
-                    {updateErrors.company_website ? (
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <ShortTextRoundedIcon fontSize="large" />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Contact Email"
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.inline}
+                          color="textPrimary"
+                        >
+                          {profileInfo.contact_email}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <Typography>Contact Email</Typography>
+                    <TextField
+                      className={classes.formInput}
+                      value={profileInfo.contact_email}
+                      onChange={handleChange}
+                      placeholder={profileInfo.contact_email}
+                      name="contact_email"
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.company_contact_email !== ""}
+                    ></TextField>
+                    {updateErrors.company_contact_email ? (
                       <Typography color="error">
-                        {updateErrors.company_website}
+                        {updateErrors.company_contact_email}
                       </Typography>
                     ) : null}
                   </div>
@@ -674,7 +713,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Company Type</Typography>
                     <Select
                       value={profileInfo.companyType}
@@ -713,7 +752,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Industry Type</Typography>
                     <Select
                       className={classes.formInput}
@@ -755,7 +794,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Phone Number</Typography>
                     <TextField
                       className={classes.formInput}
@@ -797,7 +836,7 @@ export default function CompanyProfile() {
                     }
                   />
                 ) : (
-                  <div className={classes.halfWidth}>
+                  <div className={classes.fullWidth}>
                     <Typography>Are you a single member company</Typography>
                     <RadioGroup
                       aria-label="Are you one person company"
@@ -844,8 +883,8 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid container spacing={2}>
-                      <Grid item xs={2}>
+                    <Grid container xs={12} md={6} spacing={2}>
+                      <Grid item>
                         <Typography>Company Address</Typography>
                         <TextField
                           className={classes.fullWidth}
@@ -861,7 +900,7 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item>
                         <Typography>City</Typography>
                         <TextField
                           className={classes.fullWidth}
@@ -876,7 +915,7 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item>
                         <Typography>State</Typography>
                         <Select
                           className={classes.fullWidth}
@@ -922,8 +961,8 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid container spacing={2}>
-                      <Grid item xs={2}>
+                    <Grid container xs={12} md={6} spacing={2}>
+                      <Grid item>
                         <Typography>Mailing Address</Typography>
                         <TextField
                           className={classes.fullWidth}
@@ -939,7 +978,7 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item>
                         <Typography>City</Typography>
                         <TextField
                           className={classes.fullWidth}
@@ -954,7 +993,7 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item>
                         <Typography>State</Typography>
                         <Select
                           className={classes.fullWidth}
