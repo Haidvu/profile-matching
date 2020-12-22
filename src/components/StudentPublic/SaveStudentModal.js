@@ -7,8 +7,10 @@ import {
   Container,
   DialogActions,
   Button,
-  CircularProgress,
+  LinearProgress,
   Grid,
+  Typography,
+  DialogContent,
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -65,6 +67,7 @@ const SaveStudentModal = ({ modal, setModal }) => {
   };
 
   const handleSave = () => {
+    setLoading(true);
     console.log("Clicked save");
     setModal(false);
   };
@@ -76,38 +79,46 @@ const SaveStudentModal = ({ modal, setModal }) => {
         setModal(false);
       }}>
       <DialogTitle>Add Student to the following Projects</DialogTitle>
-      <Container>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Grid container>
-            {companyProjects.map((project, index) => (
-              <Grid item xs={12} key={index}>
-                <FormControlLabel
-                  className={classes.formControl}
-                  control={
-                    <Checkbox
-                      name="saveProfile"
-                      color="secondary"
-                      onChange={saveProfileToProject}
-                    />
-                  }
-                  label={project.project_name}
-                  labelPlacement="end"
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Container>
-      <DialogActions>
-        <Button variant="outlined" color="secondary" onClick={handleCancel}>
-          Cancel
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={handleSave}>
-          Save
-        </Button>
-      </DialogActions>
+      {loading ? (
+        <LinearProgress color="secondary" />
+      ) : companyProjects.length <= 0 ? (
+        <DialogContent>
+          <Typography style={{ fontStyle: "italic" }}>
+            No Projects to Save To
+          </Typography>
+        </DialogContent>
+      ) : (
+        <div>
+          <Container>
+            <Grid container>
+              {companyProjects.map((project, index) => (
+                <Grid item xs={12} key={index}>
+                  <FormControlLabel
+                    className={classes.formControl}
+                    control={
+                      <Checkbox
+                        name="saveProfile"
+                        color="secondary"
+                        onChange={saveProfileToProject}
+                      />
+                    }
+                    label={project.project_name}
+                    labelPlacement="end"
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+          <DialogActions>
+            <Button variant="outlined" color="secondary" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleSave}>
+              Save
+            </Button>
+          </DialogActions>
+        </div>
+      )}
     </Dialog>
   );
 };

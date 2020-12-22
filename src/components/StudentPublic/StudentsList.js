@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "280px",
-    height:"100%"
+    height: "100%",
   },
   button: {
     width: "100%",
@@ -93,10 +93,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentsList = ({loading, studentsList}) => {
+const StudentsList = ({ loading, studentsList }) => {
   let { url } = useRouteMatch();
   const classes = useStyles();
-  
+
   return (
     <>
       {loading ? (
