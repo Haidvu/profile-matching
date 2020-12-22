@@ -610,7 +610,7 @@ function StudentInfo() {
                         label="Zipcode"
                         name="zipcode"
                         onChange={handleChangeFirst}
-                        value={studentFirst.city}
+                        value={studentFirst.zipcode}
                         inputProps={{ maxLength: 5 }}
                       />
                       {errorsFirst.zipcode && studentFirst.zipcode === "" ? (
