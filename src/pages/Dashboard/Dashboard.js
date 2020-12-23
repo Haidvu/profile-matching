@@ -24,6 +24,8 @@ import StudentMenu from "./StudentMenu";
 import CompanyRoutes from "./CompanyRoutes";
 import CompanyMenu from "./CompanyMenu";
 import axios from "axios";
+import AdminRoutes from "./AdminRoutes";
+import AdminMenu from "./AdminMenu";
 import { useHistory } from "react-router-dom";
 import { getConfig } from "../../authConfig";
 
@@ -121,7 +123,7 @@ export default function Dashboard() {
           //   logout();
           // }
         });
-    } else if (role_id == "2") {
+    } else if (role_id === "2") {
       setLoading(false);
     }
   }, []);
@@ -142,9 +144,9 @@ export default function Dashboard() {
         };
       case "2":
         return {
-          name: "Chad Admin",
-          menu: <h1>The menu</h1>,
-          routes: <h1>routes</h1>,
+          name: "Admin",
+          menu: <AdminMenu/>,
+          routes: <AdminRoutes/>,
         };
 
       default: {
