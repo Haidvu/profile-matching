@@ -14,9 +14,9 @@ import {
   ListItemText,
   Divider,
   IconButton,
-  Hidden 
+  Hidden,
 } from "@material-ui/core";
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "./StudentRoutes";
@@ -34,20 +34,20 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
     },
   },
 
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginLeft: drawerWidth,
     },
     background: "rgba(200,16,46,1)",
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -80,10 +80,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const { data, dispatch } = useContext(DataContext);
   const classes = useStyles();
-  const slug = localStorage.getItem("slug");
-  const role_id = localStorage.getItem("role_id");
   let history = useHistory();
   const [loading, setLoading] = useState(true);
+
+  const slug = localStorage.getItem("slug");
+  const role_id = localStorage.getItem("role_id");
 
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -100,7 +101,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (slug) {
+    if (slug && role_id !== "2") {
       const url =
         role_id === "0"
           ? `http://18.213.74.196:8000/api/student_profile/${slug}`
@@ -120,6 +121,8 @@ export default function Dashboard() {
           //   logout();
           // }
         });
+    } else if (role_id == "2") {
+      setLoading(false);
     }
   }, []);
 
@@ -137,6 +140,13 @@ export default function Dashboard() {
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
+      case "2":
+        return {
+          name: "Chad Admin",
+          menu: <h1>The menu</h1>,
+          routes: <h1>routes</h1>,
+        };
+
       default: {
         logout();
         return null;
@@ -177,7 +187,7 @@ export default function Dashboard() {
             <Hidden smUp implementation="css">
               <Drawer
                 variant="temporary"
-                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                anchor={theme.direction === "rtl" ? "right" : "left"}
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 classes={{
@@ -190,20 +200,20 @@ export default function Dashboard() {
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>
-                      {userOptions() ? userOptions().menu : null}
-                      <Link to="/login" className={classes.link}>
-                        <ListItem onClick={logout}>
-                          <ListItemIcon>
-                            <ExitToAppRoundedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Logout" />
-                        </ListItem>
-                      </Link>
+                    {userOptions() ? userOptions().menu : null}
+                    <Link to="/login" className={classes.link}>
+                      <ListItem onClick={logout}>
+                        <ListItemIcon>
+                          <ExitToAppRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                      </ListItem>
+                    </Link>
                   </List>
                 </div>
                 <Divider />
-                </Drawer>
-              </Hidden>
+              </Drawer>
+            </Hidden>
             <Hidden xsDown implementation="css">
               <Drawer
                 classes={{
