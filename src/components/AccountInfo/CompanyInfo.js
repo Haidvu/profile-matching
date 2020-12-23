@@ -280,7 +280,6 @@ const CompanyInfo = () => {
           company_description: companySecond.description,
           username: localStorage.getItem("email_id"),
         };
-        console.log(data);
         axios
           .post(
             "http://18.213.74.196:8000/api/company_profile/create",

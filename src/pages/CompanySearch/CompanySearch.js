@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: "400",
         color:"white",
         fontFamily:"Helvetica",
-        marginBottom: theme.spacing(1.5),
+        marginBottom: theme.spacing(1),
     },
     SearchLabels:{
         fontFamily:"Helvetica",
@@ -35,27 +35,27 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: "#a60d27",
             color: "white"
           },
-        marginLeft:"10px"
+        marginTop: theme.spacing(3.5),
     },
     KeywordSearch:{
         backgroundColor:"white",
         borderRadius:"10px",
         objectFit:"contain",
-        width: 180,
+        width: 250,
     },
     zipCode:{
         backgroundColor:"white",
         borderRadius:"10px",
         objectFit:"contain",
-        width: 100,
+        width: 200,
     },
     MajorSearch:{
-        width: 150,
+        width: 250,
         borderRadius:"10px",
         height: 40,
     },
     DegreeSearch:{
-        width: 150,
+        width: 250,
         objectFit:"contain",
         borderRadius:"10px",
         height: 40,
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     SkillSearch:{
         objectFit:"contain",
         borderRadius:"10px",
-        width:150
+        width:250
     },
     chipRoot: {
         display: 'flex',
@@ -343,6 +343,15 @@ export default function CompanySearch(){
                             <option value="Graduate">Graduate</option>
                         </select>
                     </Grid>
+                </Grid>
+                <Grid
+                    container
+                    id="first-left"
+                    item
+                    xs={12}
+                    spacing={4}
+                    direction="row"
+                    >
                     <Grid item>
                         <Typography className={classes.SearchLabels} variant="h5" >Skills</Typography>
                         <Select
@@ -364,6 +373,8 @@ export default function CompanySearch(){
                     <Grid item>
                         <Typography className={classes.SearchLabels} variant="h5" >Zipcode</Typography>
                         <TextField inputProps={{ maxLength: 5 }} className={classes.zipCode} name="zipCode" placeholder="zipcode"  type="string" variant="outlined" size="small" onChange={(e)=>{setSearchInput({...searchInput,zipcode:e.target.value})}}></TextField>
+                    </Grid>
+                    <Grid item>
                         <Button className={classes.SearchButton} variant="contained" onClick={handleClick}>Search</Button>
                     </Grid>
                 </Grid>
