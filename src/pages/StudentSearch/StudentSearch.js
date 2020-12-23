@@ -4,7 +4,7 @@ import makeAnimated from "react-select/animated";
 import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-
+import ProjectsList from "../../components/CompanyPublic/ProjectsList";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -105,36 +105,133 @@ const customStyles = {
   }),
 };
 
+const sample = [
+  {
+    company_name: "f",
+    company_website: "f",
+    company_contact_email: "f",
+    project_id: 1,
+    username_id: 1,
+    project_name: "ff",
+    project_description: "ff",
+    project_type: "Frontend",
+    project_tech: "",
+    project_deadline: "2020-12-19",
+    date_added: "2020-12-19",
+  },
+  {
+    company_name: "f",
+    company_website: "f",
+    company_contact_email: "f",
+    project_id: 2,
+    username_id: 1,
+    project_name: "project 2",
+    project_description: "project 2",
+    project_type: "",
+    project_tech: "",
+    project_deadline: "2020-12-19",
+    date_added: "2020-12-19",
+  },
+  {
+    company_name: "dfsgfdsg",
+    company_website: "sdafsdaf",
+    company_contact_email: "random@defsdf.com",
+    project_id: 3,
+    username_id: 3,
+    project_name: "first project",
+    project_description: "dfsadf",
+    project_type: "Backend",
+    project_tech: "Bootstrap,JavaScript,Python",
+    project_deadline: "2020-12-30",
+    date_added: "2020-12-20",
+  },
+  {
+    company_name: "dfsgfdsg",
+    company_website: "sdafsdaf",
+    company_contact_email: "random@defsdf.com",
+    project_id: 4,
+    username_id: 3,
+    project_name: "second project",
+    project_description: "dsfdsaf",
+    project_type: "Frontend",
+    project_tech: "AWS,C++,JavaScript",
+    project_deadline: "2020-12-25",
+    date_added: "2020-12-20",
+  },
+  {
+    company_name: "dfsgfdsg",
+    company_website: "sdafsdaf",
+    company_contact_email: "random@defsdf.com",
+    project_id: 5,
+    username_id: 3,
+    project_name: "project three",
+    project_description: "dsafdsa",
+    project_type: "Frontend",
+    project_tech: "AWS,GitHub",
+    project_deadline: "2020-12-17",
+    date_added: "2020-12-20",
+  },
+  {
+    company_name: "Mayoor Shardha",
+    company_website: "",
+    company_contact_email: "mayoorshardha@gmail.com",
+    project_id: 6,
+    username_id: 4,
+    project_name: "test",
+    project_description: "test",
+    project_type: "Frontend",
+    project_tech: "Apache",
+    project_deadline: "2020-12-22",
+    date_added: "2020-12-21",
+  },
+  {
+    company_name: "Muhammad Usman",
+    company_website: "N/A",
+    company_contact_email: "muhammadusman0200@gmail.com",
+    project_id: 7,
+    username_id: 6,
+    project_name: "Beast",
+    project_description: "Desription",
+    project_type: "Frontend",
+    project_tech: "Angular",
+    project_deadline: "2020-12-22",
+    date_added: "2020-12-21",
+  },
+];
+
 export const StudentSearch = () => {
   // const [searchInput, setSearchInput] = useState({
   //   company_name: null,
   //   industry_type: null,
   //   project_name: null,
-  //   project_type:[],
-  //   project_tech:[],
-  //   keywords: []
-  // })
+  //   project_type: [],
+  //   project_tech: [],
+  //   keywords: [],
+  // });
 
-  // const handleClick = () =>{
+  // const handleClick = () => {
   //   console.log(searchInput);
-  // }
+  // };
 
-  // const handleChange = (e) =>{
-  //   if (e.key === 'Enter') {
-  //       setSearchInput({...searchInput,
-  //           keywords:[...searchInput.keywords, e.target.value]});
+  // const handleChange = (e) => {
+  //   if (e.key === "Enter") {
+  //     setSearchInput({
+  //       ...searchInput,
+  //       keywords: [...searchInput.keywords, e.target.value],
+  //     });
   //   }
-  // }
+  // };
 
   const classes = useStyles();
   //this is the animated component for the react-select library
   const animatedComponents = makeAnimated();
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  const [loading, setLoading] = useState(false);
 
   return (
     <div>
@@ -357,6 +454,7 @@ export const StudentSearch = () => {
           </div>
         </Grid>
       </div>
+      <ProjectsList loading={loading} projects={sample} />
     </div>
   );
 };
