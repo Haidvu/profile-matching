@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentMenu = () => {
+const CompanyMenu = () => {
   const classes = useStyles();
   let { url } = useRouteMatch();
 
@@ -45,4 +45,4 @@ const StudentMenu = () => {
   );
 };
 
-export default StudentMenu;
+export default CompanyMenu;

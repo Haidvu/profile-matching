@@ -138,6 +138,7 @@ const CompanyInfo = () => {
     address: "",
     city: "",
     state: "",
+    zip:"",
     mailingAddress: "",
     city2: "",
     state2: "",
@@ -209,6 +210,7 @@ const CompanyInfo = () => {
       address: companyFirst.address === "" ? "Required" : null,
       city: companyFirst.city === "" ? "Required" : null,
       state: companyFirst.state === "" ? "Required" : null,
+      zip:companyFirst.zip === "" ? "Required" : null,
       mailingAddress: companyFirst.checkedAddress
         ? null
         : companyFirst.mailingAddress === ""
@@ -268,6 +270,7 @@ const CompanyInfo = () => {
           company_phone_no: companyFirst.phoneNumber,
           industry_type: companyFirst.industryType,
           company_contact_email: companyFirst.contact_email,
+          company_zip: companyFirst.zip,
           representative_name: companySecond.companyRep,
           company_representative_type: parseInt(companyFirst.isSolo),
           company_type: parseInt(companySecond.companyType),
@@ -495,7 +498,7 @@ const CompanyInfo = () => {
                     id="address-container-1"
                     item
                     direction="row"
-                    spacing={10}
+                    spacing={4}
                   >
                     <Grid item xs={7}>
                       <TextField
@@ -541,6 +544,26 @@ const CompanyInfo = () => {
                           <FormHelperText>{errorsFirst.state}</FormHelperText>
                         ) : null}
                       </FormControl>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <TextField
+                        error={errorsFirst.zip && companyFirst.zip === ""}
+                        variant="outlined"
+                        fullWidth
+                        id="zip"
+                        label="Zipcode"
+                        name="zip"
+                        onChange={handleChangeFirst}
+                        value={companyFirst.zip}
+                        inputProps={{ maxLength: 5 }}
+                      />
+                      {errorsFirst.zip && companyFirst.zip === "" ? (
+                        <FormHelperText
+                          error={errorsFirst.zip && companyFirst.zip === ""}
+                        >
+                          {errorsFirst.zip}
+                        </FormHelperText>
+                      ) : null}
                     </Grid>
                   </Grid>
                   <Grid item>
