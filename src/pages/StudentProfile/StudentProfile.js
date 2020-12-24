@@ -35,7 +35,7 @@ import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
 import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
-import ContactsRoundedIcon from '@material-ui/icons/ContactsRounded';
+import ContactsRoundedIcon from "@material-ui/icons/ContactsRounded";
 import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
 import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loginAlert: {
     marginBottom: theme.spacing(2),
-},
+  },
   inline: {
     display: "inline",
   },
@@ -227,7 +227,7 @@ export default function StudentProfile() {
   //This is for list of skills from database
   const [skills, setSkills] = useState(null);
   const [projects, setProjects] = useState();
-  
+
   //this is the original data retrieved from the api
   const [studentInfo, setStudentInfo] = useState({
     //This is the data from api
@@ -239,12 +239,12 @@ export default function StudentProfile() {
     degree: null,
     student_skills: [],
     student_description: null,
-    contact_email:null,
-    phoneNumber:null,
-    streetAddress:null,
-    city:null,
-    state:null,
-    zipcode:null
+    contact_email: null,
+    phoneNumber: null,
+    streetAddress: null,
+    city: null,
+    state: null,
+    zipcode: null,
   });
 
   const getStreetAddress = (address) => {
@@ -294,19 +294,19 @@ export default function StudentProfile() {
     degree: null,
     student_skills: [],
     student_description: null,
-    contact_email:null,
-    phoneNumber:null,
-    streetAddress:null,
-    city:null,
-    state:null,
-    zipcode:null
+    contact_email: null,
+    phoneNumber: null,
+    streetAddress: null,
+    city: null,
+    state: null,
+    zipcode: null,
   });
 
   const [errors, setErrors] = useState({
     student_description: null,
     student_skills: null,
-    contact_email:null,
-    phoneNumber:null,
+    contact_email: null,
+    phoneNumber: null,
   });
 
   const firstRender = useRef(true);
@@ -322,7 +322,7 @@ export default function StudentProfile() {
     const response = await axios.post(
       `http://18.213.74.196:8000/api/student_project/list_by_student`,
       {
-        username_id: parseInt(localStorage.getItem("email_id"))
+        username_id: parseInt(localStorage.getItem("email_id")),
       },
       getConfig()
     );
@@ -345,7 +345,7 @@ export default function StudentProfile() {
       streetAddress: getStreetAddress(profile.student_address),
       city: getCity(profile.student_address),
       state: getState(profile.student_address),
-      zipcode:profile.student_zip
+      zipcode: profile.student_zip,
     });
     setStudentInput({
       student_id: profile.student_id,
@@ -361,7 +361,7 @@ export default function StudentProfile() {
       streetAddress: getStreetAddress(profile.student_address),
       city: getCity(profile.student_address),
       state: getState(profile.student_address),
-      zipcode:profile.student_zip
+      zipcode: profile.student_zip,
     });
   }, [profile]);
 
@@ -441,32 +441,35 @@ export default function StudentProfile() {
     }
     if (studentInput.contact_email === "") {
       errors.contact_email = "Required";
-    }else{
+    } else {
       errors.contact_email = null;
     }
-    if (studentInput.phoneNumber === "" || studentInput.phoneNumber.length<10) {
+    if (
+      studentInput.phoneNumber === "" ||
+      studentInput.phoneNumber.length < 10
+    ) {
       errors.phoneNumber = "Required";
-    }else{
+    } else {
       errors.phoneNumber = null;
     }
     if (studentInput.streetAddress === "") {
       errors.streetAddress = "Required";
-    }else{
+    } else {
       errors.streetAddress = null;
     }
     if (studentInput.city === "") {
       errors.city = "Required";
-    }else{
+    } else {
       errors.city = null;
     }
     if (studentInput.state === "") {
       errors.state = "Required";
-    }else{
+    } else {
       errors.state = null;
     }
-    if (studentInput.zipcode === "" || studentInput.zipcode.length<5) {
+    if (studentInput.zipcode === "" || studentInput.zipcode.length < 5) {
       errors.zipcode = "Required";
-    }else{
+    } else {
       errors.zipcode = null;
     }
     if (studentInput.student_skills.length <= 0) {
@@ -506,7 +509,7 @@ export default function StudentProfile() {
               student_contact_email: studentInput.contact_email,
               student_phone_no: studentInput.phoneNumber,
               student_address: getStudentAddress(),
-              student_zip:studentInput.zipcode
+              student_zip: studentInput.zipcode,
             },
             getConfig()
           )
@@ -574,8 +577,7 @@ export default function StudentProfile() {
         <img
           alt="profile background"
           className={classes.profileLogo}
-          src={StudentDashboard}
-        ></img>
+          src={StudentDashboard}></img>
         <List className={classes.root}>
           <ListItem>
             <ListItemIcon edge="start">
@@ -585,8 +587,7 @@ export default function StudentProfile() {
               {studentEdit.studentEditBool === false ? (
                 <div
                   className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}
-                >
+                  style={{ justifyContent: "space-between" }}>
                   <div className={classes.flexColumn}>
                     <Typography className={classes.sectionHeader}>
                       Student Description
@@ -600,16 +601,14 @@ export default function StudentProfile() {
                     className={classes.icon}
                     onClick={() => {
                       handleOpenEdit("studentEditBool");
-                    }}
-                  >
+                    }}>
                     <EditTwoToneIcon />
                   </IconButton>
                 </div>
               ) : (
                 <>
                   <FormControl
-                    error={errors.student_description && studentInput === ""}
-                  >
+                    error={errors.student_description && studentInput === ""}>
                     <Typography className={classes.sectionHeader}>
                       Student Description
                     </Typography>
@@ -622,8 +621,7 @@ export default function StudentProfile() {
                           ...studentInput,
                           student_description: e.target.value,
                         });
-                      }}
-                    ></Input>
+                      }}></Input>
                     {errors.student_description &&
                     studentInput.student_description === "" ? (
                       <FormHelperText>
@@ -637,8 +635,7 @@ export default function StudentProfile() {
                       className={classes.icon}
                       onClick={() => {
                         handleCancel();
-                      }}
-                    >
+                      }}>
                       <ClearRoundedIcon />
                     </IconButton>
                     <IconButton
@@ -646,8 +643,7 @@ export default function StudentProfile() {
                       className={classes.icon}
                       onClick={() => {
                         handleSave();
-                      }}
-                    >
+                      }}>
                       <CheckRoundedIcon style={{ color: "green" }} />
                     </IconButton>
                   </ListItemSecondaryAction>
@@ -666,11 +662,13 @@ export default function StudentProfile() {
                   Academic
                 </Typography>
                 <Typography
-                  className={classes.sectionContent}
-                >{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
+                  className={
+                    classes.sectionContent
+                  }>{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
                 <Typography
-                  className={classes.sectionContent}
-                >{`Degree: ${studentInfo.degree}`}</Typography>
+                  className={
+                    classes.sectionContent
+                  }>{`Degree: ${studentInfo.degree}`}</Typography>
                 <Typography className={classes.sectionContent}>
                   {" "}
                   {`Major: ${studentInfo.major}`}
@@ -710,8 +708,7 @@ export default function StudentProfile() {
                             ...studentInput,
                             degree: e.target.value,
                           });
-                        }}
-                      >
+                        }}>
                         <option value="Undergraduate">Undergraduate</option>
                         <option value="Graduate">Graduate</option>
                       </select>
@@ -729,8 +726,7 @@ export default function StudentProfile() {
                             ...studentInput,
                             major: e.target.value,
                           });
-                        }}
-                      >
+                        }}>
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
                           <option value="Environmental Design">
@@ -978,29 +974,30 @@ export default function StudentProfile() {
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
-            <ListItemIcon >
-              <ContactsRoundedIcon/>
+            <ListItemIcon>
+              <ContactsRoundedIcon />
             </ListItemIcon>
             {studentEdit.studentEditBool === false ? (
               <div className={classes.flexColumn}>
                 <Typography className={classes.sectionHeader}>
                   Contact
                 </Typography>
-                <Typography className={classes.sectionContent}
-                >
-                  {`Contact Email: ${studentInfo.contact_email}`}</Typography>
-                <Typography className={classes.sectionContent}
-                >
-                  {`Phone Number: ${studentInfo.phoneNumber}`}</Typography>
+                <Typography className={classes.sectionContent}>
+                  {`Contact Email: ${studentInfo.contact_email}`}
+                </Typography>
+                <Typography className={classes.sectionContent}>
+                  {`Phone Number: ${studentInfo.phoneNumber}`}
+                </Typography>
               </div>
-              ):(
+            ) : (
               <div>
                 <Typography className={classes.sectionHeader}>
                   Contact
                 </Typography>
                 <Grid container spacing={4}>
                   <Grid item>
-                    <FormControl error={errors.contact_email && studentInput === ""}>
+                    <FormControl
+                      error={errors.contact_email && studentInput === ""}>
                       <Typography>Contact Email</Typography>
                       <TextField
                         type="string"
@@ -1017,14 +1014,13 @@ export default function StudentProfile() {
                       />
                       {errors.contact_email &&
                       studentInput.contact_email === "" ? (
-                        <FormHelperText>
-                          {errors.contact_email}
-                        </FormHelperText>
+                        <FormHelperText>{errors.contact_email}</FormHelperText>
                       ) : null}
                     </FormControl>
                   </Grid>
                   <Grid item>
-                    <FormControl error={errors.phoneNumber && studentInput === ""}>
+                    <FormControl
+                      error={errors.phoneNumber && studentInput === ""}>
                       <Typography>Phone Number</Typography>
                       <TextField
                         type="string"
@@ -1039,43 +1035,43 @@ export default function StudentProfile() {
                         required={true}
                         inputProps={{ maxLength: 11 }}
                       />
-                      {errors.phoneNumber &&
-                      studentInput.phoneNumber === "" ? (
-                        <FormHelperText>
-                          {errors.phoneNumber}
-                        </FormHelperText>
+                      {errors.phoneNumber && studentInput.phoneNumber === "" ? (
+                        <FormHelperText>{errors.phoneNumber}</FormHelperText>
                       ) : null}
                     </FormControl>
                   </Grid>
                 </Grid>
-              </div>)}
+              </div>
+            )}
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <LocationOnRoundedIcon />
-              </ListItemIcon>
-              {studentEdit.studentEditBool === false ?(
-                <ListItemText
-                  primary={
-                    <React.Fragment>
-                      <Typography className={classes.sectionHeader}>Address</Typography>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        {`${studentInfo.streetAddress},  ${studentInfo.city}, ${studentInfo.state} ${studentInfo.zipcode}`}
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-                ) : (
-                  <>
-                  <Grid container xs={12} md={6} spacing={2}>
-                    <Grid item>
-                    <FormControl error={errors.streetAddress && studentInput === ""}>
+            <ListItemIcon>
+              <LocationOnRoundedIcon />
+            </ListItemIcon>
+            {studentEdit.studentEditBool === false ? (
+              <ListItemText
+                primary={
+                  <React.Fragment>
+                    <Typography className={classes.sectionHeader}>
+                      Address
+                    </Typography>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary">
+                      {`${studentInfo.streetAddress},  ${studentInfo.city}, ${studentInfo.state} ${studentInfo.zipcode}`}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+            ) : (
+              <>
+                <Grid container xs={12} md={6} spacing={2}>
+                  <Grid item>
+                    <FormControl
+                      error={errors.streetAddress && studentInput === ""}>
                       <Typography>Street Address</Typography>
                       <TextField
                         value={studentInput.streetAddress}
@@ -1090,14 +1086,12 @@ export default function StudentProfile() {
                         placeholder="Street Address"
                       />
                       {errors.streetAddress &&
-                        studentInput.streetAddress === "" ? (
-                          <FormHelperText>
-                            {errors.streetAddress}
-                          </FormHelperText>
-                        ) : null}
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
+                      studentInput.streetAddress === "" ? (
+                        <FormHelperText>{errors.streetAddress}</FormHelperText>
+                      ) : null}
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
                     <FormControl error={errors.city && studentInput === ""}>
                       <Typography>City</Typography>
                       <TextField
@@ -1111,16 +1105,13 @@ export default function StudentProfile() {
                         inputProps={{ maxLength: 20 }}
                         name="city"
                       />
-                       {errors.city &&
-                        studentInput.city === "" ? (
-                          <FormHelperText>
-                            {errors.city}
-                          </FormHelperText>
-                        ) : null}
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
-                      <FormControl error={errors.state && studentInput === ""}>
+                      {errors.city && studentInput.city === "" ? (
+                        <FormHelperText>{errors.city}</FormHelperText>
+                      ) : null}
+                    </FormControl>
+                  </Grid>
+                  <Grid item>
+                    <FormControl error={errors.state && studentInput === ""}>
                       <Typography>State</Typography>
                       <Select
                         label="State"
@@ -1132,47 +1123,40 @@ export default function StudentProfile() {
                           });
                         }}
                         name="state"
-                        placeholder="state"
-                      >
+                        placeholder="state">
                         {states.map((state) => (
                           <MenuItem key={state} value={state}>
                             {state}
                           </MenuItem>
                         ))}
                       </Select>
-                      {errors.state &&
-                        studentInput.state === "" ? (
-                          <FormHelperText>
-                            {errors.state}
-                          </FormHelperText>
-                        ) : null}
-                      </FormControl>
-                    </Grid>
-                    <Grid item>
-                      <FormControl error={errors.zipcode && studentInput === ""}>
-                        <Typography>Zipcode</Typography>
-                        <TextField
-                          value={studentInput.zipcode}
-                          onChange={(e) => {
-                            setStudentInput({
-                              ...studentInput,
-                              zipcode: e.target.value,
-                            });
-                          }}
-                          inputProps={{ maxLength: 5 }}
-                          name="zipcode"
-                        />
-                        {errors.zipcode &&
-                        studentInput.zipcode === "" ? (
-                          <FormHelperText>
-                            {errors.zipcode}
-                          </FormHelperText>
-                        ) : null}
-                      </FormControl>
-                    </Grid>
+                      {errors.state && studentInput.state === "" ? (
+                        <FormHelperText>{errors.state}</FormHelperText>
+                      ) : null}
+                    </FormControl>
                   </Grid>
-                </>
-                )}
+                  <Grid item>
+                    <FormControl error={errors.zipcode && studentInput === ""}>
+                      <Typography>Zipcode</Typography>
+                      <TextField
+                        value={studentInput.zipcode}
+                        onChange={(e) => {
+                          setStudentInput({
+                            ...studentInput,
+                            zipcode: e.target.value,
+                          });
+                        }}
+                        inputProps={{ maxLength: 5 }}
+                        name="zipcode"
+                      />
+                      {errors.zipcode && studentInput.zipcode === "" ? (
+                        <FormHelperText>{errors.zipcode}</FormHelperText>
+                      ) : null}
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
@@ -1253,8 +1237,7 @@ export default function StudentProfile() {
                     error={
                       errors.student_skills &&
                       studentInput.student_skills.length === 0
-                    }
-                  >
+                    }>
                     {errors.student_skills}
                   </FormHelperText>
                 ) : null}
@@ -1266,8 +1249,7 @@ export default function StudentProfile() {
                         <Select
                           onChange={handleSkillChange}
                           className={classes.select}
-                          value={skillName}
-                        >
+                          value={skillName}>
                           <MenuItem value="">
                             <em>None</em>
                           </MenuItem>
@@ -1286,8 +1268,7 @@ export default function StudentProfile() {
                       <Select
                         value={experience}
                         className={classes.select}
-                        onChange={handleExpChange}
-                      >
+                        onChange={handleExpChange}>
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
@@ -1302,8 +1283,7 @@ export default function StudentProfile() {
                       variant="outlined"
                       color="secondary"
                       onClick={addSkill}
-                      disabled={skillName === "" || experience === ""}
-                    >
+                      disabled={skillName === "" || experience === ""}>
                       Add Skill
                     </Button>
                   </Grid>
@@ -1330,15 +1310,13 @@ export default function StudentProfile() {
         <Dialog
           onClose={handleDialogClose}
           open={dialogOpen}
-          className={classes.dialog}
-        >
+          className={classes.dialog}>
           <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
           {authError ? (
             <Alert
               className={classes.loginAlert}
               variant="filled"
-              severity="error"
-            >
+              severity="error">
               {authError}
             </Alert>
           ) : null}
@@ -1372,8 +1350,7 @@ export default function StudentProfile() {
               onClick={handleConfirm}
               color="secondary"
               variant="outlined"
-              className={classes.dialogConfirm}
-            >
+              className={classes.dialogConfirm}>
               Confirm
             </Button>
           </DialogActions>

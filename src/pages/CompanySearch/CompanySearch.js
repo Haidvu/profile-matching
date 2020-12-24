@@ -1,390 +1,516 @@
-import React,{useState, useEffect} from "react";
-import Select from 'react-select';
-import {Grid, Typography, TextField, Button, Chip} from '@material-ui/core/';
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
+import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
-import makeAnimated from 'react-select/animated';
-import axios from 'axios';
-import { getConfig } from '../../authConfig';
-import StudentsLists from '../../components/StudentPublic/StudentsList';
-
+import makeAnimated from "react-select/animated";
+import axios from "axios";
+import { getConfig } from "../../authConfig";
+import StudentsLists from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
-    searchBackground: {
-        // backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/1181619/pexels-photo-1181619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')`,
-        backgroundColor: 'rgba(200,16,46,1)',
-        margin:'10px',
-        borderRadius:"5px",
-        flex:"column"
+  searchBackground: {
+    // backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/1181619/pexels-photo-1181619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')`,
+    backgroundColor: "rgba(200,16,46,1)",
+    margin: "10px",
+    borderRadius: "5px",
+    flex: "column",
+  },
+  header: {
+    textAlign: "center",
+    fontSize: "60px",
+    fontWeight: "400",
+    color: "white",
+    fontFamily: "Helvetica",
+    marginBottom: theme.spacing(1.5),
+  },
+  SearchLabels: {
+    fontFamily: "Helvetica",
+    color: "white",
+  },
+  SearchButton: {
+    backgroundColor: "#324CE7",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#a60d27",
+      color: "white",
     },
-    header: {
-        textAlign: 'center',
-        fontSize:"60px",
-        fontWeight: "400",
-        color:"white",
-        fontFamily:"Helvetica",
-        marginBottom: theme.spacing(1),
-    },
-    SearchLabels:{
-        fontFamily:"Helvetica",
-        color:"white"
-    },
-    SearchButton:{
-        backgroundColor: "#324CE7",
-        color: "white",
-        "&:hover": {
-            backgroundColor: "#a60d27",
-            color: "white"
-          },
-        marginTop: theme.spacing(3.5),
-    },
-    KeywordSearch:{
-        backgroundColor:"white",
-        borderRadius:"10px",
-        objectFit:"contain",
-        width: 250,
-    },
-    zipCode:{
-        backgroundColor:"white",
-        borderRadius:"10px",
-        objectFit:"contain",
-        width: 200,
-    },
-    MajorSearch:{
-        width: 250,
-        borderRadius:"10px",
-        height: 40,
-    },
-    DegreeSearch:{
-        width: 250,
-        objectFit:"contain",
-        borderRadius:"10px",
-        height: 40,
-    },
-    SkillSearch:{
-        objectFit:"contain",
-        borderRadius:"10px",
-        width:250
-    },
-    chipRoot: {
-        display: 'flex',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        padding: theme.spacing(1),
-        margin: 1,
-      },
-    chip: {
-        margin: theme.spacing(0.5),
-    },
+    marginLeft: "10px",
+  },
+  KeywordSearch: {
+    backgroundColor: "white",
+    borderRadius: "10px",
+    objectFit: "contain",
+    width: 180,
+  },
+  zipCode: {
+    backgroundColor: "white",
+    borderRadius: "10px",
+    objectFit: "contain",
+    width: 100,
+  },
+  MajorSearch: {
+    width: 150,
+    borderRadius: "10px",
+    height: 40,
+  },
+  DegreeSearch: {
+    width: 150,
+    objectFit: "contain",
+    borderRadius: "10px",
+    height: 40,
+  },
+  SkillSearch: {
+    objectFit: "contain",
+    borderRadius: "10px",
+    width: 150,
+  },
+  chipRoot: {
+    display: "flex",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    padding: theme.spacing(1),
+    margin: 1,
+  },
+  chip: {
+    margin: theme.spacing(0.5),
+  },
 }));
 
 const customStyles = {
-    option: provided => ({
-      ...provided,
-      color: 'black'
-    }),
-    control: provided => ({
-      ...provided,
-      color: 'black'
-    }),
-    singleValue: (provided) => ({
-      ...provided,
-      color: 'black'
-    })
-  };
-  
-export default function CompanySearch(){
+  option: (provided) => ({
+    ...provided,
+    color: "black",
+  }),
+  control: (provided) => ({
+    ...provided,
+    color: "black",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "black",
+  }),
+};
 
-    const [loading, setLoading] = useState(false);
-    const [studentsList, setStudentsList] = useState([]);
-    const [searchInput, setSearchInput] = useState({ //This is the data from api
-        major: "",
-        degree_level: "",
-        zipcode:"",
-        keywords:[],
-        student_skills:[]
+export default function CompanySearch() {
+  const [loading, setLoading] = useState(false);
+  const [studentsList, setStudentsList] = useState([]);
+  const [searchInput, setSearchInput] = useState({
+    //This is the data from api
+    major: "",
+    degree_level: "",
+    zipcode: "",
+    keywords: [],
+    student_skills: [],
+  });
+
+  const handleClick = async () => {
+    const data = {
+      major: searchInput.major,
+      degree: searchInput.degree_level,
+      zip: searchInput.zipcode,
+      keywords: searchInput.keywords,
+      student_skills: searchInput.student_skills,
+    };
+    setLoading(true);
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/student_profile/search",
+        data,
+        getConfig()
+      )
+      .then((res) => {
+        setLoading(false);
+        setStudentsList(res.data);
       })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    const handleClick = async () =>{
-        const data={
-            major:searchInput.major, 
-            degree:searchInput.degree_level,
-            zip:searchInput.zipcode, 
-            keywords:searchInput.keywords, 
-            student_skills:searchInput.student_skills
-        };
-        setLoading(true);
-        axios
-        .post("http://18.213.74.196:8000/api/student_profile/search",data, getConfig())
-        .then((res) => {
-            setLoading(false);
-            setStudentsList(res.data);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
-
-    const handleChange = (e) =>{
-        if (e.key === 'Enter') {
-            setSearchInput({...searchInput, 
-                keywords:[...searchInput.keywords, e.target.value]});         
-        }
+  const handleChange = (e) => {
+    if (e.key === "Enter") {
+      setSearchInput({
+        ...searchInput,
+        keywords: [...searchInput.keywords, e.target.value],
+      });
     }
+  };
 
-    useEffect(() => {
-      }, [searchInput]);
+  useEffect(() => {}, [searchInput]);
 
-    const handleDelete = (chipToDelete) => () => {
-        const newList = searchInput.keywords.filter(item => item !== chipToDelete);
-        setSearchInput({...searchInput, keywords: newList});
-    };
-    const classes = useStyles();
-    //this is the animated component for the react-select library
-    const animatedComponents = makeAnimated();
-    const [skills, setSkills] = useState({});
-    
-    useEffect(() => {
-        axios.get("http://18.213.74.196:8000/api/skill/",
-          getConfig()).then(res => {
-    
-            const data = res.data.map((skill) => {
-              return { label: skill.skill_name, value: skill.id }
-            })
-    
-            setSkills(data)
-    
-          })
-          .catch(err => {
-            console.log(err)
-          });
-    
-      }, [])
+  const handleDelete = (chipToDelete) => () => {
+    const newList = searchInput.keywords.filter(
+      (item) => item !== chipToDelete
+    );
+    setSearchInput({ ...searchInput, keywords: newList });
+  };
+  const classes = useStyles();
+  //this is the animated component for the react-select library
+  const animatedComponents = makeAnimated();
+  const [skills, setSkills] = useState({});
+
+  useEffect(() => {
+    axios
+      .get("http://18.213.74.196:8000/api/skill/", getConfig())
+      .then((res) => {
+        const data = res.data.map((skill) => {
+          return { label: skill.skill_name, value: skill.id };
+        });
+
+        setSkills(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
-      <div>
-        <div className={classes.searchBackground}>
-            <Grid>
-                <Typography className={classes.header}>FutureStart Search</Typography>
+    <div>
+      <div className={classes.searchBackground}>
+        <Grid>
+          <Typography className={classes.header}>FutureStart Search</Typography>
+        </Grid>
+        <Grid className={classes.chipRoot}>
+          {searchInput.keywords.map((data, index) => (
+            <li key={index}>
+              <Chip
+                label={data}
+                onDelete={handleDelete(data)}
+                className={classes.chip}
+              />
+            </li>
+          ))}
+        </Grid>
+        <Grid
+          container
+          id="master"
+          direction="column"
+          justify="space-between"
+          spacing={2}
+          alignItems="center">
+          <Grid
+            container
+            id="first-left"
+            item
+            xs={12}
+            spacing={4}
+            direction="row">
+            <Grid item>
+              <Typography className={classes.SearchLabels} variant="h5">
+                Keyword
+              </Typography>
+              <TextField
+                className={classes.KeywordSearch}
+                name="keywords"
+                placeholder="Keyword"
+                type="search"
+                variant="outlined"
+                size="small"
+                onKeyDown={handleChange}
+              />
             </Grid>
-            <Grid className={classes.chipRoot}>
-                {searchInput.keywords.map((data,index) => (
-                    <li key={index}>
-                        <Chip
-                        label={data}
-                        onDelete={handleDelete(data)}
-                        className={classes.chip}
-                        />
-                    </li>
-                ))}
+            <Grid item>
+              <Typography className={classes.SearchLabels} variant="h5">
+                Major
+              </Typography>
+              <select
+                className={classes.MajorSearch}
+                defaultValue={""}
+                name="major"
+                onChange={(e) => {
+                  setSearchInput({ ...searchInput, major: e.target.value });
+                }}>
+                <option value="">Select Major</option>
+                <optgroup label="Gerald D. Hines College of Architecture and Design">
+                  <option value="Architecture">Architecture</option>
+                  <option value="Environmental_Design">
+                    Environmental Design
+                  </option>
+                  <option value="Industrial_Design">Industrial Design</option>
+                  <option value="Interior_Architecture">
+                    Interior Architecture
+                  </option>
+                </optgroup>
+                <optgroup label="Kathrine G. McGovern College of the Arts">
+                  <option value="Applied_Music">Applied Music</option>
+                  <option value="Art">Art</option>
+                  <option value="Art_History">Art History</option>
+                  <option value="Dance">Dance</option>
+                  <option value="Graphic_Design">Graphic Design</option>
+                  <option value="Music">Music</option>
+                  <option value="Painting">Painting</option>
+                  <option value="Photography">Photography/Digital Media</option>
+                  <option value="Sculpture">Sculpture</option>
+                  <option value="Theatre">Theatre</option>
+                </optgroup>
+                <optgroup label="C. T. Bauer College of Business">
+                  <option value="Accounting">Accounting</option>
+                  <option value="Entrepreneurship">Entrepreneurship</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Management">Management</option>
+                  <option value="Management_Information_Systems">
+                    Management Information Systems
+                  </option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Suppy_Chain_Management">
+                    Suppy Chain Management
+                  </option>
+                </optgroup>
+                <optgroup label="College of Education">
+                  <option value="Health">Health</option>
+                  <option value="Human_Development_and_Family_Studies">
+                    Human Development and Family Studies
+                  </option>
+                  <option value="Teaching_and_Learning">
+                    Teaching and Learning
+                  </option>
+                </optgroup>
+                <optgroup label="Cullen College of Engineering">
+                  <option value="Biomedical_Engineering">
+                    Biomedical Engineering
+                  </option>
+
+                  <option value="Chemical_Engineering">
+                    Chemical Engineering
+                  </option>
+
+                  <option value="Civil_Engineering">Civil Engineering</option>
+
+                  <option value="Computer_Engineering">
+                    Computer Engineering
+                  </option>
+
+                  <option value="Computer_Engineering_and_Analytics">
+                    Computer Engineering and Analytics
+                  </option>
+                  <option value="Construction_Engineering">
+                    Construction Engineering
+                  </option>
+                  <option value="Electrical_Engineering">
+                    Electrical Engineering
+                  </option>
+                  <option value="Industrial_Engineering">
+                    Industrial Engineering
+                  </option>
+                  <option value="Mechanical_Engineering">
+                    Mechanical Engineering
+                  </option>
+                  <option value="Petroleum_Engineering">
+                    Petroleum Engineering
+                  </option>
+                  <option value="Systems_Engineering">
+                    Systems Engineering
+                  </option>
+                </optgroup>
+                <optgroup label="Conrad N. Hilton College of Hotel and Restaurant Management">
+                  <option value="Hotel_and_Restaurant_Management">
+                    Hotel and Restaurant Management
+                  </option>
+                </optgroup>
+                <optgroup label="College of Liberal Arts and Social Sciences">
+                  <option value="African_American_Studies">
+                    African American Studies
+                  </option>
+                  <option value="American_Sign_Language_Interpreting">
+                    American Sign Language Interpreting
+                  </option>
+                  <option value="Anthropology">Anthropology</option>
+                  <option value="Chinese_Studies">Chinese Studies</option>
+                  <option value="Communication_Sciences_and_Disorders">
+                    Communication Sciences and Disorders
+                  </option>
+                  <option value="Communication_Studies">
+                    Communication Studies
+                  </option>
+                  <option value="Economics">Economics</option>
+                  <option value="English">English</option>
+                  <option value="Exercise_Science">Exercise Science</option>
+                  <option value="Fitness_and_Sports">Fitness and Sports</option>
+
+                  <option value="French">French</option>
+                  <option value="Health_Communication">
+                    Health Communication
+                  </option>
+                  <option value="History">History</option>
+                  <option value="Human_Nutrition_and_Foods">
+                    Human Nutrition and Foods
+                  </option>
+                  <option value="Journalism">Journalism</option>
+                  <option value="Liberal_Studies">Liberal Studies</option>
+                  <option value="Media_Production">Media Production</option>
+                  <option value="Philosophy">Philosophy</option>
+                  <option value="Political Science">Political Science</option>
+                  <option value="Psychology">Psychology</option>
+                  <option value="Religious_Studies">Religious Studies</option>
+                  <option value="Sociology">Sociology</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="Sports_Administration">
+                    Sports Administration
+                  </option>
+                  <option value="Strategic_Communication">
+                    Strategic Communication
+                  </option>
+
+                  <option value="Women’s,_Gender,_and_Sexuality_Studies">
+                    Women’s, Gender, and Sexuality Studies
+                  </option>
+                  <option value="World_Cultures_and_Literatures">
+                    World Cultures and Literatures
+                  </option>
+                </optgroup>
+                <optgroup label="College of Natural Sciences and Mathematics">
+                  <option value="Biochemical_and_Biophysical_Sciences">
+                    Biochemical and Biophysical Sciences
+                  </option>
+                  <option value="Biology">Biology</option>
+                  <option value="Chemistry">Chemistry</option>
+                  <option value="Computer_Science">Computer Science</option>
+                  <option value="Earth_Science">Earth Science</option>
+                  <option value="Environmental_Sciences">
+                    Environmental Sciences
+                  </option>
+                  <option value="Geology">Geology</option>
+                  <option value="Geophysics">Geophysics</option>
+                  <option value="Honors_Biomedical_Sciences">
+                    Honors Biomedical Sciences
+                  </option>
+                  <option value="Mathematical_Biology">
+                    Mathematical Biology
+                  </option>
+                  <option value="Mathematics">Mathematics</option>
+
+                  <option value="Physics">Physics</option>
+                </optgroup>
+                <optgroup label="College of Nursing">
+                  <option value="Pre-Nursing">Pre-Nursing</option>
+                  <option value="Nursing,_BSN_(RN-BSN)">
+                    Nursing, BSN (RN-BSN)
+                  </option>
+                  <option value="Nursing,_BSN_(Second_Degree)">
+                    Nursing, BSN (Second Degree)
+                  </option>
+                </optgroup>
+                <optgroup label="College of Technology">
+                  <option value="Biotechnology">Biotechnology</option>
+
+                  <option value="Computer_Engineering_Technology">
+                    Computer Engineering Technology
+                  </option>
+                  <option value="Computer_Information_Systems">
+                    Computer Information Systems
+                  </option>
+                  <option value="Construction_Management">
+                    Construction Management
+                  </option>
+                  <option value="Digital_Media">Digital Media</option>
+                  <option value="Electrical_Power_Engineering_Technology">
+                    Electrical Power Engineering Technology
+                  </option>
+                  <option value="Human_Resources_Development">
+                    Human Resources Development
+                  </option>
+                  <option value="Mechanical_Engineering_Technology">
+                    Mechanical Engineering Technology
+                  </option>
+                  <option value="Retailing_and_Consumer_Science">
+                    Retailing and Consumer Science{" "}
+                  </option>
+                  <option value="Supply_Chain_and_Logistics_Technology">
+                    Supply Chain and Logistics Technology
+                  </option>
+                  <option value="Technology_Leadership_and_Innovation_Management ">
+                    Technology Leadership and Innovation Management{" "}
+                  </option>
+                </optgroup>
+                <optgroup label="Pre-Professional Tracks">
+                  <option value="Pre-Dentistry">Pre-Dentistry</option>
+                  <option value="Pre-Law">Pre-Law</option>
+                  <option value="Pre-Medicine">Pre-Medicine</option>
+                  <option value="Pre-Optometry">Pre-Optometry</option>
+                  <option value="Pre-Pharmacy">Pre-Pharmacy</option>
+                  <option value="Pre-Physical_Therapy">
+                    Pre-Physical Therapy
+                  </option>
+                  <option value="Pre-Veterinary_Medicine">
+                    Pre-Veterinary Medicine
+                  </option>
+                </optgroup>
+              </select>
             </Grid>
-            <Grid
-                container
-                id="master"
-                direction="column"
-                justify="space-between"
-                spacing={2}
-                alignItems="center"
-            >
-                <Grid
-                    container
-                    id="first-left"
-                    item
-                    xs={12}
-                    spacing={4}
-                    direction="row"
-                    >
-                    <Grid item>
-                        <Typography className={classes.SearchLabels} variant="h5" >Keyword</Typography>
-                        <TextField className={classes.KeywordSearch} name="keywords" placeholder="Keyword"  type="search" variant="outlined" size="small" onKeyDown={handleChange}/>
-                    </Grid>
-                    <Grid item>
-                        <Typography className={classes.SearchLabels} variant="h5" >Major</Typography>
-                        <select className={classes.MajorSearch} defaultValue={""} name="major" onChange={(e)=>{setSearchInput({...searchInput,major:e.target.value})}}> 
-                        <option value="">Select Major</option>
-                                <optgroup label="Gerald D. Hines College of Architecture and Design">
-                                <option value="Architecture">Architecture</option>
-                                <option value="Environmental_Design">Environmental Design</option>
-                                <option value="Industrial_Design">Industrial Design</option>
-                                <option value="Interior_Architecture">Interior Architecture</option>
-                                </optgroup>
-                                <optgroup label="Kathrine G. McGovern College of the Arts">
-                                <option value="Applied_Music">Applied Music</option>
-                                <option value="Art">Art</option>
-                                <option value="Art_History">Art History</option>
-                                <option value="Dance">Dance</option>
-                                <option value="Graphic_Design">Graphic Design</option>
-                                <option value="Music">Music</option>
-                                <option value="Painting">Painting</option>
-                                <option value="Photography">Photography/Digital Media</option>
-                                <option value="Sculpture">Sculpture</option>
-                                <option value="Theatre">Theatre</option>
-                            </optgroup>
-                                <optgroup label="C. T. Bauer College of Business">
-                                <option value="Accounting">Accounting</option>
-                                <option value="Entrepreneurship">Entrepreneurship</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Management">Management</option>
-                                <option value="Management_Information_Systems">Management Information Systems</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Suppy_Chain_Management">Suppy Chain Management</option>
-                            </optgroup>
-                                <optgroup label="College of Education">
-                                    <option value="Health">Health</option>
-                                    <option value="Human_Development_and_Family_Studies">Human Development and Family Studies</option>
-                                    <option value="Teaching_and_Learning">Teaching and Learning</option>
-                                </optgroup>
-                                <optgroup label="Cullen College of Engineering">
-                                <option value="Biomedical_Engineering">Biomedical Engineering</option>
-
-                                <option value="Chemical_Engineering">Chemical Engineering</option>
-
-                                <option value="Civil_Engineering">Civil Engineering</option>
-
-                                <option value="Computer_Engineering">Computer Engineering</option>
-
-                                <option value="Computer_Engineering_and_Analytics">Computer Engineering and Analytics</option>
-                                <option value="Construction_Engineering">Construction Engineering</option>
-                                <option value="Electrical_Engineering">Electrical Engineering</option>
-                                <option value="Industrial_Engineering">Industrial Engineering</option>
-                                <option value="Mechanical_Engineering">Mechanical Engineering</option>
-                                <option value="Petroleum_Engineering">Petroleum Engineering</option>
-                                <option value="Systems_Engineering">Systems Engineering</option>
-                            </optgroup>
-                                <optgroup label="Conrad N. Hilton College of Hotel and Restaurant Management">
-
-                                <option value="Hotel_and_Restaurant_Management">Hotel and Restaurant Management</option>
-                            </optgroup>
-                                <optgroup label="College of Liberal Arts and Social Sciences">
-
-                                <option value="African_American_Studies">African American Studies</option>
-                                <option value="American_Sign_Language_Interpreting">American Sign Language Interpreting</option>
-                                <option value="Anthropology">Anthropology</option>
-                                <option value="Chinese_Studies">Chinese Studies</option>
-                                <option value="Communication_Sciences_and_Disorders">Communication Sciences and Disorders</option>
-                                <option value="Communication_Studies">Communication Studies</option>
-                                <option value="Economics">Economics</option>
-                                <option value="English">English</option>
-                                <option value="Exercise_Science">Exercise Science</option>
-                                <option value="Fitness_and_Sports">Fitness and Sports</option>
-
-                                <option value="French">French</option>
-                                <option value="Health_Communication">Health Communication</option>
-                                <option value="History">History</option>
-                                <option value="Human_Nutrition_and_Foods">Human Nutrition and Foods</option>
-                                <option value="Journalism">Journalism</option>
-                                <option value="Liberal_Studies">Liberal Studies</option>
-                                <option value="Media_Production">Media Production</option>
-                                <option value="Philosophy">Philosophy</option>
-                                <option value="Political Science">Political Science</option>
-                                <option value="Psychology">Psychology</option>
-                                <option value="Religious_Studies">Religious Studies</option>
-                                <option value="Sociology">Sociology</option>
-                                <option value="Spanish">Spanish</option>
-                                <option value="Sports_Administration">Sports Administration</option>
-                                <option value="Strategic_Communication">Strategic Communication</option>
-
-                                <option value="Women’s,_Gender,_and_Sexuality_Studies">Women’s, Gender, and Sexuality Studies</option>
-                                <option value="World_Cultures_and_Literatures">World Cultures and Literatures</option>
-                            </optgroup>
-                                <optgroup label="College of Natural Sciences and Mathematics">
-
-                                <option value="Biochemical_and_Biophysical_Sciences">Biochemical and Biophysical Sciences</option>
-                                <option value="Biology">Biology</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Computer_Science">Computer Science</option>
-                                <option value="Earth_Science">Earth Science</option>
-                                <option value="Environmental_Sciences">Environmental Sciences</option>
-                                <option value="Geology">Geology</option>
-                                <option value="Geophysics">Geophysics</option>
-                                <option value="Honors_Biomedical_Sciences">Honors Biomedical Sciences</option>
-                                <option value="Mathematical_Biology">Mathematical Biology</option>
-                                <option value="Mathematics">Mathematics</option>
-
-                                <option value="Physics">Physics</option>
-                            </optgroup>
-                                <optgroup label="College of Nursing">
-
-                                <option value="Pre-Nursing">Pre-Nursing</option>
-                                <option value="Nursing,_BSN_(RN-BSN)">Nursing, BSN (RN-BSN)</option>
-                                <option value="Nursing,_BSN_(Second_Degree)">Nursing, BSN (Second Degree)</option>
-                            </optgroup>
-                                <optgroup label="College of Technology">
-
-                                <option value="Biotechnology">Biotechnology</option>
-                            
-                                <option value="Computer_Engineering_Technology">Computer Engineering Technology</option>
-                                <option value="Computer_Information_Systems">Computer Information Systems</option>
-                                <option value="Construction_Management">Construction Management</option>
-                                <option value="Digital_Media">Digital Media</option>
-                                <option value="Electrical_Power_Engineering_Technology">Electrical Power Engineering Technology</option>
-                                <option value="Human_Resources_Development">Human Resources Development</option>
-                                <option value="Mechanical_Engineering_Technology">Mechanical Engineering Technology</option>
-                                <option value="Retailing_and_Consumer_Science">Retailing and Consumer Science </option>
-                                <option value="Supply_Chain_and_Logistics_Technology">Supply Chain and Logistics Technology</option>
-                                <option value="Technology_Leadership_and_Innovation_Management ">Technology Leadership and Innovation Management </option>
-                            </optgroup>
-                                <optgroup label="Pre-Professional Tracks">
-                            
-                                    <option value="Pre-Dentistry">Pre-Dentistry</option>
-                                    <option value="Pre-Law">Pre-Law</option>
-                                    <option value="Pre-Medicine">Pre-Medicine</option>
-                                    <option value="Pre-Optometry">Pre-Optometry</option>
-                                    <option value="Pre-Pharmacy">Pre-Pharmacy</option>
-                                    <option value="Pre-Physical_Therapy">Pre-Physical Therapy</option>
-                                    <option value="Pre-Veterinary_Medicine">Pre-Veterinary Medicine</option>
-                            </optgroup>
-                        </select>
-                    </Grid>
-                    <Grid item>
-                        <Typography className={classes.SearchLabels} variant="h5" >Degree Type</Typography>
-                        <select defaultValue={""} name="degree_level" onChange={(e)=>{setSearchInput({...searchInput,degree_level:e.target.value})}} className={classes.DegreeSearch}>
-                            <option value="">Select Degree type</option>
-                            <option value="Undergraduate">Undergraduate</option>
-                            <option value="Graduate">Graduate</option>
-                        </select>
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    id="first-left"
-                    item
-                    xs={12}
-                    spacing={4}
-                    direction="row"
-                    >
-                    <Grid item>
-                        <Typography className={classes.SearchLabels} variant="h5" >Skills</Typography>
-                        <Select
-                            AutoSize={true}
-                            closeMenuOnSelect={true}
-                            components={animatedComponents}
-                            isMulti
-                            isSearchable
-                            className={classes.SkillSearch}
-                            onChange={(e) => {
-                                e = e ? e : [];
-                                var skillsSeparatedByCommas = Array.prototype.map.call(e, s => s.label).toString(); 
-                                setSearchInput({ ...searchInput, student_skills: skillsSeparatedByCommas.split(",")})
-                                }}
-                            options={skills}
-                            styles={customStyles}                    
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Typography className={classes.SearchLabels} variant="h5" >Zipcode</Typography>
-                        <TextField inputProps={{ maxLength: 5 }} className={classes.zipCode} name="zipCode" placeholder="zipcode"  type="string" variant="outlined" size="small" onChange={(e)=>{setSearchInput({...searchInput,zipcode:e.target.value})}}></TextField>
-                    </Grid>
-                    <Grid item>
-                        <Button className={classes.SearchButton} variant="contained" onClick={handleClick}>Search</Button>
-                    </Grid>
-                </Grid>
+            <Grid item>
+              <Typography className={classes.SearchLabels} variant="h5">
+                Degree Type
+              </Typography>
+              <select
+                defaultValue={""}
+                name="degree_level"
+                onChange={(e) => {
+                  setSearchInput({
+                    ...searchInput,
+                    degree_level: e.target.value,
+                  });
+                }}
+                className={classes.DegreeSearch}>
+                <option value="">Select Degree type</option>
+                <option value="Undergraduate">Undergraduate</option>
+                <option value="Graduate">Graduate</option>
+              </select>
             </Grid>
-        </div>
-        <div>
-            <Grid>
-                <StudentsLists loading={loading} studentsList={studentsList}/>
+            <Grid item>
+              <Typography className={classes.SearchLabels} variant="h5">
+                Skills
+              </Typography>
+              <Select
+                AutoSize={true}
+                closeMenuOnSelect={true}
+                components={animatedComponents}
+                isMulti
+                isSearchable
+                className={classes.SkillSearch}
+                onChange={(e) => {
+                  e = e ? e : [];
+                  var skillsSeparatedByCommas = Array.prototype.map
+                    .call(e, (s) => s.label)
+                    .toString();
+                  setSearchInput({
+                    ...searchInput,
+                    student_skills: skillsSeparatedByCommas.split(","),
+                  });
+                }}
+                options={skills}
+                styles={customStyles}
+              />
             </Grid>
-        </div>
+            <Grid item>
+              <Typography className={classes.SearchLabels} variant="h5">
+                Zipcode
+              </Typography>
+              <TextField
+                inputProps={{ maxLength: 5 }}
+                className={classes.zipCode}
+                name="zipCode"
+                placeholder="zipcode"
+                type="string"
+                variant="outlined"
+                size="small"
+                onChange={(e) => {
+                  setSearchInput({ ...searchInput, zipcode: e.target.value });
+                }}></TextField>
+              <Button
+                className={classes.SearchButton}
+                variant="contained"
+                onClick={handleClick}>
+                Search
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
-      )
-    };
+      <div>
+        <Grid>
+          <StudentsLists loading={loading} studentsList={studentsList} />
+        </Grid>
+      </div>
+    </div>
+  );
+}

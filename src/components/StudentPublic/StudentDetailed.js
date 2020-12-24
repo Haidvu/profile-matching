@@ -1,26 +1,151 @@
 import React, { useEffect, useState } from "react";
 import {
+  TextField,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  Divider,
+  ListItemIcon,
+  IconButton,
+  Button,
   Typography,
+  Input,
+  FormControl,
+  MenuItem,
   Grid,
   Chip,
-  CircularProgress,
-  Card,
-  CardMedia,
-  GridList,
-  Paper,
-  Tooltip,
-  IconButton,
-  ModalManager,
+  Select,
+  FormHelperText,
+  ListItemText,
+  LinearProgress,
 } from "@material-ui/core";
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+import clsx from "clsx";
+import WebRoundedIcon from "@material-ui/icons/WebRounded";
+import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
+import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
+import StarsIcon from "@material-ui/icons/Stars";
+import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
+import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
+import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import IconPython from "react-devicon/python/original";
 import profileImage from "../../assets/StudentImagePlaceholder.png";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import SaveStudentModal from "./SaveStudentModal";
+import PersonIcon from "@material-ui/icons/Person";
 
 const useStyles = makeStyles((theme) => ({
+  dialogInput: {
+    paddingBottom: theme.spacing(2),
+  },
+  loginAlert: {
+    marginBottom: theme.spacing(2),
+  },
+  inline: {
+    display: "inline",
+  },
+  dialogConfirm: {
+    marginBottom: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  profileLogo: {
+    backgroundRepeat: "no-repeat",
+    position: "relative",
+    objectPosition: "20% 30%",
+    width: "100vw",
+    height: "15vw",
+    maxWidth: "100%",
+    zIndex: 1,
+    objectFit: "cover",
+  },
+  root: {
+    width: "100%",
+    backgroundColor: theme.palette.background.paper,
+  },
+  skills: {
+    position: "relative",
+    border: "1px solid #A6A6A6",
+    borderRadius: "50%",
+    color: "#5B5B5B",
+    padding: "1%",
+    width: "20px",
+  },
+  skillsContainer: {
+    "& > *": {
+      marginRight: theme.spacing(1),
+    },
+  },
+  sectionHeader: {
+    fontWeight: "bold",
+    color: "#606060",
+  },
+  sectionContent: {
+    color: "#5B5B5B",
+    display: "inline",
+  },
+  select: {
+    width: "30vh",
+    fontSize: "small",
+  },
+  myProjects: {
+    fontWeight: "bold",
+    color: "#606060",
+    padding: "0 auto",
+  },
+  flexColumn: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  flexRow: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  skillRoot: {
+    display: "flex",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    listStyle: "none",
+    padding: theme.spacing(0.5),
+    margin: 0,
+    "& > * ": {
+      margin: theme.spacing(0.5),
+    },
+  },
+  beginnerChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.text.primary,
+  },
+  intermediateChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.warning.main,
+    borderColor: theme.palette.warning.main,
+  },
+  expertChip: {
+    margin: theme.spacing(0.5),
+    color: theme.palette.success.main,
+    borderColor: theme.palette.success.main,
+  },
+  beginnerDeleteIcon: {
+    fill: theme.palette.text.main,
+  },
+  intermediateDeleteIcon: {
+    fill: theme.palette.warning.main,
+  },
+  expertDeleteIcon: {
+    fill: theme.palette.success.main,
+  },
   right: {
     position: "static",
   },
@@ -70,8 +195,8 @@ const useStyles = makeStyles((theme) => ({
   starIcon: {
     float: "right",
   },
-  projectContainer: {
-    marginBottom: theme.spacing(5),
+  projectsContainer: {
+    marginLeft: theme.spacing(0),
   },
   projectTitle: {
     textTransform: "uppercase",
@@ -132,84 +257,196 @@ const StudentDetailed = ({ match }) => {
   return (
     <>
       {loading ? (
-        <CircularProgress />
+        <LinearProgress color="secondary" />
       ) : (
-        <Grid container spacing={2} direction="column" className={classes.root}>
-          <Grid container direction="row" spacing={1} alignItems="center">
-            <Grid item>
-              <img className={classes.profileImage} src={profileImage} />
-            </Grid>
-            <Grid item container direction="column" spacing={1} xs={3}>
-              <Grid item>
-                <Typography className={classes.name}>
-                  {student.full_name}
+        <>
+          <List className={classes.root}>
+            <ListItem>
+              <ListItemIcon edge="start">
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText>
+                <div
+                  className={classes.flexRow}
+                  style={{ justifyContent: "space-between" }}>
+                  <div className={classes.flexColumn}>
+                    <Typography className={classes.sectionHeader}>
+                      Name
+                    </Typography>
+                    <Typography className={classes.sectionContent}>
+                      {student.full_name}
+                    </Typography>
+                  </div>
+                  <IconButton onClick={openSaveStudent}>
+                    <StarBorderIcon fontSize="large" />
+                  </IconButton>
+                </div>
+              </ListItemText>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem>
+              <ListItemIcon edge="start">
+                <FormatListBulletedTwoToneIcon />
+              </ListItemIcon>
+              <ListItemText>
+                <div
+                  className={classes.flexRow}
+                  style={{ justifyContent: "space-between" }}>
+                  <div className={classes.flexColumn}>
+                    <Typography className={classes.sectionHeader}>
+                      Bio
+                    </Typography>
+                    <Typography className={classes.sectionContent}>
+                      {student.student_description}
+                    </Typography>
+                  </div>
+                </div>
+              </ListItemText>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem alignItems="flex-start">
+              <ListItemIcon>
+                <SchoolRoundedIcon />
+              </ListItemIcon>
+              <div className={classes.flexColumn}>
+                <Typography className={classes.sectionHeader}>
+                  Academic
                 </Typography>
-              </Grid>
-              <Grid item>
-                <Typography className={classes.degree}>
-                  {`${student.degree} - ${student.major}`}
+                <Typography
+                  className={
+                    classes.sectionContent
+                  }>{`Graduation Date: ${student.graduation_date}`}</Typography>
+                <Typography
+                  className={
+                    classes.sectionContent
+                  }>{`Degree: ${student.degree}`}</Typography>
+                <Typography className={classes.sectionContent}>
+                  {" "}
+                  {`Major: ${student.major}`}
                 </Typography>
-              </Grid>
-            </Grid>
-            <Grid className={classes.starIcon}>
-              <Tooltip title="Save Student to Project">
-                <IconButton onClick={openSaveStudent}>
-                  <StarBorderIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>
-              Description
-            </Typography>
-            <Typography>{student.student_description}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>Skills</Typography>
-            <div className={classes.skillsContainer}>
-              {student.student_skills.map((skill, index) => (
-                <Chip
-                  key={index}
-                  label={skill.skill_name}
-                  color="primary"
-                  size="small"
-                  variant="outlined"
-                />
-              ))}
-            </div>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.capsLightLabel}>Projects</Typography>
-            {studentProjects.map((project) => (
-              <Grid
-                item
-                container
-                key={project.project_id}
-                direction="column"
-                className={classes.projectContainer}>
-                <Grid item container column="row">
-                  <Grid item xs={9}>
-                    <Typography className={classes.projectTitle}>
-                      {project.project_name}
+              </div>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem alignItems="flex-start">
+              <ListItemIcon>
+                <StarsIcon />
+              </ListItemIcon>
+              <div className={classes.flexColumn}>
+                <Typography className={classes.sectionHeader}>
+                  Skills
+                </Typography>
+                <ul className={classes.skillRoot}>
+                  {student.student_skills.map((skill) => {
+                    return (
+                      <li key={skill.skill_name}>
+                        <Chip
+                          variant="outlined"
+                          classes={
+                            skill.experience_level === 1
+                              ? {
+                                  root: classes.beginnerChip,
+                                }
+                              : skill.experience_level === 2
+                              ? {
+                                  root: classes.intermediateChip,
+                                }
+                              : {
+                                  root: classes.expertChip,
+                                }
+                          }
+                          label={skill.skill_name}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            {studentProjects.length > 0 ? (
+              <ListItem alignItems="flex-start">
+                <Grid container>
+                  <Grid item>
+                    <ListItemIcon>
+                      <HorizontalSplitIcon />
+                    </ListItemIcon>
+                  </Grid>
+                  <Grid item>
+                    <Typography className={classes.sectionHeader}>
+                      My Projects
                     </Typography>
                   </Grid>
-                  <Grid item xs={3}>
-                    <Typography
-                      className={
-                        classes.projectDetails
-                      }>{`${project.project_start_date} - ${project.project_end_date}`}</Typography>
+                  <Grid item xs={12}>
+                    <VerticalTimeline
+                      layout={"1-column-left"}
+                      className={classes.projectsContainer}>
+                      {studentProjects.map((project, index) => (
+                        <VerticalTimelineElement
+                          className={classes.IconStyle}
+                          iconStyle={{ background: "#C8102E", color: "#fff" }}
+                          contentArrowStyle={{
+                            borderRight: "7px solid #C8102E",
+                          }}
+                          key={index}
+                          icon={<WebRoundedIcon />}>
+                          <h3 className={classes.verticalElementTitle}>
+                            "{project.project_name}"
+                          </h3>
+                          <h4 className={classes.verticalElementSubtitle}>
+                            {project.project_role}
+                          </h4>
+                          {project.project_tech
+                            .split(",")
+                            .map((skill, index) => (
+                              <Chip
+                                label={skill}
+                                variant="outlined"
+                                classes={
+                                  skill.experience_level === 1
+                                    ? {
+                                        root: classes.beginnerChip,
+                                      }
+                                    : skill.experience_level === 2
+                                    ? {
+                                        root: classes.intermediateChip,
+                                      }
+                                    : {
+                                        root: classes.expertChip,
+                                      }
+                                }
+                                key={index}
+                              />
+                            ))}
+
+                          <p>
+                            {project.project_description} {project.student_id}
+                          </p>
+                          <div className={clsx(classes.column, classes.helper)}>
+                            <Typography variant="caption">
+                              View source link
+                              <br />
+                              <a
+                                href={`${project.project_link}`}
+                                className={classes.link}>
+                                {project.project_link}
+                              </a>
+                            </Typography>
+                          </div>
+                          <div>
+                            <h5>
+                              Date: {project.project_start_date} -{" "}
+                              {project.project_end_date}
+                            </h5>
+                          </div>
+                        </VerticalTimelineElement>
+                      ))}
+                    </VerticalTimeline>
                   </Grid>
                 </Grid>
-                <Grid item>
-                  <Typography className={classes.projectDetails}>
-                    {project.project_description}
-                  </Typography>
-                </Grid>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
+              </ListItem>
+            ) : null}
+          </List>
+        </>
       )}
       {modal ? <SaveStudentModal modal={modal} setModal={setModal} /> : null}
     </>
