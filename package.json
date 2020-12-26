@@ -11,12 +11,14 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
+    "deck.gl": "^8.3.11",
     "formik": "^2.2.0",
     "react": "^16.13.1",
     "react-date-picker": "^8.0.3",
     "react-devicon": "^0.1.9",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.11.3",
+    "react-map-gl": "^6.0.2",
     "react-phone-number-input": "^3.1.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
@@ -44,5 +46,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

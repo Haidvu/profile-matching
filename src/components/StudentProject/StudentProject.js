@@ -208,6 +208,7 @@ function StudentProject({ projects, setProjects, skills }) {
   };
 
   const handleSave = (id) => {
+    if(validate()){
     var project_id = id;
     axios
       .put(
@@ -247,6 +248,7 @@ function StudentProject({ projects, setProjects, skills }) {
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   return (

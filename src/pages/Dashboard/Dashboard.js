@@ -103,12 +103,15 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (slug && role_id !== "2") {
-      const url =
-        role_id === "0"
-          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
-          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
-
+    if (slug) {
+      let url;
+      if (role_id === "0"){
+        url= `http://18.213.74.196:8000/api/student_profile/${slug}`;
+      }else if(role_id === "1"){
+        url=`http://18.213.74.196:8000/api/company_profile/${slug}`;
+      }else if(role_id === "2"){
+        url= `http://18.213.74.196:8000/api/website_admin_profile/1`;
+      }
       axios
         .get(url, getConfig())
         .then((res) => {
@@ -123,9 +126,7 @@ export default function Dashboard() {
           //   logout();
           // }
         });
-    } else if (role_id === "2") {
-      setLoading(false);
-    }
+    } 
   }, []);
 
   const userOptions = () => {
@@ -144,7 +145,7 @@ export default function Dashboard() {
         };
       case "2":
         return {
-          name: "Admin",
+          name: data.profile.admin_first_name ? data.profile.admin_last_name : null,
           menu: <AdminMenu/>,
           routes: <AdminRoutes/>,
         };
