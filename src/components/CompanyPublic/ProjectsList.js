@@ -149,7 +149,7 @@ const ProjectsList = ({ loading, projects }) => {
                   </Typography>
 
                   <div className={classes.skillsRoot}>
-                    {project.project_tech != "" ? (
+                    {project.project_tech !== "" ? (
                       project.project_tech.split(",").map((skill, index) => (
                         <Chip
                           key={index}
