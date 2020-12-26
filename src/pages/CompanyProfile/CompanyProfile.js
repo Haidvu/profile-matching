@@ -200,6 +200,7 @@ export default function CompanyProfile() {
     streetAddress: null,
     city: null,
     state: null,
+    zip:null,
     streetAddress2: null,
     city2: null,
     state2: null,
@@ -266,6 +267,7 @@ export default function CompanyProfile() {
           streetAddress: getStreetAddress(res.data.company_address),
           city: getCity(res.data.company_address),
           state: getState(res.data.company_address),
+          zip:res.data.company_zip,
           streetAddress2: getStreetAddress(res.data.mailing_address),
           city2: getCity(res.data.mailing_address),
           state2: getState(res.data.mailing_address),
@@ -306,6 +308,7 @@ export default function CompanyProfile() {
       companyRep: profile.representative_name,
       industryType: profile.industry_type,
       phoneNumber: profile.company_phone_no,
+      zip: profile.company_zip,
       streetAddress: getStreetAddress(profile.company_address),
       city: getCity(profile.company_address),
       state: getState(profile.company_address),
@@ -344,6 +347,7 @@ export default function CompanyProfile() {
     company_address: "",
     mailing_address: "",
     company_mission: "",
+    company_zip:"",
     company_description: "",
     company_contact_email: ""
   });
@@ -376,6 +380,7 @@ export default function CompanyProfile() {
               company_type: profileInfo.companyType,
               company_address: getCompanyAddress(),
               mailing_address: getMailingAddress(),
+              company_zip: profileInfo.zip,
               company_website: profileInfo.companyWebsite,
               company_mission: profileInfo.companyMission,
               company_description: profileInfo.companyDescription,
@@ -876,7 +881,7 @@ export default function CompanyProfile() {
                           className={classes.inline}
                           color="textPrimary"
                         >
-                          {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}`}
+                          {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}, ${profileInfo.zip}`}
                         </Typography>
                       </React.Fragment>
                     }
@@ -931,6 +936,21 @@ export default function CompanyProfile() {
                             </MenuItem>
                           ))}
                         </Select>
+                      </Grid>
+                      <Grid item>
+                        <Typography>Zipcode</Typography>
+                        <TextField
+                          className={classes.fullWidth}
+                          value={profileInfo.zip}
+                          onChange={handleChange}
+                          inputProps={{ maxLength: 5 }}
+                          name="zip"
+                        ></TextField>
+                        {profileInfo.zip === "" ? (
+                          <Typography color="error">
+                            {updateErrors.company_zip}
+                          </Typography>
+                        ) : null}
                       </Grid>
                     </Grid>
                   </>

@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  TextField,
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
   List,
   ListItem,
-  ListItemSecondaryAction,
   Divider,
   ListItemIcon,
   IconButton,
-  Button,
   Typography,
-  Input,
-  FormControl,
-  MenuItem,
   Grid,
   Chip,
-  Select,
-  FormHelperText,
   ListItemText,
   LinearProgress,
 } from "@material-ui/core";
@@ -33,14 +20,10 @@ import WebRoundedIcon from "@material-ui/icons/WebRounded";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
 import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
 import StarsIcon from "@material-ui/icons/Stars";
-import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-import ClearRoundedIcon from "@material-ui/icons/ClearRounded";
-import CheckRoundedIcon from "@material-ui/icons/CheckRounded";
 import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import profileImage from "../../assets/StudentImagePlaceholder.png";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import SaveStudentModal from "./SaveStudentModal";
 import PersonIcon from "@material-ui/icons/Person";
@@ -72,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(5),
   },
   skills: {
     position: "relative",
@@ -149,9 +133,6 @@ const useStyles = makeStyles((theme) => ({
   right: {
     position: "static",
   },
-  root: {
-    padding: theme.spacing(5),
-  },
   skillsRoot: {
     display: "flex",
     padding: theme.spacing(0.5),
@@ -178,11 +159,6 @@ const useStyles = makeStyles((theme) => ({
   degree: {
     textAlign: "left",
     fontSize: "small",
-  },
-  skillsContainer: {
-    "& > *": {
-      marginRight: theme.spacing(1),
-    },
   },
   capsLightLabel: {
     textTransform: "uppercase",

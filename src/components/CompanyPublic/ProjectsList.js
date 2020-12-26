@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   gridRoot: {
     margin: theme.spacing(2),
+    backgroundColor: "white",
   },
   card: {
     width: "280px",
@@ -93,9 +94,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentsList = ({ loading, studentsList }) => {
+const ProjectsList = ({ loading, projects }) => {
   let { url } = useRouteMatch();
   const classes = useStyles();
+  console.log(loading, projects);
 
   return (
     <>
@@ -106,8 +108,8 @@ const StudentsList = ({ loading, studentsList }) => {
         ></LinearProgress>
       ) : (
         <Grid container spacing={4} className={classes.gridRoot}>
-          {studentsList.map((student) => (
-            <Grid item key={student.username_id}>
+          {projects.map((project) => (
+            <Grid item key={project.project_id}>
               <Card className={classes.card}>
                 <CardHeader
                   classes={{
@@ -116,25 +118,24 @@ const StudentsList = ({ loading, studentsList }) => {
                     subheader: classes.subheader,
                   }}
                   avatar={<Avatar className={classes.avatar}></Avatar>}
-                  title={student.full_name}
-                  subheader={`${student.degree} - ${student.major}`}
+                  title={project.project_name}
                 ></CardHeader>
                 <CardContent className={classes.cardContent}>
                   <Typography className={classes.fieldTitle}>
-                    Graduation Date
+                    Project Deadline
                   </Typography>
                   <Typography className={classes.fieldValue}>
-                    {student.graduation_date}
+                    {project.project_deadline}
                   </Typography>
                 </CardContent>
                 <CardContent
                   className={`${classes.cardContent} ${classes.noPaddingTop}`}
                 >
                   <Typography className={classes.fieldTitle}>
-                    Description
+                    Project Type
                   </Typography>
                   <Typography className={classes.fieldValue}>
-                    {student.student_description}
+                    {project.project_type ? project.project_type : "none"}
                   </Typography>
                 </CardContent>
                 <CardContent
@@ -144,13 +145,27 @@ const StudentsList = ({ loading, studentsList }) => {
                     variant="subtitle2"
                     className={classes.fieldTitle}
                   >
-                    Skills
+                    Project Tech
                   </Typography>
+
                   <div className={classes.skillsRoot}>
-                    {student.student_skills.map((skill, index) => (
+                    {project.project_tech !== "" ? (
+                      project.project_tech.split(",").map((skill, index) => (
+                        <Chip
+                          key={index}
+                          label={skill}
+                          classes={{
+                            root: classes.chip,
+                            label: classes.chipLabel,
+                          }}
+                          color="primary"
+                          size="small"
+                          variant="outlined"
+                        />
+                      ))
+                    ) : (
                       <Chip
-                        key={index}
-                        label={skill.skill_name}
+                        label={"none"}
                         classes={{
                           root: classes.chip,
                           label: classes.chipLabel,
@@ -159,13 +174,13 @@ const StudentsList = ({ loading, studentsList }) => {
                         size="small"
                         variant="outlined"
                       />
-                    ))}
+                    )}
                   </div>
                 </CardContent>
                 <Divider></Divider>
                 <CardContent>
                   <Link
-                    href={`${url}/${student.username_id}`}
+                    href={`${url}/${project.project_id}`}
                     style={{ textDecoration: "none" }}
                   >
                     <Button
@@ -174,7 +189,7 @@ const StudentsList = ({ loading, studentsList }) => {
                       variant="contained"
                       className={classes.button}
                     >
-                      View Profile
+                      View Details
                     </Button>
                   </Link>
                 </CardContent>
@@ -187,4 +202,4 @@ const StudentsList = ({ loading, studentsList }) => {
   );
 };
 
-export default StudentsList;
+export default ProjectsList;

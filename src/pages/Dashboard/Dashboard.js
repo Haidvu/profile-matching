@@ -14,9 +14,9 @@ import {
   ListItemText,
   Divider,
   IconButton,
-  Hidden 
+  Hidden,
 } from "@material-ui/core";
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
 import StudentRoutes from "./StudentRoutes";
@@ -24,6 +24,8 @@ import StudentMenu from "./StudentMenu";
 import CompanyRoutes from "./CompanyRoutes";
 import CompanyMenu from "./CompanyMenu";
 import axios from "axios";
+import AdminRoutes from "./AdminRoutes";
+import AdminMenu from "./AdminMenu";
 import { useHistory } from "react-router-dom";
 import { getConfig } from "../../authConfig";
 
@@ -34,20 +36,20 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
     },
   },
 
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       marginLeft: drawerWidth,
     },
     background: "rgba(200,16,46,1)",
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -80,10 +82,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const { data, dispatch } = useContext(DataContext);
   const classes = useStyles();
-  const slug = localStorage.getItem("slug");
-  const role_id = localStorage.getItem("role_id");
   let history = useHistory();
   const [loading, setLoading] = useState(true);
+
+  const slug = localStorage.getItem("slug");
+  const role_id = localStorage.getItem("role_id");
 
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -101,11 +104,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (slug) {
-      const url =
-        role_id === "0"
-          ? `http://18.213.74.196:8000/api/student_profile/${slug}`
-          : `http://18.213.74.196:8000/api/company_profile/${slug}`;
-
+      let url;
+      if (role_id === "0"){
+        url= `http://18.213.74.196:8000/api/student_profile/${slug}`;
+      }else if(role_id === "1"){
+        url=`http://18.213.74.196:8000/api/company_profile/${slug}`;
+      }else if(role_id === "2"){
+        url= `http://18.213.74.196:8000/api/website_admin_profile/1`;
+      }
       axios
         .get(url, getConfig())
         .then((res) => {
@@ -120,7 +126,7 @@ export default function Dashboard() {
           //   logout();
           // }
         });
-    }
+    } 
   }, []);
 
   const userOptions = () => {
@@ -137,6 +143,13 @@ export default function Dashboard() {
           menu: <CompanyMenu />,
           routes: <CompanyRoutes />,
         };
+      case "2":
+        return {
+          name: data.profile.admin_first_name ? data.profile.admin_last_name : null,
+          menu: <AdminMenu/>,
+          routes: <AdminRoutes/>,
+        };
+
       default: {
         logout();
         return null;
@@ -177,7 +190,7 @@ export default function Dashboard() {
             <Hidden smUp implementation="css">
               <Drawer
                 variant="temporary"
-                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                anchor={theme.direction === "rtl" ? "right" : "left"}
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 classes={{
@@ -190,20 +203,20 @@ export default function Dashboard() {
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>
-                      {userOptions() ? userOptions().menu : null}
-                      <Link to="/login" className={classes.link}>
-                        <ListItem onClick={logout}>
-                          <ListItemIcon>
-                            <ExitToAppRoundedIcon />
-                          </ListItemIcon>
-                          <ListItemText primary="Logout" />
-                        </ListItem>
-                      </Link>
+                    {userOptions() ? userOptions().menu : null}
+                    <Link to="/login" className={classes.link}>
+                      <ListItem onClick={logout}>
+                        <ListItemIcon>
+                          <ExitToAppRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                      </ListItem>
+                    </Link>
                   </List>
                 </div>
                 <Divider />
-                </Drawer>
-              </Hidden>
+              </Drawer>
+            </Hidden>
             <Hidden xsDown implementation="css">
               <Drawer
                 classes={{
