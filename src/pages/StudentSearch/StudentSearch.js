@@ -4,11 +4,13 @@ import makeAnimated from "react-select/animated";
 import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import ProjectsList from "../../components/CompanyPublic/ProjectsList";
+
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
+
+import ProjectsList from "../../components/CompanyPublic/ProjectsList";
 
 const useStyles = makeStyles((theme) => ({
   searchBackground: {
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     borderRadius: "10px",
     // objectFit:"contain",
-    width: "90%",
+    width: "85%",
     display: "flex-start",
     justifyContent: "center",
     margin: 10,
@@ -48,6 +50,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex-start",
     justifyContent: "center",
     margin: 10,
+    color: "#b0102a",
+    background: "white",
   },
   rootAccordion: {
     width: "100%",
@@ -70,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   SearchLabels: {
     fontFamily: "sans-serif",
     color: "white",
-    display: "center",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
     margin: 0,
@@ -78,8 +82,9 @@ const useStyles = makeStyles((theme) => ({
   searchSelect: {
     objectFit: "contain",
     borderRadius: "10px",
-    width: 200,
-    margin: theme.spacing(1.5),
+    width: 150,
+    margin: theme.spacing(1.0),
+    justifyContent: "center",
   },
   filterButton: {
     display: "flex-start",
@@ -87,6 +92,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 25,
     background: "rgba(200,16,46,1)",
     color: "white",
+    "&:hover, &.Mui-focusVisible": {
+      transition: "0.3s",
+      color: "white",
+      backgroundColor: "#b0102a",
+    },
+  },
+  ASGrid: {
+    display: "flex",
+    justifyContent: "center",
   },
 }));
 
@@ -204,33 +218,32 @@ export const StudentSearch = () => {
   //   company_name: null,
   //   industry_type: null,
   //   project_name: null,
-  //   project_type: [],
-  //   project_tech: [],
-  //   keywords: [],
-  // });
+  //   project_type:[],
+  //   project_tech:[],
+  //   keywords: []
+  // })
 
-  // const handleClick = () => {
+  // const handleClick = () =>{
   //   console.log(searchInput);
-  // };
+  // }
 
-  // const handleChange = (e) => {
-  //   if (e.key === "Enter") {
-  //     setSearchInput({
-  //       ...searchInput,
-  //       keywords: [...searchInput.keywords, e.target.value],
-  //     });
+  // const handleChange = (e) =>{
+  //   if (e.key === 'Enter') {
+  //       setSearchInput({...searchInput,
+  //           keywords:[...searchInput.keywords, e.target.value]});
   //   }
-  // };
+  // }
 
   const classes = useStyles();
   //this is the animated component for the react-select library
   const animatedComponents = makeAnimated();
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   const [loading, setLoading] = useState(false);
 
   return (
@@ -321,11 +334,12 @@ export const StudentSearch = () => {
                       xs={12}
                       spacing={4}
                       direction="row"
+                      className={classes.ASGrid}
                     >
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h5"
+                          variant="h6"
                         >
                           Company Name
                         </Typography>
@@ -348,7 +362,7 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h5"
+                          variant="h6"
                         >
                           Industry Type
                         </Typography>
@@ -371,7 +385,7 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h5"
+                          variant="h6"
                         >
                           Project Name
                         </Typography>
@@ -394,7 +408,7 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h5"
+                          variant="h6"
                         >
                           Project Type
                         </Typography>
@@ -417,7 +431,7 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h5"
+                          variant="h6"
                         >
                           Project Tech
                         </Typography>
