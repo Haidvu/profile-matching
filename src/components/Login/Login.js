@@ -71,6 +71,7 @@ function Login() {
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
+        console.log(res);
         if (res.data.slug) {
           localStorage.setItem("slug", res.data.slug);
           history.push("/dashboard");
@@ -105,8 +106,7 @@ function Login() {
               <Alert
                 className={classes.loginAlert}
                 variant="filled"
-                severity="error"
-              >
+                severity="error">
                 {error}
               </Alert>
             ) : null}
@@ -147,8 +147,7 @@ function Login() {
                 fullWidth
                 variant="contained"
                 color="secondary"
-                className={classes.submit}
-              >
+                className={classes.submit}>
                 Sign In
               </Button>
               <Grid container>

@@ -201,6 +201,10 @@ const useStyles = makeStyles((theme) => ({
   projectTitle: {
     textTransform: "uppercase",
   },
+  link: {
+    textDecoration: "none",
+    color: theme.palette.text.primary,
+  },
 }));
 
 const StudentDetailed = ({ match }) => {
@@ -390,11 +394,11 @@ const StudentDetailed = ({ match }) => {
                           key={index}
                           icon={<WebRoundedIcon />}>
                           <h3 className={classes.verticalElementTitle}>
-                            "{project.project_name}"
+                            {project.project_name}
                           </h3>
-                          <h4 className={classes.verticalElementSubtitle}>
+                          <h5 className={classes.verticalElementSubtitle}>
                             {project.project_role}
-                          </h4>
+                          </h5>
                           {project.project_tech
                             .split(",")
                             .map((skill, index) => (
