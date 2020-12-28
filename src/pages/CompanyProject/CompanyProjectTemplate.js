@@ -284,29 +284,11 @@ export default function CompanyProject({ match }) {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [updateFailed, setUpdateFailed] = useState(false);
 
-
   // Initial Info
   const [companyInfo, setCompanyInfo] = useState({});
 
   // Skills Array
   const [skills, setSkills] = useState({});
-
-  // Making sure that the skills the project has don't show in the skill list. TODO
- /* const dataSkill = []
-if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0 ){
-  for(var i = 0; i < skills.length; i++){
-    let isPartOfTheList = false;
-    for(var j = 0; j < companyInfo.project_tech.length; j++){
-      if(skills[i].label===companyInfo.project_tech[j].label){
-        isPartOfTheList=true;
-        break;
-      }
-    }
-    if(!isPartOfTheList){
-      dataSkill.push(skills[i])
-    }
-  }
-}*/
 
   const [companyEdit, showCompanyEdit] = useState({ 
     project_description: false,
@@ -721,15 +703,21 @@ if(Object.entries(skills).length !==0 && Object.entries(companyInfo).length !==0
                             components={animatedComponents}
                             isMulti
                             isSearchable
-                            value={companyInput.project_tech}
+
+                            // If filtering by object, the default value has to be the same object as the options, not a copy
+                              value={skills.filter(el => {
+                            return companyInput.project_tech.some(f => {
+                              return f.label === el.label
+                            })
+                          })}
+
                             options={skills}
                             onChange={(e) => {
 
                               e = e ? e : [];
 
-                              companyInput.project_tech.push(e)
-
                               setCompanyInput({ ...companyInput, project_tech: e })
+
                             }}
                           />
                         )}
