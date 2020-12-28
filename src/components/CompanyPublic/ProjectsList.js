@@ -99,6 +99,10 @@ const ProjectsList = ({ loading, projects }) => {
   const classes = useStyles();
   console.log(loading, projects);
 
+  const handleProjectSelect = (projectId) => {
+    console.log(projectId);
+  };
+
   return (
     <>
       {loading ? (
@@ -192,6 +196,20 @@ const ProjectsList = ({ loading, projects }) => {
                       className={classes.button}
                     >
                       View Details
+                    </Button>
+                  </Link>
+                </CardContent>
+                <Divider></Divider>
+                <CardContent>
+                  <Link style={{ textDecoration: "none" }}>
+                    <Button
+                      color="secondary"
+                      size="small"
+                      variant="contained"
+                      className={classes.button}
+                      onClick={() => handleProjectSelect(project.project_id)}
+                    >
+                      Select Button
                     </Button>
                   </Link>
                 </CardContent>
