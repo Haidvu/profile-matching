@@ -135,7 +135,9 @@ const ProjectsList = ({ loading, projects }) => {
                     Project Type
                   </Typography>
                   <Typography className={classes.fieldValue}>
-                    {project.project_type ? project.project_type : "none"}
+                    {project.project_type
+                      ? project.project_type
+                      : "Not Specified"}
                   </Typography>
                 </CardContent>
                 <CardContent
@@ -165,7 +167,7 @@ const ProjectsList = ({ loading, projects }) => {
                       ))
                     ) : (
                       <Chip
-                        label={"none"}
+                        label={"Any"}
                         classes={{
                           root: classes.chip,
                           label: classes.chipLabel,
