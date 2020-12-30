@@ -25,7 +25,7 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-import SaveStudentModal from "./SaveStudentModal";
+import SaveStudent from "./SaveStudent";
 import PersonIcon from "@material-ui/icons/Person";
 
 const useStyles = makeStyles((theme) => ({
@@ -257,9 +257,6 @@ const StudentDetailed = ({ match }) => {
                       {student.full_name}
                     </Typography>
                   </div>
-                  <IconButton onClick={openSaveStudent}>
-                    <StarBorderIcon fontSize="large" />
-                  </IconButton>
                 </div>
               </ListItemText>
             </ListItem>
@@ -428,7 +425,7 @@ const StudentDetailed = ({ match }) => {
           </List>
         </>
       )}
-      {modal ? <SaveStudentModal modal={modal} setModal={setModal} /> : null}
+      <SaveStudent studentId={match.params.id}></SaveStudent>
     </>
   );
 };
