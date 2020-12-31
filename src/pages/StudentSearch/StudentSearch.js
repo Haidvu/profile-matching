@@ -127,104 +127,10 @@ const customStyles = {
   }),
 };
 
-// const sample = [
-//   {
-//     company_name: "f",
-//     company_website: "f",
-//     company_contact_email: "f",
-//     project_id: 1,
-//     username_id: 1,
-//     project_name: "ff",
-//     project_description: "ff",
-//     project_type: "Frontend",
-//     project_tech: "",
-//     project_deadline: "2020-12-19",
-//     date_added: "2020-12-19",
-//   },
-//   {
-//     company_name: "f",
-//     company_website: "f",
-//     company_contact_email: "f",
-//     project_id: 2,
-//     username_id: 1,
-//     project_name: "project 2",
-//     project_description: "project 2",
-//     project_type: "",
-//     project_tech: "",
-//     project_deadline: "2020-12-19",
-//     date_added: "2020-12-19",
-//   },
-//   {
-//     company_name: "dfsgfdsg",
-//     company_website: "sdafsdaf",
-//     company_contact_email: "random@defsdf.com",
-//     project_id: 3,
-//     username_id: 3,
-//     project_name: "first project",
-//     project_description: "dfsadf",
-//     project_type: "Backend",
-//     project_tech: "Bootstrap,JavaScript,Python",
-//     project_deadline: "2020-12-30",
-//     date_added: "2020-12-20",
-//   },
-//   {
-//     company_name: "dfsgfdsg",
-//     company_website: "sdafsdaf",
-//     company_contact_email: "random@defsdf.com",
-//     project_id: 4,
-//     username_id: 3,
-//     project_name: "second project",
-//     project_description: "dsfdsaf",
-//     project_type: "Frontend",
-//     project_tech: "AWS,C++,JavaScript",
-//     project_deadline: "2020-12-25",
-//     date_added: "2020-12-20",
-//   },
-//   {
-//     company_name: "dfsgfdsg",
-//     company_website: "sdafsdaf",
-//     company_contact_email: "random@defsdf.com",
-//     project_id: 5,
-//     username_id: 3,
-//     project_name: "project three",
-//     project_description: "dsafdsa",
-//     project_type: "Frontend",
-//     project_tech: "AWS,GitHub",
-//     project_deadline: "2020-12-17",
-//     date_added: "2020-12-20",
-//   },
-//   {
-//     company_name: "Mayoor Shardha",
-//     company_website: "",
-//     company_contact_email: "mayoorshardha@gmail.com",
-//     project_id: 6,
-//     username_id: 4,
-//     project_name: "test",
-//     project_description: "test",
-//     project_type: "Frontend",
-//     project_tech: "Apache",
-//     project_deadline: "2020-12-22",
-//     date_added: "2020-12-21",
-//   },
-//   {
-//     company_name: "Muhammad Usman",
-//     company_website: "N/A",
-//     company_contact_email: "muhammadusman0200@gmail.com",
-//     project_id: 7,
-//     username_id: 6,
-//     project_name: "Beast",
-//     project_description: "Desription",
-//     project_type: "Frontend",
-//     project_tech: "Angular",
-//     project_deadline: "2020-12-22",
-//     date_added: "2020-12-21",
-//   },
-// ];
-
 export const StudentSearch = () => {
   // these 2 are for the ProjectsList component on the bottom
   const [loading, setLoading] = useState(false);
-  const [companyList, setCompanyList] = useState([]);
+  const [projectList, setProjectList] = useState([]);
 
   // takes in the user input
   const [searchInput, setSearchInput] = useState({
@@ -240,34 +146,6 @@ export const StudentSearch = () => {
   // this is for the normal Search
   const handleClickSearch = async () => {
     const data = {
-      keywords: searchInput.keywords,
-      company_name: "",
-      industry_type: searchInput.industry_type,
-      project_name: searchInput.project_name,
-      project_type: searchInput.project_type,
-      project_tech: searchInput.project_tech,
-    };
-    setLoading(true);
-    console.log(data);
-    axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/search",
-        data,
-        getConfig()
-      )
-      .then((res) => {
-        setLoading(false);
-        setCompanyList(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //this is for the Advanced Search w/ Filters
-  const handleClickFilterSearch = async () => {
-    const data = {
       company_name: searchInput.company_name,
       industry_type: searchInput.industry_type,
       project_name: searchInput.project_name,
@@ -276,7 +154,6 @@ export const StudentSearch = () => {
       keywords: searchInput.keywords,
     };
     setLoading(true);
-    console.log(data);
     axios
       .post(
         "http://18.213.74.196:8000/api/company_project/search",
@@ -285,23 +162,12 @@ export const StudentSearch = () => {
       )
       .then((res) => {
         setLoading(false);
-        setCompanyList(res.data);
-        console.log(res.data);
+        setProjectList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  //my handleChange on ENTER but for Keyword only, KEEP FOR FUTURE USE
-  // const handleKeyword = (e) => {
-  //   if (e.key === "Enter") {
-  //     setSearchInput({
-  //       ...searchInput,
-  //       keywords: [...searchInput.keywords, e.target.value],
-  //     });
-  //   }
-  // };
 
   useEffect(() => {}, [searchInput]);
 
@@ -649,15 +515,6 @@ export const StudentSearch = () => {
                         />
                       </Grid>
                     </Grid>
-                    <Grid item justify="flex-end" alignItems="center">
-                      <Button
-                        className={classes.filterButton}
-                        variant="contained"
-                        onClick={handleClickFilterSearch}
-                      >
-                        Save Filters
-                      </Button>
-                    </Grid>
                   </Grid>
                 </AccordionDetails>
               </Accordion>
@@ -666,8 +523,7 @@ export const StudentSearch = () => {
           </div>
         </Grid>
       </div>
-      {/* <ProjectsList loading={loading} projects={sample} /> */}
-      {/* <ProjectsList loading={loading} companyList={ProjectsList} /> JEREL's code */}
+      <ProjectsList loading={loading} projects={projectList} />
     </div>
   );
 };

@@ -97,7 +97,11 @@ const useStyles = makeStyles((theme) => ({
 const ProjectsList = ({ loading, projects }) => {
   let { url } = useRouteMatch();
   const classes = useStyles();
-  console.log(loading, projects);
+  //console.log(loading, projects);
+
+  const handleProjectSelect = (projectId) => {
+    console.log(projectId);
+  };
 
   return (
     <>
@@ -192,6 +196,20 @@ const ProjectsList = ({ loading, projects }) => {
                       className={classes.button}
                     >
                       View Details
+                    </Button>
+                  </Link>
+                </CardContent>
+                <Divider></Divider>
+                <CardContent>
+                  <Link style={{ textDecoration: "none" }}>
+                    <Button
+                      color="secondary"
+                      size="small"
+                      variant="contained"
+                      className={classes.button}
+                      onClick={() => handleProjectSelect(project.project_id)}
+                    >
+                      Select Button
                     </Button>
                   </Link>
                 </CardContent>
