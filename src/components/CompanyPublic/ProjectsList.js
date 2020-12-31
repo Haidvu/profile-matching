@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
 const ProjectsList = ({ loading, projects }) => {
   let { url } = useRouteMatch();
   const classes = useStyles();
-  console.log(loading, projects);
+  //console.log(loading, projects);
 
   const handleProjectSelect = (projectId) => {
     console.log(projectId);

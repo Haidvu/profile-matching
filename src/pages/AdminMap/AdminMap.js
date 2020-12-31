@@ -1,12 +1,12 @@
-import DeckGL from '@deck.gl/react';
-import {IconLayer} from '@deck.gl/layers';
-import axios from 'axios';
-import React,{useEffect} from "react";
-import { getConfig } from '../../authConfig';
-import {StaticMap} from 'react-map-gl';
-import {MapView} from '@deck.gl/core';
+import DeckGL from "@deck.gl/react";
+import { IconLayer } from "@deck.gl/layers";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { getConfig } from "../../authConfig";
+import { StaticMap } from "react-map-gl";
+//import {MapView} from '@deck.gl/core';
 
- /*CompanyData = () => {  
+/*CompanyData = () => {  
   const companyProfiles = [];
   
 
