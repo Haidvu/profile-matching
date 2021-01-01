@@ -36,18 +36,16 @@ const SaveStudent = ({ studentId }) => {
   const { profile } = data;
   const Id = profile.id;
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
-  const [companyProjects, setCompanyProjects] = useState([]);
-  const [saveStudent, setSaveStudnet] = useState({
+  const [companyProjectsToShow, setCompanyProjectsToShow] = useState([]);
+  const [saveStudent, setSaveStudent] = useState({
     student_db_id: null,
     project_id: null,
     project_preference_for_student: null,
   });
 
   const getCompanyProjects = async () => {
-    console.log(Id);
     try {
-      const response = await axios.post(
+      const companyProjectsResponse = await axios.post(
         `http://18.213.74.196:8000/api/company_project/list_by_company`,
 
         {
@@ -55,13 +53,29 @@ const SaveStudent = ({ studentId }) => {
         },
         getConfig()
       );
-      console.log(response);
-      setCompanyProjects(response.data);
-      setLoading(false);
+      const savedProjectsResponse = await axios.get(
+        `http://18.213.74.196:8000/api/project_select_student/all`,
+        getConfig()
+      );
+      const sp = savedProjectsResponse.data.filter((item) => {
+        return item.student_db_id == studentId;
+      });
+      console.log("Company Projects: ", companyProjectsResponse.data);
+
+      let projectsToShow = [];
+      companyProjectsResponse.data.forEach((project) => {
+        if (!sp.some((element) => element.project_id == project.project_id)) {
+          projectsToShow.push(project);
+        }
+      });
+      console.log("Projects to show: ", projectsToShow);
+      setCompanyProjectsToShow(projectsToShow);
     } catch (e) {
       console.log(e);
     }
   };
+
+  //const [pass, fail] = a.reduce(([p, f], e) => (e > 5 ? [[...p, e], f] : [p, [...f, e]]), [[], []]);
 
   useEffect(() => {
     getCompanyProjects();
@@ -74,7 +88,12 @@ const SaveStudent = ({ studentId }) => {
         saveStudent,
         getConfig()
       );
-      setSaveStudnet({
+      setCompanyProjectsToShow([
+        ...companyProjectsToShow.filter((project) => {
+          return project.project_id != saveStudent.project_id;
+        }),
+      ]);
+      setSaveStudent({
         student_db_id: null,
         project_id: null,
         project_preference_for_student: null,
@@ -86,7 +105,6 @@ const SaveStudent = ({ studentId }) => {
   };
 
   const handleSave = () => {
-    console.log("Clicked save");
     if (saveStudent.student_db_id) {
       saveStudentToProject();
     } else {
@@ -95,50 +113,51 @@ const SaveStudent = ({ studentId }) => {
   };
 
   const handleChange = (e) => {
-    setSaveStudnet({
+    setSaveStudent({
       student_db_id: parseInt(studentId),
       project_id: parseInt(e.target.name),
       project_preference_for_student: parseInt(e.target.value),
     });
   };
 
+  const handleDelete = (project) => {};
+
   return (
-    <>
-      {companyProjects.length > 0 ? (
-        <>
-          <div>
+    <Grid direction="row">
+      <Grid item container>
+        {companyProjectsToShow.length > 0 ? (
+          <>
             <Container>
               <Typography>Save Profile to the following Projects</Typography>
               <Grid container>
-                {companyProjects.map((project, index) => (
-                  <Grid container key={index} spacing={2} alignItems="center">
-                    <Grid item>
+                {companyProjectsToShow.map((project, index) => (
+                  <Grid container key={index} alignItems="center">
+                    <Grid item xs={2}>
                       <Typography>{project.project_name}</Typography>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={2}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
                           label="experience"
-                          id="experience"
+                          id={project.project_name}
                           name={project.project_id}
                           className={classes.preference}
-                          onChange={handleChange}
-                          value={saveStudent.project_preference_for_student}>
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
+                          onChange={handleChange}>
                           <MenuItem value={1}>Highest</MenuItem>
                           <MenuItem value={2}>Intermediate</MenuItem>
                           <MenuItem value={3}>Lowest</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={1}>
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={handleSave}>
+                        onClick={handleSave}
+                        disabled={
+                          saveStudent.project_id !== project.project_id
+                        }>
                         Save
                       </Button>
                     </Grid>
@@ -146,10 +165,16 @@ const SaveStudent = ({ studentId }) => {
                 ))}
               </Grid>
             </Container>
-          </div>
-        </>
-      ) : null}
-    </>
+          </>
+        ) : (
+          <Container>
+            <Typography style={{ fontStyle: "italic" }}>
+              No Projects to Add to For this Profile
+            </Typography>
+          </Container>
+        )}
+      </Grid>
+    </Grid>
   );
 };
 
