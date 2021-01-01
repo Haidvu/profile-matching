@@ -5,7 +5,6 @@ import {
   Chip,
   Button,
   Card,
-  Link,
   CardHeader,
   CardContent,
   Avatar,
@@ -24,7 +23,7 @@ import {
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { Chat } from "@material-ui/icons";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
@@ -275,29 +274,36 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
                 />
               ))
             ) : (
-              <Chip
-                label={"Any"}
-                classes={{
-                  root: classes.chip,
-                  label: classes.chipLabel,
-                }}
-                color="primary"
-                size="small"
-                variant="outlined"
-              />
-            )}
+                <Chip
+                  label={"Any"}
+                  classes={{
+                    root: classes.chip,
+                    label: classes.chipLabel,
+                  }}
+                  color="primary"
+                  size="small"
+                  variant="outlined"
+                />
+              )}
           </div>
         </CardContent>
         <Divider></Divider>
         <CardContent>
-          <Button
-            color="secondary"
-            size="small"
-            variant="contained"
-            className={classes.button}
+          <Link
+            to={{
+              pathname: `projects/${project.project_id}`,
+            }}
+            style={{ textDecoration: "none" }}
           >
-            View Details
+            <Button
+              color="secondary"
+              size="small"
+              variant="contained"
+              className={classes.button}
+            >
+              View Details
           </Button>
+          </Link>
         </CardContent>
       </Card>
 
@@ -316,17 +322,17 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
             {changingPeferencce ? (
               <LinearProgress className={classes.loading} />
             ) : (
-              <Select
-                labelId="changePreference"
-                value={preference}
-                onChange={handlePreferenceChange}
-              >
-                <MenuItem value={0}>None</MenuItem>
-                <MenuItem value={1}>Low</MenuItem>
-                <MenuItem value={2}>Medium</MenuItem>
-                <MenuItem value={3}>High</MenuItem>
-              </Select>
-            )}
+                <Select
+                  labelId="changePreference"
+                  value={preference}
+                  onChange={handlePreferenceChange}
+                >
+                  <MenuItem value={0}>None</MenuItem>
+                  <MenuItem value={1}>Low</MenuItem>
+                  <MenuItem value={2}>Medium</MenuItem>
+                  <MenuItem value={3}>High</MenuItem>
+                </Select>
+              )}
           </DialogContent>
           <DialogActions>
             <Button

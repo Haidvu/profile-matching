@@ -144,7 +144,7 @@ export const StudentSearch = () => {
   });
 
   // this is for the normal Search
-  const handleClickSearch = async () => {
+  const handleClickSearch = () => {
     const data = {
       company_name: searchInput.company_name,
       industry_type: searchInput.industry_type,
@@ -169,7 +169,23 @@ export const StudentSearch = () => {
       });
   };
 
-  useEffect(() => {}, [searchInput]);
+  useEffect(() => {
+
+    setLoading(true);
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/company_project/search",
+        searchInput,
+        getConfig()
+      )
+      .then((res) => {
+        setLoading(false);
+        setProjectList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const classes = useStyles();
 

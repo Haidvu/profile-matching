@@ -15,12 +15,10 @@ const StudentRoutes = () => {
 
         <Route path={`${path}/projects`} exact component={StudentSelected} />
 
-        {/* Route for testing purposes */}
 
         <Route
-          path={`${path}/search/:id`}
-          exact
-          component={ProjectsListTemplate}
+          path={`${path}/projects/:project`}
+          render={(props) => <ProjectsListTemplate {...props} />}
         />
 
         {/* <Route

@@ -1,39 +1,24 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { DataContext } from "../../contexts/dataContext";
 import {
   Typography,
   Grid,
   Chip,
-  Button,
-  Card,
-  Link,
-  CardHeader,
-  CardContent,
-  Avatar,
-  Divider,
   LinearProgress,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouteMatch } from "react-router-dom";
-import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
+import axios from 'axios';
+import { getConfig } from '../../authConfig';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
-import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
-import PeopleRoundedIcon from "@material-ui/icons/PeopleRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
-import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
-import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
-
-import CompanyProjectTemplate from "../../assets/CompanyProjectTemplate.svg";
-
 
 /* Speed Dial Material UI */
 
-import Backdrop from '@material-ui/core/Backdrop';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
@@ -180,25 +165,33 @@ const useStyles = makeStyles((theme) => ({
   speedDial: {
     position: 'absolute',
 
-    right: theme.spacing(2),  
+    right: theme.spacing(2),
   },
   speedDialButton: {
     "MuiButtonBase-root": {
       backgroundColor: "#c8102e"
     }
   },
-  "MuiSpeedDialAction-staticTooltipLabel":{
+  "MuiSpeedDialAction-staticTooltipLabel": {
     width: "140px"
+  },
+  description: {
+    display: "inline-block",
+    wordBreak: "break-word"
   }
 
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const actions = [
   { icon: <SaveIcon />, name: 'Save Project' },
-  { icon: <ShareIcon />, name: 'Share' }
+  /*{ icon: <ShareIcon />, name: 'Share' }*/
 ];
 
-const ProjectsListTemplate = ({ loading, project, company }) => {
+export default function ProjectsListTemplate({ match }) {
   let { url } = useRouteMatch();
 
   const classes = useStyles();
@@ -213,7 +206,82 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
     setOpen(false);
   };
 
-  const profileInfo = {
+  const { data } = useContext(DataContext);
+  const { profile } = data;
+
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
+
+  const handleCloseSaveSucess = () => {
+    setSaveSuccess(false)
+  }
+  const handleCloseSaveFailed = () => {
+    setSaveFailed(false)
+  }
+
+  const saveProject = () => {
+    setOpen(false);
+    const data = {
+      student_id: profile.student_id,
+      project_id: match.params.project,
+      student_preference_for_project: "0"
+    };
+
+    console.log(data);
+
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/student_select_project/create",
+        data,
+        getConfig()
+      )
+      .then((res) => {
+        setSaveSuccess(true);
+      })
+      .catch((err) => {
+        setSaveFailed(true);
+      });
+  };
+
+  // Initial Info
+  const [profileInfo, setCompanyInfo] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    axios.get("http://18.213.74.196:8000/api/company_project/" + match.params.project,
+
+      getConfig()).then(res => {
+
+
+        setIsLoading(false);
+
+        setCompanyInfo({
+          project_name: res.data.project_name,
+          project_description: res.data.project_description,
+          project_type: res.data.project_type,
+          project_deadline: res.data.project_deadline,
+          project_tech: res.data.project_tech.split(',').map((skill, index) => {
+            return { label: skill, value: index }
+          }),
+          company_name: res.data.company_name,
+          company_website: res.data.company_website,
+          company_contact_email: res.data.company_contact_email,
+          date_added: res.data.date_added
+        })
+
+      })
+      .catch(err => {
+        console.log(err.response.data)
+      });
+
+
+  }, [])
+
+  /*const profileInfo = {
     company_name: "Company Test",
     company_website: "hello.com",
     company_contact_email: "geourge@curious.com",
@@ -224,7 +292,7 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
     project_tech: "Java,C++,Python",
     project_deadline: "2020-12-30",
     date_added: "2020-12-20"
-  }
+}*/
 
   return (
     <>
@@ -233,12 +301,12 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
 
         <div className={classes.divProjectName}>
           <Typography variant="h4">Project</Typography>
-          <Typography variant="h5">Project Name Really Long Project Name Really Long Project Name Really Long Project Name Really Long</Typography>
+          <Typography variant="h5">{profileInfo.project_name}</Typography>
         </div>
       </div>
 
 
-      {loading ? (
+      {isLoading ? (
         <LinearProgress
           color="secondary"
           style={{ margin: "20px" }}
@@ -251,17 +319,17 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
                 <Grid container className={classes.companyInfoContainer}>
                   <Grid item xs={12} sm={12} md={3} className={classes.companyInfo}>
                     <BusinessRoundedIcon className={classes.companyIcon} />
-                  
+
                     {profileInfo.company_name}
                   </Grid>
                   <Grid item xs={12} sm={12} md={3} className={classes.companyInfo}>
                     <LanguageRoundedIcon className={classes.companyIcon} />
-                  
+
                     {profileInfo.company_website}
                   </Grid>
                   <Grid item xs={12} sm={12} md={4} className={classes.companyInfo}>
                     <ShortTextRoundedIcon className={classes.companyIcon} />
-                    
+
                     {profileInfo.company_contact_email}
                   </Grid>
                 </Grid>
@@ -269,7 +337,9 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
                 <Grid container className={classes.projectBody}>
                   <Grid item xs={12} className={classes.companyInfo}>
                     <Typography variant="h6" display="inline" className={classes.bottomSpace}> Description: </Typography>
-                    <Typography variant="body1">
+                  </Grid>
+                  <Grid item xs={12} className={classes.companyInfo}>
+                    <Typography className={classes.description}>
                       {profileInfo.project_description}
                     </Typography>
                   </Grid>
@@ -298,16 +368,22 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
 
                 <Grid container className={classes.projectInfo}>
                   <Grid item xs={12}>
-                    {profileInfo.project_tech.split(',').map((skill, index) =>
-                      <Chip label={skill} className={classes.chips} key={index} />
-                    )}
+
+
+                    {Object.keys(profileInfo).length && profileInfo.project_tech ?
+                      (profileInfo.project_tech.map((skill, index) =>
+                        <Chip component={'span'} label={skill.label} className={classes.chips} key={index} />
+                      )) : (<></>)
+                    }
+
+
 
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item xs={1}>
 
-               
+
                 <SpeedDial
                   ariaLabel="SpeedDial tooltip example"
                   className={classes.speedDial}
@@ -316,7 +392,7 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
                   onOpen={handleOpen}
                   open={open}
                   direction="down"
-                  FabProps={{ color: "secondary"}}
+                  FabProps={{ color: "secondary" }}
                 >
                   {actions.map((action) => (
                     <SpeedDialAction
@@ -324,8 +400,8 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
                       icon={action.icon}
                       tooltipTitle={action.name}
                       tooltipOpen
-                      onClick={handleClose}
-                 
+                      onClick={saveProject}
+
                     />
                   ))}
                 </SpeedDial>
@@ -333,9 +409,21 @@ const ProjectsListTemplate = ({ loading, project, company }) => {
             </Grid>
 
           </Grid>
-        )}
+        )
+      }
+
+      <Snackbar open={saveSuccess} autoHideDuration={6000} onClose={handleCloseSaveSucess}>
+        <Alert onClose={handleCloseSaveSucess} severity="success">
+          Project {profileInfo.project_name} was saved with no preference! Please go to "My Projects" to change the preference of this project.
+        </Alert>
+      </Snackbar>
+      <Snackbar open={saveFailed} autoHideDuration={6000} onClose={handleCloseSaveFailed}>
+        <Alert onClose={handleCloseSaveFailed} severity="error">
+          This project was saved. Please go to "My Projects" to change the preference of this project or to view your preferences.
+        </Alert>
+      </Snackbar>
     </>
   );
-};
+}
 
-export default ProjectsListTemplate;
+
