@@ -19,6 +19,7 @@
     "classnames": "^2.2.6",
     "formik": "^2.2.0",
     "react": "^16.13.1",
+    "react-csv": "^2.0.3",
     "react-date-picker": "^8.0.3",
     "react-devicon": "^0.1.9",
     "react-dom": "^16.13.1",
