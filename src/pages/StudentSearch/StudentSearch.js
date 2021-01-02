@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(3.0),
     marginBottom: theme.spacing(0),
   },
+  keywordGrid: {
+    width: "100%",
+  },
   keywordSearch: {
     backgroundColor: "white",
     borderRadius: "10px",
@@ -170,7 +173,6 @@ export const StudentSearch = () => {
   };
 
   useEffect(() => {
-
     setLoading(true);
     axios
       .post(
@@ -303,21 +305,17 @@ export const StudentSearch = () => {
         </Grid>
         <Grid>
           <Grid
-            // container
+            container
             id="first-left"
             item
             xs={12}
             spacing={4}
             direction="row"
           >
-            <Grid item>
-              <Typography className={classes.keywordHeading} variant="h5">
-                Keyword
-              </Typography>
-
+            <Grid item className={classes.keywordGrid}>
               <OutlinedInput
                 className={classes.keywordSearch}
-                placeholder="Please enter keyword(s) for search"
+                placeholder="Search company projects using keyword(s)"
                 // onKeyDown={handleKeyword}
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
