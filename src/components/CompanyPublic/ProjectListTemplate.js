@@ -3,43 +3,19 @@ import {
   Typography,
   Grid,
   Chip,
-  Button,
-  Card,
-  Link,
-  CardHeader,
-  CardContent,
-  Avatar,
-  Divider,
   LinearProgress,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
-import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
-import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
-import PeopleRoundedIcon from "@material-ui/icons/PeopleRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
-import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
-import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
-
-import CompanyProjectTemplate from "../../assets/CompanyProjectTemplate.svg";
-
 
 /* Speed Dial Material UI */
-
-import Backdrop from '@material-ui/core/Backdrop';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SaveIcon from '@material-ui/icons/Save';
 import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -199,7 +175,6 @@ const actions = [
 ];
 
 const ProjectsListTemplate = ({ loading, project, company }) => {
-  let { url } = useRouteMatch();
 
   const classes = useStyles();
 

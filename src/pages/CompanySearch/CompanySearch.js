@@ -9,7 +9,6 @@ import StudentsLists from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
   searchBackground: {
-    // backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/1181619/pexels-photo-1181619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')`,
     backgroundColor: "rgba(200,16,46,1)",
     margin: "10px",
     borderRadius: "5px",
