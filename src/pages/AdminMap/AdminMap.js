@@ -66,21 +66,17 @@ useEffect(() => {
   .then(res => {
     res.data.map((res) => {
         let address = getAddress(res.company_address) + res.company_zip;
-        axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${TOKEN}`)
-          .then((response) => {
-            setData(data =>[...data,{
-              coordinates: response.data.features[0].geometry.coordinates,
-              name: res.company_name,
-              description: res.company_description,
-              phone: res.company_phone_no,
-              website: res.company_website,
-              contact_email: res.company_contact_email,
-              address: address
-            }]);
-          });
-      })
-      
-  })
+        setData(data =>[...data,{
+          coordinates: [res.company_longitude,res.company_latitude],
+          name: res.company_name,
+          description: res.company_description,
+          phone: res.company_phone_no,
+          website: res.company_website,
+          contact_email: res.company_contact_email,
+          address: address
+        }]);
+      });
+    })
   .catch(err => {
     console.log(err)
   });       
@@ -93,6 +89,7 @@ useEffect(() => {
     sizeScale: 2000,
     sizeMinPixels: 30,
   });
+  console.log(data);
   return (
     <DeckGL
       layers={[layer]}
