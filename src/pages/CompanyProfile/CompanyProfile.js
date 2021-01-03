@@ -367,48 +367,56 @@ export default function CompanyProfile() {
         localStorage.setItem("slug", res.data.slug);
         let slug = res.data.slug;
         setLoading(true);
-        axios
-          .put(
-            `http://18.213.74.196:8000/api/company_profile/${slug}/update`,
-            {
-              username: localStorage.getItem("email_id"),
-              company_name: profileInfo.name,
-              company_phone_no: profileInfo.phoneNumber,
-              industry_type: profileInfo.industryType,
-              representative_name: profileInfo.companyRep,
-              company_representative_type: profileInfo.isSolo,
-              company_type: profileInfo.companyType,
-              company_address: getCompanyAddress(),
-              mailing_address: getMailingAddress(),
-              company_zip: profileInfo.zip,
-              company_website: profileInfo.companyWebsite,
-              company_mission: profileInfo.companyMission,
-              company_description: profileInfo.companyDescription,
-              company_contact_email: profileInfo.contact_email
-            },
-            getConfig()
-          )
-          .then((res) => {
-            console.log("update successful");
-            dispatch({ type: "UPDATE_PROFILE", payload: res.data });
-            setDialogOpen(false);
-            setShowEditFields(false);
-            axios
-              .post("http://18.213.74.196:8000/api/token/", {
-                email: email,
-                password: password,
-              })
-              .then((res) => {
-                console.log("login again sucessful");
-                localStorage.setItem("token", res.data.access);
-                localStorage.setItem("role_id", res.data.role_id);
-                localStorage.setItem("email_id", res.data.email_id);
-                localStorage.setItem("slug", res.data.slug);
-                setEmail(null);
-                setPassword(null);
-                setLoading(false);
-              });
-          })
+
+        let address = `${profileInfo.streetAddress}, ${profileInfo.city}, ${profileInfo.state} ${profileInfo.zip} `;
+        let token ="pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
+        axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${token}`,getConfig())
+        .then((response)=>{  
+          axios
+            .put(
+              `http://18.213.74.196:8000/api/company_profile/${slug}/update`,
+              {
+                username: localStorage.getItem("email_id"),
+                company_name: profileInfo.name,
+                company_phone_no: profileInfo.phoneNumber,
+                industry_type: profileInfo.industryType,
+                representative_name: profileInfo.companyRep,
+                company_representative_type: profileInfo.isSolo,
+                company_type: profileInfo.companyType,
+                company_address: getCompanyAddress(),
+                mailing_address: getMailingAddress(),
+                company_zip: profileInfo.zip,
+                company_website: profileInfo.companyWebsite,
+                company_mission: profileInfo.companyMission,
+                company_description: profileInfo.companyDescription,
+                company_contact_email: profileInfo.contact_email,
+                company_latitude:response.data.features[0].geometry.coordinates[1],
+                company_longitude:response.data.features[0].geometry.coordinates[0],
+              },
+              getConfig()
+            )
+            .then((res) => {
+              console.log("update successful");
+              dispatch({ type: "UPDATE_PROFILE", payload: res.data });
+              setDialogOpen(false);
+              setShowEditFields(false);
+              axios
+                .post("http://18.213.74.196:8000/api/token/", {
+                  email: email,
+                  password: password,
+                })
+                .then((res) => {
+                  console.log("login again sucessful");
+                  localStorage.setItem("token", res.data.access);
+                  localStorage.setItem("role_id", res.data.role_id);
+                  localStorage.setItem("email_id", res.data.email_id);
+                  localStorage.setItem("slug", res.data.slug);
+                  setEmail(null);
+                  setPassword(null);
+                  setLoading(false);
+                });
+            })
+        })
           .catch((err) => {
             setUpdateErrors({ ...updateErrors, ...err.response.data });
             setDialogOpen(false);
