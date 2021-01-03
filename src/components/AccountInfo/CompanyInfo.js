@@ -265,37 +265,46 @@ const CompanyInfo = () => {
         }
       });
       if (!errorExists) {
-        const data = {
-          company_name: companyFirst.name,
-          company_phone_no: companyFirst.phoneNumber,
-          industry_type: companyFirst.industryType,
-          company_contact_email: companyFirst.contact_email,
-          company_zip: companyFirst.zip,
-          representative_name: companySecond.companyRep,
-          company_representative_type: parseInt(companyFirst.isSolo),
-          company_type: parseInt(companySecond.companyType),
-          company_address: getAddress(companyFirst),
-          mailing_address: companyFirst.checkedAddress
-            ? getAddress(companyFirst)
-            : getMailingAddress(companyFirst),
-          company_website: companySecond.website,
-          company_mission: companySecond.mission,
-          company_description: companySecond.description,
-          username: localStorage.getItem("email_id"),
-        };
-        axios
-          .post(
-            "http://18.213.74.196:8000/api/company_profile/create",
-            data,
-            getConfig()
-          )
-          .then((res) => {
-            localStorage.setItem("slug", res.data.slug);
-            history.push("/dashboard");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+
+        let address = `${companyFirst.address}, ${companyFirst.city}, ${companyFirst.state} ${companyFirst.company_zip} `;
+        let token ="pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
+        axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?access_token=${token}`,getConfig())
+        
+        .then((response)=>{
+          const data = {
+            company_name: companyFirst.name,
+            company_phone_no: companyFirst.phoneNumber,
+            industry_type: companyFirst.industryType,
+            company_contact_email: companyFirst.contact_email,
+            company_zip: companyFirst.zip,
+            representative_name: companySecond.companyRep,
+            company_representative_type: parseInt(companyFirst.isSolo),
+            company_type: parseInt(companySecond.companyType),
+            company_address: getAddress(companyFirst),
+            mailing_address: companyFirst.checkedAddress
+              ? getAddress(companyFirst)
+              : getMailingAddress(companyFirst),
+            company_website: companySecond.website,
+            company_mission: companySecond.mission,
+            company_description: companySecond.description,
+            company_latitude:response.data.features[0].geometry.coordinates[1],
+            company_longitude:response.data.features[0].geometry.coordinates[0],
+            username: localStorage.getItem("email_id"),
+          };
+          axios
+            .post(
+              "http://18.213.74.196:8000/api/company_profile/create",
+              data,
+              getConfig()
+            )
+            .then((res) => {
+              localStorage.setItem("slug", res.data.slug);
+              history.push("/dashboard");
+            })
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorsSecond]);
