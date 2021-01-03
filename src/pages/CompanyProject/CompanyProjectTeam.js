@@ -15,6 +15,7 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import { DataContext } from "../../contexts/dataContext";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -163,7 +164,13 @@ const CompanyProjectTeam = ({ id }) => {
                       <Avatar />
                     </Grid>
                     <Grid item xs={2}>
-                      <Typography>{member.student_name}</Typography>
+                      <Link
+                        to={{
+                          pathname: `/dashboard/search/${member.student_db_id}`,
+                        }}
+                        style={{ textDecoration: "none" }}>
+                        <Typography>{member.student_name}</Typography>
+                      </Link>
                     </Grid>
                     {showEditFields[member.student_db_id] ? (
                       <>
