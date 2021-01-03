@@ -1,16 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  FormControlLabel,
-  Checkbox,
   Container,
-  DialogActions,
   Button,
-  LinearProgress,
   Grid,
   Typography,
-  DialogContent,
   FormControl,
   InputLabel,
   Select,
@@ -119,8 +112,6 @@ const SaveStudent = ({ studentId }) => {
       project_preference_for_student: parseInt(e.target.value),
     });
   };
-
-  const handleDelete = (project) => {};
 
   return (
     <Grid direction="row">

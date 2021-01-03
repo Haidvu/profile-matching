@@ -20,7 +20,7 @@ const StudentMenu = () => {
 
   const options = [
     { text: "Profile", url: `${url}`, icon: <AccountCircleRoundedIcon /> },
-    { text: "My Companies", url: `${url}/companies`, icon: <StarsIcon /> },
+    { text: "My Projects", url: `${url}/projects`, icon: <StarsIcon /> },
     {
       text: "Search",
       url: `${url}/search`,

@@ -5,7 +5,7 @@ import {
   Chip,
   Button,
   Card,
-  Link,
+  
   CardHeader,
   CardContent,
   Avatar,
@@ -13,7 +13,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
@@ -180,7 +180,9 @@ const ProjectsList = ({ loading, projects }) => {
                 <Divider></Divider>
                 <CardContent>
                   <Link
-                    href={`${url}/${project.project_id}`}
+                    to={{
+                      pathname: `projects/${project.project_id}`,
+                    }}
                     style={{ textDecoration: "none" }}
                   >
                     <Button

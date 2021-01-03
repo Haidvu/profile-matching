@@ -4,7 +4,6 @@ import {
   ListItem,
   Divider,
   ListItemIcon,
-  IconButton,
   Typography,
   Grid,
   Chip,
@@ -24,7 +23,6 @@ import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
 import SaveStudent from "./SaveStudent";
 import PersonIcon from "@material-ui/icons/Person";
 
@@ -189,7 +187,6 @@ const StudentDetailed = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [student, setStudent] = useState();
   const [studentProjects, setStudentProjects] = useState([]);
-  const [modal, setModal] = useState(false);
 
   const getStudent = async () => {
     try {
@@ -220,11 +217,6 @@ const StudentDetailed = ({ match }) => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const openSaveStudent = () => {
-    console.log("cliked star");
-    setModal(true);
   };
 
   //http://18.213.74.196:8000/api/student_project/list_by_student
