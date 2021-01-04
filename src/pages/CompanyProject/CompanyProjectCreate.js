@@ -215,7 +215,6 @@ export default function CompanyProjectCreate() {
       })
       .catch((err) => {
         setUpdateErrors(err.response.data);
-        console.log(err.response.data)
       });
   };
 

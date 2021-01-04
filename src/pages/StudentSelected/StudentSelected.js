@@ -149,8 +149,6 @@ const StudentSelected = () => {
     );
   };
 
-  console.log(selectedProjects);
-
   return (
     <>
       {loading ? (
