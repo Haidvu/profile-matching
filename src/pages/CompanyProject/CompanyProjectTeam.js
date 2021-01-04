@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -14,8 +14,7 @@ import {
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import { DataContext } from "../../contexts/dataContext";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -47,7 +46,7 @@ const CompanyProjectTeam = ({ id }) => {
       )
       .then((res) => {
         const savedMembers = res.data.filter((item) => {
-          return item.project_id == id;
+          return item.project_id === id;
         });
         savedMembers.forEach((member) => {
           team[member.student_db_id] = member;
@@ -80,7 +79,6 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-        console.log(res);
         setTeamMembers({
           ...teamMembers,
           [member.student_db_id]: {
@@ -110,7 +108,6 @@ const CompanyProjectTeam = ({ id }) => {
   };
 
   const handleChange = (e, member) => {
-    console.log(e);
     setTeamMembersDelta({
       ...teamMembersDelta,
       [member.student_db_id]: {
@@ -127,14 +124,7 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-        console.log(res);
         getSavedStudents();
-        // let temp = teamMembers;
-        // delete temp[member.student_db_id];
-        // console.log("loading:", loading);
-        // console.log("After removing a member: ", temp);
-        // setTeamMembers(temp);
-        // console.log("After removing state data: ", teamMembers);
       })
       .catch((err) => {
         console.log(err);
@@ -157,7 +147,6 @@ const CompanyProjectTeam = ({ id }) => {
           <Grid item container spacing={2}>
             {Object.keys(teamMembers).length > 0 ? (
               <>
-                {console.log("Length: ", Object.keys(teamMembers).length)}
                 {Object.entries(teamMembers).map(([id, member]) => (
                   <Grid item container key={id} alignItems="center" spacing={1}>
                     <Grid item>

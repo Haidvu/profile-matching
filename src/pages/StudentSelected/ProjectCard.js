@@ -11,10 +11,8 @@ import {
   Divider,
   LinearProgress,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   MenuItem,
   Select,
   InputLabel,
@@ -23,8 +21,7 @@ import {
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, useRouteMatch } from "react-router-dom";
-import { Chat } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
 
@@ -120,7 +117,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
-  let { url } = useRouteMatch();
   const classes = useStyles();
 
   const [changePreferencOpen, setPreferenceChangeOpen] = useState(false);
@@ -166,14 +162,11 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
         getConfig()
       )
       .then((res) => {
-        console.log(res.data);
         removeProject(project.project_id);
         setRemovingProject(false);
         setRemoveProjectOpen(false);
       });
   };
-
-  //console.log("render");
 
   // stuff for menu
   const [anchorEl, setAnchorEl] = React.useState(null);
