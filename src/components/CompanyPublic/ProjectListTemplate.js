@@ -7,7 +7,6 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
 import axios from 'axios';
 import { getConfig } from '../../authConfig';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -23,8 +22,6 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SaveIcon from '@material-ui/icons/Save';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -188,11 +185,9 @@ function Alert(props) {
 
 const actions = [
   { icon: <SaveIcon />, name: 'Save Project' },
-  /*{ icon: <ShareIcon />, name: 'Share' }*/
 ];
 
 export default function ProjectsListTemplate({ match }) {
-  let { url } = useRouteMatch();
 
   const classes = useStyles();
 

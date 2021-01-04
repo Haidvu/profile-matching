@@ -64,6 +64,7 @@ useEffect(() => {
   axios.get("http://18.213.74.196:8000/api/company_profile/",
   getConfig())
   .then(res => {
+    // eslint-disable-next-line array-callback-return
     res.data.map((res) => {
         let address = getAddress(res.company_address) + res.company_zip;
         setData(data =>[...data,{
