@@ -90,7 +90,6 @@ useEffect(() => {
     sizeScale: 2000,
     sizeMinPixels: 30,
   });
-  console.log(data);
   return (
     <DeckGL
       layers={[layer]}

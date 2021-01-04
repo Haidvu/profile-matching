@@ -319,7 +319,6 @@ export const StudentSearch = () => {
                 // onKeyDown={handleKeyword}
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
-                  console.log(searchInput);
                 }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -399,9 +398,6 @@ export const StudentSearch = () => {
                           className={classes.searchSelect}
                           onChange={(e) => {
                             e = e ? e : [];
-                            console.log(e);
-                            // var compNameSeparatedByCommas = "Jerel's Donut's"
-                            // var compNameSeparatedByCommas = "Jerel's Donut's"
                             var compNameSeparatedByCommas = Array.prototype.map
                               .call(e, (s) => s.label)
                               .toString();

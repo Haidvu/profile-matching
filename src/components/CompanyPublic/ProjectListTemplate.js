@@ -222,8 +222,6 @@ export default function ProjectsListTemplate({ match }) {
       student_preference_for_project: "0"
     };
 
-    console.log(data);
-
     axios
       .post(
         "http://18.213.74.196:8000/api/student_select_project/create",

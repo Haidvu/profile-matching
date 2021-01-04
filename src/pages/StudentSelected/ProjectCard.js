@@ -162,14 +162,11 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
         getConfig()
       )
       .then((res) => {
-        console.log(res.data);
         removeProject(project.project_id);
         setRemovingProject(false);
         setRemoveProjectOpen(false);
       });
   };
-
-  //console.log("render");
 
   // stuff for menu
   const [anchorEl, setAnchorEl] = React.useState(null);

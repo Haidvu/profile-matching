@@ -181,7 +181,6 @@ const useStyles = makeStyles((theme) => ({
 
 const StudentDetailed = ({ match }) => {
   const classes = useStyles();
-  // console.log("students: " + students);
   const [loading, setLoading] = useState(true);
   const [student, setStudent] = useState();
   const [studentProjects, setStudentProjects] = useState([]);
@@ -193,7 +192,6 @@ const StudentDetailed = ({ match }) => {
         `http://18.213.74.196:8000/api/student_profile/id/${match.params.id}`,
         getConfig()
       );
-      console.log(response);
       setStudent(response.data);
       setLoading(false);
     } catch (e) {
@@ -212,14 +210,12 @@ const StudentDetailed = ({ match }) => {
         getConfig()
       );
       setStudentProjects(response.data);
-      console.log(response);
     } catch (e) {
       console.log(e);
     }
   };
 
   const openSaveStudent = () => {
-    console.log("cliked star");
     setModal(true);
   };
 
@@ -228,7 +224,6 @@ const StudentDetailed = ({ match }) => {
   useEffect(() => {
     getStudent();
     getStudentProjects();
-    // console.log(students[id]);
   }, []);
   return (
     <>

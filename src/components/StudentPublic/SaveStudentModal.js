@@ -36,7 +36,6 @@ const SaveStudentModal = ({ modal, setModal }) => {
   const [companyProjects, setCompanyProjects] = useState([]);
 
   const getCompanyProjects = async () => {
-    console.log(Id);
     try {
       const response = await axios.post(
         `http://18.213.74.196:8000/api/company_project/list_by_company`,
@@ -46,7 +45,6 @@ const SaveStudentModal = ({ modal, setModal }) => {
         },
         getConfig()
       );
-      console.log(response);
       setCompanyProjects(response.data);
       setLoading(false);
     } catch (e) {
@@ -68,7 +66,6 @@ const SaveStudentModal = ({ modal, setModal }) => {
 
   const handleSave = () => {
     setLoading(true);
-    console.log("Clicked save");
     setModal(false);
   };
 

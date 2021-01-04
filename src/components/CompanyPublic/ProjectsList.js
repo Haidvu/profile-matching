@@ -13,7 +13,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
@@ -95,9 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProjectsList = ({ loading, projects }) => {
-  let { url } = useRouteMatch();
   const classes = useStyles();
-  console.log(loading, projects);
 
   return (
     <>

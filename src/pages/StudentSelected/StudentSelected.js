@@ -41,7 +41,6 @@ const StudentSelected = () => {
   const { data } = useContext(DataContext);
 
   const matchProjects = (selections, allProjects) => {
-    //console.log(selections, allProjects);
 
     return selections.map((selection) => {
       const match = allProjects.find(
@@ -149,8 +148,6 @@ const StudentSelected = () => {
       </div>
     );
   };
-
-  console.log(selectedProjects);
 
   return (
     <>
