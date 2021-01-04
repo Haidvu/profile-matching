@@ -4,7 +4,6 @@ import {
   ListItem,
   Divider,
   ListItemIcon,
-  IconButton,
   Typography,
   Grid,
   Chip,
@@ -24,8 +23,7 @@ import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import SaveStudentModal from "./SaveStudentModal";
+import SaveStudent from "./SaveStudent";
 import PersonIcon from "@material-ui/icons/Person";
 
 const useStyles = makeStyles((theme) => ({
@@ -177,6 +175,10 @@ const useStyles = makeStyles((theme) => ({
   projectTitle: {
     textTransform: "uppercase",
   },
+  link: {
+    textDecoration: "none",
+    color: theme.palette.text.primary,
+  },
 }));
 
 const StudentDetailed = ({ match }) => {
@@ -185,7 +187,6 @@ const StudentDetailed = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [student, setStudent] = useState();
   const [studentProjects, setStudentProjects] = useState([]);
-  const [modal, setModal] = useState(false);
 
   const getStudent = async () => {
     try {
@@ -218,11 +219,6 @@ const StudentDetailed = ({ match }) => {
     }
   };
 
-  const openSaveStudent = () => {
-    console.log("cliked star");
-    setModal(true);
-  };
-
   //http://18.213.74.196:8000/api/student_project/list_by_student
 
   useEffect(() => {
@@ -253,9 +249,6 @@ const StudentDetailed = ({ match }) => {
                       {student.full_name}
                     </Typography>
                   </div>
-                  <IconButton onClick={openSaveStudent}>
-                    <StarBorderIcon fontSize="large" />
-                  </IconButton>
                 </div>
               </ListItemText>
             </ListItem>
@@ -366,11 +359,11 @@ const StudentDetailed = ({ match }) => {
                           key={index}
                           icon={<WebRoundedIcon />}>
                           <h3 className={classes.verticalElementTitle}>
-                            "{project.project_name}"
+                            {project.project_name}
                           </h3>
-                          <h4 className={classes.verticalElementSubtitle}>
+                          <h5 className={classes.verticalElementSubtitle}>
                             {project.project_role}
-                          </h4>
+                          </h5>
                           {project.project_tech
                             .split(",")
                             .map((skill, index) => (
@@ -424,7 +417,7 @@ const StudentDetailed = ({ match }) => {
           </List>
         </>
       )}
-      {modal ? <SaveStudentModal modal={modal} setModal={setModal} /> : null}
+      <SaveStudent studentId={match.params.id}></SaveStudent>
     </>
   );
 };

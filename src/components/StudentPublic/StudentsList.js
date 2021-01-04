@@ -102,8 +102,7 @@ const StudentsList = ({ loading, studentsList }) => {
       {loading ? (
         <LinearProgress
           color="secondary"
-          style={{ margin: "20px" }}
-        ></LinearProgress>
+          style={{ margin: "20px" }}></LinearProgress>
       ) : (
         <Grid container spacing={4} className={classes.gridRoot}>
           {studentsList.map((student) => (
@@ -117,8 +116,7 @@ const StudentsList = ({ loading, studentsList }) => {
                   }}
                   avatar={<Avatar className={classes.avatar}></Avatar>}
                   title={student.full_name}
-                  subheader={`${student.degree} - ${student.major}`}
-                ></CardHeader>
+                  subheader={`${student.degree} - ${student.major}`}></CardHeader>
                 <CardContent className={classes.cardContent}>
                   <Typography className={classes.fieldTitle}>
                     Graduation Date
@@ -128,8 +126,7 @@ const StudentsList = ({ loading, studentsList }) => {
                   </Typography>
                 </CardContent>
                 <CardContent
-                  className={`${classes.cardContent} ${classes.noPaddingTop}`}
-                >
+                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
                   <Typography className={classes.fieldTitle}>
                     Description
                   </Typography>
@@ -138,12 +135,10 @@ const StudentsList = ({ loading, studentsList }) => {
                   </Typography>
                 </CardContent>
                 <CardContent
-                  className={`${classes.cardContent} ${classes.noPaddingTop}`}
-                >
+                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
                   <Typography
                     variant="subtitle2"
-                    className={classes.fieldTitle}
-                  >
+                    className={classes.fieldTitle}>
                     Skills
                   </Typography>
                   <div className={classes.skillsRoot}>
@@ -165,15 +160,13 @@ const StudentsList = ({ loading, studentsList }) => {
                 <Divider></Divider>
                 <CardContent>
                   <Link
-                    href={`${url}/${student.username_id}`}
-                    style={{ textDecoration: "none" }}
-                  >
+                    href={`${url}/${student.student_db_id}`}
+                    style={{ textDecoration: "none" }}>
                     <Button
                       color="secondary"
                       size="small"
                       variant="contained"
-                      className={classes.button}
-                    >
+                      className={classes.button}>
                       View Profile
                     </Button>
                   </Link>

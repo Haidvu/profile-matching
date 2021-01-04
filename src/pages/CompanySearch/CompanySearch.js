@@ -119,6 +119,7 @@ export default function CompanySearch() {
         getConfig()
       )
       .then((res) => {
+        console.log(res.data);
         setLoading(false);
         setStudentsList(res.data);
       })
