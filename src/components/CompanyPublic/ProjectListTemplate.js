@@ -7,7 +7,6 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
 import axios from 'axios';
 import { getConfig } from '../../authConfig';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -16,15 +15,11 @@ import MuiAlert from '@material-ui/lab/Alert';
 import BusinessRoundedIcon from "@material-ui/icons/BusinessRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
-
 /* Speed Dial Material UI */
-
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import SaveIcon from '@material-ui/icons/Save';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -188,11 +183,9 @@ function Alert(props) {
 
 const actions = [
   { icon: <SaveIcon />, name: 'Save Project' },
-  /*{ icon: <ShareIcon />, name: 'Share' }*/
 ];
 
 export default function ProjectsListTemplate({ match }) {
-  let { url } = useRouteMatch();
 
   const classes = useStyles();
 
@@ -226,9 +219,6 @@ export default function ProjectsListTemplate({ match }) {
       project_id: match.params.project,
       student_preference_for_project: "0"
     };
-
-    console.log(data);
-
     axios
       .post(
         "http://18.213.74.196:8000/api/student_select_project/create",
@@ -280,19 +270,6 @@ export default function ProjectsListTemplate({ match }) {
 
 
   }, [])
-
-  /*const profileInfo = {
-    company_name: "Company Test",
-    company_website: "hello.com",
-    company_contact_email: "geourge@curious.com",
-    project_id: 3,
-    project_name: "Build a Website",
-    project_description: "Perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi cons",
-    project_type: "Backend",
-    project_tech: "Java,C++,Python",
-    project_deadline: "2020-12-30",
-    date_added: "2020-12-20"
-}*/
 
   return (
     <>

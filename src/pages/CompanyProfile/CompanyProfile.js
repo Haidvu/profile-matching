@@ -360,7 +360,6 @@ export default function CompanyProfile() {
       })
       .then((res) => {
         //first remove local storage
-        console.log("login successful");
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
@@ -396,7 +395,6 @@ export default function CompanyProfile() {
               getConfig()
             )
             .then((res) => {
-              console.log("update successful");
               dispatch({ type: "UPDATE_PROFILE", payload: res.data });
               setDialogOpen(false);
               setShowEditFields(false);
@@ -406,7 +404,6 @@ export default function CompanyProfile() {
                   password: password,
                 })
                 .then((res) => {
-                  console.log("login again sucessful");
                   localStorage.setItem("token", res.data.access);
                   localStorage.setItem("role_id", res.data.role_id);
                   localStorage.setItem("email_id", res.data.email_id);
