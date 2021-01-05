@@ -316,18 +316,13 @@ export const StudentSearch = () => {
               <OutlinedInput
                 className={classes.keywordSearch}
                 placeholder="Search company projects using keyword(s)"
-                // onKeyDown={handleKeyword}
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
                 }}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Button size="large" fullWidth={true}>
-                      <SearchIcon
-                        className={classes.searchButton}
-                        aria-label="toggle password visibility"
-                        onClick={handleClickSearch}
-                      ></SearchIcon>
+                    <Button size="large" className={classes.searchButton} fullWidth={true} onClick={handleClickSearch}>
+                      <SearchIcon/>
                     </Button>
                   </InputAdornment>
                 }
