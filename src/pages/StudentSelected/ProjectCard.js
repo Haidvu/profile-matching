@@ -11,10 +11,8 @@ import {
   Divider,
   LinearProgress,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   MenuItem,
   Select,
   InputLabel,
@@ -23,8 +21,7 @@ import {
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, useRouteMatch } from "react-router-dom";
-import { Chat } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
 
@@ -120,13 +117,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
-  let { url } = useRouteMatch();
   const classes = useStyles();
 
-  const [changePreferencOpen, setPreferenceChangeOpen] = useState(false);
+  const [changePreferenceOpen, setPreferenceChangeOpen] = useState(false);
   const [removeProjectOpen, setRemoveProjectOpen] = useState(false);
   const [preference, setPreference] = useState();
-  const [changingPeferencce, setChangingPeference] = useState(false);
+  const [changingPreference, setChangingPeference] = useState(false);
   const [removingProject, setRemovingProject] = useState(false);
 
   useEffect(() => setPreference(project.student_preference_for_project), [
@@ -166,14 +162,11 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
         getConfig()
       )
       .then((res) => {
-        console.log(res.data);
         removeProject(project.project_id);
         setRemovingProject(false);
         setRemoveProjectOpen(false);
       });
   };
-
-  //console.log("render");
 
   // stuff for menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -310,7 +303,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
       {/* modal for changing preference */}
       <div>
         <Dialog
-          open={changePreferencOpen}
+          open={changePreferenceOpen}
           onClose={() => setPreferenceChangeOpen(false)}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -319,7 +312,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
             <InputLabel className={classes.selectLable} id="changePreference">
               Select your preference for <strong>{project.project_name}</strong>
             </InputLabel>
-            {changingPeferencce ? (
+            {changingPreference ? (
               <LinearProgress className={classes.loading} />
             ) : (
                 <Select
@@ -338,14 +331,14 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
             <Button
               onClick={() => confirmPeferenceChange()}
               color="primary"
-              disabled={changingPeferencce}
+              disabled={changingPreference}
             >
               Confirm
             </Button>
             <Button
-              onClick={() => setPreferenceChangeOpen(false)}
+              onClick={() =>{setPreferenceChangeOpen(false); setPreference(project.student_preference_for_project)}}
               color="primary"
-              disabled={changingPeferencce}
+              disabled={changingPreference}
             >
               Cancel
             </Button>

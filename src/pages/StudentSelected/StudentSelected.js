@@ -2,18 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Grid,
-  Chip,
-  Button,
   Card,
-  Link,
-  CardHeader,
   CardContent,
-  Avatar,
   Divider,
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useRouteMatch } from "react-router-dom";
 import ProjectCard from "./ProjectCard";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
@@ -40,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StudentSelected = () => {
-  let { url } = useRouteMatch();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [selectedProjects, setSelectedProjects] = useState([]);
@@ -48,7 +41,6 @@ const StudentSelected = () => {
   const { data } = useContext(DataContext);
 
   const matchProjects = (selections, allProjects) => {
-    //console.log(selections, allProjects);
 
     return selections.map((selection) => {
       const match = allProjects.find(
@@ -71,7 +63,7 @@ const StudentSelected = () => {
       )
       .then((res) => {
         const studentSelection = res.data.filter(
-          (selection) => selection.student_id == data.profile.student_id
+          (selection) => selection.student_id === data.profile.student_id
         );
         const param = {
           company_name: "",
@@ -156,8 +148,6 @@ const StudentSelected = () => {
       </div>
     );
   };
-
-  console.log(selectedProjects);
 
   return (
     <>

@@ -51,24 +51,20 @@ const SaveStudent = ({ studentId }) => {
         getConfig()
       );
       const sp = savedProjectsResponse.data.filter((item) => {
-        return item.student_db_id == studentId;
+        return item.student_db_id === studentId;
       });
-      console.log("Company Projects: ", companyProjectsResponse.data);
-
+     
       let projectsToShow = [];
       companyProjectsResponse.data.forEach((project) => {
-        if (!sp.some((element) => element.project_id == project.project_id)) {
+        if (!sp.some((element) => element.project_id === project.project_id)) {
           projectsToShow.push(project);
         }
       });
-      console.log("Projects to show: ", projectsToShow);
       setCompanyProjectsToShow(projectsToShow);
     } catch (e) {
       console.log(e);
     }
   };
-
-  //const [pass, fail] = a.reduce(([p, f], e) => (e > 5 ? [[...p, e], f] : [p, [...f, e]]), [[], []]);
 
   useEffect(() => {
     getCompanyProjects();
@@ -76,14 +72,14 @@ const SaveStudent = ({ studentId }) => {
 
   const saveStudentToProject = async () => {
     try {
-      const response = axios.post(
+      axios.post(
         "http://18.213.74.196:8000/api/project_select_student/create",
         saveStudent,
         getConfig()
       );
       setCompanyProjectsToShow([
         ...companyProjectsToShow.filter((project) => {
-          return project.project_id != saveStudent.project_id;
+          return project.project_id !== saveStudent.project_id;
         }),
       ]);
       setSaveStudent({
@@ -91,7 +87,6 @@ const SaveStudent = ({ studentId }) => {
         project_id: null,
         project_preference_for_student: null,
       });
-      console.log(response);
     } catch (e) {
       console.log(e);
     }

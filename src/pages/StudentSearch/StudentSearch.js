@@ -316,19 +316,13 @@ export const StudentSearch = () => {
               <OutlinedInput
                 className={classes.keywordSearch}
                 placeholder="Search company projects using keyword(s)"
-                // onKeyDown={handleKeyword}
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
-                  console.log(searchInput);
                 }}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Button size="large" fullWidth={true}>
-                      <SearchIcon
-                        className={classes.searchButton}
-                        aria-label="toggle password visibility"
-                        onClick={handleClickSearch}
-                      ></SearchIcon>
+                    <Button size="large" className={classes.searchButton} fullWidth={true} onClick={handleClickSearch}>
+                      <SearchIcon/>
                     </Button>
                   </InputAdornment>
                 }
@@ -399,9 +393,6 @@ export const StudentSearch = () => {
                           className={classes.searchSelect}
                           onChange={(e) => {
                             e = e ? e : [];
-                            console.log(e);
-                            // var compNameSeparatedByCommas = "Jerel's Donut's"
-                            // var compNameSeparatedByCommas = "Jerel's Donut's"
                             var compNameSeparatedByCommas = Array.prototype.map
                               .call(e, (s) => s.label)
                               .toString();
