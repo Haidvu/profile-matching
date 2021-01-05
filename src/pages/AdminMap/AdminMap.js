@@ -67,7 +67,7 @@ useEffect(() => {
     res.data.map((res) => {
         let address = getAddress(res.company_address) + res.company_zip;
         setData(data =>[...data,{
-          coordinates: [res.company_longitude,res.company_latitude],
+          coordinates: [ parseFloat(res.company_longitude), parseFloat(res.company_latitude)],
           name: res.company_name,
           description: res.company_description,
           phone: res.company_phone_no,
@@ -89,7 +89,6 @@ useEffect(() => {
     sizeScale: 2000,
     sizeMinPixels: 30,
   });
-  console.log(data);
   return (
     <DeckGL
       layers={[layer]}

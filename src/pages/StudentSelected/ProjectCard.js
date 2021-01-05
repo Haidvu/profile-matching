@@ -336,7 +336,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
               Confirm
             </Button>
             <Button
-              onClick={() => setPreferenceChangeOpen(false)}
+              onClick={() =>{setPreferenceChangeOpen(false); setPreference(project.student_preference_for_project)}}
               color="primary"
               disabled={changingPreference}
             >
