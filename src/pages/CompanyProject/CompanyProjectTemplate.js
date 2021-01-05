@@ -544,6 +544,10 @@ export default function CompanyProject({ match }) {
                           className={classes.textForm}
                           multiline={true}
                           name="project_name"
+                          inputProps={{
+                            maxlength: 100
+                          }}
+                          helperText={`${companyInput.project_name.length}/100`}
                           onChange={(e) => {
                             setCompanyInput({
                               ...companyInput,
@@ -615,6 +619,10 @@ export default function CompanyProject({ match }) {
                           className={classes.textForm}
                           multiline={true}
                           name="project_description"
+                          inputProps={{
+                            maxlength: 500
+                          }}
+                          helperText={`${companyInput.project_description.length}/500`}
                           onChange={(e) => {
                             setCompanyInput({
                               ...companyInput,
