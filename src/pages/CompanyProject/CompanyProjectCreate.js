@@ -144,28 +144,25 @@ export default function CompanyProjectCreate() {
 
   const animatedComponents = makeAnimated();
 
-  const projectType = [
-    {
-      value: "1",
-      label: "Cloud Development",
-    },
-    {
-      value: "2",
-      label: "Frontend",
-    },
-    {
-      value: "3",
-      label: "Backend",
-    },
-    {
-      value: "4",
-      label: "Mobile Development",
-    },
-    {
-      value: "5",
-      label: "Data Management",
-    },
-  ];
+   //api for select ProjectType
+   const [projectType, setProjectType] = useState({});
+   useEffect(() => {
+     axios
+       .get(
+         "http://18.213.74.196:8000/api/company_project/list_project_type",
+         getConfig()
+       )
+       .then((res) => {
+         const data = res.data.map((projType) => {
+           return { label: projType.project_type };
+         });
+ 
+         setProjectType(data);
+       })
+       .catch((err) => {
+         console.log(err);
+       });
+   }, []);
 
   const { data } = useContext(DataContext);
   const { profile } = data;
