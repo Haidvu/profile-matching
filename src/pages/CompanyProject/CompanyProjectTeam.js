@@ -56,8 +56,6 @@ const CompanyProjectTeam = ({ id }) => {
         setTeamMembersDelta(team);
         setShowEditFields(showEditFieldsTemp);
         setLoading(false);
-
-console.log(savedMembers)
       })
       .catch((err) => {
         console.log(err);
