@@ -269,7 +269,7 @@ export default function ProjectsListTemplate({ match }) {
       });
 
 
-  }, [])
+  }, [match.params.project])
 
   return (
     <>
