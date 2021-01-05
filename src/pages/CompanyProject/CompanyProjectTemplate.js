@@ -130,7 +130,6 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
   },
 
-  // Elisa's styles
   breadcrumbs: {
     padding: "10px",
   },
@@ -140,14 +139,12 @@ const useStyles = makeStyles((theme) => ({
   },
   companyProjectCards: {
     padding: "70px",
-    // width: "100%"
   },
   root: {
     flexGrow: 1,
   },
   cardActionArea: {
     height: "230px",
-    //overflow: "hidden"
   },
   cardText: {
     fontSize: "13px",
@@ -192,7 +189,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#ffffff",
     marginRight: "15px",
     marginLeft: "15px",
-    marginTop: "7px",
+    marginTop: "20px",
+    marginBottom: "20px",
+    padding: "10px"
   },
   selectProjectType: {
     width: "100%",
@@ -212,6 +211,19 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 100,
   },
   tabsItem: {},
+  iconList: {
+    textAlign: "right"
+  },
+  divider: {
+    listStyle: "none",
+    margin: "10px"
+  },
+  information: {
+    margin: "10px"
+  },
+  iconListGrid: {
+    textAlign: "center"
+  }
 }));
 
 function TabPanel(props) {
@@ -267,25 +279,25 @@ export default function CompanyProject({ match }) {
     setValue(newValue);
   };
 
-   //api for select ProjectType
-   const [projectType, setProjectType] = useState({});
-   useEffect(() => {
-     axios
-       .get(
-         "http://18.213.74.196:8000/api/company_project/list_project_type",
-         getConfig()
-       )
-       .then((res) => {
-         const data = res.data.map((projType) => {
-           return { label: projType.project_type};
-         });
- 
-         setProjectType(data);
-       })
-       .catch((err) => {
-         console.log(err);
-       });
-   }, []);
+  //api for select ProjectType
+  const [projectType, setProjectType] = useState({});
+  useEffect(() => {
+    axios
+      .get(
+        "http://18.213.74.196:8000/api/company_project/list_project_type",
+        getConfig()
+      )
+      .then((res) => {
+        const data = res.data.map((projType) => {
+          return { label: projType.project_type };
+        });
+
+        setProjectType(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -357,8 +369,8 @@ export default function CompanyProject({ match }) {
       project_deadline: companyInput.project_deadline,
       project_tech: companyInput.project_tech
         ? Array.prototype.map
-            .call(companyInput.project_tech, (s) => s.label)
-            .toString()
+          .call(companyInput.project_tech, (s) => s.label)
+          .toString()
         : "",
       is_published: companyInput.is_published,
       username: id,
@@ -367,8 +379,8 @@ export default function CompanyProject({ match }) {
     axios
       .put(
         "http://18.213.74.196:8000/api/company_project/" +
-          match.params.project +
-          "/update",
+        match.params.project +
+        "/update",
         data,
         getConfig()
       )
@@ -481,71 +493,68 @@ export default function CompanyProject({ match }) {
           </div>
         </>
       ) : (
-        <>
-          <div>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              centered
-              classes={{
-                root: classes.customTabRoot,
-                indicator: classes.customTabIndicator,
-              }}
-              className={classes.tabs}>
-              <Tab
-                className={classes.tabsItem}
-                label="DESCRIPTION"
-                icon={<StarsRoundedIcon />}
-                {...a11yProps(0)}
-              />
-              <Tab
-                className={classes.tabsItem}
-                label="DETAILS"
-                icon={<WorkOutlineOutlinedIcon />}
-                {...a11yProps(1)}
-              />
-              <Tab
-                className={classes.tabsItem}
-                label="MY TEAM"
-                icon={<AccountCircleRoundedIcon {...a11yProps(2)} />}
-              />
-              {/* <Tab className={classes.tabsItem} label="INFORMATION" icon={<HelpRoundedIcon />} {...a11yProps(3)} /> */}
-            </Tabs>
-            <TabPanel className={classes.tabsPanel} value={value} index={0}>
-              <List>
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <BusinessCenterRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Project Name
-                      </Box>
-                    }
-                    secondary={
-                      companyEdit.project_name === false ? (
-                        <Box
-                          component="span"
-                          variant="body2"
-                          className={`${classes.inline} ${classes.sectionContent}`}
-                          color="textPrimary">
-                          {companyInfo.project_name}
+          <>
+            <div>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                centered
+                classes={{
+                  root: classes.customTabRoot,
+                  indicator: classes.customTabIndicator,
+                }}
+                className={classes.tabs}>
+                <Tab
+                  className={classes.tabsItem}
+                  label="DESCRIPTION"
+                  icon={<StarsRoundedIcon />}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  className={classes.tabsItem}
+                  label="DETAILS"
+                  icon={<WorkOutlineOutlinedIcon />}
+                  {...a11yProps(1)}
+                />
+                <Tab
+                  className={classes.tabsItem}
+                  label="MY TEAM"
+                  icon={<AccountCircleRoundedIcon {...a11yProps(2)} />}
+                />
+                {/* <Tab className={classes.tabsItem} label="INFORMATION" icon={<HelpRoundedIcon />} {...a11yProps(3)} /> */}
+              </Tabs>
+              <TabPanel className={classes.tabsPanel} value={value} index={0}>
 
-                          {updateErrors.project_name ? (
-                            <Typography className={classes.error} color="error">
-                              {updateErrors.project_name} Project not saved.
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
+                    <BusinessCenterRoundedIcon />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Project Name
+                      </Box>
+                    {companyEdit.project_name === false ? (
+                      <Box
+                        component="div"
+                        variant="body2"
+                        className={classes.information}
+                        color="textPrimary">
+                        {companyInfo.project_name}
+
+                        {updateErrors.project_name ? (
+                          <Typography className={classes.error} color="error">
+                            {updateErrors.project_name} Project not saved.
                               Please fix all errors before saving.
-                            </Typography>
-                          ) : null}
-                        </Box>
-                      ) : (
+                          </Typography>
+                        ) : null}
+                      </Box>
+                    ) : (
                         <TextField
-                          className={classes.textForm}
+                          className={`${classes.textForm} ${classes.information}`}
                           multiline={true}
                           name="project_name"
                           inputProps={{
-                            maxlength: 100
+                            maxLength: 100
                           }}
                           helperText={`${companyInput.project_name.length}/100`}
                           onChange={(e) => {
@@ -558,52 +567,61 @@ export default function CompanyProject({ match }) {
                         />
                       )
                     }
-                  />
-                  {companyEdit.project_name === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("project_name");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+                    {companyEdit.project_name === false ? (
                       <IconButton
                         className={classes.icon}
                         onClick={() => {
-                          handleCancel("project_name");
+                          handleOpenEdit("project_name");
                         }}>
-                        <ClearRoundedIcon />
+                        <EditTwoToneIcon />
                       </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("project_name");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
+                    ) : (
+                        <>
+                          <Grid container direction="row">
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleCancel("project_name");
+                                }}>
+                                <ClearRoundedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={6} >
 
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleSave("project_name");
+                                }}>
+                                <CheckRoundedIcon style={{ color: "green" }} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+
+                        </>
+                      )}
+                  </Grid>
+                </Grid>
+
+                <Divider variant="inset" component="li" className={classes.divider} />
+
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
                     <SubjectRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Description
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Description
                       </Box>
-                    }
-                    secondary={
+                    {
                       companyEdit.project_description === false ? (
                         <Box
-                          component="span"
+                          component="div"
                           variant="body2"
-                          className={`${classes.inline} ${classes.sectionContent}`}
+                          className={classes.information}
                           color="textPrimary">
                           {companyInfo.project_description}
 
@@ -615,76 +633,85 @@ export default function CompanyProject({ match }) {
                           ) : null}
                         </Box>
                       ) : (
-                        <TextField
-                          className={classes.textForm}
-                          multiline={true}
-                          name="project_description"
-                          inputProps={{
-                            maxlength: 500
-                          }}
-                          helperText={`${companyInput.project_description.length}/500`}
-                          onChange={(e) => {
-                            setCompanyInput({
-                              ...companyInput,
-                              project_description: e.target.value,
-                            });
-                          }}
-                          value={companyInput.project_description}
-                        />
-                      )
+                          <TextField
+                            className={`${classes.textForm} ${classes.information}`}
+                            multiline={true}
+                            name="project_description"
+                            inputProps={{
+                              maxLength: 500
+                            }}
+                            helperText={`${companyInput.project_description.length}/500`}
+                            onChange={(e) => {
+                              setCompanyInput({
+                                ...companyInput,
+                                project_description: e.target.value,
+                              });
+                            }}
+                            value={companyInput.project_description}
+                          />
+                        )
                     }
-                  />
-                  {companyEdit.project_description === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("project_description");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+                    {companyEdit.project_description === false ? (
                       <IconButton
                         className={classes.icon}
                         onClick={() => {
-                          handleCancel("project_description");
+                          handleOpenEdit("project_description");
                         }}>
-                        <ClearRoundedIcon />
+                        <EditTwoToneIcon />
                       </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("project_description");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
+                    ) : (
+                        <>
+                          <Grid container direction="row">
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleCancel("project_description");
+                                }}>
+                                <ClearRoundedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={6} >
 
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleSave("project_description");
+                                }}>
+                                <CheckRoundedIcon style={{ color: "green" }} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+
+                        </>
+                      )}
+                  </Grid>
+                </Grid>
+
+                <Divider variant="inset" component="li" className={classes.divider} />
+
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
                     {companyInfo.is_published === true ? (
                       <>
                         <VisibilityIcon />
                       </>
                     ) : (
-                      <>
-                        <VisibilityOffIcon />
-                      </>
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Visibility
+                        <>
+                          <VisibilityOffIcon />
+                        </>
+                      )}
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Visibility
                       </Box>
-                    }
-                    secondary={
+                    {
                       companyEdit.is_published === false ? (
                         <Box
-                          component="span"
+                          component="div"
                           variant="body2"
                           className={`${classes.inline} ${classes.sectionContent}`}
                           color="textPrimary">
@@ -693,390 +720,431 @@ export default function CompanyProject({ match }) {
                               <Typography
                                 variant="body2"
                                 color="textSecondary"
-                                component="p"
-                                className={classes.deadline}>
+                                component="div"
+                                className={classes.information}>
                                 PUBLIC
                               </Typography>
                             </>
                           ) : (
-                            <>
-                              <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                component="p"
-                                className={classes.deadline}>
-                                DRAFT
+                              <>
+                                <Typography
+                                  variant="body2"
+                                  color="textSecondary"
+                                  component="div"
+                                  className={classes.deadline}>
+                                  DRAFT
                               </Typography>
-                            </>
-                          )}
+                              </>
+                            )}
                         </Box>
                       ) : (
-                        <FormControl
-                          component="fieldset"
-                          style={{
-                            width: "100%",
-                            paddingRight: "10px",
-                            paddingLeft: "10px",
-                          }}>
-                          <FormGroup aria-label="position" row>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={companyInput.is_published || false}
-                                  value={companyInfo.is_published}
-                                  style={{ color: "#C8102E" }}
-                                  onChange={(e) => {
-                                    setCompanyInput({
-                                      ...companyInput,
-                                      is_published: e.target.checked,
-                                    });
-                                  }}
-                                />
-                              }
-                              label={
-                                <Typography style={{ fontSize: 15 }}>
-                                  Check if you want to publish this project
+                          <FormControl
+                            component="fieldset"
+                            style={{
+                              width: "100%",
+                              paddingRight: "10px",
+                              paddingLeft: "10px",
+                            }}>
+                            <FormGroup aria-label="position" row>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={companyInput.is_published || false}
+                                    value={companyInfo.is_published}
+                                    style={{ color: "#C8102E" }}
+                                    onChange={(e) => {
+                                      setCompanyInput({
+                                        ...companyInput,
+                                        is_published: e.target.checked,
+                                      });
+                                    }}
+                                  />
+                                }
+                                label={
+                                  <Typography style={{ fontSize: 15 }}>
+                                    Check if you want to publish this project
                                 </Typography>
-                              }
-                            />
-                          </FormGroup>
-                        </FormControl>
-                      )
+                                }
+                              />
+                            </FormGroup>
+                          </FormControl>
+                        )
                     }
-                  />
-                  {companyEdit.is_published === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("is_published");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
+
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+                    {companyEdit.is_published === false ? (
                       <IconButton
                         className={classes.icon}
                         onClick={() => {
-                          handleCancel("is_published");
+                          handleOpenEdit("is_published");
                         }}>
-                        <ClearRoundedIcon />
+                        <EditTwoToneIcon />
                       </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("is_published");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
-              </List>
-            </TabPanel>
-            <TabPanel className={classes.tabsPanel} value={value} index={1}>
-              <List>
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
+                    ) : (
+                        <>
+                          <Grid container direction="row">
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleCancel("is_published");
+                                }}>
+                                <ClearRoundedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={6} >
+
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleSave("is_published");
+                                }}>
+                                <CheckRoundedIcon style={{ color: "green" }} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+
+                        </>
+                      )}
+                  </Grid>
+                </Grid>
+
+              </TabPanel>
+              <TabPanel className={classes.tabsPanel} value={value} index={1}>
+
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
                     <BusinessCenterRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Project Type
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Project Type
                       </Box>
-                    }
-                    secondary={
+                    {
                       companyEdit.project_type === false ? (
                         <Box
-                          component="span"
+                          component="div"
                           variant="body2"
-                          className={`${classes.inline} ${classes.sectionContent}`}
+                          className={classes.information}
                           color="textPrimary">
                           {companyInfo.project_type}
                         </Box>
                       ) : (
+                          <>
+                            <Select
+                              className={`${classes.selectProjectType} ${classes.information}`}
+                              closeMenuOnSelect={true}
+                              options={projectType}
+                              value={{
+                                label: companyInput.project_type,
+                                value: companyInput.project_type
+                              }}
+                              name="project_type"
+                              onChange={(e) => {
+                                setCompanyInput({
+                                  ...companyInput,
+                                  project_type: e.label,
+                                });
+                              }}
+                            />
+                          </>
+                        )
+                    }
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+                    {companyEdit.project_type === false ? (
+                      <IconButton
+                        className={classes.icon}
+                        onClick={() => {
+                          handleOpenEdit("project_type");
+                        }}>
+                        <EditTwoToneIcon />
+                      </IconButton>
+                    ) : (
                         <>
-                          <Select
-                            className={classes.selectProjectType}
-                            closeMenuOnSelect={true}
-                            options={projectType}
-                            value={{
-                              label: companyInput.project_type,
-                              value:companyInput.project_type
-                            }}
-                            name="project_type"
-                            onChange={(e) => {
-                              setCompanyInput({
-                                ...companyInput,
-                                project_type: e.label,
-                              });
-                            }}
-                          />
+                          <Grid container direction="row">
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleCancel("project_type");
+                                }}>
+                                <ClearRoundedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={6} >
+
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleSave("project_type");
+                                }}>
+                                <CheckRoundedIcon style={{ color: "green" }} />
+                              </IconButton>
+                            </Grid>
+
+                          </Grid>
+
                         </>
-                      )
-                    }
-                  />
-                  {companyEdit.project_type === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("project_type");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleCancel("project_type");
-                        }}>
-                        <ClearRoundedIcon />
-                      </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("project_type");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
+                      )}
+                  </Grid>
+                </Grid>
+
+                <Divider variant="inset" component="li" className={classes.divider} />
+
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
                     <DateRangeRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Deadline
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                      Deadline
                       </Box>
-                    }
-                    secondary={
+                    {
                       companyEdit.project_deadline === false ? (
                         <Box
-                          component="span"
+                          component="div"
                           variant="body2"
-                          className={`${classes.inline} ${classes.sectionContent}`}
+                          className={classes.information}
                           color="textPrimary">
                           {companyInfo.project_deadline}
                         </Box>
                       ) : (
-                        <TextField
-                          type="date"
-                          name="project_deadline"
-                          onChange={(e) => {
-                            setCompanyInput({
-                              ...companyInput,
-                              project_deadline: e.target.value,
-                            });
-                          }}
-                          value={companyInput.project_deadline}
-                        />
-                      )
+                          <TextField
+                            className={`${classes.textForm} ${classes.information}`}
+
+                            type="date"
+                            name="project_deadline"
+                            onChange={(e) => {
+                              setCompanyInput({
+                                ...companyInput,
+                                project_deadline: e.target.value,
+                              });
+                            }}
+                            value={companyInput.project_deadline}
+                          />
+                        )
                     }
-                  />
-                  {companyEdit.project_deadline === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("project_deadline");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+                    {companyEdit.project_deadline === false ? (
                       <IconButton
                         className={classes.icon}
                         onClick={() => {
-                          handleCancel("project_deadline");
+                          handleOpenEdit("project_deadline");
                         }}>
-                        <ClearRoundedIcon />
+                        <EditTwoToneIcon />
                       </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("project_deadline");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <LaptopRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Skills
+                    ) : (
+                        <>
+                          <Grid container direction="row">
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleCancel("project_deadline");
+                                }}>
+                                <ClearRoundedIcon />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={6} >
+                              <IconButton
+                                className={classes.icon}
+                                onClick={() => {
+                                  handleSave("project_deadline");
+                                }}>
+                                <CheckRoundedIcon style={{ color: "green" }} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+                        </>
+                      )}
+                  </Grid>
+                </Grid>
+
+                <Divider variant="inset" component="li" className={classes.divider} />
+
+                <Grid container direction="row" spacing={3}>
+                  <Grid item xs={1} className={classes.iconList}>
+                  <LaptopRoundedIcon />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Box component={"span"} className={classes.sectionHeader}>
+                    Skills
                       </Box>
-                    }
-                    secondary={
-                      <>
-                        {companyEdit.project_tech === false ? (
+                      {
+                        <>
+                          {companyEdit.project_tech === false ? (
+                            <Box
+                              component="div"
+                              variant="body2"
+                              className={classes.information}
+                              color="textPrimary">
+                              {Object.keys(companyInput).length &&
+                                companyInput.project_tech ? (
+                                  companyInput.project_tech.map((skill, index) => (
+                                    <Chip
+                                      component={"span"}
+                                      label={skill.label}
+                                      className={classes.chips}
+                                      key={index}
+                                    />
+                                  ))
+                                ) : (
+                                  <></>
+                                )}
+                            </Box>
+                          ) : (
+                              <Select
+                                className={classes.selectCompanySkills}
+                                fullWidth
+                                closeMenuOnSelect={true}
+                                components={animatedComponents}
+                                isMulti
+                                isSearchable
+                                // If filtering by object, the default value has to be the same object as the options, not a copy
+                                value={skills.filter((el) => {
+                                  return companyInput.project_tech.some((f) => {
+                                    return f.label === el.label;
+                                  });
+                                })}
+                                options={skills}
+                                onChange={(e) => {
+                                  e = e ? e : [];
+
+                                  setCompanyInput({
+                                    ...companyInput,
+                                    project_tech: e,
+                                  });
+                                }}
+                              />
+                            )}
+
+                          {updateErrors.project_tech ? (
+                            <Typography className={classes.error} color="error">
+                              {updateErrors.project_tech} Project "
+                              {companyInfo.project_name}" not saved. Please fix
+                            all errors before saving.
+                            </Typography>
+                          ) : null}
+                        </>
+                      }
+
+                  </Grid>
+                  <Grid item xs={2} className={classes.iconListGrid}>
+
+                  {companyEdit.project_tech === false ? (
+                      <IconButton
+                        className={classes.icon}
+                        onClick={() => {
+                          handleOpenEdit("project_tech");
+                        }}>
+                        <EditTwoToneIcon />
+                      </IconButton>
+                    ) : (
+                        <>
+                        <Grid container direction="row">
+                            <Grid item xs={6} >
+                          <IconButton
+                            className={classes.icon}
+                            onClick={() => {
+                              handleCancel("project_tech");
+                            }}>
+                            <ClearRoundedIcon />
+                          </IconButton>
+                          </Grid>
+                          <Grid item xs={6} >
+
+                          <IconButton
+                            className={classes.icon}
+                            onClick={() => {
+                              handleSave("project_tech");
+                            }}>
+                            <CheckRoundedIcon style={{ color: "green" }} />
+                          </IconButton>
+                          </Grid>
+                          </Grid>
+                        </>
+                      )}
+                  </Grid>
+                </Grid>
+              </TabPanel>
+              <TabPanel className={classes.tabsPanel} value={value} index={2}>
+                <List>
+                  <ListItem alignItems="flex-start">
+                    <ListItemIcon>
+                      <AccountCircleRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Box component={"span"} className={classes.sectionHeader}>
+                          Team Capacity
+                      </Box>
+                      }
+                      secondary={
+                        companyEdit.company_project_team_capacity === false ? (
                           <Box
-                            component="div"
+                            component="span"
                             variant="body2"
                             className={`${classes.inline} ${classes.sectionContent}`}
                             color="textPrimary">
-                            {Object.keys(companyInput).length &&
-                            companyInput.project_tech ? (
-                              companyInput.project_tech.map((skill, index) => (
-                                <Chip
-                                  component={"span"}
-                                  label={skill.label}
-                                  className={classes.chips}
-                                  key={index}
-                                />
-                              ))
-                            ) : (
-                              <></>
-                            )}
+                            {companyInfo.company_project_team_capacity}
                           </Box>
                         ) : (
-                          <Select
-                            className={classes.selectCompanySkills}
-                            fullWidth
-                            closeMenuOnSelect={true}
-                            components={animatedComponents}
-                            isMulti
-                            isSearchable
-                            // If filtering by object, the default value has to be the same object as the options, not a copy
-                            value={skills.filter((el) => {
-                              return companyInput.project_tech.some((f) => {
-                                return f.label === el.label;
-                              });
-                            })}
-                            options={skills}
-                            onChange={(e) => {
-                              e = e ? e : [];
-
-                              setCompanyInput({
-                                ...companyInput,
-                                project_tech: e,
-                              });
-                            }}
-                          />
-                        )}
-
-                        {updateErrors.project_tech ? (
-                          <Typography className={classes.error} color="error">
-                            {updateErrors.project_tech} Project "
-                            {companyInfo.project_name}" not saved. Please fix
-                            all errors before saving.
-                          </Typography>
-                        ) : null}
-                      </>
-                    }
-                  />
-                  {companyEdit.project_tech === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("project_tech");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
+                            <TextField
+                              className={classes.textForm}
+                              multiline={true}
+                              name="company_project_team_capacity"
+                              onChange={(e) => {
+                                setCompanyInput({
+                                  ...companyInput,
+                                  company_project_team_capacity: e.target.value,
+                                });
+                              }}
+                              value={companyInput.company_project_team_capacity}
+                            />
+                          )
+                      }
+                    />
+                    {companyEdit.company_project_team_capacity === false ? (
                       <IconButton
                         className={classes.icon}
                         onClick={() => {
-                          handleCancel("project_tech");
+                          handleOpenEdit("company_project_team_capacity");
                         }}>
-                        <ClearRoundedIcon />
+                        <EditTwoToneIcon />
                       </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("project_tech");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
-              </List>
-            </TabPanel>
-            <TabPanel className={classes.tabsPanel} value={value} index={2}>
-              <List>
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <AccountCircleRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Team Capacity
+                    ) : (
+                        <>
+                          <IconButton
+                            className={classes.icon}
+                            onClick={() => {
+                              handleCancel("company_project_team_capacity");
+                            }}>
+                            <ClearRoundedIcon />
+                          </IconButton>
+                          <IconButton
+                            className={classes.icon}
+                            onClick={() => {
+                              handleSave("company_project_team_capacity");
+                            }}>
+                            <CheckRoundedIcon style={{ color: "green" }} />
+                          </IconButton>
+                        </>
+                      )}
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                  <ListItem alignItems="flex-start">
+                    <ListItemIcon>
+                      <SupervisorAccountIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Box component={"span"} className={classes.sectionHeader}>
+                          Student(s) Selected
                       </Box>
-                    }
-                    secondary={
-                      companyEdit.company_project_team_capacity === false ? (
-                        <Box
-                          component="span"
-                          variant="body2"
-                          className={`${classes.inline} ${classes.sectionContent}`}
-                          color="textPrimary">
-                          {companyInfo.company_project_team_capacity}
-                        </Box>
-                      ) : (
-                        <TextField
-                          className={classes.textForm}
-                          multiline={true}
-                          name="company_project_team_capacity"
-                          onChange={(e) => {
-                            setCompanyInput({
-                              ...companyInput,
-                              company_project_team_capacity: e.target.value,
-                            });
-                          }}
-                          value={companyInput.company_project_team_capacity}
-                        />
-                      )
-                    }
-                  />
-                  {companyEdit.company_project_team_capacity === false ? (
-                    <IconButton
-                      className={classes.icon}
-                      onClick={() => {
-                        handleOpenEdit("company_project_team_capacity");
-                      }}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : (
-                    <>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleCancel("company_project_team_capacity");
-                        }}>
-                        <ClearRoundedIcon />
-                      </IconButton>
-                      <IconButton
-                        className={classes.icon}
-                        onClick={() => {
-                          handleSave("company_project_team_capacity");
-                        }}>
-                        <CheckRoundedIcon style={{ color: "green" }} />
-                      </IconButton>
-                    </>
-                  )}
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <SupervisorAccountIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box component={"span"} className={classes.sectionHeader}>
-                        Student(s) Selected
-                      </Box>
-                    }
+                      }
                     // secondary={
                     //   companyEdit.company_project_team_capacity === false ? (
                     //     <Box
@@ -1101,8 +1169,8 @@ export default function CompanyProject({ match }) {
                     //     />
                     //   )
                     // }
-                  />
-                  {/* {companyEdit.company_project_team_capacity === false ? (
+                    />
+                    {/* {companyEdit.company_project_team_capacity === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -1128,13 +1196,13 @@ export default function CompanyProject({ match }) {
                       </IconButton>
                     </>
                   )} */}
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <CompanyProjectTeam id={match.params.project} />
-                </ListItem>
-              </List>
-            </TabPanel>
-            {/* <TabPanel className={classes.tabsPanel} value={value} index={3}>
+                  </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <CompanyProjectTeam id={match.params.project} />
+                  </ListItem>
+                </List>
+              </TabPanel>
+              {/* <TabPanel className={classes.tabsPanel} value={value} index={3}>
             <List>
               <ListItem alignItems="flex-start">
                 <ListItemIcon>
@@ -1157,9 +1225,10 @@ export default function CompanyProject({ match }) {
               </ListItem> 
             </List>
           </TabPanel>*/}
-          </div>
-        </>
-      )}
+            </div>
+          </>
+        )
+      }
 
       <Snackbar
         open={updateSuccess}
@@ -1178,6 +1247,6 @@ export default function CompanyProject({ match }) {
           before saving.
         </Alert>
       </Snackbar>
-    </div>
+    </div >
   );
 }

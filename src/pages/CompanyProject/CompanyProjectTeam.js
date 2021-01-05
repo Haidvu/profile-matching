@@ -46,7 +46,7 @@ const CompanyProjectTeam = ({ id }) => {
       )
       .then((res) => {
         const savedMembers = res.data.filter((item) => {
-          return item.project_id === id;
+          return parseInt(item.project_id) === parseInt(id);
         });
         savedMembers.forEach((member) => {
           team[member.student_db_id] = member;
@@ -56,6 +56,8 @@ const CompanyProjectTeam = ({ id }) => {
         setTeamMembersDelta(team);
         setShowEditFields(showEditFieldsTemp);
         setLoading(false);
+
+console.log(savedMembers)
       })
       .catch((err) => {
         console.log(err);
