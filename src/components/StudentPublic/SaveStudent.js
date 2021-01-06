@@ -15,12 +15,9 @@ import { getConfig } from "../../authConfig";
 import { DataContext } from "../../contexts/dataContext";
 
 const useStyles = makeStyles((theme) => ({
-  dialogTitle: {
-    fontSize: "10px",
-  },
   formControl: {
     disply: "block",
-    minWidth: theme.spacing(10 * 2),
+    minWidth: theme.spacing(8 * 2),
   },
 }));
 
@@ -53,7 +50,7 @@ const SaveStudent = ({ studentId }) => {
       const sp = savedProjectsResponse.data.filter((item) => {
         return parseInt(item.student_db_id) === parseInt(studentId);
       });
-     
+
       let projectsToShow = [];
       companyProjectsResponse.data.forEach((project) => {
         if (!sp.some((element) => element.project_id === project.project_id)) {
@@ -117,11 +114,11 @@ const SaveStudent = ({ studentId }) => {
               <Typography>Save Profile to the following Projects</Typography>
               <Grid container>
                 {companyProjectsToShow.map((project, index) => (
-                  <Grid container key={index} alignItems="center">
-                    <Grid item xs={2}>
+                  <Grid container key={index} alignItems="center" spacing={1}>
+                    <Grid item xs={12} sm={12} md={3}>
                       <Typography>{project.project_name}</Typography>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={5} md={3}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -136,7 +133,7 @@ const SaveStudent = ({ studentId }) => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={12} sm={3} md={3}>
                       <Button
                         variant="outlined"
                         color="secondary"
