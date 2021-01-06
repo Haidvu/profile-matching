@@ -471,10 +471,17 @@ export default function CompanySearch() {
                   var skillsSeparatedByCommas = Array.prototype.map
                     .call(e, (s) => s.label)
                     .toString();
-                  setSearchInput({
-                    ...searchInput,
-                    student_skills: skillsSeparatedByCommas.split(","),
-                  });
+                  if (skillsSeparatedByCommas.length > 0) {
+                    setSearchInput({
+                      ...searchInput,
+                      student_skills: skillsSeparatedByCommas.split(","),
+                    });
+                  } else {
+                    setSearchInput({
+                      ...searchInput,
+                      student_skills: [],
+                    });
+                  }
                 }}
                 options={skills}
                 styles={customStyles}
