@@ -193,7 +193,6 @@ export default function CompanyProject() {
 
   const history = useHistory();
 
-
   const { data } = useContext(DataContext);
 
   const { profile } = data;

@@ -46,6 +46,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export const getNewToken = () => {
+  let token = localStorage.getItem("token");
+  if (token) {
+    axios
+      .post("http://18.213.74.196:8000/api/token/refresh/", {
+        refresh: localStorage.getItem("refresh"),
+      })
+      .then((res) => {
+        console.log("Got new token: ", res.data.access);
+        localStorage.setItem("token", res.data.access);
+        setTimeout(getNewToken, 17900 * 1000); //Get new token approxiamtey every 4 hrs and 58 min.
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+};
+
 function Login() {
   const classes = useStyles();
   let history = useHistory();
@@ -71,6 +89,9 @@ function Login() {
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
         localStorage.setItem("email_id", res.data.email_id);
+        localStorage.setItem("refresh", res.data.refresh);
+        setTimeout(getNewToken, 17900 * 1000); //Get new token approxiamtey every 4 hrs and 58 min.
+        console.log(res);
         if (res.data.slug) {
           localStorage.setItem("slug", res.data.slug);
           history.push("/dashboard");

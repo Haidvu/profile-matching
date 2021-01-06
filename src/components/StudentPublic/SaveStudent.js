@@ -51,7 +51,7 @@ const SaveStudent = ({ studentId }) => {
         getConfig()
       );
       const sp = savedProjectsResponse.data.filter((item) => {
-        return item.student_db_id === studentId;
+        return parseInt(item.student_db_id) === parseInt(studentId);
       });
      
       let projectsToShow = [];
