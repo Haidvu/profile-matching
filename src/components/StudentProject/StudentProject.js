@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
     },
   },
+  projectEndDate: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 //Skills denotes to all the skills in the database
@@ -195,59 +198,65 @@ function StudentProject({ projects, setProjects, skills }) {
     } else if (currentProject.project_start_date === "") {
       alert("Please enter a start date for the project");
       return false;
-    } else if (currentProject.project_end_date === "") {
-      alert("Please enter a end date for the project");
-      return false;
-    } else if (
-      currentProject.project_start_date > currentProject.project_end_date
-    ) {
-      alert("Project end date cannot be before project start date");
-      return false;
+    } else if (!currentProject.project_in_progress) {
+      if (currentProject.project_end_date === "") {
+        alert(
+          'Please enter an end date for the project or select "projet in progress"'
+        );
+        return false;
+      } else if (
+        currentProject.project_start_date > currentProject.project_end_date
+      ) {
+        alert("Project end date cannot be before project start date");
+        return false;
+      }
     }
     return true;
   };
 
   const handleSave = (id) => {
-    if(validate()){
-    var project_id = id;
-    axios
-      .put(
-        `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
-        {
-          student_id: profile.student_id,
-          project_name: currentProject.project_name,
-          project_description: currentProject.project_description,
-          project_link: currentProject.project_link,
-          project_tech: currentProject.project_tech,
-          project_start_date: currentProject.project_start_date,
-          project_end_date: currentProject.project_end_date,
-          project_in_progress: currentProject.project_in_progress,
-          project_role: currentProject.project_role,
-        },
-        getConfig()
-      )
-      .then((res) => {
-        let updated_projects = projects.map((item) => {
-          let updatedItem = { ...item };
-          if (project_id === item.project_id) {
-            updatedItem.project_id = item.project_id;
-            updatedItem.project_name = res.data.project_name;
-            updatedItem.project_description = res.data.project_description;
-            updatedItem.project_link = res.data.project_link;
-            updatedItem.project_tech = res.data.project_tech;
-            updatedItem.project_start_date = res.data.project_start_date;
-            updatedItem.project_end_date = res.data.project_end_date;
-            updatedItem.project_in_progress = res.data.project_in_progress;
-            updatedItem.project_role = res.data.project_role;
-          }
-          return updatedItem;
+    if (validate()) {
+      var project_id = id;
+      axios
+        .put(
+          `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
+          {
+            student_id: profile.student_id,
+            project_name: currentProject.project_name,
+            project_description: currentProject.project_description,
+            project_link: currentProject.project_link,
+            project_tech: currentProject.project_tech,
+            project_start_date: currentProject.project_start_date,
+            project_end_date: currentProject.project_in_progress
+              ? null
+              : currentProject.project_end_date,
+            project_in_progress: currentProject.project_in_progress,
+            project_role: currentProject.project_role,
+          },
+          getConfig()
+        )
+        .then((res) => {
+          let updated_projects = projects.map((item) => {
+            let updatedItem = { ...item };
+            if (project_id === item.project_id) {
+              updatedItem.project_id = item.project_id;
+              updatedItem.project_name = res.data.project_name;
+              updatedItem.project_description = res.data.project_description;
+              updatedItem.project_link = res.data.project_link;
+              updatedItem.project_tech = res.data.project_tech;
+              updatedItem.project_start_date = res.data.project_start_date;
+              updatedItem.project_end_date = res.data.project_end_date;
+              updatedItem.project_in_progress = res.data.project_in_progress;
+              updatedItem.project_role = res.data.project_role;
+            }
+            return updatedItem;
+          });
+          setProjects(updated_projects);
+          handleCloseEdit();
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        setProjects(updated_projects);
-        handleCloseEdit();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
     }
   };
 
@@ -260,7 +269,8 @@ function StudentProject({ projects, setProjects, skills }) {
             iconStyle={{ background: "#C8102E", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid #C8102E" }}
             key={index}
-            icon={<WebRoundedIcon />}>
+            icon={<WebRoundedIcon />}
+          >
             <h3 className={classes.verticalElementTitle}>
               "{project.project_name}"
             </h3>
@@ -285,7 +295,10 @@ function StudentProject({ projects, setProjects, skills }) {
             </div>
             <div>
               <h5>
-                Date: {project.project_start_date} - {project.project_end_date}
+                Date: {project.project_start_date} -{" "}
+                {project.project_in_progress
+                  ? "present"
+                  : project.project_end_date}
               </h5>
             </div>
             <div
@@ -293,13 +306,15 @@ function StudentProject({ projects, setProjects, skills }) {
                 display: "flex",
                 justifyContent: "flex-end",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <IconButton
                 onClick={() => {
                   handleClickOpenEdit(project);
                 }}
                 fontSize="small"
-                className={classes.edit}>
+                className={classes.edit}
+              >
                 <EditIcon />
               </IconButton>
 
@@ -308,10 +323,12 @@ function StudentProject({ projects, setProjects, skills }) {
               <Dialog
                 open={openEdit}
                 onClose={handleCloseEdit}
-                aria-labelledby="form-dialog-title">
+                aria-labelledby="form-dialog-title"
+              >
                 <DialogTitle
                   classes={classes.addNewTitle}
-                  id="form-dialog-title">
+                  id="form-dialog-title"
+                >
                   EDIT {currentProject.project_name}
                 </DialogTitle>
                 <DialogContent>
@@ -404,26 +421,30 @@ function StudentProject({ projects, setProjects, skills }) {
                     helperText="Start Date"
                     onChange={handleCurrentProjectChange}
                   />
-                  <TextField
-                    margin="dense"
-                    id="end_date"
-                    type="date"
-                    name="project_end_date"
-                    value={currentProject.project_end_date}
-                    className={classes.projectDate}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    variant="outlined"
-                    helperText="End Date"
-                    onChange={handleCurrentProjectChange}
-                  />
+                  {currentProject.project_in_progress ? null : (
+                    <TextField
+                      margin="dense"
+                      id="end_date"
+                      type="date"
+                      name="project_end_date"
+                      value={currentProject.project_end_date}
+                      className={classes.projectEndDate}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      variant="outlined"
+                      helperText="End Date"
+                      onChange={handleCurrentProjectChange}
+                    />
+                  )}
+                  <br />
                   <FormControl component="fieldset">
                     <FormGroup aria-label="position" row>
                       <FormControlLabel
                         value="end"
                         control={
                           <Checkbox
+                            checked={currentProject.project_in_progress}
                             style={{ color: "#C8102E" }}
                             onChange={(e) => {
                               setCurrentProject({
@@ -446,15 +467,17 @@ function StudentProject({ projects, setProjects, skills }) {
                 <DialogActions>
                   <Button
                     onClick={handleCloseEdit}
-                    style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}>
+                    style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}
+                  >
                     Cancel
                   </Button>
                   <Button
                     onClick={() => {
-                      handleSave(project.project_id);
+                      handleSave(currentProject.project_id);
                     }}
                     style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
-                    className={classes.projectAdd}>
+                    className={classes.projectAdd}
+                  >
                     SAVE
                   </Button>
                 </DialogActions>
@@ -471,17 +494,20 @@ function StudentProject({ projects, setProjects, skills }) {
                 }}
                 aria-label="delete"
                 fontSize="small"
-                className={classes.delete}>
+                className={classes.delete}
+              >
                 <DeleteIcon />
               </IconButton>
               <Dialog
                 open={openDelete}
                 onClose={handleCloseDelete}
                 aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description">
+                aria-describedby="alert-dialog-description"
+              >
                 <DialogTitle
                   id="alert-dialog-title"
-                  className={classes.dialogDelete}>
+                  className={classes.dialogDelete}
+                >
                   <WarningIcon />
                   {"WARNING!"}
                 </DialogTitle>
@@ -495,7 +521,8 @@ function StudentProject({ projects, setProjects, skills }) {
                 <DialogActions>
                   <Button
                     onClick={handleCloseDelete}
-                    style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}>
+                    style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}
+                  >
                     Cancel
                   </Button>
                   <Button
@@ -503,7 +530,8 @@ function StudentProject({ projects, setProjects, skills }) {
                       handleDelete(projectToDelete.project_id);
                     }}
                     style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
-                    className={classes.projectAdd}>
+                    className={classes.projectAdd}
+                  >
                     DELETE
                   </Button>
                 </DialogActions>
