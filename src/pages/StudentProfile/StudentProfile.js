@@ -1068,8 +1068,20 @@ export default function StudentProfile() {
               />
             ) : (
               <>
-                <Grid container xs={12} md={6} spacing={2}>
-                  <Grid item>
+                <Grid
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                  spacing={2}
+                >
+                  <Grid
+                  container
+                  id="first-left"
+                  item
+                  xs={12}
+                  direction="row">
+                  <Grid item lg={3} xs={12} md={6}>
                     <FormControl
                       error={errors.streetAddress && studentInput === ""}>
                       <Typography>Street Address</Typography>
@@ -1091,7 +1103,7 @@ export default function StudentProfile() {
                       ) : null}
                     </FormControl>
                   </Grid>
-                  <Grid item>
+                    <Grid item lg={3} xs={12} md={6}>
                     <FormControl error={errors.city && studentInput === ""}>
                       <Typography>City</Typography>
                       <TextField
@@ -1110,49 +1122,57 @@ export default function StudentProfile() {
                       ) : null}
                     </FormControl>
                   </Grid>
-                  <Grid item>
-                    <FormControl error={errors.state && studentInput === ""}>
-                      <Typography>State</Typography>
-                      <Select
-                        label="State"
-                        value={studentInput.state}
-                        onChange={(e) => {
-                          setStudentInput({
-                            ...studentInput,
-                            state: e.target.value,
-                          });
-                        }}
-                        name="state"
-                        placeholder="state">
-                        {states.map((state) => (
-                          <MenuItem key={state} value={state}>
-                            {state}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {errors.state && studentInput.state === "" ? (
-                        <FormHelperText>{errors.state}</FormHelperText>
-                      ) : null}
-                    </FormControl>
                   </Grid>
-                  <Grid item>
-                    <FormControl error={errors.zipcode && studentInput === ""}>
-                      <Typography>Zipcode</Typography>
-                      <TextField
-                        value={studentInput.zipcode}
-                        onChange={(e) => {
-                          setStudentInput({
-                            ...studentInput,
-                            zipcode: e.target.value,
-                          });
-                        }}
-                        inputProps={{ maxLength: 5 }}
-                        name="zipcode"
-                      />
-                      {errors.zipcode && studentInput.zipcode === "" ? (
-                        <FormHelperText>{errors.zipcode}</FormHelperText>
-                      ) : null}
-                    </FormControl>
+                  <Grid
+                  container
+                  id="first-left"
+                  item
+                  xs={12}
+                  direction="row">
+                    <Grid item lg={3} xs={12} md={6}>
+                      <FormControl error={errors.state && studentInput === ""}>
+                        <Typography>State</Typography>
+                        <Select
+                          label="State"
+                          value={studentInput.state}
+                          onChange={(e) => {
+                            setStudentInput({
+                              ...studentInput,
+                              state: e.target.value,
+                            });
+                          }}
+                          name="state"
+                          placeholder="state">
+                          {states.map((state) => (
+                            <MenuItem key={state} value={state}>
+                              {state}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {errors.state && studentInput.state === "" ? (
+                          <FormHelperText>{errors.state}</FormHelperText>
+                        ) : null}
+                      </FormControl>
+                    </Grid>
+                    <Grid item lg={3} xs={12} md={6}>
+                      <FormControl error={errors.zipcode && studentInput === ""}>
+                        <Typography>Zipcode</Typography>
+                        <TextField
+                          value={studentInput.zipcode}
+                          onChange={(e) => {
+                            setStudentInput({
+                              ...studentInput,
+                              zipcode: e.target.value,
+                            });
+                          }}
+                          inputProps={{ maxLength: 5 }}
+                          name="zipcode"
+                        />
+                        {errors.zipcode && studentInput.zipcode === "" ? (
+                          <FormHelperText>{errors.zipcode}</FormHelperText>
+                        ) : null}
+                      </FormControl>
+                    </Grid>
                   </Grid>
                 </Grid>
               </>
