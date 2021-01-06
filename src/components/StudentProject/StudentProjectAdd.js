@@ -102,15 +102,20 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
     } else if (studentInput.project_start_date === "") {
       alert("Please enter a start date for the project");
       return false;
-    } else if (studentInput.project_end_date === "") {
-      alert("Please enter a end date for the project");
-      return false;
-    } else if (
-      studentInput.project_start_date > studentInput.project_end_date
-    ) {
-      alert("Project end date cannot be before project start date");
-      return false;
+    } else if (!studentInput.project_in_progress) {
+      if (studentInput.project_end_date === "") {
+        alert(
+          'Please enter an end date for the project or select "projet in progress"'
+        );
+        return false;
+      } else if (
+        studentInput.project_start_date > studentInput.project_end_date
+      ) {
+        alert("Project end date cannot be before project start date");
+        return false;
+      }
     }
+
     return true;
   };
 
@@ -134,7 +139,9 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         project_link: studentInput.project_link,
         project_tech: studentInput.project_tech,
         project_start_date: studentInput.project_start_date,
-        project_end_date: studentInput.project_end_date,
+        project_end_date: studentInput.project_in_progress
+          ? null
+          : studentInput.project_end_date,
         project_in_progress: studentInput.project_in_progress,
         project_role: studentInput.project_role,
       };
@@ -175,7 +182,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-          }}>
+          }}
+        >
           <Button
             onClick={handleClickOpen}
             size="medium"
@@ -185,7 +193,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
               backgroundColor: "#C8102E",
               color: "#FFFFFF",
               margin: "20px",
-            }}>
+            }}
+          >
             <AddIcon
               className={classNames(classes.leftIcon, classes.iconSmall)}
             />
@@ -196,7 +205,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title">
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">ADD NEW PROJECT</DialogTitle>
         <DialogContent>
           <TextField
@@ -319,26 +329,29 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
               });
             }}
           />
-          <TextField
-            margin="dense"
-            id="date"
-            type="date"
-            className={classes.projectDate}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="outlined"
-            helperText="End Date"
-            name="project_end_date"
-            required
-            value={studentInput.project_end_date || ""}
-            onChange={(e) => {
-              setStudentInput({
-                ...studentInput,
-                project_end_date: e.target.value,
-              });
-            }}
-          />
+
+          {!studentInput.project_in_progress ? (
+            <TextField
+              margin="dense"
+              id="date"
+              type="date"
+              className={classes.projectDate}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              helperText="End Date"
+              name="project_end_date"
+              required
+              value={studentInput.project_end_date || ""}
+              onChange={(e) => {
+                setStudentInput({
+                  ...studentInput,
+                  project_end_date: e.target.value,
+                });
+              }}
+            />
+          ) : null}
           <FormControl component="fieldset">
             <FormGroup aria-label="position" row>
               <FormControlLabel
@@ -367,13 +380,15 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         <DialogActions>
           <Button
             onClick={handleClose}
-            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}>
+            style={{ backgroundColor: "#f0f0f0", color: "#C8102E" }}
+          >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
             style={{ backgroundColor: "#C8102E", color: "#FFFFFF" }}
-            className={classes.projectAdd}>
+            className={classes.projectAdd}
+          >
             Add Project
           </Button>
         </DialogActions>
