@@ -118,6 +118,7 @@ export default function CompanySearch() {
         getConfig()
       )
       .then((res) => {
+        localStorage.setItem("search_history", JSON.stringify(data));
         setLoading(false);
         setStudentsList(res.data);
       })
@@ -161,6 +162,24 @@ export default function CompanySearch() {
       .catch((err) => {
         console.log(err);
       });
+
+    //Restore seach to same data whecn going back.
+    const search_history = JSON.parse(localStorage.getItem("search_history"));
+    if (search_history) {
+      axios
+        .post(
+          "http://18.213.74.196:8000/api/student_profile/search",
+          search_history,
+          getConfig()
+        )
+        .then((res) => {
+          setLoading(false);
+          setStudentsList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
