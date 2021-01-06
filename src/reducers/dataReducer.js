@@ -11,7 +11,6 @@ export const dataReducer = (state, action) => {
         },
       };
     case "SET_STUDENTS":
-      console.log(action.payload);
       return {
         ...state,
         students: action.payload,

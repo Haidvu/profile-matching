@@ -54,7 +54,6 @@ export const getNewToken = () => {
         refresh: localStorage.getItem("refresh"),
       })
       .then((res) => {
-        console.log("Got new token: ", res.data.access);
         localStorage.setItem("token", res.data.access);
         setTimeout(getNewToken, 17900 * 1000); //Get new token approxiamtey every 4 hrs and 58 min.
       })
