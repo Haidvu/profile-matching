@@ -11,15 +11,15 @@ import {
   DialogTitle,
   DialogActions,
   DialogContentText,
-  DialogContent
+  DialogContent,
 } from "@material-ui/core";
-import Typography from '@material-ui/core/Typography';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Typography from "@material-ui/core/Typography";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddIcon from "@material-ui/icons/Add";
 import classNames from "classnames";
 
@@ -35,10 +35,7 @@ import Chip from "@material-ui/core/Chip";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
 
-import {
-  Link,
-  useRouteMatch
-} from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 import { useHistory } from "react-router-dom";
 import { DataContext } from "../../contexts/dataContext";
@@ -110,21 +107,21 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "70px",
     paddingRight: "70px",
     paddingTop: "20px",
-    [theme.breakpoints.down('xm')]:{
+    [theme.breakpoints.down("xm")]: {
       paddingLeft: "10px",
       paddingRight: "10px",
       paddingTop: "10px",
     },
-    [theme.breakpoints.down('sm')]:{
+    [theme.breakpoints.down("sm")]: {
       paddingLeft: "10px",
       paddingRight: "10px",
       paddingTop: "10px",
     },
-    [theme.breakpoints.down('md')]:{
+    [theme.breakpoints.down("md")]: {
       paddingLeft: "20px",
       paddingRight: "20px",
       paddingTop: "20px",
-    }
+    },
   },
   root: {
     flexGrow: 1,
@@ -152,32 +149,32 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   delete: {
-    '&:hover': {
-      backgroundColor: '#C8102E',
-      color: '#ffffff'
+    "&:hover": {
+      backgroundColor: "#C8102E",
+      color: "#ffffff",
     },
     margin: theme.spacing(2),
-    fontSize: '0.8125rem !important'
+    fontSize: "0.8125rem !important",
   },
 
   media: {
-    height: 140
+    height: 140,
   },
   spinner: {
-    width: '30%',
-    height: '30%'
+    width: "30%",
+    height: "30%",
   },
   cardAction: {
-    justifyContent: 'flex-end'
+    justifyContent: "flex-end",
   },
-  projectAdd:{
+  projectAdd: {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
-    [theme.breakpoints.down('sm')]:{
-      justifyContent: "center"
-    }
-  }
+    [theme.breakpoints.down("sm")]: {
+      justifyContent: "center",
+    },
+  },
 }));
 
 export default function CompanyProject() {
@@ -207,13 +204,13 @@ export default function CompanyProject() {
   };
 
   const handleOpenDeleteDialog = (project) => {
-    setOpenDeleteDialog(true)
+    setOpenDeleteDialog(true);
     setProjectToDelete(project);
-  }
+  };
 
   const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false)
-  }
+    setOpenDeleteDialog(false);
+  };
 
   const handleDelete = (id) => {
     axios
@@ -222,29 +219,33 @@ export default function CompanyProject() {
         getConfig()
       )
       .then((res) => {
-        const deletedProject = companyProjects.filter(project => id !== project.project_id)
-        setCompanyProjects(deletedProject)
+        const deletedProject = companyProjects.filter(
+          (project) => id !== project.project_id
+        );
+        setCompanyProjects(deletedProject);
       })
       .catch((err) => console.log(err.response.message));
-    setOpenDeleteDialog(false)
-  }
+    setOpenDeleteDialog(false);
+  };
 
   useEffect(() => {
     setIsLoading(true);
-    axios.post("http://18.213.74.196:8000/api/company_project/list_by_company",
-      {
-        username_id: parseInt(id)
-      }
-      , getConfig()).then(res => {
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/company_project/list_by_company",
+        {
+          username_id: parseInt(id),
+        },
+        getConfig()
+      )
+      .then((res) => {
         setIsLoading(false);
-        setCompanyProjects(res.data)
+        setCompanyProjects(res.data);
       })
-      .catch(err => {
-        console.log(err.response.data)
-      })
-
-
-  }, [id])
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  }, [id]);
 
   return (
     <div className="root">
@@ -254,33 +255,29 @@ export default function CompanyProject() {
         src={CompanyDashboard}></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
-        <Link style={{ textDecoration: 'none', color: '#000' }}  to="/" >
+        <Link style={{ textDecoration: "none", color: "#000" }} to="/">
           Home
         </Link>
-        <Link style={{ textDecoration: 'none', color: '#000' }} to="/dashboard" >
+        <Link style={{ textDecoration: "none", color: "#000" }} to="/dashboard">
           Profile
         </Link>
-        <Typography  style={{ color: '#c8102e' }} >My Projects</Typography>
+        <Typography style={{ color: "#c8102e" }}>My Projects</Typography>
       </Breadcrumbs>
-      <div
-        className={classes.projectAdd}
-        >
-    
+      <div className={classes.projectAdd}>
         <Button
-            onClick={createProject}
-            size="medium"
-            variant="outlined"
-            
-            style={{
-              backgroundColor: "#C8102E",
-              color: "#FFFFFF",
-              margin: "20px",
-            }}>
-            <AddIcon
-              className={classNames(classes.leftIcon, classes.iconSmall)}
-            />
-            ADD NEW PROJECT
-          </Button>
+          onClick={createProject}
+          size="medium"
+          variant="outlined"
+          style={{
+            backgroundColor: "#C8102E",
+            color: "#FFFFFF",
+            margin: "20px",
+          }}>
+          <AddIcon
+            className={classNames(classes.leftIcon, classes.iconSmall)}
+          />
+          ADD NEW PROJECT
+        </Button>
       </div>
 
       {isLoading ? (
@@ -292,104 +289,133 @@ export default function CompanyProject() {
           </Grid>
         </div>
       ) : (
-          <div className={classes.companyProjectCards}>
-            <Grid container spacing={3}>
-
-              {companyProjects.map((project, index) =>
-
-                <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
-
-                  <Card className={classes.root}>
-                    <Link style={{ textDecoration: 'none', color: 'black' }} to={{
-                      pathname: `${url}/${project.project_id}`
-                    }} >
-                      <CardActionArea className={classes.cardActionArea}>
-                        <CardMedia
-                          component="img"
-                          alt="Project Photo"
-                          height="80"
-                          image={AvatarImage}
-                          title="Project Photo"
-                          className={classes.media}
-                        />
-                        <CardContent className={classes.cardContent}>
-                          <Typography gutterBottom variant="h5" component="h2" className={classes.cardHeader}>
-                            {project.project_name}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                            Deadline:  {project.project_deadline.substring(0, 10)}
-                          </Typography>
-                          {project.project_tech.split(',').map((skill, index) =>
-                            <Chip label={skill} className={classes.chips} key={index} />
-                          )}
-
-                        </CardContent>
-                      </CardActionArea>
-
-                    </Link>
-                    <CardActions className={classes.cardAction}>
-                      <Button size="small" color="primary" >
-                        {project.is_published === true ?
-                          (<>
-                            <VisibilityIcon />
-                            <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                              PUBLIC
+        <div className={classes.companyProjectCards}>
+          <Grid container spacing={3}>
+            {companyProjects.map((project, index) => (
+              <Grid item xs={12} sm={12} md={6} lg={4} key={index}>
+                <Card className={classes.root}>
+                  <Link
+                    style={{ textDecoration: "none", color: "black" }}
+                    to={{
+                      pathname: `${url}/${project.project_id}`,
+                    }}>
+                    <CardActionArea className={classes.cardActionArea}>
+                      <CardMedia
+                        component="img"
+                        alt="Project Photo"
+                        height="80"
+                        image={AvatarImage}
+                        title="Project Photo"
+                        className={classes.media}
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="h2"
+                          className={classes.cardHeader}>
+                          {project.project_name}
                         </Typography>
-                          </>) : (<>
-                            <VisibilityOffIcon />
-                            <Typography variant="body2" color="textSecondary" component="p" className={classes.deadline}>
-                              DRAFT
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                          className={classes.deadline}>
+                          Deadline: {project.project_deadline.substring(0, 10)}
+                        </Typography>
+                        {project.project_tech.length > 0 ? (
+                          <>
+                            {project.project_tech
+                              .split(",")
+                              .map((skill, index) => (
+                                <Chip
+                                  label={skill}
+                                  className={classes.chips}
+                                  key={index}
+                                />
+                              ))}
+                          </>
+                        ) : null}
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                  <CardActions className={classes.cardAction}>
+                    <Button size="small" color="primary">
+                      {project.is_published === true ? (
+                        <>
+                          <VisibilityIcon />
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                            className={classes.deadline}>
+                            PUBLIC
                           </Typography>
-                          </>)}
-                      </Button>
+                        </>
+                      ) : (
+                        <>
+                          <VisibilityOffIcon />
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            component="p"
+                            className={classes.deadline}>
+                            DRAFT
+                          </Typography>
+                        </>
+                      )}
+                    </Button>
 
-                      <Button size="small" variant="contained" className={classes.delete} onClick={() => { handleOpenDeleteDialog(project) }}>
-                        <DeleteIcon />
-                          DELETE PROJECT
-                      </Button>
-                    </CardActions>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      className={classes.delete}
+                      onClick={() => {
+                        handleOpenDeleteDialog(project);
+                      }}>
+                      <DeleteIcon />
+                      DELETE PROJECT
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
 
-                  </Card>
-
-                </Grid>
-
-              )}
-
-              <Dialog
-                onClose={handleCloseDeleteDialog}
-                open={openDeleteDialog}
-                className={classes.dialog}
-              >
-                <DialogTitle>Are you sure you want to delete the project: {projectToDelete.project_name}?</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    This project will be permanently removed
-               </DialogContentText>
-                </DialogContent>
-                <DialogActions className={classes.dialogConfirm}>
-                  <Button
-                    onClick={() => { handleDelete(projectToDelete.project_id) }}
-                    color="primary"
-                    variant="outlined"
-                    className={classes.dialogConfirm}
-                  >
-                    DELETE
-            </Button>
-                  <Button
-                    onClick={handleCloseDeleteDialog}
-                    color="secondary"
-                    variant="outlined"
-                    className={classes.dialogConfirm}
-                  >
-                    CANCEL
-            </Button>
-                </DialogActions>
-              </Dialog>
-            </Grid>
-          </div>
-        )}
-
+            <Dialog
+              onClose={handleCloseDeleteDialog}
+              open={openDeleteDialog}
+              className={classes.dialog}>
+              <DialogTitle>
+                Are you sure you want to delete the project:{" "}
+                {projectToDelete.project_name}?
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  This project will be permanently removed
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions className={classes.dialogConfirm}>
+                <Button
+                  onClick={() => {
+                    handleDelete(projectToDelete.project_id);
+                  }}
+                  color="primary"
+                  variant="outlined"
+                  className={classes.dialogConfirm}>
+                  DELETE
+                </Button>
+                <Button
+                  onClick={handleCloseDeleteDialog}
+                  color="secondary"
+                  variant="outlined"
+                  className={classes.dialogConfirm}>
+                  CANCEL
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Grid>
+        </div>
+      )}
     </div>
-
   );
-};
+}
