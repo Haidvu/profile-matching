@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     flexWrap: "wrap",
     padding: theme.spacing(1),
+    listStyle: "none",
     margin: 1,
   },
   chip: {
@@ -195,7 +196,7 @@ export default function CompanySearch() {
         <Grid>
           <Typography className={classes.header}>FutureStart Search</Typography>
         </Grid>
-        <Grid className={classes.chipRoot}>
+        <ul className={classes.chipRoot}>
           {searchInput.keywords.map((data, index) => (
             <li key={index}>
               <Chip
@@ -205,7 +206,7 @@ export default function CompanySearch() {
               />
             </li>
           ))}
-        </Grid>
+        </ul>
         <Grid
           container
           id="master"
