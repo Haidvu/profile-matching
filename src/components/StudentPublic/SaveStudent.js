@@ -8,6 +8,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  LinearProgress,
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
     disply: "block",
     minWidth: theme.spacing(8 * 2),
   },
+  saveProfileContainer: {
+    padding: theme.spacing(2),
+  },
+  containerTitle: {
+    fontWeight: "bold",
+  },
 }));
 
 const SaveStudent = ({ studentId }) => {
@@ -27,71 +34,83 @@ const SaveStudent = ({ studentId }) => {
   const Id = profile.id;
   const classes = useStyles();
   const [companyProjectsToShow, setCompanyProjectsToShow] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [saveStudent, setSaveStudent] = useState({
     student_db_id: null,
     project_id: null,
     project_preference_for_student: null,
   });
 
-  const getCompanyProjects = async () => {
-    try {
-      const companyProjectsResponse = await axios.post(
-        `http://18.213.74.196:8000/api/company_project/list_by_company`,
+  const getCompanyProjects = () => {
+    //get all projects of this company.
+    const companyProjects = axios.post(
+      "http://18.213.74.196:8000/api/company_project/list_by_company",
+      { username_id: parseInt(Id) },
+      getConfig()
+    );
 
-        {
-          username_id: parseInt(Id),
-        },
-        getConfig()
-      );
-      const savedProjectsResponse = await axios.get(
-        `http://18.213.74.196:8000/api/project_select_student/all`,
-        getConfig()
-      );
-      const sp = savedProjectsResponse.data.filter((item) => {
-        return parseInt(item.student_db_id) === parseInt(studentId);
-      });
+    //get all saved projects
+    const savedProjects = axios.get(
+      "http://18.213.74.196:8000/api/project_select_student/all",
+      getConfig()
+    );
 
-      let projectsToShow = [];
-      companyProjectsResponse.data.forEach((project) => {
-        if (!sp.some((element) => element.project_id === project.project_id)) {
-          projectsToShow.push(project);
-        }
+    axios
+      .all([companyProjects, savedProjects])
+      .then(
+        axios.spread((...responses) => {
+          const companyProjectsRes = responses[0];
+          const savedProjectsRes = responses[1];
+
+          const sp = savedProjectsRes.data.filter((item) => {
+            return parseInt(item.student_db_id) === parseInt(studentId);
+          });
+          let projectsToShow = [];
+
+          companyProjectsRes.data.forEach((project) => {
+            if (
+              !sp.some((element) => element.project_id === project.project_id)
+            ) {
+              projectsToShow.push(project);
+            }
+          });
+
+          setCompanyProjectsToShow(projectsToShow);
+          setLoading(false);
+        })
+      )
+      .catch((err) => {
+        console.log(err);
       });
-      setCompanyProjectsToShow(projectsToShow);
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   useEffect(() => {
     getCompanyProjects();
   }, []);
 
-  const saveStudentToProject = async () => {
-    try {
-      axios.post(
-        "http://18.213.74.196:8000/api/project_select_student/create",
-        saveStudent,
-        getConfig()
-      );
-      setCompanyProjectsToShow([
-        ...companyProjectsToShow.filter((project) => {
-          return project.project_id !== saveStudent.project_id;
-        }),
-      ]);
-      setSaveStudent({
-        student_db_id: null,
-        project_id: null,
-        project_preference_for_student: null,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const handleSave = () => {
     if (saveStudent.student_db_id) {
-      saveStudentToProject();
+      axios
+        .post(
+          "http://18.213.74.196:8000/api/project_select_student/create",
+          saveStudent,
+          getConfig()
+        )
+        .then(() => {
+          setCompanyProjectsToShow([
+            ...companyProjectsToShow.filter((project) => {
+              return project.project_id !== saveStudent.project_id;
+            }),
+          ]);
+          setSaveStudent({
+            student_db_id: null,
+            project_id: null,
+            project_preference_for_student: null,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("Peference is required");
     }
@@ -106,19 +125,21 @@ const SaveStudent = ({ studentId }) => {
   };
 
   return (
-    <Grid direction="row">
-      <Grid item container>
-        {companyProjectsToShow.length > 0 ? (
-          <>
-            <Container>
-              <Typography>Save Profile to the following Projects</Typography>
-              <Grid container>
+    <>
+      {loading ? null : (
+        <Grid direction="row" className={classes.saveProfileContainer}>
+          {companyProjectsToShow.length > 0 ? (
+            <>
+              <Typography className={classes.containerTitle}>
+                Save Profile to the following Projects
+              </Typography>
+              <>
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
-                    <Grid item xs={12} sm={12} md={3}>
+                    <Grid item xs={12} sm={12} md={3} xl={1}>
                       <Typography>{project.project_name}</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={5} md={3}>
+                    <Grid item xs={6} sm={5} md={3} xl={2}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -133,7 +154,7 @@ const SaveStudent = ({ studentId }) => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={3} md={3}>
+                    <Grid item xs={4} sm={3} md={3} xl={1}>
                       <Button
                         variant="outlined"
                         color="secondary"
@@ -146,18 +167,18 @@ const SaveStudent = ({ studentId }) => {
                     </Grid>
                   </Grid>
                 ))}
-              </Grid>
+              </>
+            </>
+          ) : (
+            <Container>
+              <Typography style={{ fontStyle: "italic" }}>
+                No Projects to Add to For this Profile
+              </Typography>
             </Container>
-          </>
-        ) : (
-          <Container>
-            <Typography style={{ fontStyle: "italic" }}>
-              No Projects to Add to For this Profile
-            </Typography>
-          </Container>
-        )}
-      </Grid>
-    </Grid>
+          )}
+        </Grid>
+      )}
+    </>
   );
 };
 
