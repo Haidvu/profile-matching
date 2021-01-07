@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     flexWrap: "wrap",
     padding: theme.spacing(1),
+    listStyle: "none",
     margin: 1,
   },
   chip: {
@@ -136,8 +137,6 @@ export default function CompanySearch() {
     }
   };
 
-  useEffect(() => {}, [searchInput]);
-
   const handleDelete = (chipToDelete) => () => {
     const newList = searchInput.keywords.filter(
       (item) => item !== chipToDelete
@@ -164,22 +163,31 @@ export default function CompanySearch() {
       });
 
     //Restore seach to same data whecn going back.
-    const search_history = JSON.parse(localStorage.getItem("search_history"));
-    if (search_history) {
-      axios
-        .post(
-          "http://18.213.74.196:8000/api/student_profile/search",
-          search_history,
-          getConfig()
-        )
-        .then((res) => {
-          setLoading(false);
-          setStudentsList(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    let data = {};
+    if (JSON.parse(localStorage.getItem("search_history"))) {
+      data = JSON.parse(localStorage.getItem("search_history"));
+    } else {
+      data = {
+        major: "",
+        degree: "",
+        zip: "",
+        keywords: [],
+        student_skills: [],
+      };
     }
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/student_profile/search",
+        data,
+        getConfig()
+      )
+      .then((res) => {
+        setLoading(false);
+        setStudentsList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -188,7 +196,7 @@ export default function CompanySearch() {
         <Grid>
           <Typography className={classes.header}>FutureStart Search</Typography>
         </Grid>
-        <Grid className={classes.chipRoot}>
+        <ul className={classes.chipRoot}>
           {searchInput.keywords.map((data, index) => (
             <li key={index}>
               <Chip
@@ -198,7 +206,7 @@ export default function CompanySearch() {
               />
             </li>
           ))}
-        </Grid>
+        </ul>
         <Grid
           container
           id="master"
