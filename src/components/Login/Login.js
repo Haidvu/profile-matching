@@ -125,7 +125,8 @@ function Login() {
               <Alert
                 className={classes.loginAlert}
                 variant="filled"
-                severity="error">
+                severity="error"
+              >
                 {error}
               </Alert>
             ) : null}
@@ -166,10 +167,11 @@ function Login() {
                 fullWidth
                 variant="contained"
                 color="secondary"
-                className={classes.submit}>
+                className={classes.submit}
+              >
                 Sign In
               </Button>
-              <Grid container>
+              <Grid container justify="space-between">
                 {/* <Grid item xs>
                     <Link href="#" variant="body2">
                       Forgot password?
@@ -178,6 +180,15 @@ function Login() {
                 <Grid item>
                   <Link to="/signup" href="signup" variant="body2">
                     {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    to="/lost-password"
+                    href="lost-password"
+                    variant="body2"
+                  >
+                    {"Forgot Password?"}
                   </Link>
                 </Grid>
               </Grid>
