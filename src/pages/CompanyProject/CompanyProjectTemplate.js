@@ -57,6 +57,7 @@ import Select from "react-select";
 import { DataContext } from "../../contexts/dataContext";
 
 import CompanyProjectTeam from "./CompanyProjectTeam";
+import { TramOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -279,12 +280,6 @@ export default function CompanyProject({ match }) {
     setValue(newValue);
   };
 
-  // window.addEventListener("keydown", (e) => {
-  //   if (e.key === "Enter" && companyEdit.project_tech === true) {
-  //     console.log("Saved project tech");
-  //   }
-  // });
-
   //api for select ProjectType
   const [projectType, setProjectType] = useState({});
   useEffect(() => {
@@ -392,6 +387,10 @@ export default function CompanyProject({ match }) {
       )
       .then((res) => {
         setUpdateErrors({});
+        showCompanyEdit({
+          ...companyEdit,
+          [key]: false,
+        });
         setUpdateSuccess(true);
       })
       .catch((err) => {
