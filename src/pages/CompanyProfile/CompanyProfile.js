@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -185,8 +185,10 @@ export default function CompanyProfile() {
     "WY",
   ];
 
-  //initially get the data from DataContext
+  //Input ref for login popup.
+  const inputref = useRef(0);
 
+  //initially get the data from DataContext
   const { data, dispatch } = useContext(DataContext);
   const { profile } = data;
 
@@ -1114,6 +1116,7 @@ export default function CompanyProfile() {
         ) : null}
         <DialogContent>
           <TextField
+            ref={inputref}
             variant="outlined"
             fullWidth
             id="email"
@@ -1131,6 +1134,11 @@ export default function CompanyProfile() {
             label="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleConfirm();
+              }
+            }}
             value={password}
             required
             type="password"
