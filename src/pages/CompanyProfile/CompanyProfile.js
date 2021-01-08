@@ -23,6 +23,8 @@ import {
   FormControlLabel,
   CircularProgress,
   LinearProgress,
+  FormControl,
+  FormLabel,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
@@ -190,24 +192,24 @@ export default function CompanyProfile() {
 
   const [profileInfo, setProfileInfo] = useState({
     //This is the data you get from api.
-    name: null,
-    companyMission: null,
-    companyDescription: null,
-    companyType: null,
-    companyWebsite: null,
-    companyRep: null,
-    industryType: null,
-    phoneNumber: null,
-    streetAddress: null,
-    city: null,
-    state: null,
-    zip: null,
-    streetAddress2: null,
-    city2: null,
-    state2: null,
-    zip2: null,
-    contact_email: null,
-    isSolo: null,
+    name: "",
+    companyMission: "",
+    companyDescription: "",
+    companyType: "",
+    companyWebsite: "",
+    companyRep: "",
+    industryType: "",
+    phoneNumber: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    zip: "",
+    streetAddress2: "",
+    city2: "",
+    state2: "",
+    zip2: "",
+    contact_email: "",
+    isSolo: "",
   });
 
   const getTruncatedCoordinate = (coordinate) => {
@@ -860,7 +862,7 @@ export default function CompanyProfile() {
                           variant="body2"
                           className={classes.inline}
                           color="textPrimary">
-                          {profileInfo.isSolo === 1 ? "Yes" : "No"}
+                          {profileInfo.isSolo === "1" ? "Yes" : "No"}
                         </Typography>
                       </React.Fragment>
                     }
@@ -871,6 +873,7 @@ export default function CompanyProfile() {
                     <RadioGroup
                       aria-label="Are you one person company"
                       name="isSolo"
+                      id="isSolo"
                       value={profileInfo.isSolo}
                       onChange={handleChange}>
                       <FormControlLabel
