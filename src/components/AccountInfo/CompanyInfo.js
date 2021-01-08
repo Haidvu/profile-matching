@@ -545,10 +545,9 @@ const CompanyInfo = () => {
                         className={classes.formControl}>
                         <InputLabel>ST</InputLabel>
                         <Select
-                          label="State"
-                          value={companySecond.state}
+                          value={companyFirst.state}
                           onChange={handleChangeFirst}
-                          defaultValue=""
+                          id="state"
                           name="state">
                           {states.map((state) => (
                             <MenuItem value={state} key={state}>
@@ -673,7 +672,6 @@ const CompanyInfo = () => {
                         disabled={disable}>
                         <InputLabel>ST</InputLabel>
                         <Select
-                          label="State"
                           name="state2"
                           id="state2"
                           value={companyFirst.state2}

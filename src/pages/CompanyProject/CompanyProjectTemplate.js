@@ -57,7 +57,6 @@ import Select from "react-select";
 import { DataContext } from "../../contexts/dataContext";
 
 import CompanyProjectTeam from "./CompanyProjectTeam";
-import { TramOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   main: {

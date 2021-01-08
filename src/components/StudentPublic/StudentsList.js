@@ -10,6 +10,8 @@ import {
   CardContent,
   Avatar,
   Divider,
+  Box,
+  Paper,
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -66,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
   card: {
     width: "280px",
     height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   button: {
     width: "100%",
@@ -108,69 +113,74 @@ const StudentsList = ({ loading, studentsList }) => {
           {studentsList.map((student) => (
             <Grid item key={student.username_id}>
               <Card className={classes.card}>
-                <CardHeader
-                  classes={{
-                    root: classes.cardHeader,
-                    title: classes.studentName,
-                    subheader: classes.subheader,
-                  }}
-                  avatar={<Avatar className={classes.avatar}></Avatar>}
-                  title={student.full_name}
-                  subheader={`${student.degree} - ${student.major}`}></CardHeader>
-                <CardContent className={classes.cardContent}>
-                  <Typography className={classes.fieldTitle}>
-                    Graduation Date
-                  </Typography>
-                  <Typography className={classes.fieldValue}>
-                    {student.graduation_date}
-                  </Typography>
-                </CardContent>
-                <CardContent
-                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                  <Typography className={classes.fieldTitle}>
-                    Description
-                  </Typography>
-                  <Typography className={classes.fieldValue}>
-                    {student.student_description}
-                  </Typography>
-                </CardContent>
-                <CardContent
-                  className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                  <Typography
-                    variant="subtitle2"
-                    className={classes.fieldTitle}>
-                    Skills
-                  </Typography>
-                  <div className={classes.skillsRoot}>
-                    {student.student_skills.map((skill, index) => (
-                      <Chip
-                        key={index}
-                        label={skill.skill_name}
-                        classes={{
-                          root: classes.chip,
-                          label: classes.chipLabel,
-                        }}
-                        color="primary"
+                <div>
+                  <CardHeader
+                    classes={{
+                      root: classes.cardHeader,
+                      title: classes.studentName,
+                      subheader: classes.subheader,
+                    }}
+                    avatar={<Avatar className={classes.avatar}></Avatar>}
+                    title={student.full_name}
+                    subheader={`${student.degree} - ${student.major}`}></CardHeader>
+                  <CardContent className={classes.cardContent}>
+                    <Typography className={classes.fieldTitle}>
+                      Graduation Date
+                    </Typography>
+                    <Typography className={classes.fieldValue}>
+                      {student.graduation_date}
+                    </Typography>
+                  </CardContent>
+                  <CardContent
+                    className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                    <Typography className={classes.fieldTitle}>
+                      Description
+                    </Typography>
+                    <Typography className={classes.fieldValue}>
+                      {student.student_description}
+                    </Typography>
+                  </CardContent>
+
+                  <CardContent
+                    className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                    <Typography
+                      variant="subtitle2"
+                      className={classes.fieldTitle}>
+                      Skills
+                    </Typography>
+                    <div className={classes.skillsRoot}>
+                      {student.student_skills.map((skill, index) => (
+                        <Chip
+                          key={index}
+                          label={skill.skill_name}
+                          classes={{
+                            root: classes.chip,
+                            label: classes.chipLabel,
+                          }}
+                          color="primary"
+                          size="small"
+                          variant="outlined"
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </div>
+                <div>
+                  <Divider></Divider>
+                  <CardContent>
+                    <Link
+                      href={`${url}/${student.student_db_id}`}
+                      style={{ textDecoration: "none" }}>
+                      <Button
+                        color="secondary"
                         size="small"
-                        variant="outlined"
-                      />
-                    ))}
-                  </div>
-                </CardContent>
-                <Divider></Divider>
-                <CardContent>
-                  <Link
-                    href={`${url}/${student.student_db_id}`}
-                    style={{ textDecoration: "none" }}>
-                    <Button
-                      color="secondary"
-                      size="small"
-                      variant="contained"
-                      className={classes.button}>
-                      View Profile
-                    </Button>
-                  </Link>
-                </CardContent>
+                        variant="contained"
+                        className={classes.button}>
+                        View Profile
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </div>
               </Card>
             </Grid>
           ))}
