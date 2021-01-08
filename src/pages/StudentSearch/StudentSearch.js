@@ -131,8 +131,9 @@ const customStyles = {
 };
 
 export const StudentSearch = () => {
-  // these 2 are for the ProjectsList component on the bottom
+  // these 3 are for the ProjectsList component on the bottom
   const [loading, setLoading] = useState(false);
+  const [noProjectsFound, setNoProjectsFound] = useState(false);
   const [projectList, setProjectList] = useState([]);
 
   // takes in the user input
@@ -166,8 +167,15 @@ export const StudentSearch = () => {
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
+        if(projectList.length<=0){
+          setNoProjectsFound(true);
+        }else{
+          setNoProjectsFound(false);
+        }
       })
       .catch((err) => {
+        setLoading(false);
+        setNoProjectsFound(true);
         console.log(err);
       });
   };
@@ -528,7 +536,7 @@ export const StudentSearch = () => {
           </div>
         </Grid>
       </div>
-      <ProjectsList loading={loading} projects={projectList} />
+      <ProjectsList loading={loading} projects={projectList} noProjectsFound={noProjectsFound} />
     </div>
   );
 };
