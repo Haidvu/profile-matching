@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import {
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Chip,
-  MenuItem,
-} from "@material-ui/core/";
+import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
@@ -535,7 +528,6 @@ export default function CompanySearch() {
                 variant="contained"
                 color="secondary"
                 className={classes.SearchButton}
-                variant="contained"
                 onClick={handleClick}>
                 Search
               </Button>

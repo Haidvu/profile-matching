@@ -41,7 +41,6 @@ const StudentSelected = () => {
   const { data } = useContext(DataContext);
 
   const matchProjects = (selections, allProjects) => {
-
     return selections.map((selection) => {
       const match = allProjects.find(
         (project) => project.project_id === selection.project_id
@@ -104,7 +103,7 @@ const StudentSelected = () => {
         //     });
         //   });
       });
-  }, []);
+  }, [data.profile.student_id]);
 
   //used to change preference from project card (child) component
   const setModifiedProject = (modifiedProject) => {
@@ -154,8 +153,7 @@ const StudentSelected = () => {
       {loading ? (
         <LinearProgress
           color="secondary"
-          style={{ margin: "20px" }}
-        ></LinearProgress>
+          style={{ margin: "20px" }}></LinearProgress>
       ) : (
         <Grid container className={classes.gridRoot}>
           <Grid item xs={12} md={3}>
@@ -164,8 +162,7 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}
-                >
+                  className={classes.cardTitle}>
                   No Preference
                 </Typography>
                 <Divider></Divider>
@@ -180,8 +177,7 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}
-                >
+                  className={classes.cardTitle}>
                   Low Preference
                 </Typography>
                 <Divider></Divider>
@@ -196,8 +192,7 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}
-                >
+                  className={classes.cardTitle}>
                   Medium Preference
                 </Typography>
                 <Divider></Divider>
@@ -212,8 +207,7 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}
-                >
+                  className={classes.cardTitle}>
                   High Preference
                 </Typography>
                 <Divider></Divider>

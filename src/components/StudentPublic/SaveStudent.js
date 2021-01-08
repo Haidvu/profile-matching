@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   Container,
   Button,
@@ -40,20 +40,18 @@ const SaveStudent = ({ studentId }) => {
     project_preference_for_student: null,
   });
 
-  const getCompanyProjects = () => {
+  const getCompanyProjects = useCallback(() => {
     //get all projects of this company.
     const companyProjects = axios.post(
       "http://18.213.74.196:8000/api/company_project/list_by_company",
       { username_id: parseInt(Id) },
       getConfig()
     );
-
     //get all saved projects
     const savedProjects = axios.get(
       "http://18.213.74.196:8000/api/project_select_student/all",
       getConfig()
     );
-
     axios
       .all([companyProjects, savedProjects])
       .then(
@@ -81,11 +79,11 @@ const SaveStudent = ({ studentId }) => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [setCompanyProjectsToShow, setLoading, Id, studentId]);
 
   useEffect(() => {
     getCompanyProjects();
-  }, []);
+  }, [getCompanyProjects]);
 
   const handleSave = () => {
     if (saveStudent.student_db_id) {

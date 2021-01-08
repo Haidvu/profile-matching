@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Container,
   Button,
@@ -34,9 +34,9 @@ const CompanyProjectTeam = ({ id }) => {
   const [teamMembers, setTeamMembers] = useState({});
   const [teamMembersDelta, setTeamMembersDelta] = useState({});
 
-  const getSavedStudents = () => {
+  const getSavedStudents = useCallback(() => {
+    //useCallback allows function to be created only first render.
     //Get all saved profiles
-
     let team = {};
     let showEditFieldsTemp = {};
     axios
@@ -60,11 +60,11 @@ const CompanyProjectTeam = ({ id }) => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [setTeamMembers, setTeamMembersDelta, setShowEditFields, setLoading, id]);
 
   useEffect(() => {
     getSavedStudents();
-  }, []);
+  }, [getSavedStudents]);
 
   const handleSave = (member) => {
     axios
@@ -143,103 +143,101 @@ const CompanyProjectTeam = ({ id }) => {
       {loading ? (
         <LinearProgress />
       ) : (
-        <Grid container direction="row">
-          <Grid item container spacing={2}>
-            {Object.keys(teamMembers).length > 0 ? (
-              <>
-                {Object.entries(teamMembers).map(([id, member]) => (
-                  <Grid item container key={id} alignItems="center" spacing={1}>
-                    <Grid item>
-                      <Avatar />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <Link
-                        to={{
-                          pathname: `/dashboard/search/${member.student_db_id}`,
-                        }}
-                        style={{ textDecoration: "none" }}>
-                        <Typography>{member.student_name}</Typography>
-                      </Link>
-                    </Grid>
-                    {showEditFields[member.student_db_id] ? (
-                      <>
-                        <Grid item xs={2}>
-                          <FormControl className={classes.formControl}>
-                            <InputLabel>Preference</InputLabel>
-                            <Select
-                              label="experience"
-                              name={member.project_id}
-                              className={classes.preference}
-                              onChange={(e) => handleChange(e, member)}>
-                              <MenuItem value={1}>Low</MenuItem>
-                              <MenuItem value={2}>Medium</MenuItem>
-                              <MenuItem value={3}>High</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            // disabled={
-                            //   saveStudent.project_id !== project.project_id
-                            // }
-                            onClick={() => handleSave(member)}>
-                            Save
-                          </Button>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            // disabled={
-                            //   saveStudent.project_id !== project.project_id
-                            // }
-                            onClick={() => handleCancel(member)}>
-                            Cancel
-                          </Button>
-                        </Grid>
-                      </>
-                    ) : (
-                      <>
-                        <Grid item xs={2}>
-                          <Typography>{`Preference: ${member.project_preference_for_student}`}</Typography>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            // disabled={
-                            //   saveStudent.project_id !== project.project_id
-                            // }
-                            onClick={() => showFields(member)}>
-                            Update
-                          </Button>
-                        </Grid>
-                      </>
-                    )}
-
-                    <Grid item>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => {
-                          handleDelete(member);
-                        }}>
-                        Delete
-                      </Button>
-                    </Grid>
+        <Grid container direction="row" spacing={1}>
+          {Object.keys(teamMembers).length > 0 ? (
+            <>
+              {Object.entries(teamMembers).map(([id, member]) => (
+                <Grid item container key={id} alignItems="center" spacing={1}>
+                  <Grid item xs={2} md={1}>
+                    <Avatar />
                   </Grid>
-                ))}
-              </>
-            ) : (
-              <Container>
-                <Typography style={{ fontStyle: "italic" }}>
-                  No Team members Added yet.
-                </Typography>
-              </Container>
-            )}
-          </Grid>
+                  <Grid item xs={5} md={3}>
+                    <Link
+                      to={{
+                        pathname: `/dashboard/search/${member.student_db_id}`,
+                      }}
+                      style={{ textDecoration: "none" }}>
+                      <Typography>{member.student_name}</Typography>
+                    </Link>
+                  </Grid>
+                  {showEditFields[member.student_db_id] ? (
+                    <>
+                      <Grid item xs={5} md={3}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel>Preference</InputLabel>
+                          <Select
+                            label="experience"
+                            name={member.project_id}
+                            className={classes.preference}
+                            onChange={(e) => handleChange(e, member)}>
+                            <MenuItem value={1}>Low</MenuItem>
+                            <MenuItem value={2}>Medium</MenuItem>
+                            <MenuItem value={3}>High</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          // disabled={
+                          //   saveStudent.project_id !== project.project_id
+                          // }
+                          onClick={() => handleSave(member)}>
+                          Save
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          // disabled={
+                          //   saveStudent.project_id !== project.project_id
+                          // }
+                          onClick={() => handleCancel(member)}>
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </>
+                  ) : (
+                    <>
+                      <Grid item xs={5} md={3}>
+                        <Typography>{`Preference: ${member.project_preference_for_student}`}</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          // disabled={
+                          //   saveStudent.project_id !== project.project_id
+                          // }
+                          onClick={() => showFields(member)}>
+                          Update
+                        </Button>
+                      </Grid>
+                    </>
+                  )}
+
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => {
+                        handleDelete(member);
+                      }}>
+                      Delete
+                    </Button>
+                  </Grid>
+                </Grid>
+              ))}
+            </>
+          ) : (
+            <Container>
+              <Typography style={{ fontStyle: "italic" }}>
+                No Team members Added yet.
+              </Typography>
+            </Container>
+          )}
         </Grid>
       )}
     </>

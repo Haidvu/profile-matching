@@ -105,12 +105,12 @@ export default function Dashboard() {
   useEffect(() => {
     if (slug) {
       let url;
-      if (role_id === "0"){
-        url= `http://18.213.74.196:8000/api/student_profile/${slug}`;
-      }else if(role_id === "1"){
-        url=`http://18.213.74.196:8000/api/company_profile/${slug}`;
-      }else if(role_id === "2"){
-        url= `http://18.213.74.196:8000/api/website_admin_profile/1`;
+      if (role_id === "0") {
+        url = `http://18.213.74.196:8000/api/student_profile/${slug}`;
+      } else if (role_id === "1") {
+        url = `http://18.213.74.196:8000/api/company_profile/${slug}`;
+      } else if (role_id === "2") {
+        url = `http://18.213.74.196:8000/api/website_admin_profile/1`;
       }
       axios
         .get(url, getConfig())
@@ -126,8 +126,8 @@ export default function Dashboard() {
           //   logout();
           // }
         });
-    } 
-  }, []);
+    }
+  }, [dispatch, role_id, slug]);
 
   const userOptions = () => {
     switch (role_id) {
@@ -145,9 +145,11 @@ export default function Dashboard() {
         };
       case "2":
         return {
-          name: data.profile.admin_first_name ? data.profile.admin_last_name : null,
-          menu: <AdminMenu/>,
-          routes: <AdminRoutes/>,
+          name: data.profile.admin_first_name
+            ? data.profile.admin_last_name
+            : null,
+          menu: <AdminMenu />,
+          routes: <AdminRoutes />,
         };
 
       default: {
@@ -172,8 +174,7 @@ export default function Dashboard() {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                className={classes.menuButton}
-              >
+                className={classes.menuButton}>
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6">| Future Start |</Typography>
@@ -198,8 +199,7 @@ export default function Dashboard() {
                 }}
                 ModalProps={{
                   keepMounted: true, // Better open performance on mobile.
-                }}
-              >
+                }}>
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>
@@ -223,8 +223,7 @@ export default function Dashboard() {
                   paper: classes.drawerPaper,
                 }}
                 variant="permanent"
-                open
-              >
+                open>
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>

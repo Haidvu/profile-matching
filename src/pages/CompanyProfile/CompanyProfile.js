@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -21,10 +27,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  CircularProgress,
   LinearProgress,
-  FormControl,
-  FormLabel,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
@@ -130,7 +133,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function CompanyProfile() {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const states = [
     "AL",
     "AK",
@@ -185,8 +189,10 @@ export default function CompanyProfile() {
     "WY",
   ];
 
-  //initially get the data from DataContext
+  //Input ref for login popup.
+  const inputref = useRef(0);
 
+  //initially get the data from DataContext
   const { data, dispatch } = useContext(DataContext);
   const { profile } = data;
 
@@ -259,43 +265,49 @@ export default function CompanyProfile() {
 
   const slug = localStorage.getItem("slug");
 
-  const getProfile = async () => {
+  const getProfile = useCallback(() => {
     if (slug) {
-      try {
-        const url = `http://18.213.74.196:8000/api/company_profile/${slug}`;
-        const res = await axios.get(url, getConfig());
-        dispatch({ type: "SET_PROFILE", payload: res.data }); //Set the data in dataContext
-        setProfileInfo({
-          //Set data locally, in case use change, he changes this.
-          name: res.data.company_name,
-          companyMission: res.data.company_mission,
-          companyDescription: res.data.company_description,
-          companyType: res.data.company_type,
-          companyWebsite: res.data.company_website,
-          companyRep: res.data.representative_name,
-          industryType: res.data.industry_type,
-          phoneNumber: res.data.company_phone_no,
-          streetAddress: getStreetAddress(res.data.company_address),
-          city: getCity(res.data.company_address),
-          state: getState(res.data.company_address),
-          zip: res.data.company_zip,
-          streetAddress2: getStreetAddress(res.data.mailing_address),
-          city2: getCity(res.data.mailing_address),
-          state2: getState(res.data.mailing_address),
-          zip2: res.data.mailing_zip,
-          isSolo: res.data.company_representative_type,
-          contact_email: res.data.company_contact_email,
+      axios
+        .get(
+          `http://18.213.74.196:8000/api/company_profile/${slug}`,
+          getConfig()
+        )
+        .then((res) => {
+          res.data.company_representative_type =
+            res.data.company_representative_type + "";
+          dispatch({ type: "SET_PROFILE", payload: res.data }); //Set the data in dataContext
+          setProfileInfo({
+            //Set data locally, in case use change, he changes this.
+            name: res.data.company_name,
+            companyMission: res.data.company_mission,
+            companyDescription: res.data.company_description,
+            companyType: res.data.company_type,
+            companyWebsite: res.data.company_website,
+            companyRep: res.data.representative_name,
+            industryType: res.data.industry_type,
+            phoneNumber: res.data.company_phone_no,
+            streetAddress: getStreetAddress(res.data.company_address),
+            city: getCity(res.data.company_address),
+            state: getState(res.data.company_address),
+            zip: res.data.company_zip,
+            streetAddress2: getStreetAddress(res.data.mailing_address),
+            city2: getCity(res.data.mailing_address),
+            state2: getState(res.data.mailing_address),
+            zip2: res.data.mailing_zip,
+            isSolo: res.data.company_representative_type,
+            contact_email: res.data.company_contact_email,
+          });
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      } catch (e) {
-        console.log(e);
-      }
     }
-    setLoading(false);
-  };
+  }, [setLoading, setProfileInfo, dispatch, slug]);
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   const [showEditFields, setShowEditFields] = useState(false);
 
@@ -368,7 +380,7 @@ export default function CompanyProfile() {
   });
 
   const handleConfirm = () => {
-    setLoading(true);
+    setLoading2(true);
     axios
       .post("http://18.213.74.196:8000/api/token/", {
         email: email,
@@ -422,7 +434,7 @@ export default function CompanyProfile() {
                 dispatch({ type: "UPDATE_PROFILE", payload: res.data });
                 setDialogOpen(false);
                 setShowEditFields(false);
-                setLoading(false);
+                setLoading2(false);
                 axios
                   .post("http://18.213.74.196:8000/api/token/", {
                     email: email,
@@ -446,7 +458,7 @@ export default function CompanyProfile() {
                 console.log(err);
                 setUpdateErrors({ ...updateErrors, ...err.response.data });
                 setDialogOpen(false);
-                setLoading(false);
+                setLoading2(false);
               });
           })
           //Logitute / Latitute api error.
@@ -456,7 +468,7 @@ export default function CompanyProfile() {
       })
       //Log In api error.
       .catch((err) => {
-        setLoading(false);
+        setLoading2(false);
         setAuthError(
           err.response.data.detail +
             ". Make sure your email and password is correct."
@@ -466,8 +478,8 @@ export default function CompanyProfile() {
 
   return (
     <div>
-      {loading && !data.profile ? (
-        <CircularProgress color="secondary" />
+      {loading ? (
+        <LinearProgress color="secondary" />
       ) : (
         <>
           <div className={classes.profileHeader}>
@@ -914,7 +926,7 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid container xs={12} md={6} spacing={2}>
+                    <Grid item container xs={12} md={6} spacing={2}>
                       <Grid item>
                         <Typography>Company Address</Typography>
                         <TextField
@@ -1002,7 +1014,7 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid container xs={12} md={6} spacing={2}>
+                    <Grid item container xs={12} md={6} spacing={2}>
                       <Grid item>
                         <Typography>Mailing Address</Typography>
                         <TextField
@@ -1097,13 +1109,12 @@ export default function CompanyProfile() {
           </form>
         </>
       )}
-
       <Dialog
         onClose={handleDialogClose}
         open={dialogOpen}
         className={classes.dialog}>
         <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
-        {loading ? <LinearProgress /> : null}
+        {loading2 ? <LinearProgress /> : null}
         {authError ? (
           <Alert
             className={classes.loginAlert}
@@ -1114,6 +1125,7 @@ export default function CompanyProfile() {
         ) : null}
         <DialogContent>
           <TextField
+            ref={inputref}
             variant="outlined"
             fullWidth
             id="email"
@@ -1131,6 +1143,11 @@ export default function CompanyProfile() {
             label="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleConfirm();
+              }
+            }}
             value={password}
             required
             type="password"
