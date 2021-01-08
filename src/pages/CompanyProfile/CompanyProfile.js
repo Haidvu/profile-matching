@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -21,10 +27,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
-  CircularProgress,
   LinearProgress,
-  FormControl,
-  FormLabel,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
@@ -262,7 +265,7 @@ export default function CompanyProfile() {
 
   const slug = localStorage.getItem("slug");
 
-  const getProfile = () => {
+  const getProfile = useCallback(() => {
     if (slug) {
       axios
         .get(
@@ -300,11 +303,11 @@ export default function CompanyProfile() {
           console.log(err);
         });
     }
-  };
+  }, [setLoading, setProfileInfo, dispatch, slug]);
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
   const [showEditFields, setShowEditFields] = useState(false);
 

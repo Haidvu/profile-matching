@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Container,
   Button,
@@ -34,9 +34,9 @@ const CompanyProjectTeam = ({ id }) => {
   const [teamMembers, setTeamMembers] = useState({});
   const [teamMembersDelta, setTeamMembersDelta] = useState({});
 
-  const getSavedStudents = () => {
+  const getSavedStudents = useCallback(() => {
+    //useCallback allows function to be created only first render.
     //Get all saved profiles
-
     let team = {};
     let showEditFieldsTemp = {};
     axios
@@ -60,11 +60,11 @@ const CompanyProjectTeam = ({ id }) => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [setTeamMembers, setTeamMembersDelta, setShowEditFields, setLoading, id]);
 
   useEffect(() => {
     getSavedStudents();
-  }, []);
+  }, [getSavedStudents]);
 
   const handleSave = (member) => {
     axios
@@ -143,7 +143,7 @@ const CompanyProjectTeam = ({ id }) => {
       {loading ? (
         <LinearProgress />
       ) : (
-        <Grid container direction="row">
+        <Grid container direction="row" spacing={1}>
           {Object.keys(teamMembers).length > 0 ? (
             <>
               {Object.entries(teamMembers).map(([id, member]) => (

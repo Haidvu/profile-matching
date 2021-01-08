@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -172,8 +172,7 @@ export default function ResetPasswordTwo() {
             fullWidth
             variant="contained"
             color="secondary"
-            className={classes.submit}
-          >
+            className={classes.submit}>
             RESET PASSWORD
           </Button>
           {error ? (

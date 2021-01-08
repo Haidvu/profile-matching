@@ -456,7 +456,7 @@ export default function CompanyProject({ match }) {
       .catch((err) => {
         console.log(err.response.data);
       });
-  }, []);
+  }, [match.params.id, match.params.project]);
 
   return (
     <div className="root">

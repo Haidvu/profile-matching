@@ -10,8 +10,6 @@ import {
   CardContent,
   Avatar,
   Divider,
-  Box,
-  Paper,
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";

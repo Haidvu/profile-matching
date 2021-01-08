@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   List,
   ListItem,
@@ -187,39 +187,32 @@ const StudentDetailed = ({ match }) => {
   const [student, setStudent] = useState();
   const [studentProjects, setStudentProjects] = useState([]);
 
-  const getStudent = async () => {
-    try {
-      const response = await axios.get(
-        `http://18.213.74.196:8000/api/student_profile/id/${match.params.id}`,
-        getConfig()
-      );
-      setStudent(response.data);
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getStudentProjects = async () => {
-    try {
-      const response = await axios.post(
-        `http://18.213.74.196:8000/api/student_project/list_by_student`,
-
-        {
-          username_id: match.params.id,
-        },
-        getConfig()
-      );
-      setStudentProjects(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const getStudent = useCallback(() => {
+    const student = axios.get(
+      `http://18.213.74.196:8000/api/student_profile/id/${match.params.id}`,
+      getConfig()
+    );
+    const studentProjects = axios.post(
+      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      {
+        username_id: match.params.id,
+      },
+      getConfig()
+    );
+    axios.all([student, studentProjects]).then(
+      axios.spread((...responses) => {
+        const studentRes = responses[0];
+        const studentProjectRes = responses[1];
+        setStudent(studentRes.data);
+        setStudentProjects(studentProjectRes.data);
+        setLoading(false);
+      })
+    );
+  }, [match.params.id]);
 
   useEffect(() => {
     getStudent();
-    getStudentProjects();
-  }, []);
+  }, [getStudent]);
   return (
     <>
       {loading ? (
