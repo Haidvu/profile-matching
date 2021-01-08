@@ -8,7 +8,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  LinearProgress,
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
