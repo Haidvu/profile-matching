@@ -4,7 +4,11 @@
   "private": true,
   "dependencies": {
     "@deck.gl/core": "^8.3.13",
+<<<<<<< HEAD
     "@deck.gl/layers": "^8.3.1",
+=======
+    "@deck.gl/layers": "^8.3.13",
+>>>>>>> 3d36587af356502d88506252e4346230cca95d00
     "@deck.gl/react": "^8.3.13",
     "@luma.gl/core": "^8.3.1",
     "@luma.gl/engine": "^8.3.2",

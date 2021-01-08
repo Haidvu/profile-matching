@@ -344,6 +344,7 @@ export default function CompanyProfile() {
   const handleDialogClose = () => {
     setEmail("");
     setPassword("");
+    setAuthError("");
     setDialogOpen(false);
   };
 

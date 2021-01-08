@@ -564,6 +564,7 @@ export default function StudentProfile() {
   const handleDialogClose = () => {
     setEmail("");
     setPassword("");
+    setAuthError("");
     setDialogOpen(false);
   };
 
