@@ -22,6 +22,7 @@ import {
   Radio,
   FormControlLabel,
   CircularProgress,
+  LinearProgress,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
@@ -204,6 +205,7 @@ export default function CompanyProfile() {
     streetAddress2: null,
     city2: null,
     state2: null,
+    zip2: null,
     contact_email: null,
     isSolo: null,
   });
@@ -278,6 +280,7 @@ export default function CompanyProfile() {
           streetAddress2: getStreetAddress(res.data.mailing_address),
           city2: getCity(res.data.mailing_address),
           state2: getState(res.data.mailing_address),
+          zip2: res.data.mailing_zip,
           isSolo: res.data.company_representative_type,
           contact_email: res.data.company_contact_email,
         });
@@ -322,6 +325,7 @@ export default function CompanyProfile() {
       streetAddress2: getStreetAddress(profile.mailing_address),
       city2: getCity(profile.mailing_address),
       state2: getState(profile.mailing_address),
+      zip2: profile.zip2,
       isSolo: profile.company_representative_type,
       contact_email: profile.company_contact_email,
     });
@@ -358,9 +362,11 @@ export default function CompanyProfile() {
     company_zip: "",
     company_description: "",
     company_contact_email: "",
+    mailing_zip: "",
   });
 
   const handleConfirm = () => {
+    setLoading(true);
     axios
       .post("http://18.213.74.196:8000/api/token/", {
         email: email,
@@ -373,8 +379,6 @@ export default function CompanyProfile() {
         localStorage.setItem("email_id", res.data.email_id);
         localStorage.setItem("slug", res.data.slug);
         let slug = res.data.slug;
-        setLoading(true);
-
         let address = `${profileInfo.streetAddress}, ${profileInfo.city}, ${profileInfo.state} ${profileInfo.zip} `;
         let token =
           "pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
@@ -398,6 +402,7 @@ export default function CompanyProfile() {
                   company_address: getCompanyAddress(),
                   mailing_address: getMailingAddress(),
                   company_zip: profileInfo.zip,
+                  mailing_zip: profileInfo.zip2,
                   company_website: profileInfo.companyWebsite,
                   company_mission: profileInfo.companyMission,
                   company_description: profileInfo.companyDescription,
@@ -415,6 +420,7 @@ export default function CompanyProfile() {
                 dispatch({ type: "UPDATE_PROFILE", payload: res.data });
                 setDialogOpen(false);
                 setShowEditFields(false);
+                setLoading(false);
                 axios
                   .post("http://18.213.74.196:8000/api/token/", {
                     email: email,
@@ -427,16 +433,28 @@ export default function CompanyProfile() {
                     localStorage.setItem("slug", res.data.slug);
                     setEmail(null);
                     setPassword(null);
-                    setLoading(false);
+                    //2nd time token obtain error
+                  })
+                  .catch((err) => {
+                    console.log(err);
                   });
+                //Profile update api error.
+              })
+              .catch((err) => {
+                console.log(err);
+                setUpdateErrors({ ...updateErrors, ...err.response.data });
+                setDialogOpen(false);
+                setLoading(false);
               });
           })
+          //Logitute / Latitute api error.
           .catch((err) => {
-            setUpdateErrors({ ...updateErrors, ...err.response.data });
-            setDialogOpen(false);
+            console.log(err);
           });
       })
+      //Log In api error.
       .catch((err) => {
+        setLoading(false);
         setAuthError(
           err.response.data.detail +
             ". Make sure your email and password is correct."
@@ -974,7 +992,7 @@ export default function CompanyProfile() {
                           variant="body2"
                           className={classes.inline}
                           color="textPrimary">
-                          {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}`}
+                          {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}, ${profileInfo.zip2}`}
                         </Typography>
                       </React.Fragment>
                     }
@@ -1026,6 +1044,20 @@ export default function CompanyProfile() {
                           ))}
                         </Select>
                       </Grid>
+                      <Grid item>
+                        <Typography>Zipcode</Typography>
+                        <TextField
+                          className={classes.fullWidth}
+                          value={profileInfo.zip2}
+                          onChange={handleChange}
+                          inputProps={{ maxLength: 5 }}
+                          name="zip2"></TextField>
+                        {profileInfo.zip2 === "" ? (
+                          <Typography color="error">
+                            {updateErrors.mailing_zip}
+                          </Typography>
+                        ) : null}
+                      </Grid>
                     </Grid>
                   </>
                 )}
@@ -1068,6 +1100,7 @@ export default function CompanyProfile() {
         open={dialogOpen}
         className={classes.dialog}>
         <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
+        {loading ? <LinearProgress /> : null}
         {authError ? (
           <Alert
             className={classes.loginAlert}
