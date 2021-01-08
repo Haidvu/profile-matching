@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   studentName: {
@@ -93,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProjectsList = ({ loading, projects }) => {
+const ProjectsList = ({ loading, projects, noProjectsFound }) => {
   const classes = useStyles();
 
   return (
@@ -103,6 +104,12 @@ const ProjectsList = ({ loading, projects }) => {
           color="secondary"
           style={{ margin: "20px" }}
         ></LinearProgress>
+      ) : noProjectsFound ? (
+        <Grid style={{ margin: "20px" }}>
+         <Alert severity="info">
+          No Projects Found!
+        </Alert>
+        </Grid>
       ) : (
         <Grid container spacing={4} className={classes.gridRoot}>
           {projects.map((project) => (
