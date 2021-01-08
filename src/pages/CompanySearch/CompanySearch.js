@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core/";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Chip,
+  MenuItem,
+} from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
@@ -9,30 +16,24 @@ import StudentsLists from "../../components/StudentPublic/StudentsList";
 
 const useStyles = makeStyles((theme) => ({
   searchBackground: {
-    backgroundColor: "rgba(200,16,46,1)",
+    //backgroundColor: "rgba(200,16,46,1)",
     margin: "10px",
     borderRadius: "5px",
     flex: "column",
   },
   header: {
     textAlign: "center",
-    fontSize: "60px",
-    fontWeight: "400",
-    color: "white",
+    fontSize: "35px",
+    fontWeight: "bold",
+    //color: "white",
     fontFamily: "Helvetica",
     marginBottom: theme.spacing(1.5),
   },
   SearchLabels: {
     fontFamily: "Helvetica",
-    color: "white",
+    //color: "white",
   },
   SearchButton: {
-    backgroundColor: "#324CE7",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#a60d27",
-      color: "white",
-    },
     marginLeft: "10px",
   },
   KeywordSearch: {
@@ -49,13 +50,13 @@ const useStyles = makeStyles((theme) => ({
   },
   MajorSearch: {
     width: 150,
-    borderRadius: "10px",
+    //borderRadius: "10px",
     height: 40,
   },
   DegreeSearch: {
     width: 150,
     objectFit: "contain",
-    borderRadius: "10px",
+    //borderRadius: "10px",
     height: 40,
   },
   SkillSearch: {
@@ -217,12 +218,13 @@ export default function CompanySearch() {
           <Grid
             container
             id="first-left"
+            justify="center"
             item
             xs={12}
             spacing={4}
             direction="row">
             <Grid item>
-              <Typography className={classes.SearchLabels} variant="h5">
+              <Typography className={classes.SearchLabels} variant="h6">
                 Keyword
               </Typography>
               <TextField
@@ -236,7 +238,7 @@ export default function CompanySearch() {
               />
             </Grid>
             <Grid item>
-              <Typography className={classes.SearchLabels} variant="h5">
+              <Typography className={classes.SearchLabels} variant="h6">
                 Major
               </Typography>
               <select
@@ -530,6 +532,8 @@ export default function CompanySearch() {
                   setSearchInput({ ...searchInput, zipcode: e.target.value });
                 }}></TextField>
               <Button
+                variant="contained"
+                color="secondary"
                 className={classes.SearchButton}
                 variant="contained"
                 onClick={handleClick}>
