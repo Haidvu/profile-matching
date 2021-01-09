@@ -3,6 +3,8 @@ import { AppBar, Toolbar, Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import UHLogo from "../../assets/UHLogo.png";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -28,6 +30,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
   const classes = useStyles();
+  const history = useHistory();
+
+  //Check if token exists
+  const isLoggedIn = () => {
+    if (localStorage.getItem("token") && localStorage.getItem("slug")) {
+      axios
+        .post("http://18.213.74.196:8000/api/token/refresh/", {
+          refresh: localStorage.getItem("refresh"),
+        })
+        .then((res) => {
+          //Got new access token.
+          localStorage.setItem("token", res.data.access);
+          setTimeout(isLoggedIn, 17900 * 1000);
+          history.push("/dashboard");
+        })
+        .catch((err) => {
+          history.push("/login");
+        });
+    } else {
+      history.push("/login");
+    }
+  };
 
   return (
     <div>
@@ -44,9 +68,8 @@ export default function Navbar() {
               <Button
                 size="small"
                 color="inherit"
-    
-                className={classes.Login}
-                href="/login">
+                onClick={isLoggedIn}
+                className={classes.Login}>
                 Login
               </Button>
             </Grid>
