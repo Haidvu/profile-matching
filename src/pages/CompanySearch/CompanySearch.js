@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core/";
+import { Grid, Typography, TextField, Button, Chip, Tooltip, IconButton } from "@material-ui/core/";
+import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from "@material-ui/core/styles";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
@@ -68,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     margin: theme.spacing(0.5),
   },
+  ButtonHelp:{
+    padding: "5px"
+  }
 }));
 
 const customStyles = {
@@ -219,6 +223,11 @@ export default function CompanySearch() {
             <Grid item>
               <Typography className={classes.SearchLabels} variant="h6">
                 Keyword
+                <Tooltip title={<p style={{ fontSize: "13px" }}>Press enter to save your keywords after you type them.<br/> This will search the entire student description.</p>}>
+                  <IconButton className={classes.ButtonHelp}>
+                    <HelpIcon />
+                  </IconButton>
+                </Tooltip>
               </Typography>
               <TextField
                 className={classes.KeywordSearch}
@@ -459,7 +468,7 @@ export default function CompanySearch() {
               </select>
             </Grid>
             <Grid item>
-              <Typography className={classes.SearchLabels} variant="h5">
+              <Typography className={classes.SearchLabels} variant="h6">
                 Degree Type
               </Typography>
               <select
@@ -478,7 +487,7 @@ export default function CompanySearch() {
               </select>
             </Grid>
             <Grid item>
-              <Typography className={classes.SearchLabels} variant="h5">
+              <Typography className={classes.SearchLabels} variant="h6">
                 Skills
               </Typography>
               <Select
@@ -510,7 +519,7 @@ export default function CompanySearch() {
               />
             </Grid>
             <Grid item>
-              <Typography className={classes.SearchLabels} variant="h5">
+              <Typography className={classes.SearchLabels} variant="h6">
                 Zipcode
               </Typography>
               <TextField
