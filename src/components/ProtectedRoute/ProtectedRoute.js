@@ -19,8 +19,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
         })
         .catch((err) => {
           console.log(err);
-          localStorage.clear();
-          history.push("/login");
         });
     }
   }, []);
