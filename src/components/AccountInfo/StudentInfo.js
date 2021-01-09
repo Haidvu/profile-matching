@@ -286,6 +286,7 @@ function StudentInfo() {
      setUpdateFailed(true);
     }else{
       setUpdateFailed(false);
+      setAlert("")
     }
     return null;
   }
