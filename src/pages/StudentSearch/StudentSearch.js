@@ -180,6 +180,13 @@ export const StudentSearch = () => {
       });
   };
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.key === "Enter") {
+      handleClickSearch();
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -318,7 +325,8 @@ export const StudentSearch = () => {
             item
             xs={12}
             spacing={4}
-            direction="row">
+            direction="row"
+          >
             <Grid item className={classes.keywordGrid}>
               <OutlinedInput
                 className={classes.keywordSearch}
@@ -326,13 +334,15 @@ export const StudentSearch = () => {
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
                 }}
+                onKeyPress={handleKeypress}
                 endAdornment={
                   <InputAdornment position="end">
                     <Button
                       size="large"
                       className={classes.searchButton}
                       fullWidth={true}
-                      onClick={handleClickSearch}>
+                      onClick={handleClickSearch}
+                    >
                       <SearchIcon />
                     </Button>
                   </InputAdornment>
@@ -345,15 +355,18 @@ export const StudentSearch = () => {
             <Grid>
               <Accordion
                 expanded={expanded === "panel1"}
-                onChange={handleChange("panel1")}>
+                onChange={handleChange("panel1")}
+              >
                 <AccordionSummary
                   className={classes.accordionExpand}
                   // expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
-                  id="panel1bh-header">
+                  id="panel1bh-header"
+                >
                   <Button
                     className={classes.advancedSearchButton}
-                    variant="outlined">
+                    variant="outlined"
+                  >
                     ADVANCED SEARCH
                     <FilterListIcon />
                   </Button>
@@ -365,7 +378,8 @@ export const StudentSearch = () => {
                     direction="column"
                     justify="space-between"
                     spacing={2}
-                    alignItems="center">
+                    alignItems="center"
+                  >
                     <Grid
                       // container
                       // id="first-left"
@@ -382,11 +396,13 @@ export const StudentSearch = () => {
                       justify="space-evenly"
                       direction="column"
                       alignItems="stretch"
-                      className={classes.ASGrid}>
+                      className={classes.ASGrid}
+                    >
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h6">
+                          variant="h6"
+                        >
                           Company Name
                         </Typography>
                         <Select
@@ -413,7 +429,8 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h6">
+                          variant="h6"
+                        >
                           Industry Type
                         </Typography>
                         <Select
@@ -440,7 +457,8 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h6">
+                          variant="h6"
+                        >
                           Project Name
                         </Typography>
                         <Select
@@ -467,7 +485,8 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h6">
+                          variant="h6"
+                        >
                           Project Type
                         </Typography>
                         <Select
@@ -496,7 +515,8 @@ export const StudentSearch = () => {
                       <Grid item>
                         <Typography
                           className={classes.searchLabels}
-                          variant="h6">
+                          variant="h6"
+                        >
                           Project Tech
                         </Typography>
                         <Select
