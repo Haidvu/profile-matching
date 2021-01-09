@@ -4,7 +4,7 @@ import AvatarImage from "../../assets/image.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, LinearProgress } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 
@@ -245,7 +245,7 @@ export default function CompanyProject() {
         <div>
           <Grid container justify="center" alignItems="center" direction="row">
             <Grid item md={4}>
-              <Avatar src={Spinner} className={classes.spinner} />
+              <LinearProgress color="secondary" />
             </Grid>
           </Grid>
         </div>

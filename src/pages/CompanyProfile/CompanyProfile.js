@@ -591,6 +591,7 @@ export default function CompanyProfile() {
                 ) : (
                   <div className={classes.fullWidth}>
                     <TextField
+                      multiline
                       label="Company Mission"
                       className={classes.formInput}
                       value={profileInfo.companyMission}
@@ -598,6 +599,7 @@ export default function CompanyProfile() {
                       placeholder={profileInfo.companyMission}
                       name="companyMission"
                       required
+                      helperText={`${profileInfo.companyMission.length}/225`}
                       InputLabelProps={{
                         classes: {
                           root: classes.inputLabel,
@@ -641,11 +643,13 @@ export default function CompanyProfile() {
                   <div className={classes.fullWidth}>
                     <TextField
                       label="Company Description"
+                      multiline
                       className={classes.formInput}
                       value={profileInfo.companyDescription}
                       onChange={handleChange}
                       name="companyDescription"
                       required
+                      helperText={`${profileInfo.companyDescription.length}/ 225`}
                       InputLabelProps={{
                         classes: {
                           root: classes.inputLabel,

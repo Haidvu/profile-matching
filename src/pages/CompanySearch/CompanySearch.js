@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { Grid, Typography, TextField, Button, Chip } from "@material-ui/core/";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Chip,
+  LinearProgress,
+} from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import makeAnimated from "react-select/animated";
 import axios from "axios";
@@ -86,7 +93,7 @@ const customStyles = {
 };
 
 export default function CompanySearch() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [studentsList, setStudentsList] = useState([]);
   const [searchInput, setSearchInput] = useState({
     //This is the data from api
@@ -522,7 +529,10 @@ export default function CompanySearch() {
                 variant="outlined"
                 size="small"
                 onChange={(e) => {
-                  setSearchInput({ ...searchInput, zipcode: e.target.value });
+                  setSearchInput({
+                    ...searchInput,
+                    zipcode: e.target.value,
+                  });
                 }}></TextField>
               <Button
                 variant="contained"
