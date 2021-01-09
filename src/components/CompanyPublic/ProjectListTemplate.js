@@ -254,9 +254,9 @@ export default function ProjectsListTemplate({ match }) {
           project_description: res.data.project_description,
           project_type: res.data.project_type,
           project_deadline: res.data.project_deadline,
-          project_tech: res.data.project_tech.split(',').map((skill, index) => {
+          project_tech: res.data.project_tech ? res.data.project_tech.split(',').map((skill, index) => {
             return { label: skill, value: index }
-          }),
+          }): null,
           company_name: res.data.company_name,
           company_website: res.data.company_website,
           company_contact_email: res.data.company_contact_email,
@@ -344,17 +344,21 @@ export default function ProjectsListTemplate({ match }) {
                 </Grid>
 
                 <Grid container className={classes.projectInfo}>
-                  <Grid item xs={12}>
-
-
-                    {Object.keys(profileInfo).length && profileInfo.project_tech ?
+                  <Grid item xs={12}>        
+                    {(profileInfo.project_tech) ?
                       (profileInfo.project_tech.map((skill, index) =>
                         <Chip component={'span'} label={skill.label} className={classes.chips} key={index} />
-                      )) : (<Chip component={'span'} label={"None"} className={classes.chips}/>)
+                      )) :
+                      (
+                        <Chip
+                          label="No technology specified for this project"
+                          component={'span'}
+                          color="primary"
+                          size="small"
+                          variant="outlined"
+                        />
+                      )
                     }
-
-
-
                   </Grid>
                 </Grid>
               </Grid>
