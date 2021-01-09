@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Route, Redirect, useHistory } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import { getNewToken } from "../Login/Login";
 import axios from "axios";
 

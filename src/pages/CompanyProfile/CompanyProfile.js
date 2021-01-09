@@ -46,32 +46,6 @@ import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
-import clsx from "clsx";
-
-const industryTypes = [
-  "Agriculture Services",
-  "Architecture/Design",
-  "Arts/Education",
-  "Business/Finance/Consulting",
-  "Construction/RealEstate",
-  "Engineering/Manufacturing",
-  "Education Services",
-  "Food Service",
-  "Hospitality",
-  "Tourism",
-  "Government/Non-Profits",
-  "Healthcare/Life-Sciences",
-  "Information Technology",
-  "Legal",
-  "Marketing",
-  "Media/Communications",
-  "Religious Organizations",
-  "Retail/Trade/Fashion",
-  "Sports/Recreation",
-  "Utilities/Energy/Environment",
-  "UH Faculty/Staff",
-  "Transportation/Logistics",
-];
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -361,6 +335,22 @@ export default function CompanyProfile() {
   const handleSave = () => {
     setDialogOpen(true);
   };
+
+    //api for select IndustryType
+    const [industryTypes, setIndustryTypes] = useState([]);
+    useEffect(() => {
+      axios
+        .get(
+          "http://18.213.74.196:8000/api/company_profile/list_industry_type",
+          getConfig()
+        )
+        .then((res) => {  
+          setIndustryTypes(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, []);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -916,8 +906,8 @@ export default function CompanyProfile() {
                         name="industryType"
                         component="span">
                         {industryTypes.map((industryType) => (
-                          <MenuItem key={industryType} value={industryType}>
-                            {industryType}
+                          <MenuItem key={industryType.industry_type} value={industryType.industry_type}>
+                            {industryType.industry_type}
                           </MenuItem>
                         ))}
                       </Select>
