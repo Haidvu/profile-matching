@@ -38,7 +38,8 @@ import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
 import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
-import { Alert } from "@material-ui/lab";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -217,7 +218,6 @@ export default function StudentProfile() {
   //initially get the data from DataContext
   const { data, dispatch } = useContext(DataContext);
   const { profile } = data;
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -247,6 +247,14 @@ export default function StudentProfile() {
     state: null,
     zipcode: null,
   });
+  const [alert, setAlert] = useState("");
+  const [updateFailed, setUpdateFailed] = useState(false);
+  const handleCloseUpdateFailed = () => {
+    setUpdateFailed(false);
+  };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
   const getStreetAddress = (address) => {
     if (address !== "") {
@@ -398,7 +406,8 @@ export default function StudentProfile() {
       for (let i = 0; i < studentInput.student_skills.length; i++) {
         if (studentInput.student_skills[i].skill_name === skillName) {
           unique = false;
-          alert(`${skillName} already exists`);
+          setAlert(`${skillName} already exists`);
+          setUpdateFailed(true);
           break;
         }
       }
@@ -415,6 +424,8 @@ export default function StudentProfile() {
             ],
           };
         });
+        setUpdateFailed(false);
+        setAlert("");
       }
     }
   };
@@ -640,7 +651,7 @@ export default function StudentProfile() {
                       </Typography>
                       <TextField
                         multiline
-                        helperText="Max 500 characters"
+                        helperText={`${studentInput.student_description.length}/500`}
                         value={studentInput.student_description}
                         name="student_description"
                         inputProps={{ maxLength: 500 }}
@@ -1405,6 +1416,14 @@ export default function StudentProfile() {
         ) : null}
         <StudentProjectScroll showBelow={250} />
       </div>
+      <Snackbar
+          open={updateFailed}
+          autoHideDuration={6000}
+          onClose={handleCloseUpdateFailed}>
+          <Alert onClose={handleCloseUpdateFailed} severity="error">
+            {alert}
+          </Alert>
+        </Snackbar>
     </>
   );
 }
