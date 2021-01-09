@@ -50,6 +50,15 @@ const useStyles = makeStyles((theme) => ({
     background: "#C8102E",
     margin: theme.spacing(0.3),
   },
+  projectDescLabel: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: theme.spacing(2),
+  },
+  projectDesc: {
+    marginBottom: theme.spacing(5),
+  },
   column: {
     flexBasis: "33.33%",
   },
@@ -92,6 +101,11 @@ const useStyles = makeStyles((theme) => ({
   },
   projectDate: {
     marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "row",
+  },
+  projectTimeline: {
+    marginLeft: theme.spacing(1),
   },
   projectEndDate: {
     marginLeft: theme.spacing(1),
@@ -305,21 +319,35 @@ function StudentProject({ projects, setProjects, skills }) {
                 <Chip label={skill} className={classes.chips} key={index} />
               ))}
             </div>
-            <div className={classes.verticalElementTitle}>
-              <p style={{ fontWeight: "lighter" }}>
+            <div className={classes.projectDescLabel}>
+              <h3>Project Description:</h3>
+              <p
+                className={classes.projectDesc}
+                style={{ fontWeight: "lighter" }}
+              >
                 * {project.project_description} {project.student_id}
               </p>
             </div>
+
             <div className={clsx(classes.column, classes.helper)}>
               <Typography variant="caption" className={classes.projectLink}>
-                <a href={`${project.project_link}`} className={classes.link}>
-                  {project.project_link}
-                </a>
+                Project Source Link
               </Typography>
+              <br />
+              <a href={`${project.project_link}`} className={classes.link}>
+                {project.project_link}
+              </a>
             </div>
             <div className={classes.projectDate}>
-              <h5 style={{ fontWeight: "lighter", color: "#333333" }}>
-                Date: {project.project_start_date} -{" "}
+              {/* <h5 style={{ fontWeight: "lighter", color: "#333333" }}>
+                Timeline: {project.project_start_date} -{" "}
+                {project.project_in_progress
+                  ? "present"
+                  : project.project_end_date}
+              </h5> */}
+              <h5>Project Timeline:</h5>
+              <h5 className={classes.projectTimeline}>
+                {project.project_start_date} -{" "}
                 {project.project_in_progress
                   ? "present"
                   : project.project_end_date}
