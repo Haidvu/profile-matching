@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const getNewToken = () => {
+const getNewToken = () => {
   let token = localStorage.getItem("token");
   if (token) {
     axios
@@ -90,8 +90,8 @@ function Login() {
         localStorage.setItem("email_id", res.data.email_id);
         localStorage.setItem("refresh", res.data.refresh);
         setTimeout(getNewToken, 17900 * 1000); //Get new token approxiamtey every 4 hrs and 58 min.
-        console.log(res);
         if (res.data.slug) {
+          console.log("Inside Login: ", res);
           localStorage.setItem("slug", res.data.slug);
           history.push("/dashboard");
         } else {
@@ -107,13 +107,6 @@ function Login() {
       });
   };
 
-  //redirect to dashboard if the user already has a token
-  useEffect(() => {
-    if (localStorage.getItem("token") && localStorage.getItem("slug")) {
-      history.push("/dashboard");
-    }
-  }, [history]);
-
   return (
     <>
       <Grid container component="main" className={classes.root}>
@@ -125,8 +118,7 @@ function Login() {
               <Alert
                 className={classes.loginAlert}
                 variant="filled"
-                severity="error"
-              >
+                severity="error">
                 {error}
               </Alert>
             ) : null}
@@ -167,8 +159,7 @@ function Login() {
                 fullWidth
                 variant="contained"
                 color="secondary"
-                className={classes.submit}
-              >
+                className={classes.submit}>
                 Sign In
               </Button>
               <Grid container justify="space-between">
@@ -186,8 +177,7 @@ function Login() {
                   <Link
                     to="/lost-password"
                     href="lost-password"
-                    variant="body2"
-                  >
+                    variant="body2">
                     {"Forgot Password?"}
                   </Link>
                 </Grid>
