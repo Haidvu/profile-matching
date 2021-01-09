@@ -4,19 +4,9 @@ import AvatarImage from "../../assets/image.jpg";
 import Spinner from "../../assets/Spinner.gif";
 
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Avatar,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContentText,
-  DialogContent,
-} from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -184,10 +174,6 @@ export default function CompanyProject() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  const [projectToDelete, setProjectToDelete] = useState({});
-
   const history = useHistory();
 
   const { data } = useContext(DataContext);
@@ -201,31 +187,6 @@ export default function CompanyProject() {
   const createProject = () => {
     let path = `project/create`;
     history.push(path);
-  };
-
-  const handleOpenDeleteDialog = (project) => {
-    setOpenDeleteDialog(true);
-    setProjectToDelete(project);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-  };
-
-  const handleDelete = (id) => {
-    axios
-      .delete(
-        "http://18.213.74.196:8000/api/company_project/" + id + "/delete",
-        getConfig()
-      )
-      .then((res) => {
-        const deletedProject = companyProjects.filter(
-          (project) => id !== project.project_id
-        );
-        setCompanyProjects(deletedProject);
-      })
-      .catch((err) => console.log(err.response.message));
-    setOpenDeleteDialog(false);
   };
 
   useEffect(() => {
@@ -365,54 +326,10 @@ export default function CompanyProject() {
                         </>
                       )}
                     </Button>
-
-                    <Button
-                      size="small"
-                      variant="contained"
-                      className={classes.delete}
-                      onClick={() => {
-                        handleOpenDeleteDialog(project);
-                      }}>
-                      <DeleteIcon />
-                      DELETE PROJECT
-                    </Button>
                   </CardActions>
                 </Card>
               </Grid>
             ))}
-
-            <Dialog
-              onClose={handleCloseDeleteDialog}
-              open={openDeleteDialog}
-              className={classes.dialog}>
-              <DialogTitle>
-                Are you sure you want to delete the project:{" "}
-                {projectToDelete.project_name}?
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  This project will be permanently removed
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions className={classes.dialogConfirm}>
-                <Button
-                  onClick={() => {
-                    handleDelete(projectToDelete.project_id);
-                  }}
-                  color="primary"
-                  variant="outlined"
-                  className={classes.dialogConfirm}>
-                  DELETE
-                </Button>
-                <Button
-                  onClick={handleCloseDeleteDialog}
-                  color="secondary"
-                  variant="outlined"
-                  className={classes.dialogConfirm}>
-                  CANCEL
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Grid>
         </div>
       )}

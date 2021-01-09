@@ -95,10 +95,7 @@ export default function Dashboard() {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("slug");
-    localStorage.removeItem("role_id");
-    localStorage.removeItem("email_id");
+    localStorage.clear();
     history.push("/login");
   };
 

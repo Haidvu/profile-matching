@@ -18,11 +18,19 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContentText,
+  DialogContent,
 } from "@material-ui/core";
 
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
+
+import { useHistory } from "react-router-dom";
 
 import makeAnimated from "react-select/animated";
 import Chip from "@material-ui/core/Chip";
@@ -57,6 +65,8 @@ import Select from "react-select";
 import { DataContext } from "../../contexts/dataContext";
 
 import CompanyProjectTeam from "./CompanyProjectTeam";
+
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -224,11 +234,13 @@ const useStyles = makeStyles((theme) => ({
   iconListGrid: {
     textAlign: "center",
   },
+  deleteButton: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -263,6 +275,7 @@ function Alert(props) {
 }
 
 export default function CompanyProject({ match }) {
+  let history = useHistory();
   const { data } = useContext(DataContext);
 
   const { profile } = data;
@@ -299,18 +312,20 @@ export default function CompanyProject({ match }) {
       });
   }, []);
 
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [updateFailed, setUpdateFailed] = useState(false);
 
   // Initial Info
-  const [companyInfo, setCompanyInfo] = useState({});
+  const [projectInfo, setProjectInfo] = useState({});
 
   // Skills Array
   const [skills, setSkills] = useState({});
 
-  const [companyEdit, showCompanyEdit] = useState({
+  const [projectEdit, showProjectEdit] = useState({
     project_description: false,
     project_name: false,
     project_type: false,
@@ -324,7 +339,7 @@ export default function CompanyProject({ match }) {
     company_project_students_selected: false,
   });
 
-  const [companyInput, setCompanyInput] = useState({});
+  const [projectInput, setProjectInput] = useState({});
 
   const [updateErrors, setUpdateErrors] = useState({
     project_description: null,
@@ -336,15 +351,15 @@ export default function CompanyProject({ match }) {
 
   //opening the edit field
   const handleOpenEdit = (key) => {
-    showCompanyEdit({
-      ...companyEdit,
+    showProjectEdit({
+      ...projectEdit,
       [key]: true,
     });
   };
   //closing the edit field
   const handleCloseEdit = (key) => {
-    showCompanyEdit({
-      ...companyEdit,
+    showProjectEdit({
+      ...projectEdit,
       [key]: false,
     });
   };
@@ -356,23 +371,47 @@ export default function CompanyProject({ match }) {
     setUpdateFailed(false);
   };
 
+  //Dialog to confirm the delete operation.
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleDelete = () => {
+    axios
+      .delete(
+        "http://18.213.74.196:8000/api/company_project/" +
+          match.params.project +
+          "/delete",
+        getConfig()
+      )
+      .then((res) => {
+        history.goBack();
+      })
+      .catch((err) => console.log(err.response.message));
+    setOpenDeleteDialog(false);
+  };
+
   //saving the edited data
   const handleSave = (key) => {
     //Make api call to save data here.
-    setCompanyInfo(companyInput);
+    setProjectInfo(projectInput);
     handleCloseEdit(key);
 
     const data = {
-      project_name: companyInput.project_name,
-      project_description: companyInput.project_description,
-      project_type: companyInput.project_type,
-      project_deadline: companyInput.project_deadline,
-      project_tech: companyInput.project_tech
+      project_name: projectInput.project_name,
+      project_description: projectInput.project_description,
+      project_type: projectInput.project_type,
+      project_deadline: projectInput.project_deadline,
+      project_tech: projectInput.project_tech
         ? Array.prototype.map
-            .call(companyInput.project_tech, (s) => s.label)
+            .call(projectInput.project_tech, (s) => s.label)
             .toString()
         : "",
-      is_published: companyInput.is_published,
+      is_published: projectInput.is_published,
       username: id,
     };
 
@@ -386,8 +425,8 @@ export default function CompanyProject({ match }) {
       )
       .then((res) => {
         setUpdateErrors({});
-        showCompanyEdit({
-          ...companyEdit,
+        showProjectEdit({
+          ...projectEdit,
           [key]: false,
         });
         setUpdateSuccess(true);
@@ -400,7 +439,7 @@ export default function CompanyProject({ match }) {
 
   //not saving the edited data if the user does not want to change
   const handleCancel = (key) => {
-    setCompanyInput(companyInfo);
+    setProjectInput(projectInfo);
     handleCloseEdit(key);
   };
 
@@ -416,7 +455,7 @@ export default function CompanyProject({ match }) {
       .then((res) => {
         setIsLoading(false);
 
-        setCompanyInfo({
+        setProjectInfo({
           project_name: res.data.project_name,
           project_description: res.data.project_description,
           project_type: res.data.project_type,
@@ -426,7 +465,7 @@ export default function CompanyProject({ match }) {
           }),
           is_published: res.data.is_published,
         });
-        setCompanyInput({
+        setProjectInput({
           project_name: res.data.project_name,
           project_description: res.data.project_description,
           project_type: res.data.project_type,
@@ -478,7 +517,7 @@ export default function CompanyProject({ match }) {
           component={"span"}
           style={{ color: "#c8102e" }}
           color="textPrimary">
-          {companyInfo.project_name}
+          {projectInfo.project_name}
         </Typography>
       </Breadcrumbs>
 
@@ -498,6 +537,16 @@ export default function CompanyProject({ match }) {
         </>
       ) : (
         <>
+          <Grid container justify="flex-end">
+            <Button
+              className={classes.deleteButton}
+              variant="contained"
+              onClick={handleOpenDeleteDialog}
+              color="secondary">
+              <DeleteIcon />
+              Delete
+            </Button>
+          </Grid>
           <div>
             <Tabs
               value={value}
@@ -536,13 +585,13 @@ export default function CompanyProject({ match }) {
                   <Box component={"span"} className={classes.sectionHeader}>
                     Project Name
                   </Box>
-                  {companyEdit.project_name === false ? (
+                  {projectEdit.project_name === false ? (
                     <Box
                       component="div"
                       variant="body2"
                       className={classes.information}
                       color="textPrimary">
-                      {companyInfo.project_name}
+                      {projectInfo.project_name}
 
                       {updateErrors.project_name ? (
                         <Typography className={classes.error} color="error">
@@ -559,24 +608,24 @@ export default function CompanyProject({ match }) {
                       inputProps={{
                         maxLength: 100,
                       }}
-                      helperText={`${companyInput.project_name.length}/100`}
+                      helperText={`${projectInput.project_name.length}/100`}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleSave("project_name");
                         }
                       }}
                       onChange={(e) => {
-                        setCompanyInput({
-                          ...companyInput,
+                        setProjectInput({
+                          ...projectInput,
                           project_name: e.target.value,
                         });
                       }}
-                      value={companyInput.project_name}
+                      value={projectInput.project_name}
                     />
                   )}
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.project_name === false ? (
+                  {projectEdit.project_name === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -625,13 +674,13 @@ export default function CompanyProject({ match }) {
                   <Box component={"span"} className={classes.sectionHeader}>
                     Description
                   </Box>
-                  {companyEdit.project_description === false ? (
+                  {projectEdit.project_description === false ? (
                     <Box
                       component="div"
                       variant="body2"
                       className={classes.information}
                       color="textPrimary">
-                      {companyInfo.project_description}
+                      {projectInfo.project_description}
 
                       {updateErrors.project_description ? (
                         <Typography className={classes.error} color="error">
@@ -653,19 +702,19 @@ export default function CompanyProject({ match }) {
                           handleSave("project_description");
                         }
                       }}
-                      helperText={`${companyInput.project_description.length}/500`}
+                      helperText={`${projectInput.project_description.length}/500`}
                       onChange={(e) => {
-                        setCompanyInput({
-                          ...companyInput,
+                        setProjectInput({
+                          ...projectInput,
                           project_description: e.target.value,
                         });
                       }}
-                      value={companyInput.project_description}
+                      value={projectInput.project_description}
                     />
                   )}
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.project_description === false ? (
+                  {projectEdit.project_description === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -708,7 +757,7 @@ export default function CompanyProject({ match }) {
 
               <Grid container direction="row" spacing={3}>
                 <Grid item xs={1} className={classes.iconList}>
-                  {companyInfo.is_published === true ? (
+                  {projectInfo.is_published === true ? (
                     <>
                       <VisibilityIcon />
                     </>
@@ -722,13 +771,13 @@ export default function CompanyProject({ match }) {
                   <Box component={"span"} className={classes.sectionHeader}>
                     Visibility
                   </Box>
-                  {companyEdit.is_published === false ? (
+                  {projectEdit.is_published === false ? (
                     <Box
                       component="div"
                       variant="body2"
                       className={`${classes.inline} ${classes.sectionContent}`}
                       color="textPrimary">
-                      {companyInfo.is_published === true ? (
+                      {projectInfo.is_published === true ? (
                         <>
                           <Typography
                             variant="body2"
@@ -762,8 +811,8 @@ export default function CompanyProject({ match }) {
                         <FormControlLabel
                           control={
                             <Checkbox
-                              checked={companyInput.is_published || false}
-                              value={companyInfo.is_published}
+                              checked={projectInput.is_published || false}
+                              value={projectInfo.is_published}
                               style={{ color: "#C8102E" }}
                               onKeyDown={(e) => {
                                 if (e.key === "Enter") {
@@ -771,8 +820,8 @@ export default function CompanyProject({ match }) {
                                 }
                               }}
                               onChange={(e) => {
-                                setCompanyInput({
-                                  ...companyInput,
+                                setProjectInput({
+                                  ...projectInput,
                                   is_published: e.target.checked,
                                 });
                               }}
@@ -789,7 +838,7 @@ export default function CompanyProject({ match }) {
                   )}
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.is_published === false ? (
+                  {projectEdit.is_published === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -833,13 +882,13 @@ export default function CompanyProject({ match }) {
                   <Box component={"span"} className={classes.sectionHeader}>
                     Project Type
                   </Box>
-                  {companyEdit.project_type === false ? (
+                  {projectEdit.project_type === false ? (
                     <Box
                       component="div"
                       variant="body2"
                       className={classes.information}
                       color="textPrimary">
-                      {companyInfo.project_type}
+                      {projectInfo.project_type}
                     </Box>
                   ) : (
                     <>
@@ -848,8 +897,8 @@ export default function CompanyProject({ match }) {
                         closeMenuOnSelect={true}
                         options={projectType}
                         value={{
-                          label: companyInput.project_type,
-                          value: companyInput.project_type,
+                          label: projectInput.project_type,
+                          value: projectInput.project_type,
                         }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
@@ -858,8 +907,8 @@ export default function CompanyProject({ match }) {
                         }}
                         name="project_type"
                         onChange={(e) => {
-                          setCompanyInput({
-                            ...companyInput,
+                          setProjectInput({
+                            ...projectInput,
                             project_type: e.label,
                           });
                         }}
@@ -868,7 +917,7 @@ export default function CompanyProject({ match }) {
                   )}
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.project_type === false ? (
+                  {projectEdit.project_type === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -917,13 +966,13 @@ export default function CompanyProject({ match }) {
                   <Box component={"span"} className={classes.sectionHeader}>
                     Deadline
                   </Box>
-                  {companyEdit.project_deadline === false ? (
+                  {projectEdit.project_deadline === false ? (
                     <Box
                       component="div"
                       variant="body2"
                       className={classes.information}
                       color="textPrimary">
-                      {companyInfo.project_deadline}
+                      {projectInfo.project_deadline}
                     </Box>
                   ) : (
                     <TextField
@@ -936,17 +985,17 @@ export default function CompanyProject({ match }) {
                         }
                       }}
                       onChange={(e) => {
-                        setCompanyInput({
-                          ...companyInput,
+                        setProjectInput({
+                          ...projectInput,
                           project_deadline: e.target.value,
                         });
                       }}
-                      value={companyInput.project_deadline}
+                      value={projectInput.project_deadline}
                     />
                   )}
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.project_deadline === false ? (
+                  {projectEdit.project_deadline === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -997,15 +1046,15 @@ export default function CompanyProject({ match }) {
                   </Box>
                   {
                     <>
-                      {companyEdit.project_tech === false ? (
+                      {projectEdit.project_tech === false ? (
                         <Box
                           component="div"
                           variant="body2"
                           className={classes.information}
                           color="textPrimary">
-                          {Object.keys(companyInput).length &&
-                          companyInput.project_tech ? (
-                            companyInput.project_tech.map((skill, index) => (
+                          {Object.keys(projectInput).length &&
+                          projectInput.project_tech ? (
+                            projectInput.project_tech.map((skill, index) => (
                               <Chip
                                 component={"span"}
                                 label={skill.label}
@@ -1027,7 +1076,7 @@ export default function CompanyProject({ match }) {
                           isSearchable
                           // If filtering by object, the default value has to be the same object as the options, not a copy
                           value={skills.filter((el) => {
-                            return companyInput.project_tech.some((f) => {
+                            return projectInput.project_tech.some((f) => {
                               return f.label === el.label;
                             });
                           })}
@@ -1035,8 +1084,8 @@ export default function CompanyProject({ match }) {
                           onChange={(e) => {
                             e = e ? e : [];
 
-                            setCompanyInput({
-                              ...companyInput,
+                            setProjectInput({
+                              ...projectInput,
                               project_tech: e,
                             });
                           }}
@@ -1046,7 +1095,7 @@ export default function CompanyProject({ match }) {
                       {updateErrors.project_tech ? (
                         <Typography className={classes.error} color="error">
                           {updateErrors.project_tech} Project "
-                          {companyInfo.project_name}" not saved. Please fix all
+                          {projectInfo.project_name}" not saved. Please fix all
                           errors before saving.
                         </Typography>
                       ) : null}
@@ -1054,7 +1103,7 @@ export default function CompanyProject({ match }) {
                   }
                 </Grid>
                 <Grid item xs={2} className={classes.iconListGrid}>
-                  {companyEdit.project_tech === false ? (
+                  {projectEdit.project_tech === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -1103,13 +1152,13 @@ export default function CompanyProject({ match }) {
                       </Box>
                     }
                     secondary={
-                      companyEdit.company_project_team_capacity === false ? (
+                      projectEdit.company_project_team_capacity === false ? (
                         <Box
                           component="span"
                           variant="body2"
                           className={`${classes.inline} ${classes.sectionContent}`}
                           color="textPrimary">
-                          {companyInfo.company_project_team_capacity}
+                          {projectInfo.company_project_team_capacity}
                         </Box>
                       ) : (
                         <TextField
@@ -1117,17 +1166,17 @@ export default function CompanyProject({ match }) {
                           multiline={true}
                           name="company_project_team_capacity"
                           onChange={(e) => {
-                            setCompanyInput({
-                              ...companyInput,
+                            setProjectInput({
+                              ...projectInput,
                               company_project_team_capacity: e.target.value,
                             });
                           }}
-                          value={companyInput.company_project_team_capacity}
+                          value={projectInput.company_project_team_capacity}
                         />
                       )
                     }
                   />
-                  {companyEdit.company_project_team_capacity === false ? (
+                  {projectEdit.company_project_team_capacity === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -1166,13 +1215,13 @@ export default function CompanyProject({ match }) {
                       </Box>
                     }
                     // secondary={
-                    //   companyEdit.company_project_team_capacity === false ? (
+                    //   projectEdit.company_project_team_capacity === false ? (
                     //     <Box
                     //       component="span"
                     //       variant="body2"
                     //       className={`${classes.inline} ${classes.sectionContent}`}
                     //       color="textPrimary">
-                    //       {companyInfo.company_project_team_capacity}
+                    //       {projectInfo.company_project_team_capacity}
                     //     </Box>
                     //   ) : (
                     //     <TextField
@@ -1180,17 +1229,17 @@ export default function CompanyProject({ match }) {
                     //       multiline={true}
                     //       name="company_project_team_capacity"
                     //       onChange={(e) => {
-                    //         setCompanyInput({
-                    //           ...companyInput,
+                    //         setProjectInput({
+                    //           ...projectInput,
                     //           company_project_team_capacity: e.target.value,
                     //         });
                     //       }}
-                    //       value={companyInput.company_project_team_capacity}
+                    //       value={projectInput.company_project_team_capacity}
                     //     />
                     //   )
                     // }
                   />
-                  {/* {companyEdit.company_project_team_capacity === false ? (
+                  {/* {projectEdit.company_project_team_capacity === false ? (
                     <IconButton
                       className={classes.icon}
                       onClick={() => {
@@ -1246,6 +1295,36 @@ export default function CompanyProject({ match }) {
             </List>
           </TabPanel>*/}
           </div>
+          <Dialog
+            onClose={handleCloseDeleteDialog}
+            open={openDeleteDialog}
+            className={classes.dialog}>
+            <DialogTitle>
+              Are you sure you want to delete the project:{" "}
+              {projectInfo.project_name}?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                This project will be permanently removed
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions className={classes.dialogConfirm}>
+              <Button
+                onClick={handleDelete}
+                color="primary"
+                variant="outlined"
+                className={classes.dialogConfirm}>
+                DELETE
+              </Button>
+              <Button
+                onClick={handleCloseDeleteDialog}
+                color="secondary"
+                variant="outlined"
+                className={classes.dialogConfirm}>
+                CANCEL
+              </Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
 
@@ -1254,7 +1333,7 @@ export default function CompanyProject({ match }) {
         autoHideDuration={6000}
         onClose={handleCloseUpdateSucess}>
         <Alert onClose={handleCloseUpdateSucess} severity="success">
-          Project {companyInfo.project_name} was saved!
+          Project {projectInfo.project_name} was saved!
         </Alert>
       </Snackbar>
       <Snackbar
