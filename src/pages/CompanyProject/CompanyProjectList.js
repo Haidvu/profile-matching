@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
 import AvatarImage from "../../assets/image.jpg";
-import Spinner from "../../assets/Spinner.gif";
-
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Button, LinearProgress } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 
