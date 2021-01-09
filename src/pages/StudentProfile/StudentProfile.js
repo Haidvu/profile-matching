@@ -13,13 +13,11 @@ import {
   DialogContent,
   List,
   ListItem,
-  ListItemSecondaryAction,
   Divider,
   ListItemIcon,
   IconButton,
   Button,
   Typography,
-  Input,
   FormControl,
   MenuItem,
   Grid,
@@ -140,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0.5),
     color: theme.palette.warning.main,
     borderColor: theme.palette.warning.main,
+  },
+  fullWidth:{
+    width:"100%"
   },
   expertChip: {
     margin: theme.spacing(0.5),
@@ -579,6 +580,36 @@ export default function StudentProfile() {
           alt="profile background"
           className={classes.profileLogo}
           src={StudentDashboard}></img>
+        <Grid container justify="flex-end" style={{paddingRight:"20px"}}>
+        {studentEdit.studentEditBool===false ? 
+          (<IconButton
+            edge="end"
+            className={classes.icon}
+            onClick={() => {
+              handleOpenEdit("studentEditBool");
+            }}>
+            <EditTwoToneIcon />
+          </IconButton>)
+          :(<>       
+          <IconButton
+            edge="end"
+            className={classes.icon}
+            onClick={() => {
+              handleCancel();
+            }}>
+            <ClearRoundedIcon />
+          </IconButton>
+          <IconButton
+            edge="end"
+            className={classes.icon}
+            onClick={() => {
+              handleSave();
+            }}>
+            <CheckRoundedIcon style={{ color: "green" }} />
+          </IconButton>
+          </>)
+        }
+        </Grid>
         <List className={classes.root}>
           <ListItem>
             <ListItemIcon edge="start">
@@ -597,58 +628,38 @@ export default function StudentProfile() {
                       {studentInfo.student_description}
                     </Typography>
                   </div>
-                  <IconButton
-                    edge="end"
-                    className={classes.icon}
-                    onClick={() => {
-                      handleOpenEdit("studentEditBool");
-                    }}>
-                    <EditTwoToneIcon />
-                  </IconButton>
                 </div>
               ) : (
-                <>
-                  <FormControl
-                    error={errors.student_description && studentInput === ""}>
-                    <Typography className={classes.sectionHeader}>
-                      Student Description
-                    </Typography>
-                    <Input
-                      multiline
-                      value={studentInput.student_description}
-                      name="student_description"
-                      onChange={(e) => {
-                        setStudentInput({
-                          ...studentInput,
-                          student_description: e.target.value,
-                        });
-                      }}></Input>
-                    {errors.student_description &&
-                    studentInput.student_description === "" ? (
-                      <FormHelperText>
-                        {errors.student_description}
-                      </FormHelperText>
-                    ) : null}
-                  </FormControl>
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      className={classes.icon}
-                      onClick={() => {
-                        handleCancel();
-                      }}>
-                      <ClearRoundedIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      className={classes.icon}
-                      onClick={() => {
-                        handleSave();
-                      }}>
-                      <CheckRoundedIcon style={{ color: "green" }} />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </>
+                <div>
+                  <div>
+                    <FormControl
+                      className={classes.fullWidth}
+                      error={errors.student_description && studentInput === ""}>
+                      <Typography className={classes.sectionHeader}>
+                        Student Description
+                      </Typography>
+                      <TextField
+                        multiline
+                        helperText="Max 500 characters"
+                        value={studentInput.student_description}
+                        name="student_description"
+                        inputProps={{ maxLength: 500 }}
+                        fullWidth
+                        onChange={(e) => {
+                          setStudentInput({
+                            ...studentInput,
+                            student_description: e.target.value,
+                          });
+                        }}></TextField>
+                      {errors.student_description &&
+                      studentInput.student_description === "" ? (
+                        <FormHelperText>
+                          {errors.student_description}
+                        </FormHelperText>
+                      ) : null}
+                    </FormControl>
+                  </div>
+                </div>
               )}
             </ListItemText>
           </ListItem>

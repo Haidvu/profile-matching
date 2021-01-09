@@ -350,7 +350,7 @@ export default function ProjectsListTemplate({ match }) {
                     {Object.keys(profileInfo).length && profileInfo.project_tech ?
                       (profileInfo.project_tech.map((skill, index) =>
                         <Chip component={'span'} label={skill.label} className={classes.chips} key={index} />
-                      )) : (<></>)
+                      )) : (<Chip component={'span'} label={"None"} className={classes.chips}/>)
                     }
 
 
