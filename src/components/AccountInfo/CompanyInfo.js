@@ -819,6 +819,7 @@ const CompanyInfo = () => {
                       rows={5}
                       fullWidth
                       id="mission"
+                      helperText={`${companySecond.mission.length}/225`}
                       label="Company Mission"
                       name="mission"
                       onChange={handleChangeSecond}
@@ -847,6 +848,7 @@ const CompanyInfo = () => {
                       id="description"
                       label="Company Description"
                       name="description"
+                      helperText={`${companySecond.description.length}/500`}
                       onChange={handleChangeSecond}
                       value={companySecond.description}
                       inputProps={{ maxLength: 500 }}
