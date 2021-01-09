@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { Route, Redirect, useHistory } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import { getNewToken } from "../Login/Login";
 import axios from "axios";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  let history = useHistory();
   //If login fails -> obtain new token, if that fails -> log the uer out.
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -19,8 +18,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
         })
         .catch((err) => {
           console.log(err);
-          localStorage.clear();
-          history.push("/login");
         });
     }
   }, []);

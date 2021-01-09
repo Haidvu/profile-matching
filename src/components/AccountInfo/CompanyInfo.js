@@ -100,31 +100,6 @@ const CompanyInfo = () => {
     "WI",
     "WY",
   ];
-  const industryTypes = [
-    "Agriculture Services",
-    "Architecture/Design",
-    "Arts/Education",
-    "Business/Finance/Consulting",
-    "Construction/RealEstate",
-    "Engineering/Manufacturing",
-    "Education Services",
-    "Food Service",
-    "Hospitality",
-    "Tourism",
-    "GOvernment/Non-Profites",
-    "Healthcare/Life-Science",
-    "Information Technology",
-    "Legal",
-    "Marketing",
-    "Media/Communications",
-    "Religious Organizations",
-    "Retail/Trade/Fashion",
-    "Sports/Recreation",
-    "Utilities/Energy/Environment",
-    "UH Faculty/Staff",
-    "Transportation/Logistics",
-  ];
-
   let history = useHistory();
 
   const classes = useStyles();
@@ -158,7 +133,21 @@ const CompanyInfo = () => {
     mission: "",
     description: "",
   });
-
+  //api for select IndustryType
+  const [industryTypes, setIndustryTypes] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        "http://18.213.74.196:8000/api/company_profile/list_industry_type",
+        getConfig()
+      )
+      .then((res) => {  
+        setIndustryTypes(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const handleChangeFirst = (e) => {
     setCompanyFirst({
       ...companyFirst,
@@ -388,8 +377,8 @@ const CompanyInfo = () => {
                         onChange={handleChangeFirst}
                         name="industryType">
                         {industryTypes.map((item) => (
-                          <MenuItem key={item} value={item}>
-                            {item}
+                          <MenuItem key={item.industry_type} value={item.industry_type}>
+                            {item.industry_type}
                           </MenuItem>
                         ))}
                       </Select>
