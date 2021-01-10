@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "280px",
-    height: "100%",
+    height: "325px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -118,14 +118,7 @@ const StudentsList = ({ loading, studentsList }) => {
                     avatar={<Avatar className={classes.avatar}></Avatar>}
                     title={student.full_name}
                     subheader={`${student.degree} - ${student.major}`}></CardHeader>
-                  <CardContent className={classes.cardContent}>
-                    <Typography className={classes.fieldTitle}>
-                      Graduation Date
-                    </Typography>
-                    <Typography className={classes.fieldValue}>
-                      {student.graduation_date}
-                    </Typography>
-                  </CardContent>
+
                   <CardContent
                     className={`${classes.cardContent} ${classes.noPaddingTop}`}>
                     <Typography className={classes.fieldTitle}>
