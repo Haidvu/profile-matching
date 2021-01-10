@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import { Route } from "react-router-dom";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -107,9 +106,6 @@ const useStyles = makeStyles((theme) => ({
   projectTimeline: {
     marginLeft: theme.spacing(1),
   },
-  projectEndDate: {
-    marginLeft: theme.spacing(1),
-  },
 }));
 
 //Skills denotes to all the skills in the database
@@ -127,23 +123,6 @@ function StudentProject({ projects, setProjects, skills }) {
   const classes = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
-  const handleClickOpenEdit = (project) => {
-    setOpenEdit(true);
-    setCurrentProject(project);
-    setCurrentProjectSkills(
-      project.project_tech.split(",").map((skill, index) => {
-        return {
-          label: skill,
-          value: index,
-        };
-      })
-    );
-  };
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  // function handleProjectSkillChange(e){setCurrentProjectSkills}
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -156,31 +135,9 @@ function StudentProject({ projects, setProjects, skills }) {
     project_name: "",
     project_role: "",
     project_start_date: "",
-    project_tech: "",
+    project_tech: [],
     project_in_progress: false,
   });
-  const [currentProjectSkills, setCurrentProjectSkills] = useState([]);
-
-  // const checkProjectInProgress = () => {
-  //   if (currentProject.project_in_progress === true) {
-  //     setCurrentProject({
-  //       ...currentProject,
-  //       project_in_progress: false,
-  //     });
-  //     setDisable(!disable);
-  //   } else {
-  //     setCurrentProject({
-  //       ...currentProject,
-  //       project_in_progress: true,
-  //     })
-  //     setDisable(!disable);
-  //   }
-  // }; PAIR THIS CODE WITH LINES 424 & 425. UNCOMMENT THIS WTH 424 & 425
-
-  // function checkProjectInProgress(e) {
-  //   setInProgress(e.target.checked);
-  // } PAIR THIS CODE WITH LINES 426 & 427. UNCOMMENT THIS WITH 426 & 427.
-
   const [projectToDelete, setProjectToDelete] = useState({});
 
   const handleClickOpenDelete = (project) => {
@@ -193,6 +150,30 @@ function StudentProject({ projects, setProjects, skills }) {
       ...currentProject,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleClickOpenEdit = (project) => {
+    setOpenEdit(true);
+    setCurrentProject({
+        student_id: profile.student_id,
+        project_description: project.project_description,
+        project_end_date: project.project_end_date,
+        project_id: project.project_id,
+        project_link: project.project_link,
+        project_name: project.project_name,
+        project_role: project.project_role,
+        project_start_date: project.project_start_date,
+        project_tech: project.project_tech.split(",").map((skill, index) => {
+          return {
+            label: skill,
+            value: index,
+          };
+        }) ,
+      project_in_progress: project.project_in_progress,
+      });
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
   };
 
   const handleCloseDelete = () => {
@@ -248,6 +229,11 @@ function StudentProject({ projects, setProjects, skills }) {
   const handleSave = (id) => {
     if (validate()) {
       var project_id = id;
+
+      var skillsSeparatedByCommas="";
+      skillsSeparatedByCommas+= currentProject.project_tech.map ((tech) => {return tech.label;});
+      skillsSeparatedByCommas = (skillsSeparatedByCommas.length > 0) ? skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length) : "";
+      
       axios
         .put(
           `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
@@ -256,7 +242,7 @@ function StudentProject({ projects, setProjects, skills }) {
             project_name: currentProject.project_name,
             project_description: currentProject.project_description,
             project_link: currentProject.project_link,
-            project_tech: currentProject.project_tech,
+            project_tech: skillsSeparatedByCommas,
             project_start_date: currentProject.project_start_date,
             project_end_date: currentProject.project_in_progress
               ? null
@@ -315,9 +301,12 @@ function StudentProject({ projects, setProjects, skills }) {
               </h3>
             </div>
             <div className={classes.verticalElementTitle}>
-              {project.project_tech.split(",").map((skill, index) => (
+              {project.project_tech!=="" ? 
+              (project.project_tech.split(",").map((skill, index) => (
                 <Chip label={skill} className={classes.chips} key={index} />
-              ))}
+              ))):
+              (<Chip label="None" className={classes.chips}/>)
+              }
             </div>
             <div className={classes.projectDescLabel}>
               <h3>Project Description:</h3>
@@ -334,7 +323,7 @@ function StudentProject({ projects, setProjects, skills }) {
                 Project Source Link
               </Typography>
               <br />
-              <a href={`${project.project_link}`} className={classes.link}>
+              <a href={ project.project_tech.includes("https://") ? `${project.project_link}` : `https://${project.project_link}`} className={classes.link} target="_blank">
                 {project.project_link}
               </a>
             </div>
@@ -413,24 +402,16 @@ function StudentProject({ projects, setProjects, skills }) {
                     closeMenuOnSelect={true}
                     components={animatedComponents}
                     name="project_skills"
-                    defaultValue={currentProjectSkills}
+                    value={options.filter(el => {
+                        return currentProject.project_tech.some(f => {
+                          return f.label === el.label
+                        })
+                      })}
                     isMulti
                     isSearchable
                     onChange={(e) => {
-                      if (e !== null) {
-                        var skillsSeparatedByCommas = Array.prototype.map
-                          .call(e, (s) => s.label)
-                          .toString(); // "A,B,C"
-                        if (skillsSeparatedByCommas.length > 0)
-                          skillsSeparatedByCommas = skillsSeparatedByCommas.substring(
-                            0,
-                            skillsSeparatedByCommas.length
-                          );
-                      }
-                      setCurrentProject({
-                        ...currentProject,
-                        project_tech: skillsSeparatedByCommas,
-                      });
+                        e = e ? e : [];
+                        setCurrentProject({ ...currentProject, project_tech: e }) 
                     }}
                     options={options}
                   />
@@ -439,6 +420,7 @@ function StudentProject({ projects, setProjects, skills }) {
                     margin="dense"
                     id="outlined-multiline-static"
                     multiline
+                    label="Project Description"
                     rows={4}
                     variant="outlined"
                     value={currentProject.project_description}
@@ -451,7 +433,8 @@ function StudentProject({ projects, setProjects, skills }) {
                   <TextField
                     margin="dense"
                     id="outlined-static"
-                    helperText="Source Link"
+                    placeholder="www.website.com"
+                    label="Source Link"
                     value={currentProject.project_link}
                     name="project_link"
                     type="string"
@@ -480,10 +463,10 @@ function StudentProject({ projects, setProjects, skills }) {
                       type="date"
                       name="project_end_date"
                       value={currentProject.project_end_date}
-                      className={classes.projectEndDate}
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      className={classes.projectDate}
                       variant="outlined"
                       helperText="End Date"
                       onChange={handleCurrentProjectChange}
