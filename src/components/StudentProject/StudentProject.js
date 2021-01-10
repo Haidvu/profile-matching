@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import {Route} from "react-router-dom"
+import { Route } from "react-router-dom";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -38,19 +38,39 @@ const animatedComponents = makeAnimated();
 const useStyles = makeStyles((theme) => ({
   verticalElementTitle: {
     margin: 0,
+    display: "flex",
+    marginBottom: theme.spacing(1),
   },
-  verticalElementSubtitle: {
-    margin: 0,
+  projectLabels: {
+    marginRight: theme.spacing(1),
+  },
+  chips: {
+    marginTop: theme.spacing(1),
+    color: "#FFFFFF",
+    background: "#C8102E",
+    margin: theme.spacing(0.3),
+  },
+  projectDescLabel: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: theme.spacing(2),
+  },
+  projectDesc: {
+    marginBottom: theme.spacing(5),
   },
   column: {
     flexBasis: "33.33%",
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: theme.spacing(2, 2),
+    padding: theme.spacing(1, 1),
+  },
+  projectLink: {
+    marginBottom: theme.spacing(1),
   },
   link: {
-    color: theme.palette.primary.main,
+    color: "0000EE",
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
@@ -63,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
       color: "#FFFFFF",
       backgroundColor: "#C8102E",
     },
+    margin: theme.spacing(0),
   },
   dialogDelete: {
     display: "flex",
@@ -70,12 +91,21 @@ const useStyles = makeStyles((theme) => ({
   },
   edit: {
     color: "#C8102E",
+    margin: theme.spacing(0),
   },
   skillsContainer: {
     display: "flex",
     "& > *": {
       marginRight: theme.spacing(1),
     },
+  },
+  projectDate: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "row",
+  },
+  projectTimeline: {
+    marginLeft: theme.spacing(1),
   },
   projectEndDate: {
     marginLeft: theme.spacing(1),
@@ -272,31 +302,52 @@ function StudentProject({ projects, setProjects, skills }) {
             key={index}
             icon={<WebRoundedIcon />}
           >
-            <h3 className={classes.verticalElementTitle}>
-              "{project.project_name}"
-            </h3>
-            <h4 className={classes.verticalElementSubtitle}>
-              {project.project_role}
-            </h4>
-            {project.project_tech.split(",").map((skill, index) => (
-              <Chip label={skill} className={classes.chips} key={index} />
-            ))}
-
-            <p>
-              {project.project_description} {project.student_id}
-            </p>
-            <div className={clsx(classes.column, classes.helper)}>
-              <Typography variant="caption">
-                View source link
-                <br />
-                <a href={`${project.project_link}`} className={classes.link}>
-                  {project.project_link}
-                </a>
-              </Typography>
+            <div className={classes.verticalElementTitle}>
+              <h3 className={classes.projectLabels}>Project Name:</h3>
+              <h3 style={{ color: "rgb(200, 16, 46)" }}>
+                "{project.project_name}"
+              </h3>
             </div>
-            <div>
-              <h5>
-                Date: {project.project_start_date} -{" "}
+            <div className={classes.verticalElementTitle}>
+              <h3 className={classes.projectLabels}>Project Role:</h3>
+              <h3 style={{ color: "rgb(200, 16, 46)" }}>
+                {project.project_role}
+              </h3>
+            </div>
+            <div className={classes.verticalElementTitle}>
+              {project.project_tech.split(",").map((skill, index) => (
+                <Chip label={skill} className={classes.chips} key={index} />
+              ))}
+            </div>
+            <div className={classes.projectDescLabel}>
+              <h3>Project Description:</h3>
+              <p
+                className={classes.projectDesc}
+                style={{ fontWeight: "lighter" }}
+              >
+                * {project.project_description} {project.student_id}
+              </p>
+            </div>
+
+            <div className={clsx(classes.column, classes.helper)}>
+              <Typography variant="caption" className={classes.projectLink}>
+                Project Source Link
+              </Typography>
+              <br />
+              <a href={`${project.project_link}`} className={classes.link}>
+                {project.project_link}
+              </a>
+            </div>
+            <div className={classes.projectDate}>
+              {/* <h5 style={{ fontWeight: "lighter", color: "#333333" }}>
+                Timeline: {project.project_start_date} -{" "}
+                {project.project_in_progress
+                  ? "present"
+                  : project.project_end_date}
+              </h5> */}
+              <h5>Project Timeline:</h5>
+              <h5 className={classes.projectTimeline}>
+                {project.project_start_date} -{" "}
                 {project.project_in_progress
                   ? "present"
                   : project.project_end_date}
