@@ -133,10 +133,10 @@ const SaveStudent = ({ studentId }) => {
               <>
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
-                    <Grid item xs={12} sm={12} md={3} xl={1}>
+                    <Grid item xs={12} sm={12} md={4} xl={1}>
                       <Typography>{project.project_name}</Typography>
                     </Grid>
-                    <Grid item xs={6} sm={5} md={3} xl={2}>
+                    <Grid item xs={8} sm={8} md={5} xl={5}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -151,7 +151,8 @@ const SaveStudent = ({ studentId }) => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={4} sm={3} md={3} xl={1}>
+                    {/* xs={4} sm={3} md={3} xl={1} */}
+                    <Grid item>
                       <Button
                         variant="outlined"
                         color="secondary"

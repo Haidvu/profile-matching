@@ -60,9 +60,6 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
-  gridRoot: {
-    margin: theme.spacing(2),
-  },
   card: {
     width: "280px",
     height: "100%",
@@ -107,7 +104,7 @@ const StudentsList = ({ loading, studentsList }) => {
           color="secondary"
           style={{ margin: "20px" }}></LinearProgress>
       ) : (
-        <Grid container spacing={4} className={classes.gridRoot}>
+        <Grid container spacing={4} justify="center">
           {studentsList.map((student) => (
             <Grid item key={student.username_id}>
               <Card className={classes.card}>
