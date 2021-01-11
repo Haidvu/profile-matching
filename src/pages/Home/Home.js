@@ -5,9 +5,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
 
+import Footer from "../../components/Footer/Footer";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: "center",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    flex: "1 0 auto"
   },
   text: {
     position: "relative",
@@ -38,6 +44,7 @@ function Home() {
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       height: "100vh",
+      width: "100%"
     },
   };
   theme.typography.h3 = {
@@ -84,6 +91,7 @@ function Home() {
               </Typography>
             </Grid>
           </div>
+          <Footer />
         </Grid>
       </React.Fragment>
     </div>
