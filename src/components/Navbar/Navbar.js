@@ -69,7 +69,8 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 onClick={isLoggedIn}
-                className={classes.Login}>
+                className={classes.Login}
+              >
                 Login
               </Button>
             </Grid>
@@ -78,7 +79,8 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 className={classes.SignUp}
-                href="/signup">
+                href="/signup"
+              >
                 Sign Up
               </Button>
             </Grid>
