@@ -9,6 +9,7 @@ import AccountInfo from "./components/AccountInfo/AccountInfo";
 import NotFound from "./pages/NotFound/NotFound";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ReportBug from "./pages/ReportBug/ReportBug";
+import AboutDevelopers from "./pages/AboutDevelopers/AboutDevelopers";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/signup" component={Signup} />
         <Route path="/accountInfo" component={AccountInfo} />
         <Route path="/report-bug" component={ReportBug} />
+        <Route path="/developers" component={AboutDevelopers} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
         <Route path="*" component={NotFound} />
       </Switch>

@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 
+
 function Copyright() {
   return (
     <Typography variant="body2" style={{ color: "white", fontWeight: "bold" }}>
@@ -68,16 +69,19 @@ export default function Footer() {
             ></img>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="body1" className={classes.footerText}>
-              About the Developers
-            </Typography>
+            <Link to="/developers" href="/developers">
+              <Typography variant="body1" className={classes.footerText}>
+                About the Developers
+              </Typography>
+            </Link>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="body1" className={classes.footerRelated}>
-              Report an Issue
-            </Typography>
+            <Link to="/report-bug" href="/report-bug">
+              <Typography variant="body1" className={classes.footerRelated}>
+                Report an Issue
+              </Typography>
+            </Link>
           </Grid>
-
           <Grid item xs={3}>
             <Copyright />
           </Grid>
