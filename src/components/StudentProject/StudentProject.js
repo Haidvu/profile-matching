@@ -31,7 +31,8 @@ import {
 } from "@material-ui/core";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 const animatedComponents = makeAnimated();
 
 const useStyles = makeStyles((theme) => ({
@@ -117,6 +118,15 @@ function StudentProject({ projects, setProjects, skills }) {
     };
   });
 
+  const [updateFailed, setUpdateFailed] = useState(false);
+  const handleCloseUpdateFailed = () => {
+    setUpdateFailed(false);
+  };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  const [alert,setAlert] = useState("");
+
   const { data } = useContext(DataContext);
   const { profile } = data;
 
@@ -199,30 +209,38 @@ function StudentProject({ projects, setProjects, skills }) {
 
   const validate = () => {
     if (currentProject.project_name === "") {
-      alert("Please enter a name for the project");
+      setAlert("Please enter a name for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_role === "") {
-      alert("Please enter a role for the project");
+      setAlert("Please enter a role for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_description === "") {
-      alert("Please enter a description for the project");
+      setAlert("Please enter a description for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_start_date === "") {
-      alert("Please enter a start date for the project");
+      setAlert("Please enter a start date for the project");
+      setUpdateFailed(true);
       return false;
     } else if (!currentProject.project_in_progress) {
-      if (currentProject.project_end_date === "") {
-        alert(
-          'Please enter an end date for the project or select "projet in progress"'
+      if (currentProject.project_end_date === "" || !currentProject.project_end_date) {
+        setAlert(
+          'Please enter an end date for the project or select "project in progress"'
         );
+        setUpdateFailed(true);
         return false;
       } else if (
         currentProject.project_start_date > currentProject.project_end_date
       ) {
-        alert("Project end date cannot be before project start date");
+        setAlert("Project end date cannot be before project start date");
+        setUpdateFailed(true);
         return false;
       }
     }
+    setAlert("");
+    setUpdateFailed(false);
     return true;
   };
 
@@ -498,7 +516,14 @@ function StudentProject({ projects, setProjects, skills }) {
                     </FormGroup>
                   </FormControl>
                 </DialogContent>
-
+                <Snackbar
+                  open={updateFailed}
+                  autoHideDuration={6000}
+                  onClose={handleCloseUpdateFailed}>
+                  <Alert onClose={handleCloseUpdateFailed} severity="error">
+                    {alert}
+                  </Alert>
+                </Snackbar>
                 <DialogActions>
                   <Button
                     onClick={handleCloseEdit}

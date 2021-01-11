@@ -20,6 +20,8 @@ import { getConfig } from "../../authConfig";
 import { DataContext } from "../../contexts/dataContext";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +61,14 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const [open, setOpen] = React.useState(false);
   const { data } = useContext(DataContext);
   const { profile } = data;
+  const [updateFailed, setUpdateFailed] = useState(false);
+  const handleCloseUpdateFailed = () => {
+    setUpdateFailed(false);
+  };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  const [alert,setAlert] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -91,31 +101,38 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
 
   const validate = () => {
     if (studentInput.project_name === "") {
-      alert("Please enter a name for the project");
+      setAlert("Please enter a name for the project");
+      setUpdateFailed(true);
       return false;
     } else if (studentInput.project_role === "") {
-      alert("Please enter a role for the project");
+      setAlert("Please enter a role for the project");
+      setUpdateFailed(true);
       return false;
     } else if (studentInput.project_description === "") {
-      alert("Please enter a description for the project");
+      setAlert("Please enter a description for the project");
+      setUpdateFailed(true);
       return false;
     } else if (studentInput.project_start_date === "") {
-      alert("Please enter a start date for the project");
+      setAlert("Please enter a start date for the project");
+      setUpdateFailed(true);
       return false;
     } else if (!studentInput.project_in_progress) {
-      if (studentInput.project_end_date === "") {
-        alert(
-          'Please enter an end date for the project or select "projet in progress"'
+      if (studentInput.project_end_date === "" || !studentInput.project_end_date) {
+        setAlert(
+          'Please enter an end date for the project or select "project in progress"'
         );
+        setUpdateFailed(true);
         return false;
       } else if (
         studentInput.project_start_date > studentInput.project_end_date
       ) {
-        alert("Project end date cannot be before project start date");
+        setAlert("Project end date cannot be before project start date");
+        setUpdateFailed(true);
         return false;
       }
     }
-
+    setAlert("");
+    setUpdateFailed(false);
     return true;
   };
 
@@ -377,6 +394,14 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             </FormGroup>
           </FormControl>
         </DialogContent>
+        <Snackbar
+          open={updateFailed}
+          autoHideDuration={6000}
+          onClose={handleCloseUpdateFailed}>
+          <Alert onClose={handleCloseUpdateFailed} severity="error">
+            {alert}
+          </Alert>
+        </Snackbar>
         <DialogActions>
           <Button
             onClick={handleClose}
