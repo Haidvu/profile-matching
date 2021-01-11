@@ -5,6 +5,7 @@ import UHLogo from "../../assets/UHLogo.png";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -59,7 +60,9 @@ export default function Navbar() {
         <AppBar className={classes.AppBar} position="fixed">
           <Toolbar>
             <Grid item xs={11}>
-              <img alt="uh logo" className={classes.logo} src={UHLogo} />
+              <Link href="/">
+                <img alt="uh logo" className={classes.logo} src={UHLogo} />
+              </Link>
             </Grid>
             <Grid item>
               <AccountCircleIcon />
@@ -69,7 +72,8 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 onClick={isLoggedIn}
-                className={classes.Login}>
+                className={classes.Login}
+              >
                 Login
               </Button>
             </Grid>
@@ -78,7 +82,8 @@ export default function Navbar() {
                 size="small"
                 color="inherit"
                 className={classes.SignUp}
-                href="/signup">
+                href="/signup"
+              >
                 Sign Up
               </Button>
             </Grid>

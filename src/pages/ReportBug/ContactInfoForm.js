@@ -7,9 +7,29 @@ export default function ContactInfoForm() {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Enter your email and phone number
+        Enter your contact info below
       </Typography>
       <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="FirstName"
+            name="FirstName"
+            label="First Name"
+            fullWidth
+            autoComplete="First Name"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="LastName"
+            name="LastNmae"
+            label="Last Name"
+            fullWidth
+            autoComplete="LastName"
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
