@@ -12,6 +12,7 @@ import ContactInfoForm from "./ContactInfoForm";
 import ReviewSubmissionForm from "./ReviewSubmissionForm";
 
 
+
 const useStyles = makeStyles((theme) => ({
   layout: {
     width: "auto",
@@ -129,6 +130,7 @@ export default function Checkout() {
           </React.Fragment>
         </Paper>
       </main>
+
     </React.Fragment>
   );
 }

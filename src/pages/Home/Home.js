@@ -21,9 +21,11 @@ const useStyles = makeStyles((theme) => ({
   },
   title_1: {
     color: "black",
+    letterSpacing: "1px"
   },
   title_2: {
     color: "rgba(200,16,46,1)",
+    letterSpacing: "1px"
   },
   content: {
     fontFamily: "Lato",
