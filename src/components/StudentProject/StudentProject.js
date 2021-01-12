@@ -31,25 +31,46 @@ import {
 } from "@material-ui/core";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 const animatedComponents = makeAnimated();
 
 const useStyles = makeStyles((theme) => ({
   verticalElementTitle: {
     margin: 0,
+    display: "flex",
+    marginBottom: theme.spacing(1),
   },
-  verticalElementSubtitle: {
-    margin: 0,
+  projectLabels: {
+    marginRight: theme.spacing(1),
+  },
+  chips: {
+    marginTop: theme.spacing(1),
+    color: "#FFFFFF",
+    background: "#C8102E",
+    margin: theme.spacing(0.3),
+  },
+  projectDescLabel: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: theme.spacing(2),
+  },
+  projectDesc: {
+    marginBottom: theme.spacing(5),
   },
   column: {
     flexBasis: "33.33%",
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: theme.spacing(2, 2),
+    padding: theme.spacing(1, 1),
+  },
+  projectLink: {
+    marginBottom: theme.spacing(1),
   },
   link: {
-    color: theme.palette.primary.main,
+    color: "0000EE",
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
@@ -62,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
       color: "#FFFFFF",
       backgroundColor: "#C8102E",
     },
+    margin: theme.spacing(0),
   },
   dialogDelete: {
     display: "flex",
@@ -69,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   edit: {
     color: "#C8102E",
+    margin: theme.spacing(0),
   },
   skillsContainer: {
     display: "flex",
@@ -76,7 +99,12 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
     },
   },
-  projectEndDate: {
+  projectDate: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "row",
+  },
+  projectTimeline: {
     marginLeft: theme.spacing(1),
   },
 }));
@@ -90,29 +118,21 @@ function StudentProject({ projects, setProjects, skills }) {
     };
   });
 
+  const [updateFailed, setUpdateFailed] = useState(false);
+  const handleCloseUpdateFailed = () => {
+    setUpdateFailed(false);
+  };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  const [alert,setAlert] = useState("");
+
   const { data } = useContext(DataContext);
   const { profile } = data;
 
   const classes = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
-  const handleClickOpenEdit = (project) => {
-    setOpenEdit(true);
-    setCurrentProject(project);
-    setCurrentProjectSkills(
-      project.project_tech.split(",").map((skill, index) => {
-        return {
-          label: skill,
-          value: index,
-        };
-      })
-    );
-  };
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-
-  // function handleProjectSkillChange(e){setCurrentProjectSkills}
 
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -125,31 +145,9 @@ function StudentProject({ projects, setProjects, skills }) {
     project_name: "",
     project_role: "",
     project_start_date: "",
-    project_tech: "",
+    project_tech: [],
     project_in_progress: false,
   });
-  const [currentProjectSkills, setCurrentProjectSkills] = useState([]);
-
-  // const checkProjectInProgress = () => {
-  //   if (currentProject.project_in_progress === true) {
-  //     setCurrentProject({
-  //       ...currentProject,
-  //       project_in_progress: false,
-  //     });
-  //     setDisable(!disable);
-  //   } else {
-  //     setCurrentProject({
-  //       ...currentProject,
-  //       project_in_progress: true,
-  //     })
-  //     setDisable(!disable);
-  //   }
-  // }; PAIR THIS CODE WITH LINES 424 & 425. UNCOMMENT THIS WTH 424 & 425
-
-  // function checkProjectInProgress(e) {
-  //   setInProgress(e.target.checked);
-  // } PAIR THIS CODE WITH LINES 426 & 427. UNCOMMENT THIS WITH 426 & 427.
-
   const [projectToDelete, setProjectToDelete] = useState({});
 
   const handleClickOpenDelete = (project) => {
@@ -162,6 +160,30 @@ function StudentProject({ projects, setProjects, skills }) {
       ...currentProject,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleClickOpenEdit = (project) => {
+    setOpenEdit(true);
+    setCurrentProject({
+        student_id: profile.student_id,
+        project_description: project.project_description,
+        project_end_date: project.project_end_date,
+        project_id: project.project_id,
+        project_link: project.project_link,
+        project_name: project.project_name,
+        project_role: project.project_role,
+        project_start_date: project.project_start_date,
+        project_tech: project.project_tech.split(",").map((skill, index) => {
+          return {
+            label: skill,
+            value: index,
+          };
+        }) ,
+      project_in_progress: project.project_in_progress,
+      });
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
   };
 
   const handleCloseDelete = () => {
@@ -187,36 +209,49 @@ function StudentProject({ projects, setProjects, skills }) {
 
   const validate = () => {
     if (currentProject.project_name === "") {
-      alert("Please enter a name for the project");
+      setAlert("Please enter a name for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_role === "") {
-      alert("Please enter a role for the project");
+      setAlert("Please enter a role for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_description === "") {
-      alert("Please enter a description for the project");
+      setAlert("Please enter a description for the project");
+      setUpdateFailed(true);
       return false;
     } else if (currentProject.project_start_date === "") {
-      alert("Please enter a start date for the project");
+      setAlert("Please enter a start date for the project");
+      setUpdateFailed(true);
       return false;
     } else if (!currentProject.project_in_progress) {
-      if (currentProject.project_end_date === "") {
-        alert(
-          'Please enter an end date for the project or select "projet in progress"'
+      if (currentProject.project_end_date === "" || !currentProject.project_end_date) {
+        setAlert(
+          'Please enter an end date for the project or select "project in progress"'
         );
+        setUpdateFailed(true);
         return false;
       } else if (
         currentProject.project_start_date > currentProject.project_end_date
       ) {
-        alert("Project end date cannot be before project start date");
+        setAlert("Project end date cannot be before project start date");
+        setUpdateFailed(true);
         return false;
       }
     }
+    setAlert("");
+    setUpdateFailed(false);
     return true;
   };
 
   const handleSave = (id) => {
     if (validate()) {
       var project_id = id;
+
+      var skillsSeparatedByCommas="";
+      skillsSeparatedByCommas+= currentProject.project_tech.map ((tech) => {return tech.label;});
+      skillsSeparatedByCommas = (skillsSeparatedByCommas.length > 0) ? skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length) : "";
+      
       axios
         .put(
           `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
@@ -225,7 +260,7 @@ function StudentProject({ projects, setProjects, skills }) {
             project_name: currentProject.project_name,
             project_description: currentProject.project_description,
             project_link: currentProject.project_link,
-            project_tech: currentProject.project_tech,
+            project_tech: skillsSeparatedByCommas,
             project_start_date: currentProject.project_start_date,
             project_end_date: currentProject.project_in_progress
               ? null
@@ -271,31 +306,55 @@ function StudentProject({ projects, setProjects, skills }) {
             key={index}
             icon={<WebRoundedIcon />}
           >
-            <h3 className={classes.verticalElementTitle}>
-              "{project.project_name}"
-            </h3>
-            <h4 className={classes.verticalElementSubtitle}>
-              {project.project_role}
-            </h4>
-            {project.project_tech.split(",").map((skill, index) => (
-              <Chip label={skill} className={classes.chips} key={index} />
-            ))}
-
-            <p>
-              {project.project_description} {project.student_id}
-            </p>
-            <div className={clsx(classes.column, classes.helper)}>
-              <Typography variant="caption">
-                View source link
-                <br />
-                <a href={`${project.project_link}`} className={classes.link}>
-                  {project.project_link}
-                </a>
-              </Typography>
+            <div className={classes.verticalElementTitle}>
+              <h3 className={classes.projectLabels}>Project Name:</h3>
+              <h3 style={{ color: "rgb(200, 16, 46)" }}>
+                "{project.project_name}"
+              </h3>
             </div>
-            <div>
-              <h5>
-                Date: {project.project_start_date} -{" "}
+            <div className={classes.verticalElementTitle}>
+              <h3 className={classes.projectLabels}>Project Role:</h3>
+              <h3 style={{ color: "rgb(200, 16, 46)" }}>
+                {project.project_role}
+              </h3>
+            </div>
+            <div className={classes.verticalElementTitle}>
+              {project.project_tech!=="" ? 
+              (project.project_tech.split(",").map((skill, index) => (
+                <Chip label={skill} className={classes.chips} key={index} />
+              ))):
+              (<Chip label="None" className={classes.chips}/>)
+              }
+            </div>
+            <div className={classes.projectDescLabel}>
+              <h3>Project Description:</h3>
+              <p
+                className={classes.projectDesc}
+                style={{ fontWeight: "lighter" }}
+              >
+                * {project.project_description} {project.student_id}
+              </p>
+            </div>
+
+            <div className={clsx(classes.column, classes.helper)}>
+              <Typography variant="caption" className={classes.projectLink}>
+                Project Source Link
+              </Typography>
+              <br />
+              <a href={ project.project_tech.includes("https://") ? `${project.project_link}` : `https://${project.project_link}`} className={classes.link} target="_blank">
+                {project.project_link}
+              </a>
+            </div>
+            <div className={classes.projectDate}>
+              {/* <h5 style={{ fontWeight: "lighter", color: "#333333" }}>
+                Timeline: {project.project_start_date} -{" "}
+                {project.project_in_progress
+                  ? "present"
+                  : project.project_end_date}
+              </h5> */}
+              <h5>Project Timeline:</h5>
+              <h5 className={classes.projectTimeline}>
+                {project.project_start_date} -{" "}
                 {project.project_in_progress
                   ? "present"
                   : project.project_end_date}
@@ -361,24 +420,16 @@ function StudentProject({ projects, setProjects, skills }) {
                     closeMenuOnSelect={true}
                     components={animatedComponents}
                     name="project_skills"
-                    defaultValue={currentProjectSkills}
+                    value={options.filter(el => {
+                        return currentProject.project_tech.some(f => {
+                          return f.label === el.label
+                        })
+                      })}
                     isMulti
                     isSearchable
                     onChange={(e) => {
-                      if (e !== null) {
-                        var skillsSeparatedByCommas = Array.prototype.map
-                          .call(e, (s) => s.label)
-                          .toString(); // "A,B,C"
-                        if (skillsSeparatedByCommas.length > 0)
-                          skillsSeparatedByCommas = skillsSeparatedByCommas.substring(
-                            0,
-                            skillsSeparatedByCommas.length
-                          );
-                      }
-                      setCurrentProject({
-                        ...currentProject,
-                        project_tech: skillsSeparatedByCommas,
-                      });
+                        e = e ? e : [];
+                        setCurrentProject({ ...currentProject, project_tech: e }) 
                     }}
                     options={options}
                   />
@@ -387,6 +438,7 @@ function StudentProject({ projects, setProjects, skills }) {
                     margin="dense"
                     id="outlined-multiline-static"
                     multiline
+                    label="Project Description"
                     rows={4}
                     variant="outlined"
                     value={currentProject.project_description}
@@ -399,7 +451,8 @@ function StudentProject({ projects, setProjects, skills }) {
                   <TextField
                     margin="dense"
                     id="outlined-static"
-                    helperText="Source Link"
+                    placeholder="www.website.com"
+                    label="Source Link"
                     value={currentProject.project_link}
                     name="project_link"
                     type="string"
@@ -428,10 +481,10 @@ function StudentProject({ projects, setProjects, skills }) {
                       type="date"
                       name="project_end_date"
                       value={currentProject.project_end_date}
-                      className={classes.projectEndDate}
                       InputLabelProps={{
                         shrink: true,
                       }}
+                      className={classes.projectDate}
                       variant="outlined"
                       helperText="End Date"
                       onChange={handleCurrentProjectChange}
@@ -463,7 +516,14 @@ function StudentProject({ projects, setProjects, skills }) {
                     </FormGroup>
                   </FormControl>
                 </DialogContent>
-
+                <Snackbar
+                  open={updateFailed}
+                  autoHideDuration={6000}
+                  onClose={handleCloseUpdateFailed}>
+                  <Alert onClose={handleCloseUpdateFailed} severity="error">
+                    {alert}
+                  </Alert>
+                </Snackbar>
                 <DialogActions>
                   <Button
                     onClick={handleCloseEdit}

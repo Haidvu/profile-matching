@@ -1,11 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import { getNewToken } from "../Login/Login";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
-  useEffect(() => {
-    getNewToken();
-  }, []);
   return (
     <Route
       {...rest}

@@ -18,7 +18,17 @@ import {
   ListItemText,
   ListItemIcon,
   IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContentText,
+  DialogContent,
 } from "@material-ui/core";
+
+import { useHistory } from "react-router-dom";
+
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -225,6 +235,9 @@ const useStyles = makeStyles((theme) => ({
   iconListGrid: {
     textAlign: "center",
   },
+  deleteButton: {
+    marginRight: theme.spacing(2),
+  },
 }));
 
 function TabPanel(props) {
@@ -264,6 +277,9 @@ function Alert(props) {
 }
 
 export default function CompanyProject({ match }) {
+
+  let history = useHistory();
+
   const { data } = useContext(DataContext);
 
   const { profile } = data;
@@ -278,6 +294,32 @@ export default function CompanyProject({ match }) {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  //Dialog to confirm the delete operation.
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleDelete = () => {
+    axios
+      .delete(
+        "http://18.213.74.196:8000/api/company_project/" +
+        match.params.project +
+        "/delete",
+        getConfig()
+      )
+      .then((res) => {
+        history.goBack();
+      })
+      .catch((err) => console.log(err.response.message));
+    setOpenDeleteDialog(false);
   };
 
   //api for select ProjectType
@@ -500,6 +542,16 @@ export default function CompanyProject({ match }) {
         </>
       ) : (
           <>
+            <Grid container justify="flex-end">
+              <Button
+                className={classes.deleteButton}
+                variant="contained"
+                onClick={handleOpenDeleteDialog}
+                color="secondary">
+                <DeleteIcon />
+              Delete
+            </Button>
+            </Grid>
             <div>
               <Tabs
                 value={value}
@@ -1178,7 +1230,7 @@ export default function CompanyProject({ match }) {
                     </>
                   )}
                 </ListItem> */}
-                
+
                   <ListItem alignItems="flex-start">
                     <ListItemIcon>
                       <SupervisorAccountIcon />
@@ -1272,7 +1324,36 @@ export default function CompanyProject({ match }) {
             </div>
           </>
         )}
-
+        <Dialog
+            onClose={handleCloseDeleteDialog}
+            open={openDeleteDialog}
+            className={classes.dialog}>
+            <DialogTitle>
+              Are you sure you want to delete the project:{" "}
+              {companyInfo.project_name}?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                This project will be permanently removed
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions className={classes.dialogConfirm}>
+              <Button
+                onClick={handleDelete}
+                color="primary"
+                variant="outlined"
+                className={classes.dialogConfirm}>
+                DELETE
+              </Button>
+              <Button
+                onClick={handleCloseDeleteDialog}
+                color="secondary"
+                variant="outlined"
+                className={classes.dialogConfirm}>
+                CANCEL
+              </Button>
+            </DialogActions>
+          </Dialog>
       <Snackbar
         open={updateSuccess}
         autoHideDuration={6000}

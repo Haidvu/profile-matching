@@ -28,6 +28,9 @@ import {
   Radio,
   FormControlLabel,
   LinearProgress,
+  FormControl,
+  InputLabel,
+  FormLabel,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import PersonRoundedIcon from "@material-ui/icons/PersonRounded";
@@ -43,31 +46,6 @@ import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import { DataContext } from "../../contexts/dataContext";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
-
-const industryTypes = [
-  "Agriculture Services",
-  "Architecture/Design",
-  "Arts/Education",
-  "Business/Finance/Consulting",
-  "Construction/RealEstate",
-  "Engineering/Manufacturing",
-  "Education Services",
-  "Food Service",
-  "Hospitality",
-  "Tourism",
-  "Government/Non-Profits",
-  "Healthcare/Life-Sciences",
-  "Information Technology",
-  "Legal",
-  "Marketing",
-  "Media/Communications",
-  "Religious Organizations",
-  "Retail/Trade/Fashion",
-  "Sports/Recreation",
-  "Utilities/Energy/Environment",
-  "UH Faculty/Staff",
-  "Transportation/Logistics",
-];
 
 const useStyles = makeStyles((theme) => ({
   profileLogo: {
@@ -122,13 +100,21 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   inputLabel: {
-    fontSize: "1rem",
-    lineHeight: "1.5",
+    fontSize: "20px",
+  },
+  inputLabelBold: {
+    fontWeight: theme.typography.fontWeightBold,
   },
   flex: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
+  },
+  labelAsterisk: {
+    color: theme.palette.secondary.main,
+  },
+  selectInput: {
+    width: "100px",
   },
 }));
 export default function CompanyProfile() {
@@ -350,6 +336,22 @@ export default function CompanyProfile() {
     setDialogOpen(true);
   };
 
+    //api for select IndustryType
+    const [industryTypes, setIndustryTypes] = useState([]);
+    useEffect(() => {
+      axios
+        .get(
+          "http://18.213.74.196:8000/api/company_profile/list_industry_type",
+          getConfig()
+        )
+        .then((res) => {  
+          setIndustryTypes(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, []);
+
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -488,6 +490,11 @@ export default function CompanyProfile() {
               className={classes.profileLogo}
               src={CompanyDashboard}></img>
           </div>
+          {showEditFields ? (
+            <Typography style={{ padding: "20px" }}>
+              <span className={classes.labelAsterisk}>*</span> - Required Fields
+            </Typography>
+          ) : null}
           <form>
             <List>
               <ListItem alignItems="flex-start">
@@ -496,13 +503,16 @@ export default function CompanyProfile() {
                 </ListItemIcon>
                 {showEditFields === false ? (
                   <ListItemText
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     primary="Company Name"
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.name}
                         </Typography>
@@ -511,13 +521,20 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Name</Typography>
                     <TextField
+                      label="Company Name"
                       className={classes.formInput}
                       value={profileInfo.name}
                       onChange={handleChange}
                       placeholder={profileInfo.name}
                       name="name"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       inputProps={{ maxLength: 50 }}
                       error={updateErrors.company_name !== ""}></TextField>
                     {updateErrors.company_name ? (
@@ -546,12 +563,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Company Mission"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.companyMission}
                         </Typography>
@@ -560,13 +580,22 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Mission</Typography>
                     <TextField
+                      multiline
+                      label="Company Mission"
                       className={classes.formInput}
                       value={profileInfo.companyMission}
                       onChange={handleChange}
                       placeholder={profileInfo.companyMission}
                       name="companyMission"
+                      required
+                      helperText={`${profileInfo.companyMission.length}/225`}
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       inputProps={{ maxLength: 225 }}
                       error={updateErrors.company_mission !== ""}></TextField>
                     {updateErrors.company_mission ? (
@@ -585,12 +614,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Company Description"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.companyDescription}
                         </Typography>
@@ -599,12 +631,21 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Description</Typography>
                     <TextField
+                      label="Company Description"
+                      multiline
                       className={classes.formInput}
                       value={profileInfo.companyDescription}
                       onChange={handleChange}
                       name="companyDescription"
+                      required
+                      helperText={`${profileInfo.companyDescription.length}/ 225`}
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       inputProps={{ maxLength: 500 }}
                       error={
                         updateErrors.company_description !== ""
@@ -627,12 +668,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Company Representative"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.companyRep}
                         </Typography>
@@ -641,13 +685,20 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Representative</Typography>
                     <TextField
+                      label="Company Representative"
                       className={classes.formInput}
                       value={profileInfo.companyRep}
                       onChange={handleChange}
                       name="companyRep"
                       inputProps={{ maxLength: 50 }}
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       error={
                         updateErrors.representative_name !== ""
                       }></TextField>
@@ -669,12 +720,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Website"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.companyWebsite}
                         </Typography>
@@ -683,8 +737,15 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Website</Typography>
                     <TextField
+                      label="Website"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       className={classes.formInput}
                       value={profileInfo.companyWebsite}
                       onChange={handleChange}
@@ -703,12 +764,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Contact Email"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.contact_email}
                         </Typography>
@@ -717,13 +781,20 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Contact Email</Typography>
                     <TextField
+                      label="Contact Email"
                       className={classes.formInput}
                       value={profileInfo.contact_email}
                       onChange={handleChange}
                       placeholder={profileInfo.contact_email}
                       name="contact_email"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       inputProps={{ maxLength: 50 }}
                       error={
                         updateErrors.company_contact_email !== ""
@@ -746,12 +817,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Company Type"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.companyType === 0
                             ? "Social Business"
@@ -764,16 +838,27 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Company Type</Typography>
-                    <Select
-                      value={profileInfo.companyType}
-                      name="companyType"
-                      className={classes.formInput}
-                      onChange={handleChange}>
-                      <MenuItem value="1">Private</MenuItem>
-                      <MenuItem value="2">Non-Profit</MenuItem>
-                      <MenuItem value="0">Social Business</MenuItem>
-                    </Select>
+                    <FormControl required className={classes.fullWidth}>
+                      <InputLabel
+                        id="companyType"
+                        classes={{
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        }}>
+                        Company Type
+                      </InputLabel>
+
+                      <Select
+                        value={profileInfo.companyType}
+                        id="CompanyType"
+                        name="companyType"
+                        className={classes.formInput}
+                        onChange={handleChange}>
+                        <MenuItem value="1">Private</MenuItem>
+                        <MenuItem value="2">Non-Profit</MenuItem>
+                        <MenuItem value="0">Social Business</MenuItem>
+                      </Select>
+                    </FormControl>
                   </div>
                 )}
               </ListItem>
@@ -787,12 +872,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Industry Type"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.industryType}
                         </Typography>
@@ -801,19 +889,29 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Industry Type</Typography>
-                    <Select
-                      className={classes.formInput}
-                      value={profileInfo.industryType}
-                      onChange={handleChange}
-                      name="industryType"
-                      component="span">
-                      {industryTypes.map((industryType) => (
-                        <MenuItem key={industryType} value={industryType}>
-                          {industryType}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <FormControl required className={classes.fullWidth}>
+                      <InputLabel
+                        id="industryType"
+                        classes={{
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        }}>
+                        Company Type
+                      </InputLabel>
+
+                      <Select
+                        className={classes.formInput}
+                        value={profileInfo.industryType}
+                        onChange={handleChange}
+                        name="industryType"
+                        component="span">
+                        {industryTypes.map((industryType) => (
+                          <MenuItem key={industryType.industry_type} value={industryType.industry_type}>
+                            {industryType.industry_type}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </div>
                 )}
               </ListItem>
@@ -827,12 +925,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Phone Number"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.phoneNumber}
                         </Typography>
@@ -841,12 +942,19 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Phone Number</Typography>
                     <TextField
+                      label="Phone Number"
                       className={classes.formInput}
                       value={profileInfo.phoneNumber}
                       onChange={handleChange}
                       name="phoneNumber"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
                       inputProps={{ maxLength: 10 }}
                       error={updateErrors.company_phone_no !== ""}></TextField>
                     {updateErrors.company_phone_no ? (
@@ -867,12 +975,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="One Person Company"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {profileInfo.isSolo === "1" ? "Yes" : "No"}
                         </Typography>
@@ -881,24 +992,33 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <div className={classes.fullWidth}>
-                    <Typography>Are you a single member company</Typography>
-                    <RadioGroup
-                      aria-label="Are you one person company"
-                      name="isSolo"
-                      id="isSolo"
-                      value={profileInfo.isSolo}
-                      onChange={handleChange}>
-                      <FormControlLabel
-                        value="1"
-                        control={<Radio />}
-                        label="Yes (1)"
-                      />
-                      <FormControlLabel
-                        value="0"
-                        control={<Radio />}
-                        label="No (>=2)"
-                      />
-                    </RadioGroup>
+                    <FormControl required component="fieldset">
+                      <FormLabel
+                        component="legend"
+                        classes={{
+                          asterisk: classes.labelAsterisk,
+                        }}>
+                        Are you a one person company?
+                      </FormLabel>
+
+                      <RadioGroup
+                        aria-label="Are you one person company"
+                        name="isSolo"
+                        id="isSolo"
+                        value={profileInfo.isSolo}
+                        onChange={handleChange}>
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="Yes (1)"
+                        />
+                        <FormControlLabel
+                          value="0"
+                          control={<Radio />}
+                          label="No (>=2)"
+                        />
+                      </RadioGroup>
+                    </FormControl>
                   </div>
                 )}
               </ListItem>
@@ -912,12 +1032,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Company Address"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}, ${profileInfo.zip}`}
                         </Typography>
@@ -926,14 +1049,21 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid item container xs={12} md={6} spacing={2}>
+                    <Grid item container spacing={2}>
                       <Grid item>
-                        <Typography>Company Address</Typography>
                         <TextField
+                          label="Company Address"
                           className={classes.fullWidth}
                           value={profileInfo.streetAddress}
                           onChange={handleChange}
                           name="streetAddress"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           inputProps={{ maxLength: 40 }}
                           placeholder="Street Address"></TextField>
                         {profileInfo.streetAddress === "" ? (
@@ -943,11 +1073,18 @@ export default function CompanyProfile() {
                         ) : null}
                       </Grid>
                       <Grid item>
-                        <Typography>City</Typography>
                         <TextField
+                          label="City"
                           className={classes.fullWidth}
                           value={profileInfo.city}
                           onChange={handleChange}
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           inputProps={{ maxLength: 20 }}
                           name="city"></TextField>
                         {profileInfo.city === "" ? (
@@ -956,25 +1093,41 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item>
-                        <Typography>State</Typography>
-                        <Select
-                          className={classes.fullWidth}
-                          label="State"
-                          value={profileInfo.state}
-                          onChange={handleChange}
-                          name="state"
-                          placeholder="state">
-                          {states.map((state) => (
-                            <MenuItem key={state} value={state}>
-                              {state}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                      <Grid item className={classes.selectInput}>
+                        <FormControl required className={classes.fullWidth}>
+                          <InputLabel
+                            id="state"
+                            classes={{
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            }}>
+                            State
+                          </InputLabel>
+                          <Select
+                            className={classes.fullWidth}
+                            label="State"
+                            value={profileInfo.state}
+                            onChange={handleChange}
+                            name="state"
+                            placeholder="state">
+                            {states.map((state) => (
+                              <MenuItem key={state} value={state}>
+                                {state}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Grid>
                       <Grid item>
-                        <Typography>Zipcode</Typography>
                         <TextField
+                          label="Zipcode"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           className={classes.fullWidth}
                           value={profileInfo.zip}
                           onChange={handleChange}
@@ -1000,12 +1153,15 @@ export default function CompanyProfile() {
                 {showEditFields === false ? (
                   <ListItemText
                     primary="Mailing Address"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
                     secondary={
                       <React.Fragment>
                         <Typography
                           component="span"
                           variant="body2"
-                          className={classes.inline}
                           color="textPrimary">
                           {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}, ${profileInfo.zip2}`}
                         </Typography>
@@ -1014,10 +1170,17 @@ export default function CompanyProfile() {
                   />
                 ) : (
                   <>
-                    <Grid item container xs={12} md={6} spacing={2}>
+                    <Grid item container spacing={2}>
                       <Grid item>
-                        <Typography>Mailing Address</Typography>
                         <TextField
+                          label="Mailing Address"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           className={classes.fullWidth}
                           value={profileInfo.streetAddress2}
                           onChange={handleChange}
@@ -1031,8 +1194,15 @@ export default function CompanyProfile() {
                         ) : null}
                       </Grid>
                       <Grid item>
-                        <Typography>City</Typography>
                         <TextField
+                          label="City"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           className={classes.fullWidth}
                           value={profileInfo.city2}
                           onChange={handleChange}
@@ -1044,24 +1214,40 @@ export default function CompanyProfile() {
                           </Typography>
                         ) : null}
                       </Grid>
-                      <Grid item>
-                        <Typography>State</Typography>
-                        <Select
-                          className={classes.fullWidth}
-                          label="State"
-                          value={profileInfo.state2}
-                          onChange={handleChange}
-                          name="state2">
-                          {states.map((state) => (
-                            <MenuItem key={state} value={state}>
-                              {state}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                      <Grid item className={classes.selectInput}>
+                        <FormControl required className={classes.fullWidth}>
+                          <InputLabel
+                            id="state2"
+                            classes={{
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            }}>
+                            State
+                          </InputLabel>
+                          <Select
+                            className={classes.fullWidth}
+                            label="State"
+                            value={profileInfo.state2}
+                            onChange={handleChange}
+                            name="state2">
+                            {states.map((state) => (
+                              <MenuItem key={state} value={state}>
+                                {state}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </Grid>
                       <Grid item>
-                        <Typography>Zipcode</Typography>
                         <TextField
+                          label="Zipcode"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
                           className={classes.fullWidth}
                           value={profileInfo.zip2}
                           onChange={handleChange}

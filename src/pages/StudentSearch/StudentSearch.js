@@ -167,9 +167,9 @@ export const StudentSearch = () => {
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
-        if(projectList.length<=0){
+        if (projectList.length <= 0) {
           setNoProjectsFound(true);
-        }else{
+        } else {
           setNoProjectsFound(false);
         }
       })
@@ -178,6 +178,13 @@ export const StudentSearch = () => {
         setNoProjectsFound(true);
         console.log(err);
       });
+  };
+
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.key === "Enter") {
+      handleClickSearch();
+    }
   };
 
   useEffect(() => {
@@ -327,10 +334,16 @@ export const StudentSearch = () => {
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, keywords: e.target.value });
                 }}
+                onKeyPress={handleKeypress}
                 endAdornment={
                   <InputAdornment position="end">
-                    <Button size="large" className={classes.searchButton} fullWidth={true} onClick={handleClickSearch}>
-                      <SearchIcon/>
+                    <Button
+                      size="large"
+                      className={classes.searchButton}
+                      fullWidth={true}
+                      onClick={handleClickSearch}
+                    >
+                      <SearchIcon />
                     </Button>
                   </InputAdornment>
                 }
@@ -536,7 +549,11 @@ export const StudentSearch = () => {
           </div>
         </Grid>
       </div>
-      <ProjectsList loading={loading} projects={projectList} noProjectsFound={noProjectsFound} />
+      <ProjectsList
+        loading={loading}
+        projects={projectList}
+        noProjectsFound={noProjectsFound}
+      />
     </div>
   );
 };

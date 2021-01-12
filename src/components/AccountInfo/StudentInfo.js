@@ -19,7 +19,8 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
-
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -194,6 +195,16 @@ const states = [
 function StudentInfo() {
   const classes = useStyles();
   let history = useHistory();
+
+  const [updateFailed, setUpdateFailed] = useState(false);
+  const handleCloseUpdateFailed = () => {
+    setUpdateFailed(false);
+  };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  const [alert,setAlert] = useState("");
+
   const [firstStep, setFirstStep] = useState(true);
   const [studentFirst, setStudentFirst] = useState({
     first_name: "",
@@ -255,8 +266,11 @@ function StudentInfo() {
 
   const handleSubmit = () => {
     if (mySkills.length === 0) {
-      alert("Please enter at least one skill with experience");
+      setAlert("Please enter at least one skill with experience");
+      setUpdateFailed(true);
     } else {
+      setUpdateFailed(false);
+      setAlert("");
       setErrorsSecond({
         student_description:
           studentSecond.student_description === "" ? "Required" : null,
@@ -267,10 +281,12 @@ function StudentInfo() {
   function validateStudentId(studentID) {
     if (studentID === "") {
       return "Required";
-    }
-    if (!parseInt(studentID) || studentID.length < 7) {
-      alert("Please enter valid PeopleSoft ID!");
-      return "Required";
+    }if (!parseInt(studentID) || studentID.length < 7) {
+     setAlert("Please enter valid PeopleSoft ID!");
+     setUpdateFailed(true);
+    }else{
+      setUpdateFailed(false);
+      setAlert("")
     }
     return null;
   }
@@ -390,7 +406,8 @@ function StudentInfo() {
       for (let i = 0; i < mySkills.length; i++) {
         if (mySkills[i].skill_name === tempSkill) {
           unique = false;
-          alert(`${tempSkill} already exists`);
+          setAlert(`${tempSkill} already exists`);
+          setUpdateFailed(true);
           break;
         }
       }
@@ -402,6 +419,8 @@ function StudentInfo() {
             experience_level: experience,
           },
         ]);
+        setUpdateFailed(false);
+        setAlert("");
       }
     }
   };
@@ -1203,7 +1222,16 @@ function StudentInfo() {
               </Grid>
             </>
           )}
+          <Snackbar
+          open={updateFailed}
+          autoHideDuration={6000}
+          onClose={handleCloseUpdateFailed}>
+          <Alert onClose={handleCloseUpdateFailed} severity="error">
+            {alert}
+          </Alert>
+        </Snackbar>
         </form>
+        
       </div>
     </Container>
   );

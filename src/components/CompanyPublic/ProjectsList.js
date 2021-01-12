@@ -24,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
   },
   skillsRoot: {
-    display: "flex",
     alignItems: "center",
   },
   chip: {
     marginRight: theme.spacing(1),
+    marginBottom:theme.spacing(1)
   },
   chipLabel: {
     color: theme.palette.text.primary,
@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
   card: {
     width: "280px",
     height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between"
   },
   button: {
     width: "100%",
@@ -153,8 +156,9 @@ const ProjectsList = ({ loading, projects, noProjectsFound }) => {
                   </Typography>
 
                   <div className={classes.skillsRoot}>
-                    {project.project_tech !== "" ? (
+                    {project.project_tech !== "" && project.project_tech.length>0 ? (
                       project.project_tech.split(",").map((skill, index) => (
+                        <>
                         <Chip
                           key={index}
                           label={skill}
@@ -166,6 +170,7 @@ const ProjectsList = ({ loading, projects, noProjectsFound }) => {
                           size="small"
                           variant="outlined"
                         />
+                        </>
                       ))
                     ) : (
                       <Chip
