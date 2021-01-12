@@ -1,6 +1,7 @@
-import {Table, Grid, TablePagination,TableFooter, LinearProgress, Paper, TableBody, TableCell,TableContainer,TableHead,TableRow, Button} from "@material-ui/core/";
+import {Table,Link, Grid, TablePagination,TableFooter, LinearProgress, Paper, TableBody, TableCell,TableContainer,TableHead,TableRow, Button} from "@material-ui/core/";
 import React from "react";
 import PropTypes from 'prop-types';
+import { useRouteMatch } from "react-router-dom";
 import { makeStyles, withStyles,useTheme } from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   exportText:{
     color:"white",
     textDecoration:"none"
-  }
+  },
 }));
 
 const StyledTableRow = withStyles((theme) => ({
@@ -106,6 +107,7 @@ TablePaginationActions.propTypes = {
 
 const AdminTable = ({ loading, matchingList }) => {
     const classes = useStyles();
+    let { url } = useRouteMatch();
     const columns = [
     {label:"Company", key: "company_name", align:"center" }, 
     {label:"Project", key:"project_name", align:"center" } , 
@@ -160,14 +162,38 @@ const AdminTable = ({ loading, matchingList }) => {
                       {(rowsPerPage > 0
                         ? matchingList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : matchingList
-                      ).map((row) => (
-                          <StyledTableRow key={row.student_id}>
+                      ).map((row,index) => (
+                          <StyledTableRow key={index}>
                             {columns.map((column) => {
+                              if(column.label === "Project"){
+                                return (
+                                    <TableCell key={column.key} align={column.align}>
+                                      <Link
+                                       style={{ textDecoration: "underline", color:"black" }}
+                                       href={`${url}/projects/${row.project_id}`}
+                                        >
+                                        {row[column.key]}
+                                      </Link>
+                                    </TableCell>
+                                ); 
+                              }else if(column.label==="Student"){
+                                return (
+                                  <TableCell key={column.key} align={column.align}>
+                                    <Link
+                                      style={{ textDecoration: "underline", color:"black" }}
+                                      href={`${url}/search/${row.student_db_id}`}
+                                      >
+                                      {row[column.key]}
+                                    </Link>
+                                  </TableCell>
+                              ); 
+                              }else{
                               return (
                                 <TableCell key={column.key} align={column.align}>
                                   {row[column.key]}
                                 </TableCell>
                               );
+                            }
                             })}
                           </StyledTableRow>
                       ))}
