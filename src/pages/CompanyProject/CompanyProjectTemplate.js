@@ -24,6 +24,7 @@ import {
   DialogActions,
   DialogContentText,
   DialogContent,
+  LinearProgress
 } from "@material-ui/core";
 
 import { useHistory } from "react-router-dom";
@@ -331,8 +332,11 @@ export default function CompanyProject({ match }) {
         getConfig()
       )
       .then((res) => {
-        const data = res.data.map((projType) => {
-          return { label: projType.project_type };
+        const data = res.data.project_type.map((item, index) => {
+          return {
+            label: item,
+            value: index,
+          };
         });
 
         setProjectType(data);
@@ -535,7 +539,7 @@ export default function CompanyProject({ match }) {
               alignItems="center"
               direction="row">
               <Grid item md={4}>
-                <Avatar src={Spinner} className={classes.spinner} />
+                <LinearProgress color="secondary" />
               </Grid>
             </Grid>
           </div>
@@ -704,14 +708,14 @@ export default function CompanyProject({ match }) {
                           multiline={true}
                           name="project_description"
                           inputProps={{
-                            maxLength: 500,
+                            maxLength: 3500,
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               handleSave("project_description");
                             }
                           }}
-                          helperText={`${companyInput.project_description.length}/500`}
+                          helperText={`${companyInput.project_description.length}/3500`}
                           onChange={(e) => {
                             setCompanyInput({
                               ...companyInput,
@@ -1116,6 +1120,7 @@ export default function CompanyProject({ match }) {
                                   project_tech: e,
                                 });
                               }}
+                              {...console.log(skills)}
                             />
                           )}
 
@@ -1324,36 +1329,36 @@ export default function CompanyProject({ match }) {
             </div>
           </>
         )}
-        <Dialog
-            onClose={handleCloseDeleteDialog}
-            open={openDeleteDialog}
-            className={classes.dialog}>
-            <DialogTitle>
-              Are you sure you want to delete the project:{" "}
-              {companyInfo.project_name}?
+      <Dialog
+        onClose={handleCloseDeleteDialog}
+        open={openDeleteDialog}
+        className={classes.dialog}>
+        <DialogTitle>
+          Are you sure you want to delete the project:{" "}
+          {companyInfo.project_name}?
             </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                This project will be permanently removed
+        <DialogContent>
+          <DialogContentText>
+            This project will be permanently removed
               </DialogContentText>
-            </DialogContent>
-            <DialogActions className={classes.dialogConfirm}>
-              <Button
-                onClick={handleDelete}
-                color="primary"
-                variant="outlined"
-                className={classes.dialogConfirm}>
-                DELETE
+        </DialogContent>
+        <DialogActions className={classes.dialogConfirm}>
+          <Button
+            onClick={handleDelete}
+            color="primary"
+            variant="outlined"
+            className={classes.dialogConfirm}>
+            DELETE
               </Button>
-              <Button
-                onClick={handleCloseDeleteDialog}
-                color="secondary"
-                variant="outlined"
-                className={classes.dialogConfirm}>
-                CANCEL
+          <Button
+            onClick={handleCloseDeleteDialog}
+            color="secondary"
+            variant="outlined"
+            className={classes.dialogConfirm}>
+            CANCEL
               </Button>
-            </DialogActions>
-          </Dialog>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={updateSuccess}
         autoHideDuration={6000}

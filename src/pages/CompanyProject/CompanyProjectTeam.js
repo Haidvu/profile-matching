@@ -20,7 +20,7 @@ import { DataGrid } from '@material-ui/data-grid';
 import StarIcon from "@material-ui/icons/Star";
 import { TramOutlined } from "@material-ui/icons";
 
-import {styled} from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px"
   },
   dataGrid: {
-    '& > div' : {  height: "fit-content !important" }
-    }
-  }));
+    '& > div': { height: "fit-content !important" }
+  }
+}));
 
-  const MyDataGrid = styled(DataGrid)`
+const MyDataGrid = styled(DataGrid)`
   .container {
     height: 500px !important
   }
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const CompanyProjectTeam = ({ id }) => {
   //const Id = profile.id;
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showEditFields, setShowEditFields] = useState({});
   const [teamMembers, setTeamMembers] = useState({});
   const [teamMembersDelta, setTeamMembersDelta] = useState({});
@@ -59,18 +59,21 @@ const CompanyProjectTeam = ({ id }) => {
     //Get all saved profiles
     let team = {};
     let showEditFieldsTemp = {};
+    setLoading(true);
     axios
       .get(
         `http://18.213.74.196:8000/api/project_select_student/all`,
         getConfig()
       )
       .then((res) => {
+      console.log(res.data)
         const savedMembers = res.data.filter((item) => {
           return parseInt(item.project_id) === parseInt(id);
         });
         savedMembers.forEach((member) => {
           team[member.student_db_id] = member;
           showEditFieldsTemp[member.student_db_id] = false;
+
         });
         setTeamMembers(team);
         setTeamMembersDelta(team);
@@ -78,12 +81,14 @@ const CompanyProjectTeam = ({ id }) => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
       });
+
   }, [setTeamMembers, setTeamMembersDelta, setShowEditFields, setLoading, id]);
 
   useEffect(() => {
     getSavedStudents();
+
   }, [getSavedStudents]);
 
   const handleSave = (id, student_db_id, student_name, project_id) => {
@@ -168,25 +173,25 @@ const CompanyProjectTeam = ({ id }) => {
     } else if (num === 1) {
       return (
         <>
-          <StarIcon style={{color: '#ffb400'}}/>
-          <StarIcon style={{color: '#0000008a'}}/>
-          <StarIcon style={{color: '#0000008a'}}/>
+          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: '#0000008a' }} />
+          <StarIcon style={{ color: '#0000008a' }} />
         </>
       );
     } else if (num === 2) {
       return (
         <>
-          <StarIcon style={{color: '#ffb400'}}/>
-          <StarIcon style={{color: '#ffb400'}}/>
-          <StarIcon style={{color: '#0000008a'}}/>
+          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: '#0000008a' }} />
         </>
       );
     } else if (num === 3) {
       return (
         <>
-          <StarIcon style={{color: '#ffb400'}}/>
-          <StarIcon style={{color: '#ffb400'}}/>
-          <StarIcon style={{color: '#ffb400'}}/>
+          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: '#ffb400' }} />
         </>
       );
     }
@@ -327,25 +332,26 @@ const CompanyProjectTeam = ({ id }) => {
     <>
 
       {loading ? (
-        <LinearProgress />
+        <div>
+          <Grid container justify="center" alignItems="center" direction="row">
+            <Grid item md={4}>
+              <LinearProgress color="secondary" />
+            </Grid>
+          </Grid>
+        </div>
       ) : (
           <Grid container direction="row" spacing={1}>
             {Object.keys(teamMembers).length > 0 ? (
               <>
                 <div style={{ height: "100%", width: "100%" }} className={classes.dataGrid} >
                   <MyDataGrid
-                    
+
                     autoHeight={true}
                     autoPageSize={true}
                     rows={rows}
                     columns={columns}
-                    {...console.log(rows, teamMembers)}
-                    sortModel={[
-                      {
-                        field: 'preference',
-                        sort: 'desc',
-                      },
-                    ]}
+                  
+                   
                   />
                 </div>
               </>

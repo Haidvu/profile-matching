@@ -80,6 +80,7 @@ const StudentSelected = () => {
             getConfig()
           )
           .then((res) => {
+            console.log(res.data)
             setSelectedProjects(matchProjects(studentSelection, res.data));
             setLoading(false);
           });
@@ -156,7 +157,7 @@ const StudentSelected = () => {
           style={{ margin: "20px" }}></LinearProgress>
       ) : (
         <Grid container className={classes.gridRoot}>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} sm={12} md={6} lg={3}>
             <Card className={classes.selectionCard}>
               <CardContent>
                 <Typography
@@ -171,7 +172,7 @@ const StudentSelected = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} sm={12} md={6} lg={3}>
             <Card className={classes.selectionCard}>
               <CardContent>
                 <Typography
@@ -186,7 +187,7 @@ const StudentSelected = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} sm={12} md={6} lg={3}>
             <Card className={classes.selectionCard}>
               <CardContent>
                 <Typography
@@ -201,7 +202,7 @@ const StudentSelected = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} sm={12} md={6} lg={3}>
             <Card className={classes.selectionCard}>
               <CardContent>
                 <Typography

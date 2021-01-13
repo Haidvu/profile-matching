@@ -13,6 +13,8 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import { DataContext } from "../../contexts/dataContext";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -27,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const SaveStudent = ({ studentId }) => {
   const { data } = useContext(DataContext);
   const { profile } = data;
@@ -39,6 +45,16 @@ const SaveStudent = ({ studentId }) => {
     project_id: null,
     project_preference_for_student: null,
   });
+  const [addSuccess, setAddSuccess] = useState(false);
+  const [addFailed, setAddFailed] = useState(false);
+  const [nameProjectToSave, setNameProjectToSave] = useState("");
+
+  const handleCloseAddSucess = () => {
+    setAddSuccess(false);
+  };
+  const handleCloseAddFailed = () => {
+    setAddFailed(false);
+  };
 
   const getCompanyProjects = useCallback(() => {
     //get all projects of this company.
@@ -104,21 +120,24 @@ const SaveStudent = ({ studentId }) => {
             project_id: null,
             project_preference_for_student: null,
           });
+          setAddSuccess(true);
         })
         .catch((err) => {
           console.log(err);
+          setAddFailed(true);
         });
     } else {
       alert("Peference is required");
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e, projectName) => {
     setSaveStudent({
       student_db_id: parseInt(studentId),
       project_id: parseInt(e.target.name),
       project_preference_for_student: parseInt(e.target.value),
     });
+    setNameProjectToSave(projectName)
   };
 
   return (
@@ -133,10 +152,10 @@ const SaveStudent = ({ studentId }) => {
               <>
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
-                    <Grid item xs={12} sm={12} md={3} xl={1}>
-                      <Typography>{project.project_name}</Typography>
+                    <Grid item xs={12} sm={12} md={7} lg={7}>
+                      <Typography style={{ wordBreak: 'break-all' }}>{project.project_name}</Typography>
                     </Grid>
-                    <Grid item xs={6} sm={5} md={3} xl={2}>
+                    <Grid item xs={6} sm={6} md={3} lg={3}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -144,14 +163,14 @@ const SaveStudent = ({ studentId }) => {
                           id={project.project_name}
                           name={project.project_id}
                           className={classes.preference}
-                          onChange={handleChange}>
-                          <MenuItem value={1}>Highest</MenuItem>
+                          onChange={(e) => { return ( handleChange(e, project.project_name) ) }}>
+                          <MenuItem value={3}>Highest</MenuItem>
                           <MenuItem value={2}>Intermediate</MenuItem>
-                          <MenuItem value={3}>Lowest</MenuItem>
+                          <MenuItem value={1}>Lowest</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={4} sm={3} md={3} xl={1}>
+                    <Grid item xs={6} sm={6} md={2} lg={2}>
                       <Button
                         variant="outlined"
                         color="secondary"
@@ -167,12 +186,28 @@ const SaveStudent = ({ studentId }) => {
               </>
             </>
           ) : (
-            <Container>
-              <Typography style={{ fontStyle: "italic" }}>
-                No Projects to Add to For this Profile
+              <Container>
+                <Typography style={{ fontStyle: "italic" }}>
+                  No Projects to Add to For this Profile
               </Typography>
-            </Container>
-          )}
+              </Container>
+            )}
+          <Snackbar
+            open={addSuccess}
+            autoHideDuration={6000}
+            onClose={handleCloseAddSucess}>
+            <Alert onClose={handleCloseAddSucess} severity="success">
+              This student was saved to project {nameProjectToSave}! Please check this student in the 'My Projects/My Team' tab 
+              </Alert>
+          </Snackbar>
+          <Snackbar
+            open={addFailed}
+            autoHideDuration={6000}
+            onClose={handleCloseAddFailed}>
+            <Alert onClose={handleCloseAddFailed} severity="error">
+              There was a problem when saving this student to {nameProjectToSave}
+            </Alert>
+          </Snackbar>
         </Grid>
       )}
     </>
