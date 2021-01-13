@@ -271,6 +271,10 @@ export default function CompanyProjectCreate() {
             className={classes.addCompanyProjectFields}
             autoFocus
             required
+            inputProps={{
+              maxLength: 100,
+            }}
+            helperText={`${companyInput.project_name.length}/100`}
             margin="dense"
             id="name"
             label="Project Name"
@@ -300,6 +304,10 @@ export default function CompanyProjectCreate() {
             className={classes.addCompanyProjectFields}
             autoFocus
             required
+            inputProps={{
+              maxLength: 500,
+            }}
+            helperText={`${companyInput.project_description.length}/500`}
             margin="dense"
             id="outlined-multiline-static"
             multiline
