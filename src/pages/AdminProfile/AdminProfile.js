@@ -81,6 +81,25 @@ export default function AdminProfile() {
         .catch((err) => {
             console.log(err);
         });
+    
+        //Restore seach to same data whecn going back.
+        let data = {};
+        if (JSON.parse(localStorage.getItem("search_history"))) {
+            data = JSON.parse(localStorage.getItem("search_history"));
+            axios
+            .post(
+                "http://18.213.74.196:8000/api/project_select_student/admin_matching",
+                data,
+                getConfig()
+            )
+            .then((res) => {
+                setLoading(false);
+                setMatchingList(ReplacePreferences(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        } 
     }, []);
     
     const handleClick = () =>{
@@ -97,6 +116,7 @@ export default function AdminProfile() {
         getConfig()
       )
       .then((res) => {
+        localStorage.setItem("search_history", JSON.stringify(data));
         setLoading(false);
         setMatchingList(ReplacePreferences(res.data));
       })
@@ -104,6 +124,7 @@ export default function AdminProfile() {
         console.log(err);
       });
     }
+
     return (
     <div>
         <div className={classes.reportBackground}>
