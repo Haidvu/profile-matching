@@ -13,7 +13,6 @@ import Grid from "@material-ui/core/Grid";
 import NavBar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
-
 const useStyles = makeStyles((theme) => ({
   main: {
     background: "#f5f5f5",
@@ -85,7 +84,7 @@ export default function MediaControlCard() {
                     Minor: Mathematics
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact: I like to eat donuts.
+                    Fun Fact: I like to work on cars as a hobby
                   </Typography>
                   <Link href="https://www.linkedin.com/in/jerellopez/">
                     <LinkedInIcon className={classes.icon} />
@@ -137,7 +136,7 @@ export default function MediaControlCard() {
                     Hai Vu
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    BS Computer Science
+                    Junior, BS Computer Science (May 2022)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     CS Undergrad at University of Houston.
@@ -221,13 +220,13 @@ export default function MediaControlCard() {
                     Elisa Martinez
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    BS Computer Science
+                    Junior, BS Computer Science and Mathematics (May 2022)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     CS Undergrad at University of Houston.
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact:
+                    Fun Fact: My favorite fictional character is Sherlock Holmes
                   </Typography>
                   <Link href="https://www.linkedin.com/in/elisa-martinez-fuentes/">
                     <LinkedInIcon className={classes.icon} />
@@ -249,10 +248,10 @@ export default function MediaControlCard() {
                     Thanh Le
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    BS Computer Science
+                    Senior, BS Computer Science (May 2021)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    CS Undergrad at University of Houston.
+                    Minor: Mathematics
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact:
@@ -264,7 +263,7 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://avatars3.githubusercontent.com/u/18520066?s=400&u=a9bd56a3219bf1f51014539de36efda55af11265&v=4"
+                image="https://media-exp1.licdn.com/dms/image/C4E03AQEu83drkqqoFw/profile-displayphoto-shrink_400_400/0/1597455837340?e=1616025600&v=beta&t=ruvWomJEmRqXI7_a4vsbcPlN_AgWu4LV69N4t7jVSPQ"
               />
             </Card>
           </Grid>
