@@ -6,7 +6,6 @@ import {
   Grid,
   Typography,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Avatar,
@@ -18,8 +17,6 @@ import { Link } from "react-router-dom";
 
 import { DataGrid } from '@material-ui/data-grid';
 import StarIcon from "@material-ui/icons/Star";
-import { TramOutlined } from "@material-ui/icons";
-
 import { styled } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({

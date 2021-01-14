@@ -10,7 +10,6 @@ import {
   Checkbox,
   ListItem,
   FormHelperText,
-  MenuItem
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -320,7 +319,6 @@ export default function CompanyProjectCreate() {
             label="Description"
             variant="outlined"
             fullWidth
-            inputProps={{ maxLength: 500 }}
             name="project_description"
             InputLabelProps={{
               classes: {
