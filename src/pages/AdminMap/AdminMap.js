@@ -1,11 +1,10 @@
 import DeckGL from "@deck.gl/react";
 import { IconLayer } from "@deck.gl/layers";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { StaticMap } from "react-map-gl";
 import { MapView } from "@deck.gl/core";
 import locationIconAtlas from "../../assets/location-icon-atlas.png";
 import locationIconMapping from "../../assets/location-icon-mapping.json";
-import mapStyleJson from "../../assets/MapStyle.json";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
 
@@ -107,11 +106,6 @@ useEffect(() => {
       initialViewState={INITIAL_VIEW_STATE}
       controller={true}
       getTooltip={getTooltip}
-   /*   {...hoverInfo.object && (
-        <div style={{position: 'absolute', zIndex: 1, pointerEvents: 'none', left: hoverInfo.x, top: hoverInfo.y}}>
-          { hoverInfo.object.name }
-        </div>
-      )}*/
       useDevicePixels={false}
     >
       <StaticMap

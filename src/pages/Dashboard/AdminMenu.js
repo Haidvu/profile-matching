@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ExploreRoundedIcon from '@material-ui/icons/ExploreRounded';
 import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+import BusinessRoundedIcon from '@material-ui/icons/BusinessRounded';
 import { Link, useRouteMatch } from "react-router-dom";
 import { ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
@@ -24,6 +25,11 @@ const AdminMenu = () => {
       url: `${url}/Maps`,
       icon: <ExploreRoundedIcon />,
     },
+    {
+      text:"Company Projects",
+      url: `${url}/CompanyProjects`,
+      icon:<BusinessRoundedIcon />
+    }
   ];
   return (
     <div>
