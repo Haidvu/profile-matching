@@ -687,6 +687,7 @@ export default function CompanyProject({ match }) {
                   </Box>
                     {companyEdit.project_description === false ? (
                       <Box
+                      style={{whiteSpace: 'pre-line'}}
                         component="div"
                         variant="body2"
                         className={classes.information}
@@ -709,11 +710,6 @@ export default function CompanyProject({ match }) {
                           name="project_description"
                           inputProps={{
                             maxLength: 3500,
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              handleSave("project_description");
-                            }
                           }}
                           helperText={`${companyInput.project_description.length}/3500`}
                           onChange={(e) => {

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@deck.gl/core": "^8.3.13",
+    "@deck.gl/core": "^8.3.14",
     "@deck.gl/layers": "^8.3.12",
     "@deck.gl/react": "^8.3.13",
     "@luma.gl/core": "^8.3.1",

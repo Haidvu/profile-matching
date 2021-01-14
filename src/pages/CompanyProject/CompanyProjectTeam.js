@@ -10,6 +10,9 @@ import {
   Select,
   MenuItem,
   Avatar,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from "@material-ui/core";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,6 +24,9 @@ import StarIcon from "@material-ui/icons/Star";
 import { TramOutlined } from "@material-ui/icons";
 
 import { styled } from '@material-ui/core/styles';
+import Chip from "@material-ui/core/Chip";
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -36,13 +42,35 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px"
   },
   dataGrid: {
-    '& > div': { height: "fit-content !important" }
+    '& > div': { height: "fit-content !important" },
+    '& .MuiDataGrid-cell': { maxHeight: "none !important", flexWrap: "wrap" },
+    '& .MuiDataGrid-row': { maxHeight: "none !important" },
+    '& .MuiDataGrid-viewport': { maxHeight: "none !important" },
+    '& .MuiDataGrid-window': { overflowY: "auto !important" },
+    '& .actions': { display: "flex", justifyContent: "space-evenly" },
+  },
+  chips: {
+    margin: "5px",
+  },
+  accordionContainer:{
+    boxShadow: "none",
+    width: "100%",
+    background: "none"
+  },
+  accordionDetails:{
+    flexWrap: "wrap"
+  },
+  heading:{
+    color: "#0000008a"
   }
 }));
 
 const MyDataGrid = styled(DataGrid)`
   .container {
     height: 500px !important
+  }
+  .cell{
+    max-width: none !important
   }
 `;
 
@@ -66,7 +94,7 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-      console.log(res.data)
+        console.log(res.data)
         const savedMembers = res.data.filter((item) => {
           return parseInt(item.project_id) === parseInt(id);
         });
@@ -91,7 +119,7 @@ const CompanyProjectTeam = ({ id }) => {
 
   }, [getSavedStudents]);
 
-  const handleSave = (id, student_db_id, student_name, project_id) => {
+  const handleSave = (id, student_db_id, student_name, project_id, student_skills) => {
     axios
       .put(
         `http://18.213.74.196:8000/api/project_select_student/${id}/update`,
@@ -104,6 +132,9 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
+
+        console.log('update skill', student_skills)
+
         setTeamMembers({
           ...teamMembers,
           [student_db_id]: {
@@ -111,6 +142,7 @@ const CompanyProjectTeam = ({ id }) => {
             project_id: project_id,
             student_db_id: res.data.student_db_id,
             student_name: student_name,
+            student_skills: student_skills,
             project_preference_for_student:
               res.data.project_preference_for_student,
           },
@@ -149,7 +181,19 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-        getSavedStudents();
+        // you set and clean the state here, not call axios again
+        /* getSavedStudents();*/
+
+        const filterObject = (obj, filter, filterValue) =>
+          Object.keys(obj).reduce((acc, val) =>
+          (obj[val][filter] === filterValue ? acc : {
+            ...acc,
+            [val]: obj[val]
+          }
+          ), {});
+
+        setTeamMembers(filterObject(teamMembers, "id", id));
+
       })
       .catch((err) => {
         console.log(err);
@@ -226,17 +270,58 @@ const CompanyProjectTeam = ({ id }) => {
     {
       field: "preference",
       headerName: "Preference",
-      width: 160,
+      width: 130,
       renderCell: (params) => {
         return showStars(params.row.project_preference_for_student);
       },
       sortComparator: (v1, v2, param1, param2) => param1.row.project_preference_for_student - param2.row.project_preference_for_student,
     },
     {
+      field: "student_skills",
+      headerName: "Student Skills",
+      sortable: false,
+      width: 330,
+      renderCell: (params) => {
+        return (
+          <>
+
+            <Accordion className={classes.accordionContainer}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>Click here to see the skills</Typography>
+              </AccordionSummary>
+              <AccordionDetails className={classes.accordionDetails}>
+
+              {Object.keys(params.row.student_skills).length &&
+              params.row.student_skills ? (
+                params.row.student_skills.map((skill, index) => (
+                  <Chip
+                    label={skill}
+                    className={classes.chips}
+                    key={index}
+                  />
+                ))
+              ) : (
+                <>
+                <Typography className={classes.heading}>None</Typography>
+                </>
+              )}
+              </AccordionDetails>
+            </Accordion>
+          </>
+        )
+      }
+    },
+    {
       field: "action",
       headerName: "Action",
-      width: 600,
+      width: 500,
+      cellClassName: "actions",
       sortable: false,
+      align: 'right',
       renderCell: (params) => {
         return (
           <>
@@ -265,7 +350,7 @@ const CompanyProjectTeam = ({ id }) => {
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-                    onClick={() => handleSave(params.row.id, params.row.student_db_id, params.row.student_name, params.row.project_id)}>
+                    onClick={() => handleSave(params.row.id, params.row.student_db_id, params.row.student_name, params.row.project_id, params.row.student_skills)}>
                     Save
                         </Button>
                 </Grid>
@@ -315,6 +400,7 @@ const CompanyProjectTeam = ({ id }) => {
         )
       }
     }
+
   ];
 
   const rows = Object.entries(teamMembers).map(([id, member]) => {
@@ -324,7 +410,8 @@ const CompanyProjectTeam = ({ id }) => {
       project_id: member.project_id,
       project_preference_for_student: member.project_preference_for_student,
       student_db_id: member.student_db_id,
-      student_name: member.student_name
+      student_name: member.student_name,
+      student_skills: member.student_skills
     })
   })
 
@@ -343,15 +430,15 @@ const CompanyProjectTeam = ({ id }) => {
           <Grid container direction="row" spacing={1}>
             {Object.keys(teamMembers).length > 0 ? (
               <>
-                <div style={{ height: "100%", width: "100%" }} className={classes.dataGrid} >
+                <div style={{ height: "600px", width: "100%" }} className={classes.dataGrid} >
                   <MyDataGrid
 
-                    autoHeight={true}
+
                     autoPageSize={true}
                     rows={rows}
                     columns={columns}
-                  
-                   
+
+
                   />
                 </div>
               </>
