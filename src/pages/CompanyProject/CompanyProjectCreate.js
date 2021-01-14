@@ -10,6 +10,7 @@ import {
   Checkbox,
   ListItem,
   FormHelperText,
+  MenuItem
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -157,7 +158,7 @@ export default function CompanyProjectCreate() {
   const animatedComponents = makeAnimated();
 
   //api for select ProjectType
-  const [projectType, setProjectType] = useState({});
+  const [projectType, setProjectType] = useState([]);
   useEffect(() => {
     axios
       .get(
@@ -165,8 +166,12 @@ export default function CompanyProjectCreate() {
         getConfig()
       )
       .then((res) => {
-        const data = res.data.map((projType) => {
-          return { label: projType.project_type };
+        
+        const data = res.data.project_type.map((item, index) => {
+          return { 
+            label: item,
+            value: index,
+           };
         });
 
         setProjectType(data);
@@ -305,9 +310,9 @@ export default function CompanyProjectCreate() {
             autoFocus
             required
             inputProps={{
-              maxLength: 500,
+              maxLength: 3500,
             }}
-            helperText={`${companyInput.project_description.length}/500`}
+            helperText={`${companyInput.project_description.length}/3500`}
             margin="dense"
             id="outlined-multiline-static"
             multiline
@@ -343,12 +348,14 @@ export default function CompanyProjectCreate() {
               //className={classes.selectProjectType}
               closeMenuOnSelect={true}
               label="Project Type"
-              options={projectType}
-              name="project_type"
+              name="projectType"
               onChange={(e) => {
                 setCompanyInput({ ...companyInput, project_type: e.label });
               }}
+              {...console.log(projectType)}
+              options={projectType}
             />
+             
             {updateErrors.project_type ? (
               <Typography className={classes.error} color="error">
                 {updateErrors.project_type}

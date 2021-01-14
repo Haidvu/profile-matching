@@ -345,7 +345,13 @@ export default function CompanyProfile() {
           getConfig()
         )
         .then((res) => {  
-          setIndustryTypes(res.data);
+          const data = res.data.industry_type.map((item, index) => {
+            return {
+              label: item,
+              value: index,
+            };
+          });
+          setIndustryTypes(data);
         })
         .catch((err) => {
           console.log(err);
@@ -452,12 +458,12 @@ export default function CompanyProfile() {
                     //2nd time token obtain error
                   })
                   .catch((err) => {
-                    console.log(err);
+                    console.log(err.response.data);
                   });
                 //Profile update api error.
               })
               .catch((err) => {
-                console.log(err);
+                console.log(err.response.data);
                 setUpdateErrors({ ...updateErrors, ...err.response.data });
                 setDialogOpen(false);
                 setLoading2(false);
@@ -465,7 +471,7 @@ export default function CompanyProfile() {
           })
           //Logitute / Latitute api error.
           .catch((err) => {
-            console.log(err);
+            console.log(err.response.data);
           });
       })
       //Log In api error.
@@ -896,7 +902,7 @@ export default function CompanyProfile() {
                           root: classes.inputLabel,
                           asterisk: classes.labelAsterisk,
                         }}>
-                        Company Type
+                        Industry Type
                       </InputLabel>
 
                       <Select
@@ -905,9 +911,9 @@ export default function CompanyProfile() {
                         onChange={handleChange}
                         name="industryType"
                         component="span">
-                        {industryTypes.map((industryType) => (
-                          <MenuItem key={industryType.industry_type} value={industryType.industry_type}>
-                            {industryType.industry_type}
+                         {industryTypes.map((item) => (
+                          <MenuItem key={item.label} value={item.label}>
+                            {item.label}
                           </MenuItem>
                         ))}
                       </Select>
@@ -1326,7 +1332,7 @@ export default function CompanyProfile() {
             variant="outlined"
             fullWidth
             id="password"
-            label="password"
+            label="Password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
             onKeyPress={(e) => {

@@ -36,9 +36,11 @@ const useStyles = makeStyles((theme) => ({
   skillsRoot: {
     display: "flex",
     alignItems: "center",
+    flexWrap: "wrap"
   },
   chip: {
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   chipLabel: {
     color: theme.palette.text.primary,
@@ -252,7 +254,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
           </Typography>
 
           <div className={classes.skillsRoot}>
-            {project.project_tech !== "" ? (
+            {project.project_tech !== "" && project.project_tech ? (
               project.project_tech.split(",").map((skill, index) => (
                 <Chip
                   key={index}
