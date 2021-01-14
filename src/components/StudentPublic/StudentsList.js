@@ -112,11 +112,7 @@ const StudentsList = ({ loading, studentsList }) => {
           color="secondary"
           style={{ margin: "20px" }}></LinearProgress>
       ) : (
-<<<<<<< HEAD
-        <Grid container spacing={4} justify="center">
-=======
         <Grid container justify={"center"}>
->>>>>>> 0719513064e641f530a90e3072f558b34cba0d37
           {studentsList.map((student) => (
             <Grid item key={student.username_id} style={{ margin: "15px" }}>
               <Card className={classes.card}>
@@ -133,10 +129,12 @@ const StudentsList = ({ loading, studentsList }) => {
 
                   <CardContent
                     className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                    <Typography className={classes.fieldTitle} >
+                    <Typography className={classes.fieldTitle}>
                       Description
                     </Typography>
-                    <Typography className={classes.fieldValue} style={{wordBreak: 'break-all' }}>
+                    <Typography
+                      className={classes.fieldValue}
+                      style={{ wordBreak: "break-all" }}>
                       {student.student_description}
                     </Typography>
                   </CardContent>
@@ -148,7 +146,9 @@ const StudentsList = ({ loading, studentsList }) => {
                       className={classes.fieldTitle}>
                       Skills
                     </Typography>
-                    <div className={classes.skillsRoot} style={{ flexWrap: "wrap"}}>
+                    <div
+                      className={classes.skillsRoot}
+                      style={{ flexWrap: "wrap" }}>
                       {student.student_skills.map((skill, index) => (
                         <Chip
                           key={index}
