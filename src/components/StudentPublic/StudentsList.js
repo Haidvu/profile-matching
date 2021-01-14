@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   chipLabel: {
     color: theme.palette.text.primary,
@@ -111,9 +112,13 @@ const StudentsList = ({ loading, studentsList }) => {
           color="secondary"
           style={{ margin: "20px" }}></LinearProgress>
       ) : (
+<<<<<<< HEAD
         <Grid container spacing={4} justify="center">
+=======
+        <Grid container justify={"center"}>
+>>>>>>> 0719513064e641f530a90e3072f558b34cba0d37
           {studentsList.map((student) => (
-            <Grid item key={student.username_id}>
+            <Grid item key={student.username_id} style={{ margin: "15px" }}>
               <Card className={classes.card}>
                 <div>
                   <CardHeader
@@ -128,10 +133,10 @@ const StudentsList = ({ loading, studentsList }) => {
 
                   <CardContent
                     className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                    <Typography className={classes.fieldTitle}>
+                    <Typography className={classes.fieldTitle} >
                       Description
                     </Typography>
-                    <Typography className={classes.fieldValue}>
+                    <Typography className={classes.fieldValue} style={{wordBreak: 'break-all' }}>
                       {student.student_description}
                     </Typography>
                   </CardContent>
@@ -143,7 +148,7 @@ const StudentsList = ({ loading, studentsList }) => {
                       className={classes.fieldTitle}>
                       Skills
                     </Typography>
-                    <div className={classes.skillsRoot}>
+                    <div className={classes.skillsRoot} style={{ flexWrap: "wrap"}}>
                       {student.student_skills.map((skill, index) => (
                         <Chip
                           key={index}

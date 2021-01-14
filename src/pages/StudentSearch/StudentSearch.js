@@ -167,7 +167,7 @@ export const StudentSearch = () => {
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
-        if (projectList.length <= 0) {
+        if (projectList.length === 0) {
           setNoProjectsFound(true);
         } else {
           setNoProjectsFound(false);
@@ -244,10 +244,12 @@ export const StudentSearch = () => {
         getConfig()
       )
       .then((res) => {
-        const data = res.data.map((indType) => {
-          return { label: indType.industry_type };
+        const data = res.data.industry_type.map((item, index) => {
+          return {
+            label: item,
+            value: index,
+          };
         });
-
         setIndustryType(data);
       })
       .catch((err) => {
@@ -284,8 +286,11 @@ export const StudentSearch = () => {
         getConfig()
       )
       .then((res) => {
-        const data = res.data.map((projType) => {
-          return { label: projType.project_type };
+        const data = res.data.project_type.map((item, index) => {
+          return {
+            label: item,
+            value: index,
+          };
         });
 
         setProjectType(data);

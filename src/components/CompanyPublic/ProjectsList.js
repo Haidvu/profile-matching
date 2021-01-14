@@ -114,9 +114,9 @@ const ProjectsList = ({ loading, projects, noProjectsFound }) => {
         </Alert>
         </Grid>
       ) : (
-        <Grid container spacing={4} className={classes.gridRoot}>
+        <Grid container justify={"center"}>
           {projects.map((project) => (
-            <Grid item key={project.project_id}>
+            <Grid item key={project.project_id} style={{ margin: "15px" }}>
               <Card className={classes.card}>
                 <CardHeader
                   classes={{
