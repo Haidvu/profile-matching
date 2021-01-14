@@ -6,7 +6,6 @@ import {
   Grid,
   Typography,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Avatar,
@@ -18,9 +17,13 @@ import { Link } from "react-router-dom";
 
 import { DataGrid } from "@material-ui/data-grid";
 import StarIcon from "@material-ui/icons/Star";
+<<<<<<< HEAD
 import { TramOutlined } from "@material-ui/icons";
 
 import { styled } from "@material-ui/core/styles";
+=======
+import { styled } from '@material-ui/core/styles';
+>>>>>>> 90ee2825f0a2326d504112c25666c20715bdda50
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
