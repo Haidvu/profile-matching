@@ -202,7 +202,13 @@ const CompanyProjectTeam = ({ id }) => {
                   ) : (
                     <>
                       <Grid item xs={5} md={3}>
-                        <Typography>{`Preference: ${member.project_preference_for_student}`}</Typography>
+                        <Typography>{`Preference: ${
+                          member.project_preference_for_student === 1
+                            ? "Low"
+                            : member.project_preference_for_student === 2
+                            ? "Medium"
+                            : "High"
+                        }`}</Typography>
                       </Grid>
                       <Grid item>
                         <Button

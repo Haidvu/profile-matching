@@ -16,6 +16,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
+  rootChild: {
+    margin: "0 auto",
+    //width: "100%",
+    // marginLeft: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+    // width: "100%",
+  },
   studentName: {
     fontWeight: "bold",
     fontSize: "1rem",

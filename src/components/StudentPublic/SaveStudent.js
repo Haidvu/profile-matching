@@ -124,7 +124,10 @@ const SaveStudent = ({ studentId }) => {
   return (
     <>
       {loading ? null : (
-        <Grid direction="row" className={classes.saveProfileContainer}>
+        <Grid
+          container
+          direction="row"
+          className={classes.saveProfileContainer}>
           {companyProjectsToShow.length > 0 ? (
             <>
               <Typography className={classes.containerTitle}>
