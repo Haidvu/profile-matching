@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: theme.spacing(1.0),
     justifyContent: "center",
+    '& > div > div > div': { width: "auto !important" },
   },
   filterButton: {
     display: "flex-end",
@@ -127,6 +128,15 @@ const customStyles = {
   singleValue: (provided) => ({
     ...provided,
     color: "black",
+    width: "100%"
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    width: "100%"
+  }),
+  ValueContainer: (provided) => ({
+    ...provided,
+    width: "100%"
   }),
 };
 
@@ -167,7 +177,7 @@ export const StudentSearch = () => {
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
-        if (projectList.length === 0) {
+        if (res.data.length === 0) {
           setNoProjectsFound(true);
         } else {
           setNoProjectsFound(false);

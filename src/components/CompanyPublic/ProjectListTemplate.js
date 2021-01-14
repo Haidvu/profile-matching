@@ -294,12 +294,12 @@ export default function ProjectsListTemplate({ match }) {
             <Grid container className={classes.gridRoot}>
               <Grid item xs={11}>
                 <Grid container className={classes.companyInfoContainer}>
-                  <Grid item xs={12} sm={12} md={3} className={classes.companyInfo}>
+                  <Grid item xs={12} sm={12} md={4} className={classes.companyInfo}>
                     <BusinessRoundedIcon className={classes.companyIcon} />
 
                     {profileInfo.company_name}
                   </Grid>
-                  <Grid item xs={12} sm={12} md={3} className={classes.companyInfo}>
+                  <Grid item xs={12} sm={12} md={4} className={classes.companyInfo}>
                     <LanguageRoundedIcon className={classes.companyIcon} />
 
                     {profileInfo.company_website}
@@ -316,7 +316,7 @@ export default function ProjectsListTemplate({ match }) {
                     <Typography variant="h6" display="inline" className={classes.bottomSpace}> Description: </Typography>
                   </Grid>
                   <Grid item xs={12} className={classes.companyInfo}>
-                    <Typography className={classes.description}>
+                    <Typography className={classes.description}  style={{whiteSpace: 'pre-line'}}>
                       {profileInfo.project_description}
                     </Typography>
                   </Grid>
