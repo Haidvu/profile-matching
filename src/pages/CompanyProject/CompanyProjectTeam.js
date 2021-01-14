@@ -16,11 +16,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import { Link } from "react-router-dom";
 
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from "@material-ui/data-grid";
 import StarIcon from "@material-ui/icons/Star";
 import { TramOutlined } from "@material-ui/icons";
 
-import { styled } from '@material-ui/core/styles';
+import { styled } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -29,20 +29,19 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     disply: "block",
     minWidth: theme.spacing(15),
-    margin: "5px"
-
+    margin: "5px",
   },
   button: {
-    margin: "5px"
+    margin: "5px",
   },
   dataGrid: {
-    '& > div': { height: "fit-content !important" }
-  }
+    "& > div": { height: "fit-content !important" },
+  },
 }));
 
 const MyDataGrid = styled(DataGrid)`
   .container {
-    height: 500px !important
+    height: 500px !important;
   }
 `;
 
@@ -66,14 +65,13 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-      console.log(res.data)
+        console.log(res.data);
         const savedMembers = res.data.filter((item) => {
           return parseInt(item.project_id) === parseInt(id);
         });
         savedMembers.forEach((member) => {
           team[member.student_db_id] = member;
           showEditFieldsTemp[member.student_db_id] = false;
-
         });
         setTeamMembers(team);
         setTeamMembersDelta(team);
@@ -83,12 +81,10 @@ const CompanyProjectTeam = ({ id }) => {
       .catch((err) => {
         console.log(err.response.data);
       });
-
   }, [setTeamMembers, setTeamMembersDelta, setShowEditFields, setLoading, id]);
 
   useEffect(() => {
     getSavedStudents();
-
   }, [getSavedStudents]);
 
   const handleSave = (id, student_db_id, student_name, project_id) => {
@@ -98,8 +94,7 @@ const CompanyProjectTeam = ({ id }) => {
         {
           student_db_id: student_db_id,
           project_preference_for_student:
-            teamMembersDelta[student_db_id]
-              .project_preference_for_student,
+            teamMembersDelta[student_db_id].project_preference_for_student,
         },
         getConfig()
       )
@@ -163,89 +158,6 @@ const CompanyProjectTeam = ({ id }) => {
     });
   };
 
-<<<<<<< HEAD
-  return (
-    <>
-      {loading ? (
-        <LinearProgress />
-      ) : (
-        <Grid container direction="row" spacing={1}>
-          {Object.keys(teamMembers).length > 0 ? (
-            <>
-              {Object.entries(teamMembers).map(([id, member]) => (
-                <Grid item container key={id} alignItems="center" spacing={1}>
-                  <Grid item xs={2} md={1}>
-                    <Avatar />
-                  </Grid>
-                  <Grid item xs={5} md={3}>
-                    <Link
-                      to={{
-                        pathname: `/dashboard/search/${member.student_db_id}`,
-                      }}
-                      style={{ textDecoration: "none" }}>
-                      <Typography>{member.student_name}</Typography>
-                    </Link>
-                  </Grid>
-                  {showEditFields[member.student_db_id] ? (
-                    <>
-                      <Grid item xs={5} md={3}>
-                        <FormControl className={classes.formControl}>
-                          <InputLabel>Preference</InputLabel>
-                          <Select
-                            label="experience"
-                            name={member.project_id}
-                            className={classes.preference}
-                            onChange={(e) => handleChange(e, member)}>
-                            <MenuItem value={1}>Low</MenuItem>
-                            <MenuItem value={2}>Medium</MenuItem>
-                            <MenuItem value={3}>High</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          // disabled={
-                          //   saveStudent.project_id !== project.project_id
-                          // }
-                          onClick={() => handleSave(member)}>
-                          Save
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          // disabled={
-                          //   saveStudent.project_id !== project.project_id
-                          // }
-                          onClick={() => handleCancel(member)}>
-                          Cancel
-                        </Button>
-                      </Grid>
-                    </>
-                  ) : (
-                    <>
-                      <Grid item xs={5} md={3}>
-                        <Typography>{`Preference: ${
-                          member.project_preference_for_student === 1
-                            ? "Low"
-                            : member.project_preference_for_student === 2
-                            ? "Medium"
-                            : "High"
-                        }`}</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          // disabled={
-                          //   saveStudent.project_id !== project.project_id
-                          // }
-                          onClick={() => showFields(member)}>
-                          Update
-=======
   const showStars = (num) => {
     if (num === 0) {
       return (
@@ -256,39 +168,40 @@ const CompanyProjectTeam = ({ id }) => {
     } else if (num === 1) {
       return (
         <>
-          <StarIcon style={{ color: '#ffb400' }} />
-          <StarIcon style={{ color: '#0000008a' }} />
-          <StarIcon style={{ color: '#0000008a' }} />
+          <StarIcon style={{ color: "#ffb400" }} />
+          <StarIcon style={{ color: "#0000008a" }} />
+          <StarIcon style={{ color: "#0000008a" }} />
         </>
       );
     } else if (num === 2) {
       return (
         <>
-          <StarIcon style={{ color: '#ffb400' }} />
-          <StarIcon style={{ color: '#ffb400' }} />
-          <StarIcon style={{ color: '#0000008a' }} />
+          <StarIcon style={{ color: "#ffb400" }} />
+          <StarIcon style={{ color: "#ffb400" }} />
+          <StarIcon style={{ color: "#0000008a" }} />
         </>
       );
     } else if (num === 3) {
       return (
         <>
-          <StarIcon style={{ color: '#ffb400' }} />
-          <StarIcon style={{ color: '#ffb400' }} />
-          <StarIcon style={{ color: '#ffb400' }} />
+          <StarIcon style={{ color: "#ffb400" }} />
+          <StarIcon style={{ color: "#ffb400" }} />
+          <StarIcon style={{ color: "#ffb400" }} />
         </>
       );
     }
   };
 
   const columns = [
-
     {
-      field: "icon", headerName: "Avatar", width: 130,
+      field: "icon",
+      headerName: "Avatar",
+      width: 130,
       renderCell: (params) => {
         return <Avatar />;
       },
       sortable: false,
-      disableColumnMenu: false
+      disableColumnMenu: false,
     },
     {
       field: "student_name",
@@ -303,8 +216,8 @@ const CompanyProjectTeam = ({ id }) => {
             style={{ textDecoration: "none" }}>
             <Typography>{params.row.student_name}</Typography>
           </Link>
-        )
-      }
+        );
+      },
     },
     {
       field: "preference",
@@ -313,7 +226,9 @@ const CompanyProjectTeam = ({ id }) => {
       renderCell: (params) => {
         return showStars(params.row.project_preference_for_student);
       },
-      sortComparator: (v1, v2, param1, param2) => param1.row.project_preference_for_student - param2.row.project_preference_for_student,
+      sortComparator: (v1, v2, param1, param2) =>
+        param1.row.project_preference_for_student -
+        param2.row.project_preference_for_student,
     },
     {
       field: "action",
@@ -327,12 +242,13 @@ const CompanyProjectTeam = ({ id }) => {
               <>
                 <Grid item xs={5} md={3}>
                   <FormControl className={classes.formControl}>
-
                     <Select
                       label="experience"
                       name={params.row.project_id}
                       className={classes.preference}
-                      onChange={(e) => handleChange(e, params.row.student_db_id)}>
+                      onChange={(e) =>
+                        handleChange(e, params.row.student_db_id)
+                      }>
                       <MenuItem value={1}>Low</MenuItem>
                       <MenuItem value={2}>Medium</MenuItem>
                       <MenuItem value={3}>High</MenuItem>
@@ -344,45 +260,49 @@ const CompanyProjectTeam = ({ id }) => {
                     variant="outlined"
                     color="secondary"
                     className={classes.button}
-
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-                    onClick={() => handleSave(params.row.id, params.row.student_db_id, params.row.student_name, params.row.project_id)}>
+                    onClick={() =>
+                      handleSave(
+                        params.row.id,
+                        params.row.student_db_id,
+                        params.row.student_name,
+                        params.row.project_id
+                      )
+                    }>
                     Save
->>>>>>> 0719513064e641f530a90e3072f558b34cba0d37
-                        </Button>
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
                     className={classes.button}
-
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
                     onClick={() => handleCancel(params.row.student_db_id)}>
                     Cancel
-                        </Button>
+                  </Button>
                 </Grid>
               </>
             ) : (
-                <>
-                  <Grid item>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={classes.button}
-                      // disabled={
-                      //   saveStudent.project_id !== project.project_id
-                      // }
-                      onClick={() => showFields(params.row.student_db_id)}>
-                      Update
-                        </Button>
-                  </Grid>
-                </>
-              )}
+              <>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.button}
+                    // disabled={
+                    //   saveStudent.project_id !== project.project_id
+                    // }
+                    onClick={() => showFields(params.row.student_db_id)}>
+                    Update
+                  </Button>
+                </Grid>
+              </>
+            )}
 
             <Grid item>
               <Button
@@ -393,28 +313,26 @@ const CompanyProjectTeam = ({ id }) => {
                   handleDelete(params.row.id);
                 }}>
                 Delete
-                    </Button>
+              </Button>
             </Grid>
           </>
-        )
-      }
-    }
+        );
+      },
+    },
   ];
 
   const rows = Object.entries(teamMembers).map(([id, member]) => {
-
-    return ({
+    return {
       id: member.id,
       project_id: member.project_id,
       project_preference_for_student: member.project_preference_for_student,
       student_db_id: member.student_db_id,
-      student_name: member.student_name
-    })
-  })
+      student_name: member.student_name,
+    };
+  });
 
   return (
     <>
-
       {loading ? (
         <div>
           <Grid container justify="center" alignItems="center" direction="row">
@@ -424,30 +342,29 @@ const CompanyProjectTeam = ({ id }) => {
           </Grid>
         </div>
       ) : (
-          <Grid container direction="row" spacing={1}>
-            {Object.keys(teamMembers).length > 0 ? (
-              <>
-                <div style={{ height: "100%", width: "100%" }} className={classes.dataGrid} >
-                  <MyDataGrid
-
-                    autoHeight={true}
-                    autoPageSize={true}
-                    rows={rows}
-                    columns={columns}
-                  
-                   
-                  />
-                </div>
-              </>
-            ) : (
-                <Container>
-                  <Typography style={{ fontStyle: "italic" }}>
-                    No Team members Added yet.
+        <Grid container direction="row" spacing={1}>
+          {Object.keys(teamMembers).length > 0 ? (
+            <>
+              <div
+                style={{ height: "100%", width: "100%" }}
+                className={classes.dataGrid}>
+                <MyDataGrid
+                  autoHeight={true}
+                  autoPageSize={true}
+                  rows={rows}
+                  columns={columns}
+                />
+              </div>
+            </>
+          ) : (
+            <Container>
+              <Typography style={{ fontStyle: "italic" }}>
+                No Team members Added yet.
               </Typography>
-                </Container>
-              )}
-          </Grid>
-        )}
+            </Container>
+          )}
+        </Grid>
+      )}
     </>
   );
 };

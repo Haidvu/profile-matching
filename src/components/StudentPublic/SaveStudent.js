@@ -137,7 +137,7 @@ const SaveStudent = ({ studentId }) => {
       project_id: parseInt(e.target.name),
       project_preference_for_student: parseInt(e.target.value),
     });
-    setNameProjectToSave(projectName)
+    setNameProjectToSave(projectName);
   };
 
   return (
@@ -155,17 +155,10 @@ const SaveStudent = ({ studentId }) => {
               <>
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
-<<<<<<< HEAD
                     <Grid item xs={12} sm={12} md={4} xl={1}>
                       <Typography>{project.project_name}</Typography>
                     </Grid>
                     <Grid item xs={8} sm={8} md={5} xl={5}>
-=======
-                    <Grid item xs={12} sm={12} md={7} lg={7}>
-                      <Typography style={{ wordBreak: 'break-all' }}>{project.project_name}</Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6} md={3} lg={3}>
->>>>>>> 0719513064e641f530a90e3072f558b34cba0d37
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -173,19 +166,16 @@ const SaveStudent = ({ studentId }) => {
                           id={project.project_name}
                           name={project.project_id}
                           className={classes.preference}
-                          onChange={(e) => { return ( handleChange(e, project.project_name) ) }}>
+                          onChange={(e) => {
+                            return handleChange(e, project.project_name);
+                          }}>
                           <MenuItem value={3}>Highest</MenuItem>
                           <MenuItem value={2}>Intermediate</MenuItem>
                           <MenuItem value={1}>Lowest</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
-<<<<<<< HEAD
-                    {/* xs={4} sm={3} md={3} xl={1} */}
-                    <Grid item>
-=======
                     <Grid item xs={6} sm={6} md={2} lg={2}>
->>>>>>> 0719513064e641f530a90e3072f558b34cba0d37
                       <Button
                         variant="outlined"
                         color="secondary"
@@ -201,26 +191,28 @@ const SaveStudent = ({ studentId }) => {
               </>
             </>
           ) : (
-              <Container>
-                <Typography style={{ fontStyle: "italic" }}>
-                  No Projects to Add to For this Profile
+            <Container>
+              <Typography style={{ fontStyle: "italic" }}>
+                No Projects to Add to For this Profile
               </Typography>
-              </Container>
-            )}
+            </Container>
+          )}
           <Snackbar
             open={addSuccess}
             autoHideDuration={6000}
             onClose={handleCloseAddSucess}>
             <Alert onClose={handleCloseAddSucess} severity="success">
-              This student was saved to project {nameProjectToSave}! Please check this student in the 'My Projects/My Team' tab 
-              </Alert>
+              This student was saved to project {nameProjectToSave}! Please
+              check this student in the 'My Projects/My Team' tab
+            </Alert>
           </Snackbar>
           <Snackbar
             open={addFailed}
             autoHideDuration={6000}
             onClose={handleCloseAddFailed}>
             <Alert onClose={handleCloseAddFailed} severity="error">
-              There was a problem when saving this student to {nameProjectToSave}
+              There was a problem when saving this student to{" "}
+              {nameProjectToSave}
             </Alert>
           </Snackbar>
         </Grid>
