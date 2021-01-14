@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import CompanyDashboard from "../../assets/CompanyDashboard.jpg";
-import Spinner from "../../assets/Spinner.gif";
-
 import { makeStyles } from "@material-ui/core/styles";
 import {
   FormControl,
@@ -11,7 +9,6 @@ import {
   Grid,
   TextField,
   Box,
-  Avatar,
   List,
   ListItem,
   Divider,

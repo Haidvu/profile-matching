@@ -16,7 +16,6 @@ import {
   RadioGroup,
   Radio,
   FormHelperText,
-  LinearProgress
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";

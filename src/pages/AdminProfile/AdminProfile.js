@@ -3,7 +3,7 @@ import axios from "axios";
 import { getConfig } from "../../authConfig";
 import { makeStyles } from "@material-ui/core/styles";
 import {Grid, Select, MenuItem, Typography, Button,createMuiTheme,responsiveFontSizes, MuiThemeProvider } from "@material-ui/core/";
-import AdminTable from "../../components/AdminTable/AdminTable";
+import AdminMatchingTable from "../../components/AdminMatchingTable/AdminMatchingTable";
 
 const useStyles = makeStyles((theme) => ({
     reportBackground: {
@@ -82,7 +82,7 @@ export default function AdminProfile() {
             console.log(err);
         });
     
-        //Restore seach to same data whecn going back.
+        //Restore seach to same data when going back.
         let data = {};
         if (JSON.parse(localStorage.getItem("search_history"))) {
             data = JSON.parse(localStorage.getItem("search_history"));
@@ -215,7 +215,7 @@ export default function AdminProfile() {
         </div>
         <div>
             <Grid>
-                <AdminTable loading={loading} matchingList={matchingList} />
+                <AdminMatchingTable loading={loading} matchingList={matchingList} />
             </Grid>
         </div>
     </div>

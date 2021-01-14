@@ -5,7 +5,7 @@
   "dependencies": {
     "@deck.gl/core": "^8.3.14",
     "@deck.gl/layers": "^8.3.12",
-    "@deck.gl/react": "^8.3.13",
+    "@deck.gl/react": "^8.3.14",
     "@luma.gl/core": "^8.3.1",
     "@luma.gl/engine": "^8.3.2",
     "@luma.gl/webgl": "^8.3.2",
