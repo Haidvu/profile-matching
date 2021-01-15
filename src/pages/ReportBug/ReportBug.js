@@ -1,136 +1,154 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Paper from "@material-ui/core/Paper";
+import React, { useState } from "react";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import IssueForm from "./IssueForm";
-import ContactInfoForm from "./ContactInfoForm";
-import ReviewSubmissionForm from "./ReviewSubmissionForm";
+import FirstStep from "./IssueForm";
+import SecondStep from "./ContactInfoForm";
+import ReviewSubmission from "./ReviewSubmissionForm";
+import Success from "./Success";
+import formValidation from "./formValidation";
 
 
+export default function ReportBug() {
+  // Step titles
+  const labels = ["Issue Summary", "Contact Info", "Review Submission"];
 
-const useStyles = makeStyles((theme) => ({
-  layout: {
-    width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
-    
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
-  buttons: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-    color: "#FFFFFF",
-    background: "rgba(200,16,46,1)",
-    "&:hover, &.Mui-focusVisible": {
-      transition: "0.3s",
-      color: "white",
-      backgroundColor: "#b0102a",
-    },
-  },
-}));
-
-const steps = ["Summary", "Contact Info", "Review your submission"];
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <IssueForm />;
-    case 1:
-      return <ContactInfoForm />;
-    case 2:
-      return <ReviewSubmissionForm />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
-
-export default function Checkout() {
-  const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const initialValues = {
+    first_name: "",
+    last_name: "",
+    contact_email: "",
+    contact_phone: "",
+    issue_summary: "",
   };
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+  const fieldsValidation = {
+    first_name: {
+      error: "",
+      validate: "text",
+      minLength: 2,
+      maxLength: 25,
+    },
+    last_name: {
+      error: "",
+      validate: "text",
+      minLength: 2,
+      maxLength: 25,
+    },
+    contact_email: {
+      error: "",
+      validate: "contact_email",
+      maxLength: 50,
+    },
+    contact_phone: {
+      error: "",
+      validate: "contact_phone",
+      maxLength: 15,
+    },
+    issue_summary: {
+      error: "",
+      validate: "text",
+      maxLength: 750,
+    },
+  };
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+
+  // Proceed to next step
+  const handleNext = () => setActiveStep((prev) => prev + 1);
+  // Go back to prev step
+  const handleBack = () => setActiveStep((prev) => prev - 1);
+
+  // Handle form change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Set values
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // set errors
+    const error = formValidation(name, value, fieldsValidation) || "";
+
+    setFormErrors({
+      [name]: error,
+    });
+  };
+
+  const handleSteps = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <FirstStep
+            handleNext={handleNext}
+            handleChange={handleChange}
+            values={formValues}
+            formErrors={formErrors}
+          />
+        );
+      case 1:
+        return (
+          <SecondStep
+            handleNext={handleNext}
+            handleBack={handleBack}
+            handleChange={handleChange}
+            values={formValues}
+            formErrors={formErrors}
+          />
+        );
+      case 2:
+        return (
+          <ReviewSubmission
+            handleNext={handleNext}
+            handleBack={handleBack}
+            values={formValues}
+          />
+        );
+      default:
+        break;
+    }
   };
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      {/* appbar can go here */}
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
-            Report an issue
-          </Typography>
-          <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((label) => (
+    <>
+      {activeStep === labels.length ? (
+        // Last Component
+        <Success values={formValues} />
+      ) : (
+        <>
+          <Box style={{ margin: "30px 0 50px" }}>
+            <Typography variant="h4" align="center">
+              Report a Bug Form
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              align="center"
+              style={{ margin: "10px 0" }}
+            >
+              Your feedback is greatly appreciated!
+            </Typography>
+          </Box>
+          <Stepper
+            activeStep={activeStep}
+            style={{ margin: "30px 0 15px" }}
+            alternativeLabel
+          >
+            {labels.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
-          <React.Fragment>
-            {activeStep === steps.length ? (
-              <React.Fragment>
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your submission
-                </Typography>
-                <Typography variant="subtitle1">
-                  Your issue has been received. We greatly appreciate any reports for issues & bugs and your submission will be sent to the development team.
-                </Typography>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {getStepContent(activeStep)}
-                <div className={classes.buttons}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
-                      Back
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? "Submit Issue" : "Next"}
-                  </Button>
-                </div>
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        </Paper>
-      </main>
-
-    </React.Fragment>
+          {handleSteps(activeStep)}
+        </>
+      )}
+    </>
   );
-}
+};
+
+
