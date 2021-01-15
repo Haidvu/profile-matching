@@ -203,7 +203,7 @@ function StudentInfo() {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-  const [alert,setAlert] = useState("");
+  const [alert, setAlert] = useState("");
 
   const [firstStep, setFirstStep] = useState(true);
   const [studentFirst, setStudentFirst] = useState({
@@ -219,7 +219,7 @@ function StudentInfo() {
     address: "",
     city: "",
     state: "",
-    zipcode:"",
+    zipcode: "",
     username: parseInt(localStorage.getItem("email_id")),
   });
   const [errorsFirst, setErrorsFirst] = useState({});
@@ -253,10 +253,7 @@ function StudentInfo() {
   const [mySkills, setMySkills] = useState([]);
 
   const getSkills = async () => {
-    const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill/`,
-      getConfig()
-    );
+    const response = await axios.get(`/skill/`, getConfig());
     setSkills(response.data);
   };
 
@@ -281,12 +278,13 @@ function StudentInfo() {
   function validateStudentId(studentID) {
     if (studentID === "") {
       return "Required";
-    }if (!parseInt(studentID) || studentID.length < 7) {
-     setAlert("Please enter valid PeopleSoft ID!");
-     setUpdateFailed(true);
-    }else{
+    }
+    if (!parseInt(studentID) || studentID.length < 7) {
+      setAlert("Please enter valid PeopleSoft ID!");
+      setUpdateFailed(true);
+    } else {
       setUpdateFailed(false);
-      setAlert("")
+      setAlert("");
     }
     return null;
   }
@@ -364,7 +362,7 @@ function StudentInfo() {
           student_id: studentFirst.student_id,
           full_name: studentFirst.first_name + " " + studentFirst.last_name,
           date_of_birth: studentFirst.date_of_birth,
-          student_contact_email:studentFirst.contact_email,
+          student_contact_email: studentFirst.contact_email,
           student_phone_no: studentFirst.phoneNumber,
           graduation_date: studentFirst.graduation_date,
           major: studentFirst.major,
@@ -375,17 +373,13 @@ function StudentInfo() {
           username: parseInt(localStorage.getItem("email_id")),
         };
         axios
-          .post(
-            "http://18.213.74.196:8000/api/student_profile/create",
-            data,
-            getConfig()
-          )
+          .post("/student_profile/create", data, getConfig())
           .then((res) => {
             localStorage.setItem("slug", res.data.slug);
             const student_db_id = res.data.student_db_id;
             axios
               .post(
-                "http://18.213.74.196:8000/api/student_skill/add",
+                "/student_skill/add",
                 replaceSkillIdWithName(student_db_id),
                 getConfig()
               )
@@ -456,18 +450,18 @@ function StudentInfo() {
                 justify="space-between"
                 spacing={2}
                 alignItems="flex-start"
-              > 
-           {/* column 1 ----------------------------------------------*/}
-              <Grid
-              container
-              id="first-left"
-              item
-              xs={12}
-              md={6}
-              spacing={3}
-              direction="column"
-            >
-                {/* Left Grid */}
+              >
+                {/* column 1 ----------------------------------------------*/}
+                <Grid
+                  container
+                  id="first-left"
+                  item
+                  xs={12}
+                  md={6}
+                  spacing={3}
+                  direction="column"
+                >
+                  {/* Left Grid */}
                   <Grid item>
                     <TextField
                       error={
@@ -523,7 +517,8 @@ function StudentInfo() {
                   <Grid item>
                     <TextField
                       error={
-                        errorsFirst.phoneNumber && studentFirst.phoneNumber === ""
+                        errorsFirst.phoneNumber &&
+                        studentFirst.phoneNumber === ""
                       }
                       variant="outlined"
                       id="phoneNumber"
@@ -535,10 +530,12 @@ function StudentInfo() {
                       required={true}
                       inputProps={{ maxLength: 11 }}
                     />
-                    {errorsFirst.phoneNumber && studentFirst.phoneNumber === "" ? (
+                    {errorsFirst.phoneNumber &&
+                    studentFirst.phoneNumber === "" ? (
                       <FormHelperText
                         error={
-                          errorsFirst.phoneNumber && studentFirst.phoneNumber === ""
+                          errorsFirst.phoneNumber &&
+                          studentFirst.phoneNumber === ""
                         }
                       >
                         {errorsFirst.phoneNumber}
@@ -568,25 +565,25 @@ function StudentInfo() {
                     ) : null}
                   </Grid>
                   <Grid item>
-                      <TextField
+                    <TextField
+                      error={errorsFirst.city && studentFirst.city === ""}
+                      variant="outlined"
+                      fullWidth
+                      id="city"
+                      label="City"
+                      name="city"
+                      onChange={handleChangeFirst}
+                      value={studentFirst.city}
+                      inputProps={{ maxLength: 20 }}
+                    />
+                    {errorsFirst.city && studentFirst.city === "" ? (
+                      <FormHelperText
                         error={errorsFirst.city && studentFirst.city === ""}
-                        variant="outlined"
-                        fullWidth
-                        id="city"
-                        label="City"
-                        name="city"
-                        onChange={handleChangeFirst}
-                        value={studentFirst.city}
-                        inputProps={{ maxLength: 20 }}
-                      />
-                      {errorsFirst.city && studentFirst.city === "" ? (
-                        <FormHelperText
-                          error={errorsFirst.city && studentFirst.city === ""}
-                        >
-                          {errorsFirst.address}
-                        </FormHelperText>
-                      ) : null}
-                    </Grid>
+                      >
+                        {errorsFirst.address}
+                      </FormHelperText>
+                    ) : null}
+                  </Grid>
                   <Grid
                     container
                     xs={12}
@@ -594,7 +591,7 @@ function StudentInfo() {
                     item
                     direction="row"
                     spacing={2}
-                    >
+                  >
                     <Grid item>
                       <FormControl
                         error={errorsFirst.state && studentFirst.state === ""}
@@ -622,7 +619,9 @@ function StudentInfo() {
                     </Grid>
                     <Grid item>
                       <TextField
-                        error={errorsFirst.zipcode && studentFirst.zipcode === ""}
+                        error={
+                          errorsFirst.zipcode && studentFirst.zipcode === ""
+                        }
                         variant="outlined"
                         fullWidth
                         id="zipcode"
@@ -634,15 +633,17 @@ function StudentInfo() {
                       />
                       {errorsFirst.zipcode && studentFirst.zipcode === "" ? (
                         <FormHelperText
-                          error={errorsFirst.zipcode && studentFirst.zipcode === ""}
+                          error={
+                            errorsFirst.zipcode && studentFirst.zipcode === ""
+                          }
                         >
                           {errorsFirst.zipcode}
                         </FormHelperText>
                       ) : null}
                     </Grid>
                   </Grid>
-              </Grid>
-              <Grid
+                </Grid>
+                <Grid
                   container
                   id="first-right"
                   item
@@ -681,7 +682,8 @@ function StudentInfo() {
                   <Grid item>
                     <TextField
                       error={
-                        errorsFirst.contact_email && studentFirst.contact_email === ""
+                        errorsFirst.contact_email &&
+                        studentFirst.contact_email === ""
                       }
                       variant="outlined"
                       id="contact_email"
@@ -693,10 +695,12 @@ function StudentInfo() {
                       required={true}
                       inputProps={{ maxLength: 50 }}
                     />
-                    {errorsFirst.contact_email && studentFirst.contact_email === "" ? (
+                    {errorsFirst.contact_email &&
+                    studentFirst.contact_email === "" ? (
                       <FormHelperText
                         error={
-                          errorsFirst.contact_email && studentFirst.contact_email === ""
+                          errorsFirst.contact_email &&
+                          studentFirst.contact_email === ""
                         }
                       >
                         {errorsFirst.contact_email}
@@ -1223,15 +1227,15 @@ function StudentInfo() {
             </>
           )}
           <Snackbar
-          open={updateFailed}
-          autoHideDuration={6000}
-          onClose={handleCloseUpdateFailed}>
-          <Alert onClose={handleCloseUpdateFailed} severity="error">
-            {alert}
-          </Alert>
-        </Snackbar>
+            open={updateFailed}
+            autoHideDuration={6000}
+            onClose={handleCloseUpdateFailed}
+          >
+            <Alert onClose={handleCloseUpdateFailed} severity="error">
+              {alert}
+            </Alert>
+          </Snackbar>
         </form>
-        
       </div>
     </Container>
   );

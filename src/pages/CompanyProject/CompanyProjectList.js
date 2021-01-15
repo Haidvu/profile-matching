@@ -191,7 +191,7 @@ export default function CompanyProject() {
     setIsLoading(true);
     axios
       .post(
-        "http://18.213.74.196:8000/api/company_project/list_by_company",
+        "/company_project/list_by_company",
         {
           username_id: parseInt(id),
         },
@@ -211,7 +211,8 @@ export default function CompanyProject() {
       <img
         alt="profile background"
         className={classes.profileLogo}
-        src={CompanyDashboard}></img>
+        src={CompanyDashboard}
+      ></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link style={{ textDecoration: "none", color: "#000" }} to="/">
@@ -231,7 +232,8 @@ export default function CompanyProject() {
             backgroundColor: "#C8102E",
             color: "#FFFFFF",
             margin: "20px",
-          }}>
+          }}
+        >
           <AddIcon
             className={classNames(classes.leftIcon, classes.iconSmall)}
           />
@@ -257,7 +259,8 @@ export default function CompanyProject() {
                     style={{ textDecoration: "none", color: "black" }}
                     to={{
                       pathname: `${url}/${project.project_id}`,
-                    }}>
+                    }}
+                  >
                     <CardActionArea className={classes.cardActionArea}>
                       <CardMedia
                         component="img"
@@ -269,18 +272,20 @@ export default function CompanyProject() {
                       />
                       <CardContent className={classes.cardContent}>
                         <Typography
-                        style={{wordBreak: 'break-all' }}
+                          style={{ wordBreak: "break-all" }}
                           gutterBottom
                           variant="h5"
                           component="h2"
-                          className={classes.cardHeader}>
+                          className={classes.cardHeader}
+                        >
                           {project.project_name}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="textSecondary"
                           component="p"
-                          className={classes.deadline}>
+                          className={classes.deadline}
+                        >
                           Deadline: {project.project_deadline.substring(0, 10)}
                         </Typography>
                         {project.project_tech.length > 0 ? (
@@ -308,7 +313,8 @@ export default function CompanyProject() {
                             variant="body2"
                             color="textSecondary"
                             component="p"
-                            className={classes.deadline}>
+                            className={classes.deadline}
+                          >
                             PUBLIC
                           </Typography>
                         </>
@@ -319,7 +325,8 @@ export default function CompanyProject() {
                             variant="body2"
                             color="textSecondary"
                             component="p"
-                            className={classes.deadline}>
+                            className={classes.deadline}
+                          >
                             DRAFT
                           </Typography>
                         </>

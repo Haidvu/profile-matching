@@ -59,15 +59,12 @@ const SaveStudent = ({ studentId }) => {
   const getCompanyProjects = useCallback(() => {
     //get all projects of this company.
     const companyProjects = axios.post(
-      "http://18.213.74.196:8000/api/company_project/list_by_company",
+      "/company_project/list_by_company",
       { username_id: parseInt(Id) },
       getConfig()
     );
     //get all saved projects
-    const savedProjects = axios.get(
-      "http://18.213.74.196:8000/api/project_select_student/all",
-      getConfig()
-    );
+    const savedProjects = axios.get("/project_select_student/all", getConfig());
     axios
       .all([companyProjects, savedProjects])
       .then(
@@ -104,11 +101,7 @@ const SaveStudent = ({ studentId }) => {
   const handleSave = () => {
     if (saveStudent.student_db_id) {
       axios
-        .post(
-          "http://18.213.74.196:8000/api/project_select_student/create",
-          saveStudent,
-          getConfig()
-        )
+        .post("/project_select_student/create", saveStudent, getConfig())
         .then(() => {
           setCompanyProjectsToShow([
             ...companyProjectsToShow.filter((project) => {
@@ -137,7 +130,7 @@ const SaveStudent = ({ studentId }) => {
       project_id: parseInt(e.target.name),
       project_preference_for_student: parseInt(e.target.value),
     });
-    setNameProjectToSave(projectName)
+    setNameProjectToSave(projectName);
   };
 
   return (
@@ -153,7 +146,9 @@ const SaveStudent = ({ studentId }) => {
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
                     <Grid item xs={12} sm={12} md={7} lg={7}>
-                      <Typography style={{ wordBreak: 'break-all' }}>{project.project_name}</Typography>
+                      <Typography style={{ wordBreak: "break-all" }}>
+                        {project.project_name}
+                      </Typography>
                     </Grid>
                     <Grid item xs={6} sm={6} md={3} lg={3}>
                       <FormControl className={classes.formControl}>
@@ -163,7 +158,10 @@ const SaveStudent = ({ studentId }) => {
                           id={project.project_name}
                           name={project.project_id}
                           className={classes.preference}
-                          onChange={(e) => { return ( handleChange(e, project.project_name) ) }}>
+                          onChange={(e) => {
+                            return handleChange(e, project.project_name);
+                          }}
+                        >
                           <MenuItem value={3}>Highest</MenuItem>
                           <MenuItem value={2}>Intermediate</MenuItem>
                           <MenuItem value={1}>Lowest</MenuItem>
@@ -175,9 +173,8 @@ const SaveStudent = ({ studentId }) => {
                         variant="outlined"
                         color="secondary"
                         onClick={handleSave}
-                        disabled={
-                          saveStudent.project_id !== project.project_id
-                        }>
+                        disabled={saveStudent.project_id !== project.project_id}
+                      >
                         Save
                       </Button>
                     </Grid>
@@ -186,26 +183,30 @@ const SaveStudent = ({ studentId }) => {
               </>
             </>
           ) : (
-              <Container>
-                <Typography style={{ fontStyle: "italic" }}>
-                  No Projects to Add to For this Profile
+            <Container>
+              <Typography style={{ fontStyle: "italic" }}>
+                No Projects to Add to For this Profile
               </Typography>
-              </Container>
-            )}
+            </Container>
+          )}
           <Snackbar
             open={addSuccess}
             autoHideDuration={6000}
-            onClose={handleCloseAddSucess}>
+            onClose={handleCloseAddSucess}
+          >
             <Alert onClose={handleCloseAddSucess} severity="success">
-              This student was saved to project {nameProjectToSave}! Please check this student in the 'My Projects/My Team' tab 
-              </Alert>
+              This student was saved to project {nameProjectToSave}! Please
+              check this student in the 'My Projects/My Team' tab
+            </Alert>
           </Snackbar>
           <Snackbar
             open={addFailed}
             autoHideDuration={6000}
-            onClose={handleCloseAddFailed}>
+            onClose={handleCloseAddFailed}
+          >
             <Alert onClose={handleCloseAddFailed} severity="error">
-              There was a problem when saving this student to {nameProjectToSave}
+              There was a problem when saving this student to{" "}
+              {nameProjectToSave}
             </Alert>
           </Snackbar>
         </Grid>

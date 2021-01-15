@@ -193,7 +193,7 @@ function StudentProject({ projects, setProjects, skills }) {
   const handleDelete = (id) => {
     axios
       .delete(
-        "http://18.213.74.196:8000/api/student_project/" + id + "/delete",
+        "/student_project/" + id + "/delete",
 
         getConfig()
       )
@@ -225,7 +225,10 @@ function StudentProject({ projects, setProjects, skills }) {
       setUpdateFailed(true);
       return false;
     } else if (!currentProject.project_in_progress) {
-      if (currentProject.project_end_date === "" || !currentProject.project_end_date) {
+      if (
+        currentProject.project_end_date === "" ||
+        !currentProject.project_end_date
+      ) {
         setAlert(
           'Please enter an end date for the project or select "project in progress"'
         );
@@ -249,12 +252,17 @@ function StudentProject({ projects, setProjects, skills }) {
       var project_id = id;
 
       var skillsSeparatedByCommas = "";
-      skillsSeparatedByCommas += currentProject.project_tech.map((tech) => { return tech.label; });
-      skillsSeparatedByCommas = (skillsSeparatedByCommas.length > 0) ? skillsSeparatedByCommas.substring(0, skillsSeparatedByCommas.length) : "";
+      skillsSeparatedByCommas += currentProject.project_tech.map((tech) => {
+        return tech.label;
+      });
+      skillsSeparatedByCommas =
+        skillsSeparatedByCommas.length > 0
+          ? skillsSeparatedByCommas.substring(0, skillsSeparatedByCommas.length)
+          : "";
 
       axios
         .put(
-          `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
+          `/student_project/${project_id}/update`,
           {
             student_id: profile.student_id,
             project_name: currentProject.project_name,
@@ -319,12 +327,15 @@ function StudentProject({ projects, setProjects, skills }) {
               </h3>
             </div>
             <div className={classes.verticalElementTitle}>
-              {project.project_tech !== "" ?
-                (project.project_tech.split(",").map((skill, index) => (
-                  <Chip label={skill} className={classes.chips} key={index} />
-                ))) :
-                (<Chip label="None" className={classes.chips} />)
-              }
+              {project.project_tech !== "" ? (
+                project.project_tech
+                  .split(",")
+                  .map((skill, index) => (
+                    <Chip label={skill} className={classes.chips} key={index} />
+                  ))
+              ) : (
+                <Chip label="None" className={classes.chips} />
+              )}
             </div>
             <div className={classes.projectDescLabel}>
               <h3>Project Description:</h3>
@@ -341,7 +352,15 @@ function StudentProject({ projects, setProjects, skills }) {
                 Project Source Link
               </Typography>
               <br />
-              <a href={project.project_tech.includes("https://") ? `${project.project_link}` : `https://${project.project_link}`} className={classes.link} target="_blank">
+              <a
+                href={
+                  project.project_tech.includes("https://")
+                    ? `${project.project_link}`
+                    : `https://${project.project_link}`
+                }
+                className={classes.link}
+                target="_blank"
+              >
                 {project.project_link}
               </a>
             </div>
@@ -424,16 +443,16 @@ function StudentProject({ projects, setProjects, skills }) {
                     closeMenuOnSelect={true}
                     components={animatedComponents}
                     name="project_skills"
-                    value={options.filter(el => {
-                      return currentProject.project_tech.some(f => {
-                        return f.label === el.label
-                      })
+                    value={options.filter((el) => {
+                      return currentProject.project_tech.some((f) => {
+                        return f.label === el.label;
+                      });
                     })}
                     isMulti
                     isSearchable
                     onChange={(e) => {
                       e = e ? e : [];
-                      setCurrentProject({ ...currentProject, project_tech: e })
+                      setCurrentProject({ ...currentProject, project_tech: e });
                     }}
                     options={options}
                   />
@@ -525,7 +544,8 @@ function StudentProject({ projects, setProjects, skills }) {
                 <Snackbar
                   open={updateFailed}
                   autoHideDuration={6000}
-                  onClose={handleCloseUpdateFailed}>
+                  onClose={handleCloseUpdateFailed}
+                >
                   <Alert onClose={handleCloseUpdateFailed} severity="error">
                     {alert}
                   </Alert>

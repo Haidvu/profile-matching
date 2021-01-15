@@ -50,7 +50,7 @@ const getNewToken = () => {
   let token = localStorage.getItem("token");
   if (token) {
     axios
-      .post("http://18.213.74.196:8000/api/token/refresh/", {
+      .post("/token/refresh/", {
         refresh: localStorage.getItem("refresh"),
       })
       .then((res) => {
@@ -83,7 +83,7 @@ function Login() {
   const login = (e) => {
     e.preventDefault();
     axios
-      .post("http://18.213.74.196:8000/api/token/", loginInfo)
+      .post("/token/", loginInfo)
       .then((res) => {
         localStorage.setItem("token", res.data.access);
         localStorage.setItem("role_id", res.data.role_id);
@@ -118,7 +118,8 @@ function Login() {
               <Alert
                 className={classes.loginAlert}
                 variant="filled"
-                severity="error">
+                severity="error"
+              >
                 {error}
               </Alert>
             ) : null}
@@ -159,7 +160,8 @@ function Login() {
                 fullWidth
                 variant="contained"
                 color="secondary"
-                className={classes.submit}>
+                className={classes.submit}
+              >
                 Sign In
               </Button>
               <Grid container justify="space-between">
@@ -177,7 +179,8 @@ function Login() {
                   <Link
                     to="/lost-password"
                     href="lost-password"
-                    variant="body2">
+                    variant="body2"
+                  >
                     {"Forgot Password?"}
                   </Link>
                 </Grid>
