@@ -17,11 +17,11 @@ export default function formValidation(name, value, schema) {
       if (!isText.test(value)) error = "This field accepts text only.";
       break;
 
-    case "email":
+    case "contact_email":
       if (!isEmail.test(value)) error = "Please enter a valid email address.";
       break;
 
-    case "phone":
+    case "contact_phone":
       if (!isPhone.test(value))
         error = "Please enter a valid phone number. i.e: xxx-xxx-xxxx";
       break;
