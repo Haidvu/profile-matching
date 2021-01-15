@@ -131,7 +131,7 @@ const SecondStep = ({
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="phone"
+                  label="Phone"
                   name="contact_phone"
                   placeholder="Your phone number"
                   type="phone"

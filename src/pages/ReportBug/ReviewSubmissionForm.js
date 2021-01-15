@@ -113,7 +113,7 @@ const Confirm = ({ handleNext, handleBack, values }) => {
 
               <ListItem>
                 <ListItemText
-                  primary="phone"
+                  primary="Phone"
                   secondary={contact_phone.length > 0 ? contact_phone : "Not Provided"}
                 />
               </ListItem>

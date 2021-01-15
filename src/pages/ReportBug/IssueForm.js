@@ -82,13 +82,13 @@ const classes = useStyles();
                   required
                   variant="outlined"
                   fullWidth
-                  inputProps={{ maxLength: 1000 }}
+                  inputProps={{ maxLength: 750}}
                   name="issue_summary"
                   placeholder="Please enter your issue *"
                   value={issue_summary || ""}
                   onChange={handleChange}
                   error={!!formErrors.issue_summary}
-                  helperText={formErrors.issue_summary}
+                  helperText={`${issue_summary.length}/750`}
                 />
               </Grid>
             </Grid>
