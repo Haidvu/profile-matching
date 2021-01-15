@@ -55,55 +55,44 @@ const StudentSelected = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(
-        "http://18.213.74.196:8000/api/student_select_project/all",
-        getConfig()
-      )
-      .then((res) => {
-        const studentSelection = res.data.filter(
-          (selection) => selection.student_id === data.profile.student_id
-        );
-        const param = {
-          company_name: "",
-          industry_type: "",
-          project_name: "",
-          project_type: [],
-          project_tech: [],
-          keywords: [],
-        };
+    axios.get("/student_select_project/all", getConfig()).then((res) => {
+      const studentSelection = res.data.filter(
+        (selection) => selection.student_id === data.profile.student_id
+      );
+      const param = {
+        company_name: "",
+        industry_type: "",
+        project_name: "",
+        project_type: [],
+        project_tech: [],
+        keywords: [],
+      };
 
-        axios
-          .post(
-            "http://18.213.74.196:8000/api/company_project/search",
-            param,
-            getConfig()
-          )
-          .then((res) => {
-            console.log(res.data)
-            setSelectedProjects(matchProjects(studentSelection, res.data));
-            setLoading(false);
-          });
-
-        // This technique would work if we have separate way of gettting company info
-        // axios
-        //   .all(
-        //     studentSelection.map((selection) =>
-        //       axios.get(
-        //         `http://18.213.74.196:8000/api/company_project/${selection.project_id}`,
-        //         getConfig()
-        //       )
-        //     )
-        //   )
-        //   .then((responses) => {
-        //     responses.map((res, index) => {
-        //       const project = res.data;
-        //       const selection = studentSelection[index]; //has the same length and indices as projects
-
-        //       console.log(project, selection);
-        //     });
-        //   });
+      axios.post("/company_project/search", param, getConfig()).then((res) => {
+        console.log(res.data);
+        setSelectedProjects(matchProjects(studentSelection, res.data));
+        setLoading(false);
       });
+
+      // This technique would work if we have separate way of gettting company info
+      // axios
+      //   .all(
+      //     studentSelection.map((selection) =>
+      //       axios.get(
+      //         `/company_project/${selection.project_id}`,
+      //         getConfig()
+      //       )
+      //     )
+      //   )
+      //   .then((responses) => {
+      //     responses.map((res, index) => {
+      //       const project = res.data;
+      //       const selection = studentSelection[index]; //has the same length and indices as projects
+
+      //       console.log(project, selection);
+      //     });
+      //   });
+    });
   }, [data.profile.student_id]);
 
   //used to change preference from project card (child) component
@@ -154,7 +143,8 @@ const StudentSelected = () => {
       {loading ? (
         <LinearProgress
           color="secondary"
-          style={{ margin: "20px" }}></LinearProgress>
+          style={{ margin: "20px" }}
+        ></LinearProgress>
       ) : (
         <Grid container className={classes.gridRoot}>
           <Grid item xs={12} sm={12} md={6} lg={3}>
@@ -163,7 +153,8 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}>
+                  className={classes.cardTitle}
+                >
                   No Preference
                 </Typography>
                 <Divider></Divider>
@@ -178,7 +169,8 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}>
+                  className={classes.cardTitle}
+                >
                   Low Preference
                 </Typography>
                 <Divider></Divider>
@@ -193,7 +185,8 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}>
+                  className={classes.cardTitle}
+                >
                   Medium Preference
                 </Typography>
                 <Divider></Divider>
@@ -208,7 +201,8 @@ const StudentSelected = () => {
                 <Typography
                   align="center"
                   variant="h5"
-                  className={classes.cardTitle}>
+                  className={classes.cardTitle}
+                >
                   High Preference
                 </Typography>
                 <Divider></Divider>

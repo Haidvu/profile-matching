@@ -87,10 +87,7 @@ export default function ResetPasswordTwo() {
 
       console.log(data);
       axios
-        .patch(
-          "http://18.213.74.196:8000/api/user_accounts/password_reset_complete",
-          data
-        )
+        .patch("/user_accounts/password_reset_complete", data)
         .then((res) => {
           if (res.data.error) {
             setError(res.data.error);
@@ -172,7 +169,8 @@ export default function ResetPasswordTwo() {
             fullWidth
             variant="contained"
             color="secondary"
-            className={classes.submit}>
+            className={classes.submit}
+          >
             RESET PASSWORD
           </Button>
           {error ? (

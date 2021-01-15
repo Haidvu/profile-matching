@@ -20,12 +20,12 @@ const INITIAL_VIEW_STATE = {
 };
 
 const TOKEN =
-    "pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
+  "pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
 
-    function getTooltip({object}) {
-      return (
-        object && {
-          html: `\
+function getTooltip({ object }) {
+  return (
+    object && {
+      html: `\
       <div style="width:250px">
       <div><b>Company Information</b></div>
       <div>Name: ${object.name}</div>
@@ -36,58 +36,62 @@ const TOKEN =
       <div>Website: ${object.website}</div>
       <div>
 
-      `
-        }
-      );
+      `,
     }
+  );
+}
 
 export default function AdminMap({
   iconMapping = locationIconMapping,
   iconAtlas = locationIconAtlas,
- 
 }) {
+  const mapStyle =
+    "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
 
-
-const mapStyle = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
-  
-const [data,setData] = useState([])
+  const [data, setData] = useState([]);
   const layerProps = {
     data,
     pickable: true,
     getPosition: (d) => d.coordinates,
     iconAtlas,
-    iconMapping
+    iconMapping,
   };
 
-const getAddress = (address) => {
-  if (address !== "") {
-    const res = address.split("|");
-    return `${res[0]}, ${res[1]}, ${res[2]} `;
-  }
-  return "";
-};
+  const getAddress = (address) => {
+    if (address !== "") {
+      const res = address.split("|");
+      return `${res[0]}, ${res[1]}, ${res[2]} `;
+    }
+    return "";
+  };
 
-useEffect(() => {
-  axios.get("http://18.213.74.196:8000/api/company_profile/",
-  getConfig())
-  .then(res => {
-    res.data.map((res) => {
-        let address = getAddress(res.company_address) + res.company_zip;
-        setData(data =>[...data,{
-          coordinates: [ parseFloat(res.company_longitude), parseFloat(res.company_latitude)],
-          name: res.company_name,
-          description: res.company_description,
-          phone: res.company_phone_no,
-          website: res.company_website,
-          contact_email: res.company_contact_email,
-          address: address
-        }]);
+  useEffect(() => {
+    axios
+      .get("/company_profile/", getConfig())
+      .then((res) => {
+        res.data.map((res) => {
+          let address = getAddress(res.company_address) + res.company_zip;
+          setData((data) => [
+            ...data,
+            {
+              coordinates: [
+                parseFloat(res.company_longitude),
+                parseFloat(res.company_latitude),
+              ],
+              name: res.company_name,
+              description: res.company_description,
+              phone: res.company_phone_no,
+              website: res.company_website,
+              contact_email: res.company_contact_email,
+              address: address,
+            },
+          ]);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-  .catch(err => {
-    console.log(err)
-  });       
-}, [])
+  }, []);
   const layer = new IconLayer({
     ...layerProps,
     id: "icon",
@@ -95,12 +99,11 @@ useEffect(() => {
     sizeUnits: "meters",
     sizeScale: 2000,
     sizeMinPixels: 30,
-    pickable: true
+    pickable: true,
   });
   return (
-    
     <DeckGL
-    width={"100%"}
+      width={"100%"}
       layers={[layer]}
       views={MAP_VIEW}
       initialViewState={INITIAL_VIEW_STATE}
@@ -109,14 +112,11 @@ useEffect(() => {
       useDevicePixels={false}
     >
       <StaticMap
-      
         reuseMaps
         mapStyle={mapStyle}
         mapboxApiAccessToken={TOKEN}
         preventStyleDiffing={true}
       />
     </DeckGL>
-    
   );
 }
-

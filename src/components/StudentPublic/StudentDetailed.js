@@ -189,11 +189,11 @@ const StudentDetailed = ({ match }) => {
 
   const getStudent = useCallback(() => {
     const student = axios.get(
-      `http://18.213.74.196:8000/api/student_profile/id/${match.params.id}`,
+      `/student_profile/id/${match.params.id}`,
       getConfig()
     );
     const studentProjects = axios.post(
-      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      `/student_project/list_by_student`,
       {
         username_id: match.params.id,
       },
@@ -227,7 +227,8 @@ const StudentDetailed = ({ match }) => {
               <ListItemText>
                 <div
                   className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}>
+                  style={{ justifyContent: "space-between" }}
+                >
                   <div className={classes.flexColumn}>
                     <Typography className={classes.sectionHeader}>
                       Name
@@ -247,7 +248,8 @@ const StudentDetailed = ({ match }) => {
               <ListItemText>
                 <div
                   className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}>
+                  style={{ justifyContent: "space-between" }}
+                >
                   <div className={classes.flexColumn}>
                     <Typography className={classes.sectionHeader}>
                       Bio
@@ -269,13 +271,11 @@ const StudentDetailed = ({ match }) => {
                   Academic
                 </Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Graduation Date: ${student.graduation_date}`}</Typography>
+                  className={classes.sectionContent}
+                >{`Graduation Date: ${student.graduation_date}`}</Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Degree: ${student.degree}`}</Typography>
+                  className={classes.sectionContent}
+                >{`Degree: ${student.degree}`}</Typography>
                 <Typography className={classes.sectionContent}>
                   {" "}
                   {`Major: ${student.major}`}
@@ -335,7 +335,8 @@ const StudentDetailed = ({ match }) => {
                   <Grid item xs={12}>
                     <VerticalTimeline
                       layout={"1-column-left"}
-                      className={classes.projectsContainer}>
+                      className={classes.projectsContainer}
+                    >
                       {studentProjects.map((project, index) => (
                         <VerticalTimelineElement
                           className={classes.IconStyle}
@@ -344,7 +345,8 @@ const StudentDetailed = ({ match }) => {
                             borderRight: "7px solid #C8102E",
                           }}
                           key={index}
-                          icon={<WebRoundedIcon />}>
+                          icon={<WebRoundedIcon />}
+                        >
                           <h3 className={classes.verticalElementTitle}>
                             {project.project_name}
                           </h3>
@@ -383,7 +385,8 @@ const StudentDetailed = ({ match }) => {
                               <br />
                               <a
                                 href={`${project.project_link}`}
-                                className={classes.link}>
+                                className={classes.link}
+                              >
                                 {project.project_link}
                               </a>
                             </Typography>

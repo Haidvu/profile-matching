@@ -62,23 +62,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 // Destructure props
 const Confirm = ({ handleNext, handleBack, values }) => {
-  const { first_name, last_name, contact_email, contact_phone, issue_summary } = values;
+  const {
+    first_name,
+    last_name,
+    contact_email,
+    contact_phone,
+    issue_summary,
+  } = values;
 
   const handleSubmit = () => {
     axios
-      .post("http://18.213.74.196:8000/api/issue_report/create",
-      values
-      )
-    .then((res) => {
-          console.log(values);
-          handleNext();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      .post("/issue_report/create", values)
+      .then((res) => {
+        console.log(values);
+        handleNext();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const classes = useStyles();
@@ -89,7 +92,10 @@ const Confirm = ({ handleNext, handleBack, values }) => {
           <Paper className={classes.paper}>
             <List disablePadding>
               <ListItem>
-                <ListItemText primary="Issue Summary" secondary={issue_summary} />
+                <ListItemText
+                  primary="Issue Summary"
+                  secondary={issue_summary}
+                />
               </ListItem>
 
               <Divider />
@@ -106,7 +112,10 @@ const Confirm = ({ handleNext, handleBack, values }) => {
               <Divider />
 
               <ListItem>
-                <ListItemText primary="Email Address" secondary={contact_email} />
+                <ListItemText
+                  primary="Email Address"
+                  secondary={contact_email}
+                />
               </ListItem>
 
               <Divider />
@@ -114,14 +123,19 @@ const Confirm = ({ handleNext, handleBack, values }) => {
               <ListItem>
                 <ListItemText
                   primary="Phone"
-                  secondary={contact_phone.length > 0 ? contact_phone : "Not Provided"}
+                  secondary={
+                    contact_phone.length > 0 ? contact_phone : "Not Provided"
+                  }
                 />
               </ListItem>
             </List>
 
-            <div className={classes.buttons}
-            >
-              <Button className={classes.backButton} variant="contained" onClick={handleBack}>
+            <div className={classes.buttons}>
+              <Button
+                className={classes.backButton}
+                variant="contained"
+                onClick={handleBack}
+              >
                 Back
               </Button>
               <Button

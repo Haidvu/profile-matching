@@ -254,10 +254,7 @@ export default function CompanyProfile() {
   const getProfile = useCallback(() => {
     if (slug) {
       axios
-        .get(
-          `http://18.213.74.196:8000/api/company_profile/${slug}`,
-          getConfig()
-        )
+        .get(`/company_profile/${slug}`, getConfig())
         .then((res) => {
           res.data.company_representative_type =
             res.data.company_representative_type + "";
@@ -340,10 +337,7 @@ export default function CompanyProfile() {
   const [industryTypes, setIndustryTypes] = useState([]);
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_profile/list_industry_type",
-        getConfig()
-      )
+      .get("/company_profile/list_industry_type", getConfig())
       .then((res) => {
         const data = res.data.industry_type.map((item, index) => {
           return {
@@ -390,7 +384,7 @@ export default function CompanyProfile() {
   const handleConfirm = () => {
     setLoading2(true);
     axios
-      .post("http://18.213.74.196:8000/api/token/", {
+      .post("/token/", {
         email: email,
         password: password,
       })
@@ -412,7 +406,7 @@ export default function CompanyProfile() {
           .then((response) => {
             axios
               .put(
-                `http://18.213.74.196:8000/api/company_profile/${slug}/update`,
+                `/company_profile/${slug}/update`,
                 {
                   username: localStorage.getItem("email_id"),
                   company_name: profileInfo.name,
@@ -444,7 +438,7 @@ export default function CompanyProfile() {
                 setShowEditFields(false);
                 setLoading2(false);
                 axios
-                  .post("http://18.213.74.196:8000/api/token/", {
+                  .post("/token/", {
                     email: email,
                     password: password,
                   })
@@ -479,7 +473,7 @@ export default function CompanyProfile() {
         setLoading2(false);
         setAuthError(
           err.response.data.detail +
-          ". Make sure your email and password is correct."
+            ". Make sure your email and password is correct."
         );
       });
   };
@@ -489,51 +483,601 @@ export default function CompanyProfile() {
       {loading ? (
         <LinearProgress color="secondary" />
       ) : (
-          <>
-            <div className={classes.profileHeader}>
-              <img
-                alt="profile logo"
-                className={classes.profileLogo}
-                src={CompanyDashboard}></img>
-            </div>
-            {showEditFields ? (
-              <Typography style={{ padding: "20px" }}>
-                <span className={classes.labelAsterisk}>*</span> - Required Fields
-              </Typography>
-            ) : null}
-            <form>
-              <List>
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <BusinessRoundedIcon fontSize="large" />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
+        <>
+          <div className={classes.profileHeader}>
+            <img
+              alt="profile logo"
+              className={classes.profileLogo}
+              src={CompanyDashboard}
+            ></img>
+          </div>
+          {showEditFields ? (
+            <Typography style={{ padding: "20px" }}>
+              <span className={classes.labelAsterisk}>*</span> - Required Fields
+            </Typography>
+          ) : null}
+          <form>
+            <List>
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <BusinessRoundedIcon fontSize="large" />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    primary="Company Name"
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.name}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Company Name"
+                      className={classes.formInput}
+                      value={profileInfo.name}
+                      onChange={handleChange}
+                      placeholder={profileInfo.name}
+                      name="name"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
                       }}
-                      primary="Company Name"
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.name}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
+                      helperText={`${profileInfo.name.length}/50`}
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.company_name !== ""}
+                    ></TextField>
+                    {updateErrors.company_name ? (
+                      <Typography color="error">
+                        {updateErrors.company_name}
+                      </Typography>
+                    ) : null}
+                  </div>
+                )}
+                {showEditFields === false ? (
+                  <IconButton
+                    edge="end"
+                    className={classes.icon}
+                    onClick={handleOpenEdit}
+                  >
+                    <EditTwoToneIcon />
+                  </IconButton>
+                ) : null}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <ShortTextRoundedIcon fontSize="large" />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Company Mission"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.companyMission}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      multiline
+                      label="Company Mission"
+                      className={classes.formInput}
+                      value={profileInfo.companyMission}
+                      onChange={handleChange}
+                      placeholder={profileInfo.companyMission}
+                      name="companyMission"
+                      required
+                      helperText={`${profileInfo.companyMission.length}/225`}
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      inputProps={{ maxLength: 225 }}
+                      error={updateErrors.company_mission !== ""}
+                    ></TextField>
+                    {updateErrors.company_mission ? (
+                      <Typography>{updateErrors.company_mission}</Typography>
+                    ) : null}
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <ShortTextRoundedIcon fontSize="large" />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Company Description"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.companyDescription}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Company Description"
+                      multiline
+                      className={classes.formInput}
+                      value={profileInfo.companyDescription}
+                      onChange={handleChange}
+                      name="companyDescription"
+                      required
+                      helperText={`${profileInfo.companyDescription.length}/500`}
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      inputProps={{ maxLength: 500 }}
+                      error={updateErrors.company_description !== ""}
+                    ></TextField>
+                    {updateErrors.company_description ? (
+                      <Typography color="error">
+                        {updateErrors.company_description}
+                      </Typography>
+                    ) : null}
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <PersonRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Company Representative"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.companyRep}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Company Representative"
+                      className={classes.formInput}
+                      value={profileInfo.companyRep}
+                      onChange={handleChange}
+                      name="companyRep"
+                      inputProps={{ maxLength: 50 }}
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      error={updateErrors.representative_name !== ""}
+                    ></TextField>
+                    {updateErrors.representative_name ? (
+                      <Typography color="error">
+                        {updateErrors.representative_name}
+                      </Typography>
+                    ) : null}
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <LanguageRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Website"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.companyWebsite}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Website"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      className={classes.formInput}
+                      value={profileInfo.companyWebsite}
+                      onChange={handleChange}
+                      name="companyWebsite"
+                      inputProps={{ maxLength: 50 }}
+                    ></TextField>
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <ShortTextRoundedIcon fontSize="large" />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Contact Email"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.contact_email}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Contact Email"
+                      className={classes.formInput}
+                      value={profileInfo.contact_email}
+                      onChange={handleChange}
+                      placeholder={profileInfo.contact_email}
+                      name="contact_email"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      inputProps={{ maxLength: 50 }}
+                      error={updateErrors.company_contact_email !== ""}
+                    ></TextField>
+                    {updateErrors.company_contact_email ? (
+                      <Typography color="error">
+                        {updateErrors.company_contact_email}
+                      </Typography>
+                    ) : null}
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <BusinessRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Company Type"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.companyType === 0
+                            ? "Social Business"
+                            : profileInfo.companyType === 1
+                            ? "Private"
+                            : "Non-Profit"}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <FormControl required className={classes.fullWidth}>
+                      <InputLabel
+                        id="companyType"
+                        classes={{
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        }}
+                      >
+                        Company Type
+                      </InputLabel>
+
+                      <Select
+                        value={profileInfo.companyType}
+                        id="CompanyType"
+                        name="companyType"
+                        className={classes.formInput}
+                        onChange={handleChange}
+                      >
+                        <MenuItem value="1">Private</MenuItem>
+                        <MenuItem value="2">Non-Profit</MenuItem>
+                        <MenuItem value="0">Social Business</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <WorkRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Industry Type"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.industryType}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <FormControl required className={classes.fullWidth}>
+                      <InputLabel
+                        id="industryType"
+                        classes={{
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        }}
+                      >
+                        Industry Type
+                      </InputLabel>
+
+                      <Select
+                        className={classes.formInput}
+                        value={profileInfo.industryType}
+                        onChange={handleChange}
+                        name="industryType"
+                        component="span"
+                      >
+                        {industryTypes.map((item) => (
+                          <MenuItem key={item.label} value={item.label}>
+                            {item.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <PhoneRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Phone Number"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.phoneNumber}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <TextField
+                      label="Phone Number"
+                      className={classes.formInput}
+                      value={profileInfo.phoneNumber}
+                      onChange={handleChange}
+                      name="phoneNumber"
+                      required
+                      InputLabelProps={{
+                        classes: {
+                          root: classes.inputLabel,
+                          asterisk: classes.labelAsterisk,
+                        },
+                      }}
+                      inputProps={{ maxLength: 10 }}
+                      error={updateErrors.company_phone_no !== ""}
+                    ></TextField>
+                    {updateErrors.company_phone_no ? (
+                      <Typography color="error">
+                        {updateErrors.company_phone_no}
+                      </Typography>
+                    ) : null}
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <PeopleRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="One Person Company"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {profileInfo.isSolo === "1" ? "Yes" : "No"}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <div className={classes.fullWidth}>
+                    <FormControl required component="fieldset">
+                      <FormLabel
+                        component="legend"
+                        classes={{
+                          asterisk: classes.labelAsterisk,
+                        }}
+                      >
+                        Are you a one person company?
+                      </FormLabel>
+
+                      <RadioGroup
+                        aria-label="Are you one person company"
+                        name="isSolo"
+                        id="isSolo"
+                        value={profileInfo.isSolo}
+                        onChange={handleChange}
+                      >
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="Yes (1)"
+                        />
+                        <FormControlLabel
+                          value="0"
+                          control={<Radio />}
+                          label="No (>=2)"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <LocationOnRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Company Address"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}, ${profileInfo.zip}`}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <>
+                    <Grid item container spacing={2}>
+                      <Grid item>
                         <TextField
-                          label="Company Name"
-                          className={classes.formInput}
-                          value={profileInfo.name}
+                          label="Company Address"
+                          className={classes.fullWidth}
+                          value={profileInfo.streetAddress}
                           onChange={handleChange}
-                          placeholder={profileInfo.name}
-                          name="name"
+                          name="streetAddress"
                           required
                           InputLabelProps={{
                             classes: {
@@ -541,420 +1085,67 @@ export default function CompanyProfile() {
                               asterisk: classes.labelAsterisk,
                             },
                           }}
-                          helperText={`${profileInfo.name.length}/50`}
-                          inputProps={{ maxLength: 50 }}
-                          error={updateErrors.company_name !== ""}></TextField>
-                        {updateErrors.company_name ? (
+                          inputProps={{ maxLength: 40 }}
+                          placeholder="Street Address"
+                        ></TextField>
+                        {profileInfo.streetAddress === "" ? (
                           <Typography color="error">
-                            {updateErrors.company_name}
+                            {updateErrors.company_address}
                           </Typography>
                         ) : null}
-                      </div>
-                    )}
-                  {showEditFields === false ? (
-                    <IconButton
-                      edge="end"
-                      className={classes.icon}
-                      onClick={handleOpenEdit}>
-                      <EditTwoToneIcon />
-                    </IconButton>
-                  ) : null}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <ShortTextRoundedIcon fontSize="large" />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Company Mission"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.companyMission}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
+                      </Grid>
+                      <Grid item>
                         <TextField
-                          multiline
-                          label="Company Mission"
-                          className={classes.formInput}
-                          value={profileInfo.companyMission}
+                          label="City"
+                          className={classes.fullWidth}
+                          value={profileInfo.city}
                           onChange={handleChange}
-                          placeholder={profileInfo.companyMission}
-                          name="companyMission"
                           required
-                          helperText={`${profileInfo.companyMission.length}/225`}
                           InputLabelProps={{
                             classes: {
                               root: classes.inputLabel,
                               asterisk: classes.labelAsterisk,
                             },
                           }}
-                          inputProps={{ maxLength: 225 }}
-                          error={updateErrors.company_mission !== ""}></TextField>
-                        {updateErrors.company_mission ? (
-                          <Typography>{updateErrors.company_mission}</Typography>
-                        ) : null}
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <ShortTextRoundedIcon fontSize="large" />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Company Description"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.companyDescription}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <TextField
-                          label="Company Description"
-                          multiline
-                          className={classes.formInput}
-                          value={profileInfo.companyDescription}
-                          onChange={handleChange}
-                          name="companyDescription"
-                          required
-                          helperText={`${profileInfo.companyDescription.length}/500`}
-                          InputLabelProps={{
-                            classes: {
-                              root: classes.inputLabel,
-                              asterisk: classes.labelAsterisk,
-                            },
-                          }}
-                          inputProps={{ maxLength: 500 }}
-                          error={
-                            updateErrors.company_description !== ""
-                          }></TextField>
-                        {updateErrors.company_description ? (
+                          inputProps={{ maxLength: 20 }}
+                          name="city"
+                        ></TextField>
+                        {profileInfo.city === "" ? (
                           <Typography color="error">
-                            {updateErrors.company_description}
+                            {updateErrors.company_address}
                           </Typography>
                         ) : null}
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <PersonRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Company Representative"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.companyRep}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <TextField
-                          label="Company Representative"
-                          className={classes.formInput}
-                          value={profileInfo.companyRep}
-                          onChange={handleChange}
-                          name="companyRep"
-                          inputProps={{ maxLength: 50 }}
-                          required
-                          InputLabelProps={{
-                            classes: {
-                              root: classes.inputLabel,
-                              asterisk: classes.labelAsterisk,
-                            },
-                          }}
-                          error={
-                            updateErrors.representative_name !== ""
-                          }></TextField>
-                        {updateErrors.representative_name ? (
-                          <Typography color="error">
-                            {updateErrors.representative_name}
-                          </Typography>
-                        ) : null}
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <LanguageRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Website"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.companyWebsite}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <TextField
-                          label="Website"
-                          required
-                          InputLabelProps={{
-                            classes: {
-                              root: classes.inputLabel,
-                              asterisk: classes.labelAsterisk,
-                            },
-                          }}
-                          className={classes.formInput}
-                          value={profileInfo.companyWebsite}
-                          onChange={handleChange}
-                          name="companyWebsite"
-                          inputProps={{ maxLength: 50 }}></TextField>
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <ShortTextRoundedIcon fontSize="large" />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Contact Email"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.contact_email}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <TextField
-                          label="Contact Email"
-                          className={classes.formInput}
-                          value={profileInfo.contact_email}
-                          onChange={handleChange}
-                          placeholder={profileInfo.contact_email}
-                          name="contact_email"
-                          required
-                          InputLabelProps={{
-                            classes: {
-                              root: classes.inputLabel,
-                              asterisk: classes.labelAsterisk,
-                            },
-                          }}
-                          inputProps={{ maxLength: 50 }}
-                          error={
-                            updateErrors.company_contact_email !== ""
-                          }></TextField>
-                        {updateErrors.company_contact_email ? (
-                          <Typography color="error">
-                            {updateErrors.company_contact_email}
-                          </Typography>
-                        ) : null}
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <BusinessRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Company Type"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.companyType === 0
-                              ? "Social Business"
-                              : profileInfo.companyType === 1
-                                ? "Private"
-                                : "Non-Profit"}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
+                      </Grid>
+                      <Grid item className={classes.selectInput}>
                         <FormControl required className={classes.fullWidth}>
                           <InputLabel
-                            id="companyType"
+                            id="state"
                             classes={{
                               root: classes.inputLabel,
                               asterisk: classes.labelAsterisk,
-                            }}>
-                            Company Type
-                      </InputLabel>
-
+                            }}
+                          >
+                            State
+                          </InputLabel>
                           <Select
-                            value={profileInfo.companyType}
-                            id="CompanyType"
-                            name="companyType"
-                            className={classes.formInput}
-                            onChange={handleChange}>
-                            <MenuItem value="1">Private</MenuItem>
-                            <MenuItem value="2">Non-Profit</MenuItem>
-                            <MenuItem value="0">Social Business</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <WorkRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Industry Type"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.industryType}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <FormControl required className={classes.fullWidth}>
-                          <InputLabel
-                            id="industryType"
-                            classes={{
-                              root: classes.inputLabel,
-                              asterisk: classes.labelAsterisk,
-                            }}>
-                            Industry Type
-                      </InputLabel>
-
-                          <Select
-                            className={classes.formInput}
-                            value={profileInfo.industryType}
+                            className={classes.fullWidth}
+                            label="State"
+                            value={profileInfo.state}
                             onChange={handleChange}
-                            name="industryType"
-                            component="span">
-                            {industryTypes.map((item) => (
-                              <MenuItem key={item.label} value={item.label}>
-                                {item.label}
+                            name="state"
+                            placeholder="state"
+                          >
+                            {states.map((state) => (
+                              <MenuItem key={state} value={state}>
+                                {state}
                               </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <PhoneRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Phone Number"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.phoneNumber}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
+                      </Grid>
+                      <Grid item>
                         <TextField
-                          label="Phone Number"
-                          className={classes.formInput}
-                          value={profileInfo.phoneNumber}
-                          onChange={handleChange}
-                          name="phoneNumber"
+                          label="Zipcode"
                           required
                           InputLabelProps={{
                             classes: {
@@ -962,357 +1153,196 @@ export default function CompanyProfile() {
                               asterisk: classes.labelAsterisk,
                             },
                           }}
-                          inputProps={{ maxLength: 10 }}
-                          error={updateErrors.company_phone_no !== ""}></TextField>
-                        {updateErrors.company_phone_no ? (
+                          className={classes.fullWidth}
+                          value={profileInfo.zip}
+                          onChange={handleChange}
+                          inputProps={{ maxLength: 5 }}
+                          name="zip"
+                        ></TextField>
+                        {profileInfo.zip === "" ? (
                           <Typography color="error">
-                            {updateErrors.company_phone_no}
+                            {updateErrors.company_zip}
                           </Typography>
                         ) : null}
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <PeopleRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="One Person Company"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {profileInfo.isSolo === "1" ? "Yes" : "No"}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <div className={classes.fullWidth}>
-                        <FormControl required component="fieldset">
-                          <FormLabel
-                            component="legend"
-                            classes={{
-                              asterisk: classes.labelAsterisk,
-                            }}>
-                            Are you a one person company?
-                      </FormLabel>
-
-                          <RadioGroup
-                            aria-label="Are you one person company"
-                            name="isSolo"
-                            id="isSolo"
-                            value={profileInfo.isSolo}
-                            onChange={handleChange}>
-                            <FormControlLabel
-                              value="1"
-                              control={<Radio />}
-                              label="Yes (1)"
-                            />
-                            <FormControlLabel
-                              value="0"
-                              control={<Radio />}
-                              label="No (>=2)"
-                            />
-                          </RadioGroup>
-                        </FormControl>
-                      </div>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <LocationOnRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Company Address"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}, ${profileInfo.zip}`}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <>
-                        <Grid item container spacing={2}>
-                          <Grid item>
-                            <TextField
-                              label="Company Address"
-                              className={classes.fullWidth}
-                              value={profileInfo.streetAddress}
-                              onChange={handleChange}
-                              name="streetAddress"
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              inputProps={{ maxLength: 40 }}
-                              placeholder="Street Address"></TextField>
-                            {profileInfo.streetAddress === "" ? (
-                              <Typography color="error">
-                                {updateErrors.company_address}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                          <Grid item>
-                            <TextField
-                              label="City"
-                              className={classes.fullWidth}
-                              value={profileInfo.city}
-                              onChange={handleChange}
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              inputProps={{ maxLength: 20 }}
-                              name="city"></TextField>
-                            {profileInfo.city === "" ? (
-                              <Typography color="error">
-                                {updateErrors.company_address}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                          <Grid item className={classes.selectInput}>
-                            <FormControl required className={classes.fullWidth}>
-                              <InputLabel
-                                id="state"
-                                classes={{
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                }}>
-                                State
-                          </InputLabel>
-                              <Select
-                                className={classes.fullWidth}
-                                label="State"
-                                value={profileInfo.state}
-                                onChange={handleChange}
-                                name="state"
-                                placeholder="state">
-                                {states.map((state) => (
-                                  <MenuItem key={state} value={state}>
-                                    {state}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                          <Grid item>
-                            <TextField
-                              label="Zipcode"
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              className={classes.fullWidth}
-                              value={profileInfo.zip}
-                              onChange={handleChange}
-                              inputProps={{ maxLength: 5 }}
-                              name="zip"></TextField>
-                            {profileInfo.zip === "" ? (
-                              <Typography color="error">
-                                {updateErrors.company_zip}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                        </Grid>
-                      </>
-                    )}
-                </ListItem>
-                {!showEditFields ? (
-                  <Divider variant="inset" component="li" />
-                ) : null}
-                <ListItem alignItems="flex-start">
-                  <ListItemIcon>
-                    <LocationOnRoundedIcon />
-                  </ListItemIcon>
-                  {showEditFields === false ? (
-                    <ListItemText
-                      primary="Mailing Address"
-                      classes={{
-                        secondary: classes.inline,
-                        primary: classes.inputLabelBold,
-                      }}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary">
-                            {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}, ${profileInfo.zip2}`}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  ) : (
-                      <>
-                        <Grid item container spacing={2}>
-                          <Grid item>
-                            <TextField
-                              label="Mailing Address"
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              className={classes.fullWidth}
-                              value={profileInfo.streetAddress2}
-                              onChange={handleChange}
-                              name="streetAddress2"
-                              inputProps={{ maxLength: 40 }}
-                              placeholder="Street Address"></TextField>
-                            {profileInfo.streetAddress2 === "" ? (
-                              <Typography color="error">
-                                {updateErrors.mailing_address}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                          <Grid item>
-                            <TextField
-                              label="City"
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              className={classes.fullWidth}
-                              value={profileInfo.city2}
-                              onChange={handleChange}
-                              inputProps={{ maxLength: 20 }}
-                              name="city2"></TextField>
-                            {profileInfo.city2 === "" ? (
-                              <Typography color="error">
-                                {updateErrors.mailing_address}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                          <Grid item className={classes.selectInput}>
-                            <FormControl required className={classes.fullWidth}>
-                              <InputLabel
-                                id="state2"
-                                classes={{
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                }}>
-                                State
-                          </InputLabel>
-                              <Select
-                                className={classes.fullWidth}
-                                label="State"
-                                value={profileInfo.state2}
-                                onChange={handleChange}
-                                name="state2">
-                                {states.map((state) => (
-                                  <MenuItem key={state} value={state}>
-                                    {state}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                          <Grid item>
-                            <TextField
-                              label="Zipcode"
-                              required
-                              InputLabelProps={{
-                                classes: {
-                                  root: classes.inputLabel,
-                                  asterisk: classes.labelAsterisk,
-                                },
-                              }}
-                              className={classes.fullWidth}
-                              value={profileInfo.zip2}
-                              onChange={handleChange}
-                              inputProps={{ maxLength: 5 }}
-                              name="zip2"></TextField>
-                            {profileInfo.zip2 === "" ? (
-                              <Typography color="error">
-                                {updateErrors.mailing_zip}
-                              </Typography>
-                            ) : null}
-                          </Grid>
-                        </Grid>
-                      </>
-                    )}
-                </ListItem>
-                {showEditFields ? (
-                  <ListItem>
-                    <Grid
-                      container
-                      id="buttons-container"
-                      justify="flex-end"
-                      spacing={4}>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          size="large"
-                          onClick={handleCancel}>
-                          Cancel
-                      </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          size="large"
-                          onClick={handleSave}>
-                          Save
-                      </Button>
                       </Grid>
                     </Grid>
-                  </ListItem>
-                ) : null}
-              </List>
-            </form>
-          </>
-        )}
+                  </>
+                )}
+              </ListItem>
+              {!showEditFields ? (
+                <Divider variant="inset" component="li" />
+              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <LocationOnRoundedIcon />
+                </ListItemIcon>
+                {showEditFields === false ? (
+                  <ListItemText
+                    primary="Mailing Address"
+                    classes={{
+                      secondary: classes.inline,
+                      primary: classes.inputLabelBold,
+                    }}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="textPrimary"
+                        >
+                          {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}, ${profileInfo.zip2}`}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                ) : (
+                  <>
+                    <Grid item container spacing={2}>
+                      <Grid item>
+                        <TextField
+                          label="Mailing Address"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
+                          className={classes.fullWidth}
+                          value={profileInfo.streetAddress2}
+                          onChange={handleChange}
+                          name="streetAddress2"
+                          inputProps={{ maxLength: 40 }}
+                          placeholder="Street Address"
+                        ></TextField>
+                        {profileInfo.streetAddress2 === "" ? (
+                          <Typography color="error">
+                            {updateErrors.mailing_address}
+                          </Typography>
+                        ) : null}
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          label="City"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
+                          className={classes.fullWidth}
+                          value={profileInfo.city2}
+                          onChange={handleChange}
+                          inputProps={{ maxLength: 20 }}
+                          name="city2"
+                        ></TextField>
+                        {profileInfo.city2 === "" ? (
+                          <Typography color="error">
+                            {updateErrors.mailing_address}
+                          </Typography>
+                        ) : null}
+                      </Grid>
+                      <Grid item className={classes.selectInput}>
+                        <FormControl required className={classes.fullWidth}>
+                          <InputLabel
+                            id="state2"
+                            classes={{
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            }}
+                          >
+                            State
+                          </InputLabel>
+                          <Select
+                            className={classes.fullWidth}
+                            label="State"
+                            value={profileInfo.state2}
+                            onChange={handleChange}
+                            name="state2"
+                          >
+                            {states.map((state) => (
+                              <MenuItem key={state} value={state}>
+                                {state}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item>
+                        <TextField
+                          label="Zipcode"
+                          required
+                          InputLabelProps={{
+                            classes: {
+                              root: classes.inputLabel,
+                              asterisk: classes.labelAsterisk,
+                            },
+                          }}
+                          className={classes.fullWidth}
+                          value={profileInfo.zip2}
+                          onChange={handleChange}
+                          inputProps={{ maxLength: 5 }}
+                          name="zip2"
+                        ></TextField>
+                        {profileInfo.zip2 === "" ? (
+                          <Typography color="error">
+                            {updateErrors.mailing_zip}
+                          </Typography>
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </>
+                )}
+              </ListItem>
+              {showEditFields ? (
+                <ListItem>
+                  <Grid
+                    container
+                    id="buttons-container"
+                    justify="flex-end"
+                    spacing={4}
+                  >
+                    <Grid item>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="large"
+                        onClick={handleCancel}
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        onClick={handleSave}
+                      >
+                        Save
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              ) : null}
+            </List>
+          </form>
+        </>
+      )}
       <Dialog
         onClose={handleDialogClose}
         open={dialogOpen}
-        className={classes.dialog}>
+        className={classes.dialog}
+      >
         <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
         {loading2 ? <LinearProgress /> : null}
         {authError ? (
           <Alert
             className={classes.loginAlert}
             variant="filled"
-            severity="error">
+            severity="error"
+          >
             {authError}
           </Alert>
         ) : null}
@@ -1352,7 +1382,8 @@ export default function CompanyProfile() {
             onClick={handleConfirm}
             color="secondary"
             variant="outlined"
-            className={classes.dialogConfirm}>
+            className={classes.dialogConfirm}
+          >
             Confirm
           </Button>
         </DialogActions>

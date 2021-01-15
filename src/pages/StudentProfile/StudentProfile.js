@@ -324,15 +324,12 @@ export default function StudentProfile() {
   const firstRender = useRef(true);
 
   const getSkillsRepo = async () => {
-    const response = await axios.get(
-      `http://18.213.74.196:8000/api/skill/`,
-      getConfig()
-    );
+    const response = await axios.get(`/skill/`, getConfig());
     setSkills(response.data);
   };
   const getStudentProjects = async () => {
     const response = await axios.post(
-      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      `/student_project/list_by_student`,
       {
         username_id: parseInt(localStorage.getItem("email_id")),
       },
@@ -502,7 +499,7 @@ export default function StudentProfile() {
 
   const updateProfile = async () => {
     axios
-      .post("http://18.213.74.196:8000/api/token/", {
+      .post("/token/", {
         email: email,
         password: password,
       })
@@ -511,7 +508,7 @@ export default function StudentProfile() {
         let slug = localStorage.getItem("slug");
         axios
           .put(
-            `http://18.213.74.196:8000/api/student_profile/${slug}/update`,
+            `/student_profile/${slug}/update`,
             {
               username: localStorage.getItem("email_id"),
               full_name: studentInput.full_name,
@@ -533,7 +530,7 @@ export default function StudentProfile() {
             handleCloseEdit("studentEditBool");
             setDialogOpen(false);
             axios
-              .post("http://18.213.74.196:8000/api/token/", {
+              .post("/token/", {
                 email: email,
                 password: password,
               })
@@ -593,7 +590,8 @@ export default function StudentProfile() {
         <img
           alt="profile background"
           className={classes.profileLogo}
-          src={StudentDashboard}></img>
+          src={StudentDashboard}
+        ></img>
         <>
           {studentEdit.studentEditBool === false ? (
             <Grid container justify="flex-end" style={{ paddingRight: "20px" }}>
@@ -602,7 +600,8 @@ export default function StudentProfile() {
                 className={classes.icon}
                 onClick={() => {
                   handleOpenEdit("studentEditBool");
-                }}>
+                }}
+              >
                 <EditTwoToneIcon />
               </IconButton>
             </Grid>
@@ -611,7 +610,8 @@ export default function StudentProfile() {
               container
               justify="space-between"
               alignItems="center"
-              style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+              style={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
               <Typography>
                 <span className={classes.labelAsterisk}>*</span> - Required
                 Fields
@@ -622,7 +622,8 @@ export default function StudentProfile() {
                   className={classes.icon}
                   onClick={() => {
                     handleCancel();
-                  }}>
+                  }}
+                >
                   <ClearRoundedIcon />
                 </IconButton>
                 <IconButton
@@ -630,7 +631,8 @@ export default function StudentProfile() {
                   className={classes.icon}
                   onClick={() => {
                     handleSave();
-                  }}>
+                  }}
+                >
                   <CheckRoundedIcon style={{ color: "green" }} />
                 </IconButton>
               </div>
@@ -646,7 +648,8 @@ export default function StudentProfile() {
               {studentEdit.studentEditBool === false ? (
                 <div
                   className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}>
+                  style={{ justifyContent: "space-between" }}
+                >
                   <div className={classes.flexColumn}>
                     <Typography className={classes.sectionHeader}>
                       Student Description
@@ -661,7 +664,8 @@ export default function StudentProfile() {
                   <div>
                     <FormControl
                       className={classes.fullWidth}
-                      error={errors.student_description && studentInput === ""}>
+                      error={errors.student_description && studentInput === ""}
+                    >
                       <Typography className={classes.sectionHeader}>
                         Student Description
                         {studentEdit.studentEditBool ? (
@@ -680,7 +684,8 @@ export default function StudentProfile() {
                             ...studentInput,
                             student_description: e.target.value,
                           });
-                        }}></TextField>
+                        }}
+                      ></TextField>
                       {errors.student_description &&
                       studentInput.student_description === "" ? (
                         <FormHelperText>
@@ -704,13 +709,11 @@ export default function StudentProfile() {
                   Academic
                 </Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
+                  className={classes.sectionContent}
+                >{`Graduation Date: ${studentInfo.graduation_date}`}</Typography>
                 <Typography
-                  className={
-                    classes.sectionContent
-                  }>{`Degree: ${studentInfo.degree}`}</Typography>
+                  className={classes.sectionContent}
+                >{`Degree: ${studentInfo.degree}`}</Typography>
                 <Typography className={classes.sectionContent}>
                   {" "}
                   {`Major: ${studentInfo.major}`}
@@ -760,7 +763,8 @@ export default function StudentProfile() {
                             ...studentInput,
                             degree: e.target.value,
                           });
-                        }}>
+                        }}
+                      >
                         <option value="Undergraduate">Undergraduate</option>
                         <option value="Graduate">Graduate</option>
                       </select>
@@ -783,7 +787,8 @@ export default function StudentProfile() {
                             ...studentInput,
                             major: e.target.value,
                           });
-                        }}>
+                        }}
+                      >
                         <optgroup label="Gerald D. Hines College of Architecture and Design">
                           <option value="Architecture">Architecture</option>
                           <option value="Environmental Design">
@@ -1057,7 +1062,8 @@ export default function StudentProfile() {
                 <Grid container spacing={4}>
                   <Grid item>
                     <FormControl
-                      error={errors.contact_email && studentInput === ""}>
+                      error={errors.contact_email && studentInput === ""}
+                    >
                       <Typography>
                         Contact Email
                         {studentEdit.studentEditBool ? (
@@ -1085,7 +1091,8 @@ export default function StudentProfile() {
                   </Grid>
                   <Grid item>
                     <FormControl
-                      error={errors.phoneNumber && studentInput === ""}>
+                      error={errors.phoneNumber && studentInput === ""}
+                    >
                       <Typography>
                         Phone Number
                         {studentEdit.studentEditBool ? (
@@ -1130,7 +1137,8 @@ export default function StudentProfile() {
                       component="span"
                       variant="body2"
                       className={classes.inline}
-                      color="textPrimary">
+                      color="textPrimary"
+                    >
                       {`${studentInfo.streetAddress},  ${studentInfo.city}, ${studentInfo.state} ${studentInfo.zipcode}`}
                     </Typography>
                   </React.Fragment>
@@ -1143,11 +1151,13 @@ export default function StudentProfile() {
                   direction="row"
                   justify="flex-start"
                   alignItems="flex-start"
-                  spacing={2}>
+                  spacing={2}
+                >
                   <Grid container id="first-left" item xs={12} direction="row">
                     <Grid item lg={3} xs={12} md={6}>
                       <FormControl
-                        error={errors.streetAddress && studentInput === ""}>
+                        error={errors.streetAddress && studentInput === ""}
+                      >
                         <Typography>
                           Street Address
                           {studentEdit.studentEditBool ? (
@@ -1218,7 +1228,8 @@ export default function StudentProfile() {
                             });
                           }}
                           name="state"
-                          placeholder="state">
+                          placeholder="state"
+                        >
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -1232,7 +1243,8 @@ export default function StudentProfile() {
                     </Grid>
                     <Grid item lg={3} xs={12} md={6}>
                       <FormControl
-                        error={errors.zipcode && studentInput === ""}>
+                        error={errors.zipcode && studentInput === ""}
+                      >
                         <Typography>
                           Zipcode
                           {studentEdit.studentEditBool ? (
@@ -1339,7 +1351,8 @@ export default function StudentProfile() {
                     error={
                       errors.student_skills &&
                       studentInput.student_skills.length === 0
-                    }>
+                    }
+                  >
                     {errors.student_skills}
                   </FormHelperText>
                 ) : null}
@@ -1356,7 +1369,8 @@ export default function StudentProfile() {
                         <Select
                           onChange={handleSkillChange}
                           className={classes.select}
-                          value={skillName}>
+                          value={skillName}
+                        >
                           <MenuItem value="">
                             <em>None</em>
                           </MenuItem>
@@ -1380,7 +1394,8 @@ export default function StudentProfile() {
                       <Select
                         value={experience}
                         className={classes.select}
-                        onChange={handleExpChange}>
+                        onChange={handleExpChange}
+                      >
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
@@ -1395,7 +1410,8 @@ export default function StudentProfile() {
                       variant="outlined"
                       color="secondary"
                       onClick={addSkill}
-                      disabled={skillName === "" || experience === ""}>
+                      disabled={skillName === "" || experience === ""}
+                    >
                       Add Skill
                     </Button>
                   </Grid>
@@ -1422,13 +1438,15 @@ export default function StudentProfile() {
         <Dialog
           onClose={handleDialogClose}
           open={dialogOpen}
-          className={classes.dialog}>
+          className={classes.dialog}
+        >
           <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
           {authError ? (
             <Alert
               className={classes.loginAlert}
               variant="filled"
-              severity="error">
+              severity="error"
+            >
               {authError}
             </Alert>
           ) : null}
@@ -1462,7 +1480,8 @@ export default function StudentProfile() {
               onClick={handleConfirm}
               color="secondary"
               variant="outlined"
-              className={classes.dialogConfirm}>
+              className={classes.dialogConfirm}
+            >
               Confirm
             </Button>
           </DialogActions>
@@ -1488,7 +1507,8 @@ export default function StudentProfile() {
       <Snackbar
         open={updateFailed}
         autoHideDuration={6000}
-        onClose={handleCloseUpdateFailed}>
+        onClose={handleCloseUpdateFailed}
+      >
         <Alert onClose={handleCloseUpdateFailed} severity="error">
           {alert}
         </Alert>

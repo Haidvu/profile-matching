@@ -103,11 +103,11 @@ export default function Dashboard() {
     if (slug) {
       let url;
       if (role_id === "0") {
-        url = `http://18.213.74.196:8000/api/student_profile/${slug}`;
+        url = `/student_profile/${slug}`;
       } else if (role_id === "1") {
-        url = `http://18.213.74.196:8000/api/company_profile/${slug}`;
+        url = `/company_profile/${slug}`;
       } else if (role_id === "2") {
-        url = `http://18.213.74.196:8000/api/website_admin_profile/1`;
+        url = `/website_admin_profile/1`;
       }
       axios
         .get(url, getConfig())
@@ -171,7 +171,8 @@ export default function Dashboard() {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                className={classes.menuButton}>
+                className={classes.menuButton}
+              >
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6">| Future Start |</Typography>
@@ -196,7 +197,8 @@ export default function Dashboard() {
                 }}
                 ModalProps={{
                   keepMounted: true, // Better open performance on mobile.
-                }}>
+                }}
+              >
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>
@@ -220,7 +222,8 @@ export default function Dashboard() {
                   paper: classes.drawerPaper,
                 }}
                 variant="permanent"
-                open>
+                open
+              >
                 <Toolbar />
                 <div className={classes.drawerContainer}>
                   <List>
