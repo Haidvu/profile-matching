@@ -105,7 +105,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const AdminTable = ({ loading, matchingList }) => {
+const AdminMatchingTable = ({ loading, matchingList }) => {
     const classes = useStyles();
     let { url } = useRouteMatch();
     const columns = [
@@ -224,4 +224,4 @@ const AdminTable = ({ loading, matchingList }) => {
     );
 };
 
-export default AdminTable;
+export default AdminMatchingTable;

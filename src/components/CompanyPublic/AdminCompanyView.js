@@ -98,7 +98,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     height: "200px",
     alignItems: 'center',
-
   },
   divProjectName: {
     alignItems: "flex-end",
@@ -272,5 +271,3 @@ export default function AdminCompanyView({ match }) {
     </>
   );
 }
-
-

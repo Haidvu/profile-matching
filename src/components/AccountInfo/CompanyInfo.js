@@ -142,12 +142,19 @@ const CompanyInfo = () => {
         getConfig()
       )
       .then((res) => {  
-        setIndustryTypes(res.data);
+        const data = res.data.industry_type.map((item, index) => {
+          return {
+            label: item,
+            value: index,
+          };
+        });
+        setIndustryTypes(data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+  
   const handleChangeFirst = (e) => {
     setCompanyFirst({
       ...companyFirst,
@@ -318,6 +325,7 @@ const CompanyInfo = () => {
   };
 
   return (
+    
     <Container component="main" maxwidth="xs">
       <div className={classes.root}>
         <Typography component="h1" variant="h5">
@@ -377,11 +385,12 @@ const CompanyInfo = () => {
                         onChange={handleChangeFirst}
                         name="industryType">
                         {industryTypes.map((item) => (
-                          <MenuItem key={item.industry_type} value={item.industry_type}>
-                            {item.industry_type}
+                          <MenuItem key={item.label} value={item.label}>
+                            {item.label}
                           </MenuItem>
                         ))}
-                      </Select>
+                        </Select>
+                      
                       {errorsFirst.industryType &&
                       companyFirst.industryType === "" ? (
                         <FormHelperText>

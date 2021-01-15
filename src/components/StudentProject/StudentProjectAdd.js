@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   selectTech: {
     marginTop: "5px",
     marginBottom: "5px",
+    fontSize: "16px"
   },
 }));
 
@@ -235,8 +236,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             required
             variant="outlined"
             name="project_name"
-            helperText="Please enter an unique project name"
-            inputProps={{ maxLength: 500 }}
+            helperText={` Please enter an unique project name. ${studentInput.project_name.length}/200`}
+            inputProps={{ maxLength: 200 }}
             value={studentInput.project_name || ""}
             onChange={(e) => {
               setStudentInput({
@@ -255,6 +256,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             variant="outlined"
             name="project_role"
             inputProps={{ maxLength: 50 }}
+            helperText={`${studentInput.project_role.length}/50`}
             value={studentInput.project_role || ""}
             onChange={(e) => {
               setStudentInput({
@@ -296,7 +298,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             id="filled-multiline-static"
             multiline
             rows={4}
-            helperText="Project Description"
+            helperText={`Project Description. ${studentInput.project_description.length}/500`}
             required
             variant="outlined"
             fullWidth
@@ -313,7 +315,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
           <TextField
             margin="dense"
             id="outlined-static"
-            helperText="Student Project Link"
+            helperText={`Student Project Link. ${studentInput.project_link.length}/200`}
             fullWidth
             variant="outlined"
             name="project_link"

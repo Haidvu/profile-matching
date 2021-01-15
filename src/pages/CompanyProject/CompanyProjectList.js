@@ -269,6 +269,7 @@ export default function CompanyProject() {
                       />
                       <CardContent className={classes.cardContent}>
                         <Typography
+                        style={{wordBreak: 'break-all' }}
                           gutterBottom
                           variant="h5"
                           component="h2"

@@ -5,7 +5,6 @@ import { StaticMap } from "react-map-gl";
 import { MapView } from "@deck.gl/core";
 import locationIconAtlas from "../../assets/location-icon-atlas.png";
 import locationIconMapping from "../../assets/location-icon-mapping.json";
-import mapStyleJson from "../../assets/MapStyle.json";
 import { getConfig } from "../../authConfig";
 import axios from "axios";
 
@@ -23,24 +22,33 @@ const INITIAL_VIEW_STATE = {
 const TOKEN =
     "pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
 
+    function getTooltip({object}) {
+      return (
+        object && {
+          html: `\
+      <div style="width:250px">
+      <div><b>Company Information</b></div>
+      <div>Name: ${object.name}</div>
+      <div>Address: ${object.address}</div>
+      <div>Description: ${object.description}</div>
+      <div>Email: ${object.contact_email}</div>
+      <div>Contact: ${object.phone}</div>
+      <div>Website: ${object.website}</div>
+      <div>
+
+      `
+        }
+      );
+    }
+
 export default function AdminMap({
   iconMapping = locationIconMapping,
   iconAtlas = locationIconAtlas,
-  mapStyle = mapStyleJson
+ 
 }) {
-  const [hoverInfo, setHoverInfo] = useState({});
 
-  const hideTooltip = () => {
-    setHoverInfo({});
-  };
-  const expandTooltip = (info) => {
-    if (info.picked) {
-      setHoverInfo(info);
-    } else {
-      setHoverInfo({});
-    }
-  };
 
+const mapStyle = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
   
 const [data,setData] = useState([])
   const layerProps = {
@@ -48,8 +56,7 @@ const [data,setData] = useState([])
     pickable: true,
     getPosition: (d) => d.coordinates,
     iconAtlas,
-    iconMapping,
-    onHover: !hoverInfo.objects && setHoverInfo,
+    iconMapping
   };
 
 const getAddress = (address) => {
@@ -88,24 +95,28 @@ useEffect(() => {
     sizeUnits: "meters",
     sizeScale: 2000,
     sizeMinPixels: 30,
+    pickable: true
   });
   return (
+    
     <DeckGL
+    width={"100%"}
       layers={[layer]}
       views={MAP_VIEW}
       initialViewState={INITIAL_VIEW_STATE}
-      controller={{ dragRotate: false }}
-      onViewStateChange={hideTooltip}
-      onClick={expandTooltip}
-      getTooltip={({ object }) => object && `Name: ${object.name}\n Address: ${object.address}\n Description: ${object.description}\n Email: ${object.contact_email}\n Contact: ${object.phone}\n Website: ${object.website}`}
+      controller={true}
+      getTooltip={getTooltip}
+      useDevicePixels={false}
     >
       <StaticMap
+      
         reuseMaps
         mapStyle={mapStyle}
         mapboxApiAccessToken={TOKEN}
         preventStyleDiffing={true}
       />
     </DeckGL>
+    
   );
 }
 
