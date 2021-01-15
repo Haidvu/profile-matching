@@ -70,7 +70,7 @@ export default function SignUp() {
     } else {
       setError("");
       axios
-        .post("http://18.213.74.196:8000/api/user_accounts/signup", signUpInfo)
+        .post("/user_accounts/signup", signUpInfo)
         .then((res) => {
           if (res.data.error) {
             setError(res.data.error);
@@ -78,14 +78,12 @@ export default function SignUp() {
             //authenticate again after the user is created
             const email = signUpInfo.email;
             const password = signUpInfo.password1;
-            axios
-              .post("http://18.213.74.196:8000/api/token/", { email, password })
-              .then((res) => {
-                localStorage.setItem("token", res.data.access);
-                localStorage.setItem("role_id", res.data.role_id);
-                localStorage.setItem("email_id", res.data.email_id);
-                history.push("/accountInfo");
-              });
+            axios.post("/token/", { email, password }).then((res) => {
+              localStorage.setItem("token", res.data.access);
+              localStorage.setItem("role_id", res.data.role_id);
+              localStorage.setItem("email_id", res.data.email_id);
+              history.push("/accountInfo");
+            });
           }
         })
         .catch((err) => console.log(err));

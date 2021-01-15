@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   selectTech: {
     marginTop: "5px",
     marginBottom: "5px",
-    fontSize: "16px"
+    fontSize: "16px",
   },
 }));
 
@@ -69,7 +69,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-  const [alert,setAlert] = useState("");
+  const [alert, setAlert] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -118,7 +118,10 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
       setUpdateFailed(true);
       return false;
     } else if (!studentInput.project_in_progress) {
-      if (studentInput.project_end_date === "" || !studentInput.project_end_date) {
+      if (
+        studentInput.project_end_date === "" ||
+        !studentInput.project_end_date
+      ) {
         setAlert(
           'Please enter an end date for the project or select "project in progress"'
         );
@@ -164,11 +167,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         project_role: studentInput.project_role,
       };
       axios
-        .post(
-          "http://18.213.74.196:8000/api/student_project/create",
-          data,
-          getConfig()
-        )
+        .post("/student_project/create", data, getConfig())
         .then((res) => {
           const newProject = {
             project_id: res.data.project_id,
@@ -399,7 +398,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         <Snackbar
           open={updateFailed}
           autoHideDuration={6000}
-          onClose={handleCloseUpdateFailed}>
+          onClose={handleCloseUpdateFailed}
+        >
           <Alert onClose={handleCloseUpdateFailed} severity="error">
             {alert}
           </Alert>
