@@ -3,7 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 
-export default function ContactInfoForm() {
+export default function ContactInfoForm({ reportDetails, setReportDetails }) {
+  const { first_name, last_name, contact_email, contact_phone } = reportDetails
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -18,6 +20,7 @@ export default function ContactInfoForm() {
             label="First Name"
             fullWidth
             autoComplete="First Name"
+            handleChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -28,6 +31,7 @@ export default function ContactInfoForm() {
             label="Last Name"
             fullWidth
             autoComplete="LastName"
+            handleChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -38,6 +42,7 @@ export default function ContactInfoForm() {
             label="Email"
             fullWidth
             autoComplete="email"
+            handleChange={handleChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -48,6 +53,7 @@ export default function ContactInfoForm() {
             label="Phone Number"
             fullWidth
             autoComplete="phoneNumber"
+            handleChange={handleChange}
           />
         </Grid>
       </Grid>

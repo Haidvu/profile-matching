@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
@@ -7,11 +7,12 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+
 import IssueForm from "./IssueForm";
 import ContactInfoForm from "./ContactInfoForm";
 import ReviewSubmissionForm from "./ReviewSubmissionForm";
 
-
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -55,23 +56,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ["Summary", "Contact Info", "Review your submission"];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <IssueForm />;
-    case 1:
-      return <ContactInfoForm />;
-    case 2:
-      return <ReviewSubmissionForm />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
 
 export default function Checkout() {
   const classes = useStyles();
+
+  const steps = ["Summary", "Contact Info", "Review your submission"];
+
+  const props = { reportDetails, setReportDetails, setActiveStep }
+
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <IssueForm {...props} />;
+      case 1:
+        return <ContactInfoForm {...props} />;
+      case 2:
+        return <ReviewSubmissionForm {...props} />;
+      default:
+        throw new Error("Unknown step");
+    }
+  } 
+
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -80,6 +87,37 @@ export default function Checkout() {
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+  };
+
+  const [reportDetails, setReportDetails] = useState({
+    first_name: "",
+    last_name: "",
+    contact_email: "",
+    contact_phone: "",
+    issue_summary: "",
+  });
+
+  const handleChange = (e) => {
+    setReportDetails({
+      ...reportDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleClickSubmitIssue = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        "http://18.213.74.196:8000/api/issue_report/create",
+        reportDetails
+        )
+        .then((res) => {
+          setReportDetails(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   };
 
   return (
@@ -113,13 +151,14 @@ export default function Checkout() {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
+                    <Button handleBack={handleBack} className={classes.button}>
                       Back
                     </Button>
                   )}
                   <Button
                     variant="contained"
-                    onClick={handleNext}
+                    handleNext={handleNext}
+                    onClick={handleClickSubmitIssue}
                     className={classes.button}
                   >
                     {activeStep === steps.length - 1 ? "Submit Issue" : "Next"}

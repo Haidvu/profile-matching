@@ -3,7 +3,9 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 
-export default function IssueForm() {
+export default function IssueForm({ reportDetails, setReportDetails }) {
+  const issue_summary = reportDetails;
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -20,8 +22,10 @@ export default function IssueForm() {
             required
             variant="outlined"
             fullWidth
-            inputProps={{ maxLength: 1000 }}
+            inputProps={{ maxLength: 750 }}
             name="issueSummary"
+            value={issue_summary}
+            onChange={setReportDetails}
           />
         </Grid>
       </Grid>
