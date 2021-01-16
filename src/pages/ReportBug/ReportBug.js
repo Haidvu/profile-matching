@@ -48,7 +48,7 @@ export default function ReportBug() {
     },
     issue_summary: {
       error: "",
-      validate: "text",
+      validate: "",
       maxLength: 750,
     },
   };

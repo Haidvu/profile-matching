@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -60,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     justifyContent: "flex-end",
   },
+  grid: {
+    display: "inline-block",
+    overflow: "auto",
+  },
 }));
 
 // Destructure props
@@ -90,62 +95,69 @@ const Confirm = ({ handleNext, handleBack, values }) => {
       <React.Fragment>
         <main className={classes.layout}>
           <Paper className={classes.paper}>
-            <List disablePadding>
-              <ListItem>
-                <ListItemText
-                  primary="Issue Summary"
-                  secondary={issue_summary}
-                />
-              </ListItem>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <List disablePadding>
+                  <ListItem>
+                    <ListItemText
+                      primary="Issue Summary"
+                      secondary={issue_summary}
+                      className={classes.grid}
+                    />
+                  </ListItem>
 
-              <Divider />
-              <ListItem>
-                <ListItemText primary="First Name" secondary={first_name} />
-              </ListItem>
+                  <Divider />
+                  <ListItem>
+                    <ListItemText primary="First Name" secondary={first_name} />
+                  </ListItem>
 
-              <Divider />
+                  <Divider />
 
-              <ListItem>
-                <ListItemText primary="Last Name" secondary={last_name} />
-              </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Last Name" secondary={last_name} />
+                  </ListItem>
 
-              <Divider />
+                  <Divider />
 
-              <ListItem>
-                <ListItemText
-                  primary="Email Address"
-                  secondary={contact_email}
-                />
-              </ListItem>
+                  <ListItem>
+                    <ListItemText
+                      primary="Email Address"
+                      secondary={contact_email}
+                    />
+                  </ListItem>
 
-              <Divider />
+                  <Divider />
 
-              <ListItem>
-                <ListItemText
-                  primary="Phone"
-                  secondary={
-                    contact_phone.length > 0 ? contact_phone : "Not Provided"
-                  }
-                />
-              </ListItem>
-            </List>
+                  <ListItem>
+                    <ListItemText
+                      primary="Phone"
+                      secondary={
+                        contact_phone.length > 0
+                          ? contact_phone
+                          : "Not Provided"
+                      }
+                    />
+                  </ListItem>
+                </List>
 
-            <div className={classes.buttons}>
-              <Button
-                className={classes.backButton}
-                variant="contained"
-                onClick={handleBack}
-              >
-                Back
-              </Button>
-              <Button
-                className={classes.button}
-                variant="contained"
-                onClick={handleSubmit}
-              >
-                Confirm & Continue
-              </Button>
-            </div>
+                <div className={classes.buttons}>
+                  <Button
+                    className={classes.backButton}
+                    variant="contained"
+                    onClick={handleBack}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    onClick={handleSubmit}
+                  >
+                    Confirm & Continue
+                  </Button>
+                </div>
+              </Grid>
+            </Grid>
           </Paper>
         </main>
       </React.Fragment>
