@@ -212,8 +212,7 @@ export default function CompanySearch() {
           direction="column"
           justify="space-between"
           spacing={2}
-          alignItems="center"
-        >
+          alignItems="center">
           <Grid
             container
             id="first-left"
@@ -221,8 +220,7 @@ export default function CompanySearch() {
             item
             xs={12}
             spacing={4}
-            direction="row"
-          >
+            direction="row">
             <Grid item>
               <Typography className={classes.SearchLabels} variant="h6">
                 Keyword
@@ -232,8 +230,7 @@ export default function CompanySearch() {
                       Press enter to save your keywords after you type them.
                       <br /> This will search the entire student description.
                     </p>
-                  }
-                >
+                  }>
                   <IconButton className={classes.ButtonHelp}>
                     <HelpIcon />
                   </IconButton>
@@ -259,8 +256,7 @@ export default function CompanySearch() {
                 name="major"
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, major: e.target.value });
-                }}
-              >
+                }}>
                 <option value="">Select Major</option>
                 <optgroup label="Gerald D. Hines College of Architecture and Design">
                   <option value="Architecture">Architecture</option>
@@ -491,8 +487,7 @@ export default function CompanySearch() {
                     degree_level: e.target.value,
                   });
                 }}
-                className={classes.DegreeSearch}
-              >
+                className={classes.DegreeSearch}>
                 <option value="">Select Degree type</option>
                 <option value="Undergraduate">Undergraduate</option>
                 <option value="Graduate">Graduate</option>
@@ -547,25 +542,19 @@ export default function CompanySearch() {
                     ...searchInput,
                     zipcode: e.target.value,
                   });
-                }}
-              ></TextField>
+                }}></TextField>
               <Button
                 variant="contained"
                 color="secondary"
                 className={classes.SearchButton}
-                onClick={handleClick}
-              >
+                onClick={handleClick}>
                 Search
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </div>
-      <div>
-        <Grid>
-          <StudentsLists loading={loading} studentsList={studentsList} />
-        </Grid>
-      </div>
+      <StudentsLists loading={loading} studentsList={studentsList} />
     </div>
   );
 }

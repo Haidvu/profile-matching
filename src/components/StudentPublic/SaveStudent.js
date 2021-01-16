@@ -136,7 +136,10 @@ const SaveStudent = ({ studentId }) => {
   return (
     <>
       {loading ? null : (
-        <Grid direction="row" className={classes.saveProfileContainer}>
+        <Grid
+          container
+          direction="row"
+          className={classes.saveProfileContainer}>
           {companyProjectsToShow.length > 0 ? (
             <>
               <Typography className={classes.containerTitle}>
@@ -150,7 +153,7 @@ const SaveStudent = ({ studentId }) => {
                         {project.project_name}
                       </Typography>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={3} lg={3}>
+                    <Grid item xs={8} sm={8} md={5} xl={5}>
                       <FormControl className={classes.formControl}>
                         <InputLabel>Preference</InputLabel>
                         <Select
@@ -160,8 +163,7 @@ const SaveStudent = ({ studentId }) => {
                           className={classes.preference}
                           onChange={(e) => {
                             return handleChange(e, project.project_name);
-                          }}
-                        >
+                          }}>
                           <MenuItem value={3}>Highest</MenuItem>
                           <MenuItem value={2}>Intermediate</MenuItem>
                           <MenuItem value={1}>Lowest</MenuItem>
@@ -173,8 +175,9 @@ const SaveStudent = ({ studentId }) => {
                         variant="outlined"
                         color="secondary"
                         onClick={handleSave}
-                        disabled={saveStudent.project_id !== project.project_id}
-                      >
+                        disabled={
+                          saveStudent.project_id !== project.project_id
+                        }>
                         Save
                       </Button>
                     </Grid>
@@ -192,8 +195,7 @@ const SaveStudent = ({ studentId }) => {
           <Snackbar
             open={addSuccess}
             autoHideDuration={6000}
-            onClose={handleCloseAddSucess}
-          >
+            onClose={handleCloseAddSucess}>
             <Alert onClose={handleCloseAddSucess} severity="success">
               This student was saved to project {nameProjectToSave}! Please
               check this student in the 'My Projects/My Team' tab
@@ -202,8 +204,7 @@ const SaveStudent = ({ studentId }) => {
           <Snackbar
             open={addFailed}
             autoHideDuration={6000}
-            onClose={handleCloseAddFailed}
-          >
+            onClose={handleCloseAddFailed}>
             <Alert onClose={handleCloseAddFailed} severity="error">
               There was a problem when saving this student to{" "}
               {nameProjectToSave}

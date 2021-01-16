@@ -9,6 +9,7 @@ import {
   Chip,
   ListItemText,
   LinearProgress,
+  Dialog,
 } from "@material-ui/core";
 import {
   VerticalTimeline,
@@ -25,6 +26,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import SaveStudent from "./SaveStudent";
 import PersonIcon from "@material-ui/icons/Person";
+
+import SpeedDial from "@material-ui/lab/SpeedDial";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
+
+import SaveIcon from "@material-ui/icons/Save";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -52,8 +59,8 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     width: "100%",
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(5),
+    //backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(3),
   },
   skills: {
     position: "relative",
@@ -179,13 +186,22 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: theme.palette.text.primary,
   },
+  speedDial: {
+    position: "absolute",
+    right: theme.spacing(1),
+    marginTop: theme.spacing(2),
+  },
 }));
+
+const actions = [{ icon: <SaveIcon />, name: "Save Project" }];
 
 const StudentDetailed = ({ match }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [student, setStudent] = useState();
   const [studentProjects, setStudentProjects] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const getStudent = useCallback(() => {
     const student = axios.get(
@@ -213,112 +229,176 @@ const StudentDetailed = ({ match }) => {
   useEffect(() => {
     getStudent();
   }, [getStudent]);
+
+  const openDialog = () => {
+    setDialogOpen(false);
+  };
   return (
     <>
       {loading ? (
         <LinearProgress color="secondary" />
       ) : (
         <>
-          <List className={classes.root}>
-            <ListItem>
-              <ListItemIcon edge="start">
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <div
-                  className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <div className={classes.flexColumn}>
-                    <Typography className={classes.sectionHeader}>
-                      Name
-                    </Typography>
-                    <Typography className={classes.sectionContent}>
-                      {student.full_name}
-                    </Typography>
+          <Grid container>
+            <List className={classes.root}>
+              <ListItem>
+                <ListItemIcon edge="start">
+                  <PersonIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <div
+                    className={classes.flexRow}
+                    style={{ justifyContent: "space-between" }}>
+                    <div className={classes.flexColumn}>
+                      <Typography className={classes.sectionHeader}>
+                        Name
+                      </Typography>
+                      <Typography className={classes.sectionContent}>
+                        {student.full_name}
+                      </Typography>
+                    </div>
                   </div>
-                </div>
-              </ListItemText>
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem>
-              <ListItemIcon edge="start">
-                <FormatListBulletedTwoToneIcon />
-              </ListItemIcon>
-              <ListItemText>
-                <div
-                  className={classes.flexRow}
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <div className={classes.flexColumn}>
-                    <Typography className={classes.sectionHeader}>
-                      Bio
-                    </Typography>
-                    <Typography className={classes.sectionContent}>
-                      {student.student_description}
-                    </Typography>
+                </ListItemText>
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+
+              <ListItem>
+                <ListItemIcon edge="start">
+                  <FormatListBulletedTwoToneIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <div
+                    className={classes.flexRow}
+                    style={{ justifyContent: "space-between" }}>
+                    <div className={classes.flexColumn}>
+                      <Typography className={classes.sectionHeader}>
+                        Bio
+                      </Typography>
+                      <Typography className={classes.sectionContent}>
+                        {student.student_description}
+                      </Typography>
+                    </div>
                   </div>
+                </ListItemText>
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <SchoolRoundedIcon />
+                </ListItemIcon>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Academic
+                  </Typography>
+
+                  <Typography
+                    className={
+                      classes.sectionContent
+                    }>{`Degree: ${student.degree}`}</Typography>
+                  <Typography className={classes.sectionContent}>
+                    {" "}
+                    {`Major: ${student.major}`}
+                  </Typography>
                 </div>
-              </ListItemText>
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <SchoolRoundedIcon />
-              </ListItemIcon>
-              <div className={classes.flexColumn}>
-                <Typography className={classes.sectionHeader}>
-                  Academic
-                </Typography>
-                <Typography
-                  className={classes.sectionContent}
-                >{`Graduation Date: ${student.graduation_date}`}</Typography>
-                <Typography
-                  className={classes.sectionContent}
-                >{`Degree: ${student.degree}`}</Typography>
-                <Typography className={classes.sectionContent}>
-                  {" "}
-                  {`Major: ${student.major}`}
-                </Typography>
-              </div>
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
-              <ListItemIcon>
-                <StarsIcon />
-              </ListItemIcon>
-              <div className={classes.flexColumn}>
-                <Typography className={classes.sectionHeader}>
-                  Skills
-                </Typography>
-                <ul className={classes.skillRoot}>
-                  {student.student_skills.map((skill) => {
-                    return (
-                      <li key={skill.skill_name}>
-                        <Chip
-                          variant="outlined"
-                          classes={
-                            skill.experience_level === 1
-                              ? {
-                                  root: classes.beginnerChip,
-                                }
-                              : skill.experience_level === 2
-                              ? {
-                                  root: classes.intermediateChip,
-                                }
-                              : {
-                                  root: classes.expertChip,
-                                }
-                          }
-                          label={skill.skill_name}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </ListItem>
-            <Divider variant="inset" component="li" />
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <SchoolRoundedIcon />
+                </ListItemIcon>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Academic
+                  </Typography>
+                  <Typography
+                    className={
+                      classes.sectionContent
+                    }>{`Graduation Date: ${student.graduation_date}`}</Typography>
+                  <Typography
+                    className={
+                      classes.sectionContent
+                    }>{`Degree: ${student.degree}`}</Typography>
+                  <Typography className={classes.sectionContent}>
+                    {" "}
+                    {`Major: ${student.major}`}
+                  </Typography>
+                </div>
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <StarsIcon />
+                </ListItemIcon>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Skills
+                  </Typography>
+                  <ul className={classes.skillRoot}>
+                    {student.student_skills.map((skill) => {
+                      return (
+                        <li key={skill.skill_name}>
+                          <Chip
+                            variant="outlined"
+                            classes={
+                              skill.experience_level === 1
+                                ? {
+                                    root: classes.beginnerChip,
+                                  }
+                                : skill.experience_level === 2
+                                ? {
+                                    root: classes.intermediateChip,
+                                  }
+                                : {
+                                    root: classes.expertChip,
+                                  }
+                            }
+                            label={skill.skill_name}
+                          />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+            </List>
+          </Grid>
+
+          <Grid item>
+            <SpeedDial
+              ariaLabel="SpeedDial tooltip example"
+              className={classes.speedDial}
+              icon={<SpeedDialIcon />}
+              onClose={() => {
+                setOpen(false);
+              }}
+              onOpen={() => {
+                setOpen(true);
+              }}
+              open={open}
+              direction="down"
+              FabProps={{ color: "secondary" }}>
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                  tooltipOpen
+                  onClick={() => setDialogOpen(true)}
+                />
+              ))}
+            </SpeedDial>
+          </Grid>
+
+          <Grid item container>
             {studentProjects.length > 0 ? (
               <ListItem alignItems="flex-start">
                 <Grid container>
@@ -335,8 +415,7 @@ const StudentDetailed = ({ match }) => {
                   <Grid item xs={12}>
                     <VerticalTimeline
                       layout={"1-column-left"}
-                      className={classes.projectsContainer}
-                    >
+                      className={classes.projectsContainer}>
                       {studentProjects.map((project, index) => (
                         <VerticalTimelineElement
                           className={classes.IconStyle}
@@ -345,8 +424,7 @@ const StudentDetailed = ({ match }) => {
                             borderRight: "7px solid #C8102E",
                           }}
                           key={index}
-                          icon={<WebRoundedIcon />}
-                        >
+                          icon={<WebRoundedIcon />}>
                           <h3 className={classes.verticalElementTitle}>
                             {project.project_name}
                           </h3>
@@ -354,27 +432,29 @@ const StudentDetailed = ({ match }) => {
                             {project.project_role}
                           </h5>
                           {project.project_tech
-                            .split(",")
-                            .map((skill, index) => (
-                              <Chip
-                                label={skill}
-                                variant="outlined"
-                                classes={
-                                  skill.experience_level === 1
-                                    ? {
-                                        root: classes.beginnerChip,
-                                      }
-                                    : skill.experience_level === 2
-                                    ? {
-                                        root: classes.intermediateChip,
-                                      }
-                                    : {
-                                        root: classes.expertChip,
-                                      }
-                                }
-                                key={index}
-                              />
-                            ))}
+                            ? project.project_tech
+                                .split(",")
+                                .map((skill, index) => (
+                                  <Chip
+                                    label={skill}
+                                    variant="outlined"
+                                    classes={
+                                      skill.experience_level === 1
+                                        ? {
+                                            root: classes.beginnerChip,
+                                          }
+                                        : skill.experience_level === 2
+                                        ? {
+                                            root: classes.intermediateChip,
+                                          }
+                                        : {
+                                            root: classes.expertChip,
+                                          }
+                                    }
+                                    key={index}
+                                  />
+                                ))
+                            : null}
 
                           <p>
                             {project.project_description} {project.student_id}
@@ -385,8 +465,7 @@ const StudentDetailed = ({ match }) => {
                               <br />
                               <a
                                 href={`${project.project_link}`}
-                                className={classes.link}
-                              >
+                                className={classes.link}>
                                 {project.project_link}
                               </a>
                             </Typography>
@@ -404,10 +483,16 @@ const StudentDetailed = ({ match }) => {
                 </Grid>
               </ListItem>
             ) : null}
-          </List>
+          </Grid>
         </>
       )}
-      <SaveStudent studentId={match.params.id}></SaveStudent>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => {
+          setDialogOpen(false);
+        }}>
+        <SaveStudent studentId={match.params.id}></SaveStudent>
+      </Dialog>
     </>
   );
 };

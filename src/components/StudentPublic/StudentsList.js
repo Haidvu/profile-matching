@@ -16,6 +16,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
+  rootChild: {
+    margin: "0 auto",
+    //width: "100%",
+    // marginLeft: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+    // width: "100%",
+  },
   studentName: {
     fontWeight: "bold",
     fontSize: "1rem",
@@ -61,12 +68,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
-  gridRoot: {
-    margin: theme.spacing(2),
-  },
   card: {
     width: "280px",
-    height: "100%",
+    height: "325px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -122,20 +126,15 @@ const StudentsList = ({ loading, studentsList }) => {
                     avatar={<Avatar className={classes.avatar}></Avatar>}
                     title={student.full_name}
                     subheader={`${student.degree} - ${student.major}`}></CardHeader>
-                  <CardContent className={classes.cardContent}>
-                    <Typography className={classes.fieldTitle}>
-                      Graduation Date
-                    </Typography>
-                    <Typography className={classes.fieldValue}>
-                      {student.graduation_date}
-                    </Typography>
-                  </CardContent>
+
                   <CardContent
                     className={`${classes.cardContent} ${classes.noPaddingTop}`}>
-                    <Typography className={classes.fieldTitle} >
+                    <Typography className={classes.fieldTitle}>
                       Description
                     </Typography>
-                    <Typography className={classes.fieldValue} style={{wordBreak: 'break-all' }}>
+                    <Typography
+                      className={classes.fieldValue}
+                      style={{ wordBreak: "break-all" }}>
                       {student.student_description}
                     </Typography>
                   </CardContent>
@@ -147,7 +146,9 @@ const StudentsList = ({ loading, studentsList }) => {
                       className={classes.fieldTitle}>
                       Skills
                     </Typography>
-                    <div className={classes.skillsRoot} style={{ flexWrap: "wrap"}}>
+                    <div
+                      className={classes.skillsRoot}
+                      style={{ flexWrap: "wrap" }}>
                       {student.student_skills.map((skill, index) => (
                         <Chip
                           key={index}

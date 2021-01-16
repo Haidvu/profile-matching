@@ -256,8 +256,7 @@ const CompanyProjectTeam = ({ id }) => {
             to={{
               pathname: `/dashboard/search/${params.row.student_db_id}`,
             }}
-            style={{ textDecoration: "none" }}
-          >
+            style={{ textDecoration: "none" }}>
             <Typography>{params.row.student_name}</Typography>
           </Link>
         );
@@ -286,8 +285,7 @@ const CompanyProjectTeam = ({ id }) => {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
+                id="panel1a-header">
                 <Typography className={classes.heading}>
                   Click here to see the skills
                 </Typography>
@@ -329,8 +327,7 @@ const CompanyProjectTeam = ({ id }) => {
                       className={classes.preference}
                       onChange={(e) =>
                         handleChange(e, params.row.student_db_id)
-                      }
-                    >
+                      }>
                       <MenuItem value={1}>Low</MenuItem>
                       <MenuItem value={2}>Medium</MenuItem>
                       <MenuItem value={3}>High</MenuItem>
@@ -353,8 +350,7 @@ const CompanyProjectTeam = ({ id }) => {
                         params.row.project_id,
                         params.row.student_skills
                       )
-                    }
-                  >
+                    }>
                     Save
                   </Button>
                 </Grid>
@@ -366,8 +362,7 @@ const CompanyProjectTeam = ({ id }) => {
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-                    onClick={() => handleCancel(params.row.student_db_id)}
-                  >
+                    onClick={() => handleCancel(params.row.student_db_id)}>
                     Cancel
                   </Button>
                 </Grid>
@@ -382,8 +377,7 @@ const CompanyProjectTeam = ({ id }) => {
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-                    onClick={() => showFields(params.row.student_db_id)}
-                  >
+                    onClick={() => showFields(params.row.student_db_id)}>
                     Update
                   </Button>
                 </Grid>
@@ -397,8 +391,7 @@ const CompanyProjectTeam = ({ id }) => {
                 className={classes.button}
                 onClick={() => {
                   handleDelete(params.row.id);
-                }}
-              >
+                }}>
                 Delete
               </Button>
             </Grid>
@@ -435,8 +428,7 @@ const CompanyProjectTeam = ({ id }) => {
             <>
               <div
                 style={{ height: "600px", width: "100%" }}
-                className={classes.dataGrid}
-              >
+                className={classes.dataGrid}>
                 <MyDataGrid autoPageSize={true} rows={rows} columns={columns} />
               </div>
             </>
