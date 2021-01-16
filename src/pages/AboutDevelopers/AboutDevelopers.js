@@ -93,8 +93,7 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://avatars2.githubusercontent.com/u/58873590?s=460&v=4"
-                title="Live from space album cover"
+                image="https://avatars3.githubusercontent.com/u/58873590?s=460&u=190a998622e3d85be2ae5fdca839c3bd10f2acc3&v=4"
               />
             </Card>
           </Grid>
@@ -139,10 +138,10 @@ export default function MediaControlCard() {
                     Junior, BS Computer Science (May 2022)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    CS Undergrad at University of Houston.
+                    Minor: Mathematics
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact:
+                    Fun Fact: I'm an amateur carpenter
                   </Typography>
                   <Link href="https://www.linkedin.com/in/haidvu/">
                     <LinkedInIcon className={classes.icon} />
@@ -192,13 +191,13 @@ export default function MediaControlCard() {
                     Sai Patibandla
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    BS Computer Science
+                    Senior, BS Computer Science (Dec 2021)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    CS Undergrad at University of Houston.
+                    Minor: Biology
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact:
+                    Fun Fact: I like doing art
                   </Typography>
                   <Link href="https://www.linkedin.com/in/sai-patibandla-8b6b1715a/">
                     <LinkedInIcon className={classes.icon} />
