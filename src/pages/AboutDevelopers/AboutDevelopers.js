@@ -69,7 +69,6 @@ export default function MediaControlCard() {
           justify="center"
           alignItems="flex-start"
         >
-          {/* <NavBar /> */}
           <Grid item xs={3}>
             <Card className={classes.root}>
               <div className={classes.details}>
