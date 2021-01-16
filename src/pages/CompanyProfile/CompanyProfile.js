@@ -254,10 +254,7 @@ export default function CompanyProfile() {
   const getProfile = useCallback(() => {
     if (slug) {
       axios
-        .get(
-          `http://18.213.74.196:8000/api/company_profile/${slug}`,
-          getConfig()
-        )
+        .get(`/company_profile/${slug}`, getConfig())
         .then((res) => {
           res.data.company_representative_type =
             res.data.company_representative_type + "";
@@ -336,27 +333,24 @@ export default function CompanyProfile() {
     setDialogOpen(true);
   };
 
-    //api for select IndustryType
-    const [industryTypes, setIndustryTypes] = useState([]);
-    useEffect(() => {
-      axios
-        .get(
-          "http://18.213.74.196:8000/api/company_profile/list_industry_type",
-          getConfig()
-        )
-        .then((res) => {  
-          const data = res.data.industry_type.map((item, index) => {
-            return {
-              label: item,
-              value: index,
-            };
-          });
-          setIndustryTypes(data);
-        })
-        .catch((err) => {
-          console.log(err);
+  //api for select IndustryType
+  const [industryTypes, setIndustryTypes] = useState([]);
+  useEffect(() => {
+    axios
+      .get("/company_profile/list_industry_type", getConfig())
+      .then((res) => {
+        const data = res.data.industry_type.map((item, index) => {
+          return {
+            label: item,
+            value: index,
+          };
         });
-    }, []);
+        setIndustryTypes(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -390,7 +384,7 @@ export default function CompanyProfile() {
   const handleConfirm = () => {
     setLoading2(true);
     axios
-      .post("http://18.213.74.196:8000/api/token/", {
+      .post("/token/", {
         email: email,
         password: password,
       })
@@ -412,7 +406,7 @@ export default function CompanyProfile() {
           .then((response) => {
             axios
               .put(
-                `http://18.213.74.196:8000/api/company_profile/${slug}/update`,
+                `/company_profile/${slug}/update`,
                 {
                   username: localStorage.getItem("email_id"),
                   company_name: profileInfo.name,
@@ -444,7 +438,7 @@ export default function CompanyProfile() {
                 setShowEditFields(false);
                 setLoading2(false);
                 axios
-                  .post("http://18.213.74.196:8000/api/token/", {
+                  .post("/token/", {
                     email: email,
                     password: password,
                   })
@@ -494,7 +488,8 @@ export default function CompanyProfile() {
             <img
               alt="profile logo"
               className={classes.profileLogo}
-              src={CompanyDashboard}></img>
+              src={CompanyDashboard}
+            ></img>
           </div>
           {showEditFields ? (
             <Typography style={{ padding: "20px" }}>
@@ -519,7 +514,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.name}
                         </Typography>
                       </React.Fragment>
@@ -541,8 +537,10 @@ export default function CompanyProfile() {
                           asterisk: classes.labelAsterisk,
                         },
                       }}
+                      helperText={`${profileInfo.name.length}/50`}
                       inputProps={{ maxLength: 50 }}
-                      error={updateErrors.company_name !== ""}></TextField>
+                      error={updateErrors.company_name !== ""}
+                    ></TextField>
                     {updateErrors.company_name ? (
                       <Typography color="error">
                         {updateErrors.company_name}
@@ -554,7 +552,8 @@ export default function CompanyProfile() {
                   <IconButton
                     edge="end"
                     className={classes.icon}
-                    onClick={handleOpenEdit}>
+                    onClick={handleOpenEdit}
+                  >
                     <EditTwoToneIcon />
                   </IconButton>
                 ) : null}
@@ -578,7 +577,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyMission}
                         </Typography>
                       </React.Fragment>
@@ -603,7 +603,8 @@ export default function CompanyProfile() {
                         },
                       }}
                       inputProps={{ maxLength: 225 }}
-                      error={updateErrors.company_mission !== ""}></TextField>
+                      error={updateErrors.company_mission !== ""}
+                    ></TextField>
                     {updateErrors.company_mission ? (
                       <Typography>{updateErrors.company_mission}</Typography>
                     ) : null}
@@ -629,7 +630,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyDescription}
                         </Typography>
                       </React.Fragment>
@@ -645,7 +647,7 @@ export default function CompanyProfile() {
                       onChange={handleChange}
                       name="companyDescription"
                       required
-                      helperText={`${profileInfo.companyDescription.length}/ 225`}
+                      helperText={`${profileInfo.companyDescription.length}/500`}
                       InputLabelProps={{
                         classes: {
                           root: classes.inputLabel,
@@ -653,9 +655,8 @@ export default function CompanyProfile() {
                         },
                       }}
                       inputProps={{ maxLength: 500 }}
-                      error={
-                        updateErrors.company_description !== ""
-                      }></TextField>
+                      error={updateErrors.company_description !== ""}
+                    ></TextField>
                     {updateErrors.company_description ? (
                       <Typography color="error">
                         {updateErrors.company_description}
@@ -683,7 +684,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyRep}
                         </Typography>
                       </React.Fragment>
@@ -705,9 +707,8 @@ export default function CompanyProfile() {
                           asterisk: classes.labelAsterisk,
                         },
                       }}
-                      error={
-                        updateErrors.representative_name !== ""
-                      }></TextField>
+                      error={updateErrors.representative_name !== ""}
+                    ></TextField>
                     {updateErrors.representative_name ? (
                       <Typography color="error">
                         {updateErrors.representative_name}
@@ -735,7 +736,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyWebsite}
                         </Typography>
                       </React.Fragment>
@@ -756,7 +758,8 @@ export default function CompanyProfile() {
                       value={profileInfo.companyWebsite}
                       onChange={handleChange}
                       name="companyWebsite"
-                      inputProps={{ maxLength: 50 }}></TextField>
+                      inputProps={{ maxLength: 50 }}
+                    ></TextField>
                   </div>
                 )}
               </ListItem>
@@ -779,7 +782,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.contact_email}
                         </Typography>
                       </React.Fragment>
@@ -802,9 +806,8 @@ export default function CompanyProfile() {
                         },
                       }}
                       inputProps={{ maxLength: 50 }}
-                      error={
-                        updateErrors.company_contact_email !== ""
-                      }></TextField>
+                      error={updateErrors.company_contact_email !== ""}
+                    ></TextField>
                     {updateErrors.company_contact_email ? (
                       <Typography color="error">
                         {updateErrors.company_contact_email}
@@ -832,7 +835,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.companyType === 0
                             ? "Social Business"
                             : profileInfo.companyType === 1
@@ -850,7 +854,8 @@ export default function CompanyProfile() {
                         classes={{
                           root: classes.inputLabel,
                           asterisk: classes.labelAsterisk,
-                        }}>
+                        }}
+                      >
                         Company Type
                       </InputLabel>
 
@@ -859,7 +864,8 @@ export default function CompanyProfile() {
                         id="CompanyType"
                         name="companyType"
                         className={classes.formInput}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                      >
                         <MenuItem value="1">Private</MenuItem>
                         <MenuItem value="2">Non-Profit</MenuItem>
                         <MenuItem value="0">Social Business</MenuItem>
@@ -887,7 +893,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.industryType}
                         </Typography>
                       </React.Fragment>
@@ -901,7 +908,8 @@ export default function CompanyProfile() {
                         classes={{
                           root: classes.inputLabel,
                           asterisk: classes.labelAsterisk,
-                        }}>
+                        }}
+                      >
                         Industry Type
                       </InputLabel>
 
@@ -910,8 +918,9 @@ export default function CompanyProfile() {
                         value={profileInfo.industryType}
                         onChange={handleChange}
                         name="industryType"
-                        component="span">
-                         {industryTypes.map((item) => (
+                        component="span"
+                      >
+                        {industryTypes.map((item) => (
                           <MenuItem key={item.label} value={item.label}>
                             {item.label}
                           </MenuItem>
@@ -940,7 +949,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.phoneNumber}
                         </Typography>
                       </React.Fragment>
@@ -962,7 +972,8 @@ export default function CompanyProfile() {
                         },
                       }}
                       inputProps={{ maxLength: 10 }}
-                      error={updateErrors.company_phone_no !== ""}></TextField>
+                      error={updateErrors.company_phone_no !== ""}
+                    ></TextField>
                     {updateErrors.company_phone_no ? (
                       <Typography color="error">
                         {updateErrors.company_phone_no}
@@ -990,7 +1001,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {profileInfo.isSolo === "1" ? "Yes" : "No"}
                         </Typography>
                       </React.Fragment>
@@ -1003,7 +1015,8 @@ export default function CompanyProfile() {
                         component="legend"
                         classes={{
                           asterisk: classes.labelAsterisk,
-                        }}>
+                        }}
+                      >
                         Are you a one person company?
                       </FormLabel>
 
@@ -1012,7 +1025,8 @@ export default function CompanyProfile() {
                         name="isSolo"
                         id="isSolo"
                         value={profileInfo.isSolo}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                      >
                         <FormControlLabel
                           value="1"
                           control={<Radio />}
@@ -1047,7 +1061,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {`${profileInfo.streetAddress},  ${profileInfo.city}, ${profileInfo.state}, ${profileInfo.zip}`}
                         </Typography>
                       </React.Fragment>
@@ -1071,7 +1086,8 @@ export default function CompanyProfile() {
                             },
                           }}
                           inputProps={{ maxLength: 40 }}
-                          placeholder="Street Address"></TextField>
+                          placeholder="Street Address"
+                        ></TextField>
                         {profileInfo.streetAddress === "" ? (
                           <Typography color="error">
                             {updateErrors.company_address}
@@ -1092,7 +1108,8 @@ export default function CompanyProfile() {
                             },
                           }}
                           inputProps={{ maxLength: 20 }}
-                          name="city"></TextField>
+                          name="city"
+                        ></TextField>
                         {profileInfo.city === "" ? (
                           <Typography color="error">
                             {updateErrors.company_address}
@@ -1106,7 +1123,8 @@ export default function CompanyProfile() {
                             classes={{
                               root: classes.inputLabel,
                               asterisk: classes.labelAsterisk,
-                            }}>
+                            }}
+                          >
                             State
                           </InputLabel>
                           <Select
@@ -1115,7 +1133,8 @@ export default function CompanyProfile() {
                             value={profileInfo.state}
                             onChange={handleChange}
                             name="state"
-                            placeholder="state">
+                            placeholder="state"
+                          >
                             {states.map((state) => (
                               <MenuItem key={state} value={state}>
                                 {state}
@@ -1138,7 +1157,8 @@ export default function CompanyProfile() {
                           value={profileInfo.zip}
                           onChange={handleChange}
                           inputProps={{ maxLength: 5 }}
-                          name="zip"></TextField>
+                          name="zip"
+                        ></TextField>
                         {profileInfo.zip === "" ? (
                           <Typography color="error">
                             {updateErrors.company_zip}
@@ -1168,7 +1188,8 @@ export default function CompanyProfile() {
                         <Typography
                           component="span"
                           variant="body2"
-                          color="textPrimary">
+                          color="textPrimary"
+                        >
                           {`${profileInfo.streetAddress2},  ${profileInfo.city2}, ${profileInfo.state2}, ${profileInfo.zip2}`}
                         </Typography>
                       </React.Fragment>
@@ -1192,7 +1213,8 @@ export default function CompanyProfile() {
                           onChange={handleChange}
                           name="streetAddress2"
                           inputProps={{ maxLength: 40 }}
-                          placeholder="Street Address"></TextField>
+                          placeholder="Street Address"
+                        ></TextField>
                         {profileInfo.streetAddress2 === "" ? (
                           <Typography color="error">
                             {updateErrors.mailing_address}
@@ -1213,7 +1235,8 @@ export default function CompanyProfile() {
                           value={profileInfo.city2}
                           onChange={handleChange}
                           inputProps={{ maxLength: 20 }}
-                          name="city2"></TextField>
+                          name="city2"
+                        ></TextField>
                         {profileInfo.city2 === "" ? (
                           <Typography color="error">
                             {updateErrors.mailing_address}
@@ -1227,7 +1250,8 @@ export default function CompanyProfile() {
                             classes={{
                               root: classes.inputLabel,
                               asterisk: classes.labelAsterisk,
-                            }}>
+                            }}
+                          >
                             State
                           </InputLabel>
                           <Select
@@ -1235,7 +1259,8 @@ export default function CompanyProfile() {
                             label="State"
                             value={profileInfo.state2}
                             onChange={handleChange}
-                            name="state2">
+                            name="state2"
+                          >
                             {states.map((state) => (
                               <MenuItem key={state} value={state}>
                                 {state}
@@ -1258,7 +1283,8 @@ export default function CompanyProfile() {
                           value={profileInfo.zip2}
                           onChange={handleChange}
                           inputProps={{ maxLength: 5 }}
-                          name="zip2"></TextField>
+                          name="zip2"
+                        ></TextField>
                         {profileInfo.zip2 === "" ? (
                           <Typography color="error">
                             {updateErrors.mailing_zip}
@@ -1275,13 +1301,15 @@ export default function CompanyProfile() {
                     container
                     id="buttons-container"
                     justify="flex-end"
-                    spacing={4}>
+                    spacing={4}
+                  >
                     <Grid item>
                       <Button
                         variant="outlined"
                         color="secondary"
                         size="large"
-                        onClick={handleCancel}>
+                        onClick={handleCancel}
+                      >
                         Cancel
                       </Button>
                     </Grid>
@@ -1290,7 +1318,8 @@ export default function CompanyProfile() {
                         variant="contained"
                         color="secondary"
                         size="large"
-                        onClick={handleSave}>
+                        onClick={handleSave}
+                      >
                         Save
                       </Button>
                     </Grid>
@@ -1304,14 +1333,16 @@ export default function CompanyProfile() {
       <Dialog
         onClose={handleDialogClose}
         open={dialogOpen}
-        className={classes.dialog}>
+        className={classes.dialog}
+      >
         <DialogTitle>Enter Email and Password to Confirm</DialogTitle>
         {loading2 ? <LinearProgress /> : null}
         {authError ? (
           <Alert
             className={classes.loginAlert}
             variant="filled"
-            severity="error">
+            severity="error"
+          >
             {authError}
           </Alert>
         ) : null}
@@ -1351,7 +1382,8 @@ export default function CompanyProfile() {
             onClick={handleConfirm}
             color="secondary"
             variant="outlined"
-            className={classes.dialogConfirm}>
+            className={classes.dialogConfirm}
+          >
             Confirm
           </Button>
         </DialogActions>

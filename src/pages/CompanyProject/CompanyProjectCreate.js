@@ -160,17 +160,13 @@ export default function CompanyProjectCreate() {
   const [projectType, setProjectType] = useState([]);
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_project/list_project_type",
-        getConfig()
-      )
+      .get("/company_project/list_project_type", getConfig())
       .then((res) => {
-        
         const data = res.data.project_type.map((item, index) => {
-          return { 
+          return {
             label: item,
             value: index,
-           };
+          };
         });
 
         setProjectType(data);
@@ -218,11 +214,7 @@ export default function CompanyProjectCreate() {
     };
 
     axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/create",
-        data,
-        getConfig()
-      )
+      .post("/company_project/create", data, getConfig())
       .then((res) => {
         history.push("/dashboard/projects");
       })
@@ -233,7 +225,7 @@ export default function CompanyProjectCreate() {
 
   useEffect(() => {
     axios
-      .get("http://18.213.74.196:8000/api/skill/", getConfig())
+      .get("/skill/", getConfig())
       .then((res) => {
         const data = res.data.map((skill) => {
           return { label: skill.skill_name, value: skill.id };
@@ -251,7 +243,8 @@ export default function CompanyProjectCreate() {
       <img
         alt="profile background"
         className={classes.profileLogo}
-        src={CompanyDashboard}></img>
+        src={CompanyDashboard}
+      ></img>
 
       <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
         <Link color="inherit" href="/">
@@ -353,7 +346,7 @@ export default function CompanyProjectCreate() {
               {...console.log(projectType)}
               options={projectType}
             />
-             
+
             {updateErrors.project_type ? (
               <Typography className={classes.error} color="error">
                 {updateErrors.project_type}
@@ -425,7 +418,8 @@ export default function CompanyProjectCreate() {
               width: "100%",
               paddingRight: "10px",
               paddingLeft: "10px",
-            }}>
+            }}
+          >
             <FormGroup aria-label="position" row>
               <FormControlLabel
                 value="end"
@@ -456,7 +450,8 @@ export default function CompanyProjectCreate() {
                 variant="contained"
                 color="secondary"
                 size="large"
-                onClick={handleSave}>
+                onClick={handleSave}
+              >
                 Save
               </Button>
             </Grid>

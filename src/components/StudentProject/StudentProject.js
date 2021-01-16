@@ -125,7 +125,7 @@ function StudentProject({ projects, setProjects, skills }) {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-  const [alert,setAlert] = useState("");
+  const [alert, setAlert] = useState("");
 
   const { data } = useContext(DataContext);
   const { profile } = data;
@@ -165,22 +165,22 @@ function StudentProject({ projects, setProjects, skills }) {
   const handleClickOpenEdit = (project) => {
     setOpenEdit(true);
     setCurrentProject({
-        student_id: profile.student_id,
-        project_description: project.project_description,
-        project_end_date: project.project_end_date,
-        project_id: project.project_id,
-        project_link: project.project_link,
-        project_name: project.project_name,
-        project_role: project.project_role,
-        project_start_date: project.project_start_date,
-        project_tech: project.project_tech.split(",").map((skill, index) => {
-          return {
-            label: skill,
-            value: index,
-          };
-        }) ,
+      student_id: profile.student_id,
+      project_description: project.project_description,
+      project_end_date: project.project_end_date,
+      project_id: project.project_id,
+      project_link: project.project_link,
+      project_name: project.project_name,
+      project_role: project.project_role,
+      project_start_date: project.project_start_date,
+      project_tech: project.project_tech.split(",").map((skill, index) => {
+        return {
+          label: skill,
+          value: index,
+        };
+      }),
       project_in_progress: project.project_in_progress,
-      });
+    });
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -193,7 +193,7 @@ function StudentProject({ projects, setProjects, skills }) {
   const handleDelete = (id) => {
     axios
       .delete(
-        "http://18.213.74.196:8000/api/student_project/" + id + "/delete",
+        "/student_project/" + id + "/delete",
 
         getConfig()
       )
@@ -225,7 +225,10 @@ function StudentProject({ projects, setProjects, skills }) {
       setUpdateFailed(true);
       return false;
     } else if (!currentProject.project_in_progress) {
-      if (currentProject.project_end_date === "" || !currentProject.project_end_date) {
+      if (
+        currentProject.project_end_date === "" ||
+        !currentProject.project_end_date
+      ) {
         setAlert(
           'Please enter an end date for the project or select "project in progress"'
         );
@@ -248,13 +251,18 @@ function StudentProject({ projects, setProjects, skills }) {
     if (validate()) {
       var project_id = id;
 
-      var skillsSeparatedByCommas="";
-      skillsSeparatedByCommas+= currentProject.project_tech.map ((tech) => {return tech.label;});
-      skillsSeparatedByCommas = (skillsSeparatedByCommas.length > 0) ? skillsSeparatedByCommas.substring(0,skillsSeparatedByCommas.length) : "";
-      
+      var skillsSeparatedByCommas = "";
+      skillsSeparatedByCommas += currentProject.project_tech.map((tech) => {
+        return tech.label;
+      });
+      skillsSeparatedByCommas =
+        skillsSeparatedByCommas.length > 0
+          ? skillsSeparatedByCommas.substring(0, skillsSeparatedByCommas.length)
+          : "";
+
       axios
         .put(
-          `http://18.213.74.196:8000/api/student_project/${project_id}/update`,
+          `/student_project/${project_id}/update`,
           {
             student_id: profile.student_id,
             project_name: currentProject.project_name,
@@ -319,12 +327,15 @@ function StudentProject({ projects, setProjects, skills }) {
               </h3>
             </div>
             <div className={classes.verticalElementTitle}>
-              {project.project_tech!=="" ? 
-              (project.project_tech.split(",").map((skill, index) => (
-                <Chip label={skill} className={classes.chips} key={index} />
-              ))):
-              (<Chip label="None" className={classes.chips}/>)
-              }
+              {project.project_tech !== "" ? (
+                project.project_tech
+                  .split(",")
+                  .map((skill, index) => (
+                    <Chip label={skill} className={classes.chips} key={index} />
+                  ))
+              ) : (
+                <Chip label="None" className={classes.chips} />
+              )}
             </div>
             <div className={classes.projectDescLabel}>
               <h3>Project Description:</h3>
@@ -341,7 +352,15 @@ function StudentProject({ projects, setProjects, skills }) {
                 Project Source Link
               </Typography>
               <br />
-              <a href={ project.project_tech.includes("https://") ? `${project.project_link}` : `https://${project.project_link}`} className={classes.link} target="_blank">
+              <a
+                href={
+                  project.project_tech.includes("https://")
+                    ? `${project.project_link}`
+                    : `https://${project.project_link}`
+                }
+                className={classes.link}
+                target="_blank"
+              >
                 {project.project_link}
               </a>
             </div>
@@ -397,6 +416,8 @@ function StudentProject({ projects, setProjects, skills }) {
                     id="project_name"
                     label="Project Name"
                     name="project_name"
+                    helperText={`${currentProject.project_name.length}/200`}
+                    inputProps={{ maxLength: 200 }}
                     type="string"
                     fullWidth
                     variant="outlined"
@@ -410,6 +431,8 @@ function StudentProject({ projects, setProjects, skills }) {
                     label="Project Role"
                     type="string"
                     name="project_role"
+                    helperText={`${currentProject.project_role.length}/50`}
+                    inputProps={{ maxLength: 50 }}
                     fullWidth
                     variant="outlined"
                     value={currentProject.project_role}
@@ -420,16 +443,16 @@ function StudentProject({ projects, setProjects, skills }) {
                     closeMenuOnSelect={true}
                     components={animatedComponents}
                     name="project_skills"
-                    value={options.filter(el => {
-                        return currentProject.project_tech.some(f => {
-                          return f.label === el.label
-                        })
-                      })}
+                    value={options.filter((el) => {
+                      return currentProject.project_tech.some((f) => {
+                        return f.label === el.label;
+                      });
+                    })}
                     isMulti
                     isSearchable
                     onChange={(e) => {
-                        e = e ? e : [];
-                        setCurrentProject({ ...currentProject, project_tech: e }) 
+                      e = e ? e : [];
+                      setCurrentProject({ ...currentProject, project_tech: e });
                     }}
                     options={options}
                   />
@@ -444,8 +467,9 @@ function StudentProject({ projects, setProjects, skills }) {
                     value={currentProject.project_description}
                     fullWidth
                     name="project_description"
+                    helperText={`${currentProject.project_description.length}/500`}
+                    inputProps={{ maxLength: 500 }}
                     type="string"
-                    inputProps={{ maxLength: 350 }}
                     onChange={handleCurrentProjectChange}
                   />
                   <TextField
@@ -454,6 +478,7 @@ function StudentProject({ projects, setProjects, skills }) {
                     placeholder="www.website.com"
                     label="Source Link"
                     value={currentProject.project_link}
+                    inputProps={{ maxLength: 200 }}
                     name="project_link"
                     type="string"
                     fullWidth
@@ -519,7 +544,8 @@ function StudentProject({ projects, setProjects, skills }) {
                 <Snackbar
                   open={updateFailed}
                   autoHideDuration={6000}
-                  onClose={handleCloseUpdateFailed}>
+                  onClose={handleCloseUpdateFailed}
+                >
                   <Alert onClose={handleCloseUpdateFailed} severity="error">
                     {alert}
                   </Alert>

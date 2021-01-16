@@ -59,15 +59,12 @@ const SaveStudent = ({ studentId }) => {
   const getCompanyProjects = useCallback(() => {
     //get all projects of this company.
     const companyProjects = axios.post(
-      "http://18.213.74.196:8000/api/company_project/list_by_company",
+      "/company_project/list_by_company",
       { username_id: parseInt(Id) },
       getConfig()
     );
     //get all saved projects
-    const savedProjects = axios.get(
-      "http://18.213.74.196:8000/api/project_select_student/all",
-      getConfig()
-    );
+    const savedProjects = axios.get("/project_select_student/all", getConfig());
     axios
       .all([companyProjects, savedProjects])
       .then(
@@ -104,11 +101,7 @@ const SaveStudent = ({ studentId }) => {
   const handleSave = () => {
     if (saveStudent.student_db_id) {
       axios
-        .post(
-          "http://18.213.74.196:8000/api/project_select_student/create",
-          saveStudent,
-          getConfig()
-        )
+        .post("/project_select_student/create", saveStudent, getConfig())
         .then(() => {
           setCompanyProjectsToShow([
             ...companyProjectsToShow.filter((project) => {
@@ -155,8 +148,10 @@ const SaveStudent = ({ studentId }) => {
               <>
                 {companyProjectsToShow.map((project, index) => (
                   <Grid container key={index} alignItems="center" spacing={1}>
-                    <Grid item xs={12} sm={12} md={4} xl={1}>
-                      <Typography>{project.project_name}</Typography>
+                    <Grid item xs={12} sm={12} md={7} lg={7}>
+                      <Typography style={{ wordBreak: "break-all" }}>
+                        {project.project_name}
+                      </Typography>
                     </Grid>
                     <Grid item xs={8} sm={8} md={5} xl={5}>
                       <FormControl className={classes.formControl}>

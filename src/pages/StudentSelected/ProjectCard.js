@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   skillsRoot: {
     display: "flex",
     alignItems: "center",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   chip: {
     marginRight: theme.spacing(1),
@@ -139,7 +139,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
     setChangingPeference(true);
     axios
       .put(
-        `http://18.213.74.196:8000/api/student_select_project/${project.selection_id}/update`,
+        `/student_select_project/${project.selection_id}/update`,
         {
           project_id: project.project_id,
           student_preference_for_project: preference,
@@ -160,7 +160,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
     setRemovingProject(true);
     axios
       .delete(
-        `http://18.213.74.196:8000/api/student_select_project/${project.selection_id}/delete`,
+        `/student_select_project/${project.selection_id}/delete`,
         getConfig()
       )
       .then((res) => {
@@ -269,17 +269,17 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
                 />
               ))
             ) : (
-                <Chip
-                  label={"Any"}
-                  classes={{
-                    root: classes.chip,
-                    label: classes.chipLabel,
-                  }}
-                  color="primary"
-                  size="small"
-                  variant="outlined"
-                />
-              )}
+              <Chip
+                label={"Any"}
+                classes={{
+                  root: classes.chip,
+                  label: classes.chipLabel,
+                }}
+                color="primary"
+                size="small"
+                variant="outlined"
+              />
+            )}
           </div>
         </CardContent>
         <Divider></Divider>
@@ -297,7 +297,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
               className={classes.button}
             >
               View Details
-          </Button>
+            </Button>
           </Link>
         </CardContent>
       </Card>
@@ -317,17 +317,17 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
             {changingPreference ? (
               <LinearProgress className={classes.loading} />
             ) : (
-                <Select
-                  labelId="changePreference"
-                  value={preference}
-                  onChange={handlePreferenceChange}
-                >
-                  <MenuItem value={0}>None</MenuItem>
-                  <MenuItem value={1}>Low</MenuItem>
-                  <MenuItem value={2}>Medium</MenuItem>
-                  <MenuItem value={3}>High</MenuItem>
-                </Select>
-              )}
+              <Select
+                labelId="changePreference"
+                value={preference}
+                onChange={handlePreferenceChange}
+              >
+                <MenuItem value={0}>None</MenuItem>
+                <MenuItem value={1}>Low</MenuItem>
+                <MenuItem value={2}>Medium</MenuItem>
+                <MenuItem value={3}>High</MenuItem>
+              </Select>
+            )}
           </DialogContent>
           <DialogActions>
             <Button
@@ -338,7 +338,10 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
               Confirm
             </Button>
             <Button
-              onClick={() =>{setPreferenceChangeOpen(false); setPreference(project.student_preference_for_project)}}
+              onClick={() => {
+                setPreferenceChangeOpen(false);
+                setPreference(project.student_preference_for_project);
+              }}
               color="primary"
               disabled={changingPreference}
             >

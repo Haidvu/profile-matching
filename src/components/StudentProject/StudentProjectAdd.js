@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   selectTech: {
     marginTop: "5px",
     marginBottom: "5px",
+    fontSize: "16px",
   },
 }));
 
@@ -68,7 +69,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
-  const [alert,setAlert] = useState("");
+  const [alert, setAlert] = useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -117,7 +118,10 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
       setUpdateFailed(true);
       return false;
     } else if (!studentInput.project_in_progress) {
-      if (studentInput.project_end_date === "" || !studentInput.project_end_date) {
+      if (
+        studentInput.project_end_date === "" ||
+        !studentInput.project_end_date
+      ) {
         setAlert(
           'Please enter an end date for the project or select "project in progress"'
         );
@@ -163,11 +167,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         project_role: studentInput.project_role,
       };
       axios
-        .post(
-          "http://18.213.74.196:8000/api/student_project/create",
-          data,
-          getConfig()
-        )
+        .post("/student_project/create", data, getConfig())
         .then((res) => {
           const newProject = {
             project_id: res.data.project_id,
@@ -235,8 +235,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             required
             variant="outlined"
             name="project_name"
-            helperText="Please enter an unique project name"
-            inputProps={{ maxLength: 500 }}
+            helperText={` Please enter an unique project name. ${studentInput.project_name.length}/200`}
+            inputProps={{ maxLength: 200 }}
             value={studentInput.project_name || ""}
             onChange={(e) => {
               setStudentInput({
@@ -255,6 +255,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             variant="outlined"
             name="project_role"
             inputProps={{ maxLength: 50 }}
+            helperText={`${studentInput.project_role.length}/50`}
             value={studentInput.project_role || ""}
             onChange={(e) => {
               setStudentInput({
@@ -296,7 +297,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
             id="filled-multiline-static"
             multiline
             rows={4}
-            helperText="Project Description"
+            helperText={`Project Description. ${studentInput.project_description.length}/500`}
             required
             variant="outlined"
             fullWidth
@@ -313,7 +314,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
           <TextField
             margin="dense"
             id="outlined-static"
-            helperText="Student Project Link"
+            helperText={`Student Project Link. ${studentInput.project_link.length}/200`}
             fullWidth
             variant="outlined"
             name="project_link"
@@ -397,7 +398,8 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
         <Snackbar
           open={updateFailed}
           autoHideDuration={6000}
-          onClose={handleCloseUpdateFailed}>
+          onClose={handleCloseUpdateFailed}
+        >
           <Alert onClose={handleCloseUpdateFailed} severity="error">
             {alert}
           </Alert>

@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: theme.spacing(1.0),
     justifyContent: "center",
+    "& > div > div > div": { width: "auto !important" },
   },
   filterButton: {
     display: "flex-end",
@@ -127,6 +128,15 @@ const customStyles = {
   singleValue: (provided) => ({
     ...provided,
     color: "black",
+    width: "100%",
+  }),
+  multiValue: (provided) => ({
+    ...provided,
+    width: "100%",
+  }),
+  ValueContainer: (provided) => ({
+    ...provided,
+    width: "100%",
   }),
 };
 
@@ -159,15 +169,11 @@ export const StudentSearch = () => {
     };
     setLoading(true);
     axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/search",
-        data,
-        getConfig()
-      )
+      .post("/company_project/search", data, getConfig())
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
-        if (projectList.length === 0) {
+        if (res.data.length === 0) {
           setNoProjectsFound(true);
         } else {
           setNoProjectsFound(false);
@@ -190,11 +196,7 @@ export const StudentSearch = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .post(
-        "http://18.213.74.196:8000/api/company_project/search",
-        searchInput,
-        getConfig()
-      )
+      .post("/company_project/search", searchInput, getConfig())
       .then((res) => {
         setLoading(false);
         setProjectList(res.data);
@@ -219,10 +221,7 @@ export const StudentSearch = () => {
   const [companyName, setCompanyName] = useState({});
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_profile/list_company_name",
-        getConfig()
-      )
+      .get("/company_profile/list_company_name", getConfig())
       .then((res) => {
         const data = res.data.map((compName) => {
           return { label: compName.company_name };
@@ -239,10 +238,7 @@ export const StudentSearch = () => {
   const [industryType, setIndustryType] = useState({});
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_profile/list_industry_type",
-        getConfig()
-      )
+      .get("/company_profile/list_industry_type", getConfig())
       .then((res) => {
         const data = res.data.industry_type.map((item, index) => {
           return {
@@ -261,10 +257,7 @@ export const StudentSearch = () => {
   const [projectName, setProjectName] = useState({});
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_project/list_project_name",
-        getConfig()
-      )
+      .get("/company_project/list_project_name", getConfig())
       .then((res) => {
         const data = res.data.map((projName) => {
           return { label: projName.project_name };
@@ -281,10 +274,7 @@ export const StudentSearch = () => {
   const [projectType, setProjectType] = useState({});
   useEffect(() => {
     axios
-      .get(
-        "http://18.213.74.196:8000/api/company_project/list_project_type",
-        getConfig()
-      )
+      .get("/company_project/list_project_type", getConfig())
       .then((res) => {
         const data = res.data.project_type.map((item, index) => {
           return {
@@ -304,7 +294,7 @@ export const StudentSearch = () => {
   const [projectTech, setProjectTech] = useState({});
   useEffect(() => {
     axios
-      .get("http://18.213.74.196:8000/api/skill/", getConfig())
+      .get("/skill/", getConfig())
       .then((res) => {
         const data = res.data.map((skill) => {
           return { label: skill.skill_name, value: skill.id };

@@ -120,11 +120,7 @@ export default function CompanySearch() {
     };
     setLoading(true);
     axios
-      .post(
-        "http://18.213.74.196:8000/api/student_profile/search",
-        data,
-        getConfig()
-      )
+      .post("/student_profile/search", data, getConfig())
       .then((res) => {
         localStorage.setItem("search_history", JSON.stringify(data));
         setLoading(false);
@@ -157,7 +153,7 @@ export default function CompanySearch() {
 
   useEffect(() => {
     axios
-      .get("http://18.213.74.196:8000/api/skill/", getConfig())
+      .get("/skill/", getConfig())
       .then((res) => {
         const data = res.data.map((skill) => {
           return { label: skill.skill_name, value: skill.id };
@@ -183,11 +179,7 @@ export default function CompanySearch() {
       };
     }
     axios
-      .post(
-        "http://18.213.74.196:8000/api/student_profile/search",
-        data,
-        getConfig()
-      )
+      .post("/student_profile/search", data, getConfig())
       .then((res) => {
         setLoading(false);
         setStudentsList(res.data);
@@ -220,7 +212,8 @@ export default function CompanySearch() {
           direction="column"
           justify="space-between"
           spacing={2}
-          alignItems="center">
+          alignItems="center"
+        >
           <Grid
             container
             id="first-left"
@@ -228,7 +221,8 @@ export default function CompanySearch() {
             item
             xs={12}
             spacing={4}
-            direction="row">
+            direction="row"
+          >
             <Grid item>
               <Typography className={classes.SearchLabels} variant="h6">
                 Keyword
@@ -238,7 +232,12 @@ export default function CompanySearch() {
                       Press enter to save your keywords after you type them.
                       <br /> This will search the entire student description.
                     </p>
+<<<<<<< HEAD
                   }>
+=======
+                  }
+                >
+>>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
                   <IconButton className={classes.ButtonHelp}>
                     <HelpIcon />
                   </IconButton>
@@ -264,7 +263,8 @@ export default function CompanySearch() {
                 name="major"
                 onChange={(e) => {
                   setSearchInput({ ...searchInput, major: e.target.value });
-                }}>
+                }}
+              >
                 <option value="">Select Major</option>
                 <optgroup label="Gerald D. Hines College of Architecture and Design">
                   <option value="Architecture">Architecture</option>
@@ -495,7 +495,8 @@ export default function CompanySearch() {
                     degree_level: e.target.value,
                   });
                 }}
-                className={classes.DegreeSearch}>
+                className={classes.DegreeSearch}
+              >
                 <option value="">Select Degree type</option>
                 <option value="Undergraduate">Undergraduate</option>
                 <option value="Graduate">Graduate</option>
@@ -550,12 +551,14 @@ export default function CompanySearch() {
                     ...searchInput,
                     zipcode: e.target.value,
                   });
-                }}></TextField>
+                }}
+              ></TextField>
               <Button
                 variant="contained"
                 color="secondary"
                 className={classes.SearchButton}
-                onClick={handleClick}>
+                onClick={handleClick}
+              >
                 Search
               </Button>
             </Grid>

@@ -205,11 +205,11 @@ const StudentDetailed = ({ match }) => {
 
   const getStudent = useCallback(() => {
     const student = axios.get(
-      `http://18.213.74.196:8000/api/student_profile/id/${match.params.id}`,
+      `/student_profile/id/${match.params.id}`,
       getConfig()
     );
     const studentProjects = axios.post(
-      `http://18.213.74.196:8000/api/student_project/list_by_student`,
+      `/student_project/list_by_student`,
       {
         username_id: match.params.id,
       },
@@ -238,8 +238,8 @@ const StudentDetailed = ({ match }) => {
       {loading ? (
         <LinearProgress color="secondary" />
       ) : (
-        <Grid container>
-          <Grid item container xs={11}>
+        <>
+          <Grid container>
             <List className={classes.root}>
               <ListItem>
                 <ListItemIcon edge="start">
@@ -260,7 +260,9 @@ const StudentDetailed = ({ match }) => {
                   </div>
                 </ListItemText>
               </ListItem>
+
               <Divider variant="inset" component="li" />
+
               <ListItem>
                 <ListItemIcon edge="start">
                   <FormatListBulletedTwoToneIcon />
@@ -280,7 +282,9 @@ const StudentDetailed = ({ match }) => {
                   </div>
                 </ListItemText>
               </ListItem>
+
               <Divider variant="inset" component="li" />
+
               <ListItem alignItems="flex-start">
                 <ListItemIcon>
                   <SchoolRoundedIcon />
@@ -301,50 +305,73 @@ const StudentDetailed = ({ match }) => {
                 </div>
               </ListItem>
 
-              {student.student_skills.length > 0 ? (
-                <>
-                  <Divider variant="inset" component="li" />
-                  <ListItem alignItems="flex-start">
-                    <ListItemIcon>
-                      <StarsIcon />
-                    </ListItemIcon>
+              <Divider variant="inset" component="li" />
 
-                    <div className={classes.flexColumn}>
-                      <Typography className={classes.sectionHeader}>
-                        Skills
-                      </Typography>
-                      <ul className={classes.skillRoot}>
-                        {student.student_skills.map((skill) => {
-                          return (
-                            <li key={skill.skill_name}>
-                              <Chip
-                                variant="outlined"
-                                classes={
-                                  skill.experience_level === 1
-                                    ? {
-                                        root: classes.beginnerChip,
-                                      }
-                                    : skill.experience_level === 2
-                                    ? {
-                                        root: classes.intermediateChip,
-                                      }
-                                    : {
-                                        root: classes.expertChip,
-                                      }
-                                }
-                                label={skill.skill_name}
-                              />
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  </ListItem>
-                </>
-              ) : null}
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <SchoolRoundedIcon />
+                </ListItemIcon>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Academic
+                  </Typography>
+                  <Typography
+                    className={
+                      classes.sectionContent
+                    }>{`Graduation Date: ${student.graduation_date}`}</Typography>
+                  <Typography
+                    className={
+                      classes.sectionContent
+                    }>{`Degree: ${student.degree}`}</Typography>
+                  <Typography className={classes.sectionContent}>
+                    {" "}
+                    {`Major: ${student.major}`}
+                  </Typography>
+                </div>
+              </ListItem>
+
+              <Divider variant="inset" component="li" />
+
+              <ListItem alignItems="flex-start">
+                <ListItemIcon>
+                  <StarsIcon />
+                </ListItemIcon>
+                <div className={classes.flexColumn}>
+                  <Typography className={classes.sectionHeader}>
+                    Skills
+                  </Typography>
+                  <ul className={classes.skillRoot}>
+                    {student.student_skills.map((skill) => {
+                      return (
+                        <li key={skill.skill_name}>
+                          <Chip
+                            variant="outlined"
+                            classes={
+                              skill.experience_level === 1
+                                ? {
+                                    root: classes.beginnerChip,
+                                  }
+                                : skill.experience_level === 2
+                                ? {
+                                    root: classes.intermediateChip,
+                                  }
+                                : {
+                                    root: classes.expertChip,
+                                  }
+                            }
+                            label={skill.skill_name}
+                          />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </ListItem>
+
               <Divider variant="inset" component="li" />
             </List>
           </Grid>
+
           <Grid item>
             <SpeedDial
               ariaLabel="SpeedDial tooltip example"
@@ -370,6 +397,7 @@ const StudentDetailed = ({ match }) => {
               ))}
             </SpeedDial>
           </Grid>
+
           <Grid item container>
             {studentProjects.length > 0 ? (
               <ListItem alignItems="flex-start">
@@ -456,7 +484,7 @@ const StudentDetailed = ({ match }) => {
               </ListItem>
             ) : null}
           </Grid>
-        </Grid>
+        </>
       )}
       <Dialog
         open={dialogOpen}

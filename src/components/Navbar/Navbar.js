@@ -37,7 +37,7 @@ export default function Navbar() {
   const isLoggedIn = () => {
     if (localStorage.getItem("token") && localStorage.getItem("slug")) {
       axios
-        .post("http://18.213.74.196:8000/api/token/refresh/", {
+        .post("/token/refresh/", {
           refresh: localStorage.getItem("refresh"),
         })
         .then((res) => {
