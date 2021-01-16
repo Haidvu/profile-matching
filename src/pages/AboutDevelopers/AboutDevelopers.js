@@ -252,9 +252,6 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Minor: Mathematics
                   </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact:
-                  </Typography>
                   <Link href="https://www.linkedin.com/in/thanhtanle/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
