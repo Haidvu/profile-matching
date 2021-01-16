@@ -109,7 +109,7 @@ const CompanyInfo = () => {
   const [companyFirst, setCompanyFirst] = useState({
     name: "",
     industryType: "",
-    phoneNumber: "",
+    companyType: "",
     address: "",
     city: "",
     state: "",
@@ -119,7 +119,6 @@ const CompanyInfo = () => {
     state2: "",
     zip2: "",
     checkedAddress: false,
-    contact_email: "",
     isSolo: "",
   });
 
@@ -128,7 +127,8 @@ const CompanyInfo = () => {
 
   const [companySecond, setCompanySecond] = useState({
     companyRep: "",
-    companyType: "",
+    contact_email: "",
+    phoneNumber: "",
     website: "",
     mission: "",
     description: "",
@@ -200,7 +200,7 @@ const CompanyInfo = () => {
     setErrorsFirst({
       name: companyFirst.name === "" ? "Required" : null,
       industryType: companyFirst.industryType === "" ? "Required" : null,
-      phoneNumber: companyFirst.phoneNumber === "" ? "Required" : null,
+      companyType: companyFirst.companyType === "" ? "Required" : null,
       address: companyFirst.address === "" ? "Required" : null,
       city: companyFirst.city === "" ? "Required" : null,
       state: companyFirst.state === "" ? "Required" : null,
@@ -225,7 +225,7 @@ const CompanyInfo = () => {
         : companyFirst.zip2 === ""
         ? "Required"
         : null,
-      contact_email: companyFirst.contact_email === "" ? "Required" : null,
+
       isSolo: companyFirst.isSolo === "" ? "Please select one" : null,
     });
   };
@@ -233,7 +233,8 @@ const CompanyInfo = () => {
   const handleSubmit = () => {
     setErrorsSecond({
       companyRep: companySecond.companyRep === "" ? "Required" : null,
-      companyType: companySecond.companyType === "" ? "Required" : null,
+      contact_email: companySecond.contact_email === "" ? "Required" : null,
+      phoneNumber: companySecond.phoneNumber === "" ? "Required" : null,
       mission: companySecond.mission === "" ? "Required" : null,
       description: companySecond.description === "" ? "Required" : null,
     });
@@ -276,13 +277,13 @@ const CompanyInfo = () => {
           .then((response) => {
             const data = {
               company_name: companyFirst.name,
-              company_phone_no: companyFirst.phoneNumber,
+              company_phone_no: companySecond.phoneNumber,
               industry_type: companyFirst.industryType,
-              company_contact_email: companyFirst.contact_email,
+              company_contact_email: companySecond.contact_email,
               company_zip: companyFirst.zip,
               representative_name: companySecond.companyRep,
               company_representative_type: parseInt(companyFirst.isSolo),
-              company_type: parseInt(companySecond.companyType),
+              company_type: parseInt(companyFirst.companyType),
               company_address: getAddress(companyFirst),
               mailing_address: companyFirst.checkedAddress
                 ? getAddress(companyFirst)
@@ -333,8 +334,7 @@ const CompanyInfo = () => {
                 direction="row"
                 justify="space-between"
                 spacing={2}
-                alignItems="flex-start"
-              >
+                alignItems="flex-start">
                 {/* Left Grid */}
                 <Grid
                   container
@@ -343,8 +343,7 @@ const CompanyInfo = () => {
                   xs={12}
                   md={6}
                   spacing={3}
-                  direction="column"
-                >
+                  direction="column">
                   <Grid item>
                     <TextField
                       error={errorsFirst.name && companyFirst.name === ""}
@@ -359,8 +358,7 @@ const CompanyInfo = () => {
                     />
                     {errorsFirst.name && companyFirst.name === "" ? (
                       <FormHelperText
-                        error={errorsFirst.name && companyFirst.name === ""}
-                      >
+                        error={errorsFirst.name && companyFirst.name === ""}>
                         {errorsFirst.name}
                       </FormHelperText>
                     ) : null}
@@ -372,15 +370,13 @@ const CompanyInfo = () => {
                         companyFirst.industryType === ""
                       }
                       variant="outlined"
-                      className={classes.formControl}
-                    >
+                      className={classes.formControl}>
                       <InputLabel>Industry Type</InputLabel>
                       <Select
                         label="Industry Type"
                         value={companyFirst.industryType}
                         onChange={handleChangeFirst}
-                        name="industryType"
-                      >
+                        name="industryType">
                         {industryTypes.map((item) => (
                           <MenuItem key={item.label} value={item.label}>
                             {item.label}
@@ -397,73 +393,44 @@ const CompanyInfo = () => {
                     </FormControl>
                   </Grid>
                   <Grid item>
-                    <TextField
+                    <FormControl
                       error={
-                        errorsFirst.contact_email &&
-                        companyFirst.contact_email === ""
+                        errorsFirst.companyType &&
+                        companyFirst.companyType === ""
                       }
                       variant="outlined"
-                      fullWidth
-                      id="contact_email"
-                      label="Contact Email"
-                      name="contact_email"
-                      onChange={handleChangeFirst}
-                      value={companyFirst.contact_email}
-                      inputProps={{ maxLength: 50 }}
-                    />
-                    {errorsFirst.contact_email &&
-                    companyFirst.contact_email === "" ? (
-                      <FormHelperText
-                        error={
-                          errorsFirst.contact_email &&
-                          companyFirst.contact_email === ""
-                        }
-                      >
-                        {errorsFirst.contact_email}
-                      </FormHelperText>
-                    ) : null}
+                      className={classes.formControl}>
+                      <InputLabel>Company Type</InputLabel>
+                      <Select
+                        label="Company Type"
+                        name="companyType"
+                        id="companyType"
+                        onChange={handleChangeFirst}
+                        value={companyFirst.companyType}>
+                        <MenuItem value="1">Private</MenuItem>
+                        <MenuItem value="2">Non-Profit</MenuItem>
+                        <MenuItem value="0">Social Business</MenuItem>
+                      </Select>
+                      {errorsFirst.companyType &&
+                      companyFirst.companyType === "" ? (
+                        <FormHelperText>
+                          {errorsFirst.companyType}
+                        </FormHelperText>
+                      ) : null}
+                    </FormControl>
                   </Grid>
-                  <Grid item>
-                    <TextField
-                      error={
-                        (errorsFirst.phoneNumber &&
-                          companyFirst.phoneNumber === "") ||
-                        errorsFirst.phoneNumber === "Enter valid Phone Number"
-                      }
-                      variant="outlined"
-                      fullWidth
-                      id="phoneNumber"
-                      label="Phone Number"
-                      name="phoneNumber"
-                      onChange={handleChangeFirst}
-                      value={companyFirst.phoneNumber}
-                      inputProps={{ maxLength: 10 }}
-                    />
-                    {errorsFirst.phoneNumber &&
-                    companyFirst.phoneNumber === "" ? (
-                      <FormHelperText
-                        error={
-                          errorsFirst.phoneNumber &&
-                          companyFirst.phoneNumber === ""
-                        }
-                      >
-                        {errorsFirst.phoneNumber}
-                      </FormHelperText>
-                    ) : null}
-                  </Grid>
+
                   <Grid item>
                     <Typography>Is this a one person company?</Typography>
                     <FormControl
                       error={errorsFirst.isSolo && companyFirst.isSolo === ""}
                       variant="outlined"
-                      className={classes.formControl}
-                    >
+                      className={classes.formControl}>
                       <RadioGroup
                         aria-label="Are you single member company"
                         name="isSolo"
                         value={companyFirst.isSolo}
-                        onChange={handleChangeFirst}
-                      >
+                        onChange={handleChangeFirst}>
                         <FormControlLabel
                           value="1"
                           control={<Radio />}
@@ -490,8 +457,7 @@ const CompanyInfo = () => {
                   xs={12}
                   md={6}
                   spacing={3}
-                  direction="column"
-                >
+                  direction="column">
                   <Grid item>
                     <TextField
                       error={errorsFirst.address && companyFirst.address === ""}
@@ -508,8 +474,7 @@ const CompanyInfo = () => {
                       <FormHelperText
                         error={
                           errorsFirst.address && companyFirst.address === ""
-                        }
-                      >
+                        }>
                         {errorsFirst.address}
                       </FormHelperText>
                     ) : null}
@@ -519,8 +484,7 @@ const CompanyInfo = () => {
                     id="address-container-1"
                     item
                     direction="row"
-                    spacing={4}
-                  >
+                    spacing={4}>
                     <Grid item xs={7}>
                       <TextField
                         error={errorsFirst.city && companyFirst.city === ""}
@@ -535,8 +499,7 @@ const CompanyInfo = () => {
                       />
                       {errorsFirst.city && companyFirst.city === "" ? (
                         <FormHelperText
-                          error={errorsFirst.city && companyFirst.city === ""}
-                        >
+                          error={errorsFirst.city && companyFirst.city === ""}>
                           {errorsFirst.address}
                         </FormHelperText>
                       ) : null}
@@ -545,15 +508,13 @@ const CompanyInfo = () => {
                       <FormControl
                         error={errorsFirst.state && companyFirst.state === ""}
                         variant="outlined"
-                        className={classes.formControl}
-                      >
+                        className={classes.formControl}>
                         <InputLabel>ST</InputLabel>
                         <Select
                           value={companyFirst.state}
                           onChange={handleChangeFirst}
                           id="state"
-                          name="state"
-                        >
+                          name="state">
                           {states.map((state) => (
                             <MenuItem value={state} key={state}>
                               {state}
@@ -579,8 +540,7 @@ const CompanyInfo = () => {
                       />
                       {errorsFirst.zip && companyFirst.zip === "" ? (
                         <FormHelperText
-                          error={errorsFirst.zip && companyFirst.zip === ""}
-                        >
+                          error={errorsFirst.zip && companyFirst.zip === ""}>
                           {errorsFirst.zip}
                         </FormHelperText>
                       ) : null}
@@ -625,8 +585,7 @@ const CompanyInfo = () => {
                           errorsFirst.mailingAddress &&
                           !companyFirst.checkedAddress &&
                           companyFirst.mailingAddress === ""
-                        }
-                      >
+                        }>
                         {errorsFirst.mailingAddress}
                       </FormHelperText>
                     ) : null}
@@ -636,8 +595,7 @@ const CompanyInfo = () => {
                     id="address-container-2"
                     item
                     direction="row"
-                    spacing={3}
-                  >
+                    spacing={3}>
                     <Grid item xs={7}>
                       <TextField
                         error={
@@ -663,8 +621,7 @@ const CompanyInfo = () => {
                             errorsFirst.city2 &&
                             !companyFirst.city2 &&
                             companyFirst.city2 === ""
-                          }
-                        >
+                          }>
                           {errorsFirst.city2}
                         </FormHelperText>
                       ) : null}
@@ -678,15 +635,13 @@ const CompanyInfo = () => {
                         }
                         variant="outlined"
                         className={classes.formControl}
-                        disabled={disable}
-                      >
+                        disabled={disable}>
                         <InputLabel>ST</InputLabel>
                         <Select
                           name="state2"
                           id="state2"
                           value={companyFirst.state2}
-                          onChange={handleChangeFirst}
-                        >
+                          onChange={handleChangeFirst}>
                           {states.map((state) => (
                             <MenuItem key={state} value={state}>
                               {state}
@@ -702,7 +657,11 @@ const CompanyInfo = () => {
                     </Grid>
                     <Grid item xs={7}>
                       <TextField
-                        error={errorsFirst.zip2 && companyFirst.zip2 === ""}
+                        error={
+                          errorsFirst.zip2 &&
+                          companyFirst.zip2 === "" &&
+                          !companyFirst.checkedAddress
+                        }
                         variant="outlined"
                         fullWidth
                         disabled={disable}
@@ -713,10 +672,15 @@ const CompanyInfo = () => {
                         value={companyFirst.zip2}
                         inputProps={{ maxLength: 5 }}
                       />
-                      {errorsFirst.zip2 && companyFirst.zip2 === "" ? (
+                      {errorsFirst.zip2 &&
+                      companyFirst.zip2 === "" &&
+                      !companyFirst.checkedAddress ? (
                         <FormHelperText
-                          error={errorsFirst.zip2 && companyFirst.zip2 === ""}
-                        >
+                          error={
+                            errorsFirst.zip2 &&
+                            companyFirst.zip2 === "" &&
+                            !companyFirst.zip2
+                          }>
                           {errorsFirst.zip2}
                         </FormHelperText>
                       ) : null}
@@ -732,22 +696,21 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     onClick={nextStep}
-                    size="large"
-                  >
+                    size="large">
                     Continue
                   </Button>
                 </Grid>
               </Grid>
             </>
           ) : (
+            // Second Page
             <>
               <Grid
                 container
                 direction="row"
                 spacing={2}
                 justify="space-between"
-                alignItems="flex-start"
-              >
+                alignItems="flex-start">
                 {/* Left part of form */}
                 <Grid
                   container
@@ -756,8 +719,7 @@ const CompanyInfo = () => {
                   xs={12}
                   md={6}
                   direction="column"
-                  spacing={3}
-                >
+                  spacing={3}>
                   <Grid item>
                     <TextField
                       error={
@@ -779,40 +741,63 @@ const CompanyInfo = () => {
                         error={
                           errorsSecond.companyRep &&
                           companySecond.companyRep === ""
-                        }
-                      >
+                        }>
                         {errorsSecond.companyRep}
                       </FormHelperText>
                     ) : null}
                   </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FormControl
+                  <Grid item>
+                    <TextField
                       error={
-                        errorsSecond.companyType &&
-                        companySecond.companyType === ""
+                        errorsSecond.contact_email &&
+                        companySecond.contact_email === ""
                       }
                       variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <InputLabel>Company Type</InputLabel>
-                      <Select
-                        label="Company Type"
-                        name="companyType"
-                        id="companyType"
-                        onChange={handleChangeSecond}
-                        value={companySecond.companyType}
-                      >
-                        <MenuItem value="1">Private</MenuItem>
-                        <MenuItem value="2">Non-Profit</MenuItem>
-                        <MenuItem value="0">Social Business</MenuItem>
-                      </Select>
-                      {errorsSecond.companyRep &&
-                      companySecond.companyRep === "" ? (
-                        <FormHelperText>
-                          {errorsSecond.companyRep}
-                        </FormHelperText>
-                      ) : null}
-                    </FormControl>
+                      fullWidth
+                      id="contact_email"
+                      label="Contact Email"
+                      name="contact_email"
+                      onChange={handleChangeSecond}
+                      value={companySecond.contact_email}
+                      inputProps={{ maxLength: 50 }}
+                    />
+                    {errorsSecond.contact_email &&
+                    companySecond.contact_email === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.contact_email &&
+                          companySecond.contact_email === ""
+                        }>
+                        {errorsSecond.contact_email}
+                      </FormHelperText>
+                    ) : null}
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      error={
+                        (errorsSecond.phoneNumber &&
+                          companySecond.phoneNumber === "") ||
+                        errorsSecond.phoneNumber === "Enter valid Phone Number"
+                      }
+                      variant="outlined"
+                      fullWidth
+                      id="phoneNumber"
+                      label="Phone Number"
+                      name="phoneNumber"
+                      onChange={handleChangeSecond}
+                      value={companySecond.phoneNumber}
+                      inputProps={{ maxLength: 10 }}
+                    />
+                    {errorsSecond.phoneNumber &&
+                    companySecond.phoneNumber === "" ? (
+                      <FormHelperText
+                        error={
+                          errorsSecond.phoneNumber &&
+                          companySecond.phoneNumber === ""
+                        }>
+                        {errorsSecond.phoneNumber}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item>
                     <TextField
@@ -837,8 +822,7 @@ const CompanyInfo = () => {
                   xs={12}
                   md={6}
                   direction="column"
-                  spacing={3}
-                >
+                  spacing={3}>
                   <Grid item>
                     <TextField
                       error={
@@ -860,8 +844,7 @@ const CompanyInfo = () => {
                       <FormHelperText
                         error={
                           errorsSecond.mission && companySecond.mission === ""
-                        }
-                      >
+                        }>
                         {errorsSecond.mission}
                       </FormHelperText>
                     ) : null}
@@ -890,8 +873,7 @@ const CompanyInfo = () => {
                         error={
                           errorsSecond.description &&
                           companySecond.description === ""
-                        }
-                      >
+                        }>
                         {errorsSecond.description}
                       </FormHelperText>
                     ) : null}
@@ -903,16 +885,14 @@ const CompanyInfo = () => {
                 container
                 id="buttons-container"
                 justify="flex-end"
-                spacing={3}
-              >
+                spacing={3}>
                 <Grid item>
                   <Button
                     variant="outlined"
                     color="secondary"
                     className={classes.submit}
                     onClick={goBack}
-                    size="large"
-                  >
+                    size="large">
                     Go Back
                   </Button>
                 </Grid>
@@ -922,8 +902,7 @@ const CompanyInfo = () => {
                     color="secondary"
                     className={classes.submit}
                     size="large"
-                    onClick={handleSubmit}
-                  >
+                    onClick={handleSubmit}>
                     Submit
                   </Button>
                 </Grid>
