@@ -21,12 +21,9 @@ import { Link } from "react-router-dom";
 import { DataGrid } from "@material-ui/data-grid";
 import StarIcon from "@material-ui/icons/Star";
 import { styled } from "@material-ui/core/styles";
-<<<<<<< HEAD
-=======
 import Chip from "@material-ui/core/Chip";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
 
 const useStyles = makeStyles((theme) => ({
   dialogTitle: {
@@ -42,8 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
   dataGrid: {
     "& > div": { height: "fit-content !important" },
-<<<<<<< HEAD
-=======
     "& .MuiDataGrid-cell": { maxHeight: "none !important", flexWrap: "wrap" },
     "& .MuiDataGrid-row": { maxHeight: "none !important" },
     "& .MuiDataGrid-viewport": { maxHeight: "none !important" },
@@ -63,19 +58,15 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     color: "#0000008a",
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
   },
 }));
 
 const MyDataGrid = styled(DataGrid)`
   .container {
     height: 500px !important;
-<<<<<<< HEAD
-=======
   }
   .cell {
     max-width: none !important;
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
   }
 `;
 
@@ -265,8 +256,7 @@ const CompanyProjectTeam = ({ id }) => {
             to={{
               pathname: `/dashboard/search/${params.row.student_db_id}`,
             }}
-            style={{ textDecoration: "none" }}
-          >
+            style={{ textDecoration: "none" }}>
             <Typography>{params.row.student_name}</Typography>
           </Link>
         );
@@ -282,8 +272,6 @@ const CompanyProjectTeam = ({ id }) => {
       sortComparator: (v1, v2, param1, param2) =>
         param1.row.project_preference_for_student -
         param2.row.project_preference_for_student,
-<<<<<<< HEAD
-=======
     },
     {
       field: "student_skills",
@@ -297,8 +285,7 @@ const CompanyProjectTeam = ({ id }) => {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
+                id="panel1a-header">
                 <Typography className={classes.heading}>
                   Click here to see the skills
                 </Typography>
@@ -319,7 +306,6 @@ const CompanyProjectTeam = ({ id }) => {
           </>
         );
       },
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
     },
     {
       field: "action",
@@ -341,12 +327,7 @@ const CompanyProjectTeam = ({ id }) => {
                       className={classes.preference}
                       onChange={(e) =>
                         handleChange(e, params.row.student_db_id)
-<<<<<<< HEAD
                       }>
-=======
-                      }
-                    >
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
                       <MenuItem value={1}>Low</MenuItem>
                       <MenuItem value={2}>Medium</MenuItem>
                       <MenuItem value={3}>High</MenuItem>
@@ -366,17 +347,10 @@ const CompanyProjectTeam = ({ id }) => {
                         params.row.id,
                         params.row.student_db_id,
                         params.row.student_name,
-<<<<<<< HEAD
-                        params.row.project_id
-                      )
-                    }>
-=======
                         params.row.project_id,
                         params.row.student_skills
                       )
-                    }
-                  >
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
+                    }>
                     Save
                   </Button>
                 </Grid>
@@ -388,8 +362,7 @@ const CompanyProjectTeam = ({ id }) => {
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-                    onClick={() => handleCancel(params.row.student_db_id)}
-                  >
+                    onClick={() => handleCancel(params.row.student_db_id)}>
                     Cancel
                   </Button>
                 </Grid>
@@ -404,12 +377,7 @@ const CompanyProjectTeam = ({ id }) => {
                     // disabled={
                     //   saveStudent.project_id !== project.project_id
                     // }
-<<<<<<< HEAD
                     onClick={() => showFields(params.row.student_db_id)}>
-=======
-                    onClick={() => showFields(params.row.student_db_id)}
-                  >
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
                     Update
                   </Button>
                 </Grid>
@@ -423,8 +391,7 @@ const CompanyProjectTeam = ({ id }) => {
                 className={classes.button}
                 onClick={() => {
                   handleDelete(params.row.id);
-                }}
-              >
+                }}>
                 Delete
               </Button>
             </Grid>
@@ -441,10 +408,7 @@ const CompanyProjectTeam = ({ id }) => {
       project_preference_for_student: member.project_preference_for_student,
       student_db_id: member.student_db_id,
       student_name: member.student_name,
-<<<<<<< HEAD
-=======
       student_skills: member.student_skills,
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
     };
   });
 
@@ -463,21 +427,9 @@ const CompanyProjectTeam = ({ id }) => {
           {Object.keys(teamMembers).length > 0 ? (
             <>
               <div
-<<<<<<< HEAD
-                style={{ height: "100%", width: "100%" }}
-                className={classes.dataGrid}>
-                <MyDataGrid
-                  autoHeight={true}
-                  autoPageSize={true}
-                  rows={rows}
-                  columns={columns}
-                />
-=======
                 style={{ height: "600px", width: "100%" }}
-                className={classes.dataGrid}
-              >
+                className={classes.dataGrid}>
                 <MyDataGrid autoPageSize={true} rows={rows} columns={columns} />
->>>>>>> 6eca6936f09f9d186077ffadb1fa969f1c194aa6
               </div>
             </>
           ) : (
