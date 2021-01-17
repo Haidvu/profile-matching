@@ -1,6 +1,6 @@
 # Front End
 
-## Web app for UHCS Consulting Clinic
+## UH CS Consulting Clinic | [Website](scmatch.cs.uh.edu) | [Docs](https://docs.google.com/document/d/1qAKRZRM-IT5l_4MUn2Y0_DtkMkUm9Him8XRKAZrxHXM/edit?usp=sharing)
 
 ### Installation
 
@@ -15,4 +15,4 @@
 - Material-UI
 - MapBox
 
-[Docs](https://docs.google.com/document/d/1qAKRZRM-IT5l_4MUn2Y0_DtkMkUm9Him8XRKAZrxHXM/edit?usp=sharing)
+> Refer to package.json for all JavaScript libraries used in the frontend project
