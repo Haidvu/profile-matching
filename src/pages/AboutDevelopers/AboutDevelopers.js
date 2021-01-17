@@ -13,6 +13,13 @@ import Grid from "@material-ui/core/Grid";
 import NavBar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
+import Jerel from "../../assets/Jerel.jpeg";
+import Mayoor from "../../assets/Mayoor.jpeg";
+import Muhammad from "../../assets/Muhammad.jpeg";
+import Elisa from "../../assets/Elisa.jpeg";
+import Hai from "../../assets/Hai.jpeg";
+import Thanh from "../../assets/Thanh.jpeg";
+
 const useStyles = makeStyles((theme) => ({
   main: {
     background: "#f5f5f5",
@@ -85,6 +92,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact: I like to work on cars as a hobby
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/jerellopez/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -92,7 +102,8 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://avatars3.githubusercontent.com/u/58873590?s=460&u=190a998622e3d85be2ae5fdca839c3bd10f2acc3&v=4"
+                image={Jerel}
+                title="Jerel Lopez"
               />
             </Card>
           </Grid>
@@ -114,6 +125,9 @@ export default function MediaControlCard() {
                     Fun Fact: I want to do skydiving even though I am scared of
                     heights!
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/mayoor-shardha/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -121,35 +135,8 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://media-exp1.licdn.com/dms/image/C4E03AQEtZYGpiDU7YQ/profile-displayphoto-shrink_400_400/0/1600906402673?e=1616025600&v=beta&t=6ysFxodU0jybsP3sXd6vgdd93cbIWUlCkhzdMpvkPIA"
-              />
-            </Card>
-          </Grid>
-
-          <Grid item xs={3}>
-            <Card className={classes.root}>
-              <div className={classes.details}>
-                <CardContent className={classes.content}>
-                  <Typography component="h5" variant="h5">
-                    Hai Vu
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Junior, BS Computer Science (May 2022)
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Minor: Mathematics
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact: I'm an amateur carpenter
-                  </Typography>
-                  <Link href="https://www.linkedin.com/in/haidvu/">
-                    <LinkedInIcon className={classes.icon} />
-                  </Link>
-                </CardContent>
-              </div>
-              <CardMedia
-                className={classes.cover}
-                image="https://media-exp1.licdn.com/dms/image/C4E03AQE31aoPM2imkQ/profile-displayphoto-shrink_400_400/0/1595704770154?e=1616025600&v=beta&t=YOJpoU8sh0p0mA3HfEBHcu3RPS6lrJMMZJcFA3s_wLI"
+                image={Mayoor}
+                title="Mayoor Shardha"
               />
             </Card>
           </Grid>
@@ -170,6 +157,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact: I like potatoes (very much)
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/muhammad-u/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -177,7 +167,8 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://media-exp1.licdn.com/dms/image/C4E03AQFWhWvfUXUbVQ/profile-displayphoto-shrink_400_400/0/1598304352545?e=1616025600&v=beta&t=_KnbKmIPtP3-5BVp7m8Sg4Yf8Qm7_ReMMy1cQ6c8hGw"
+                image={Muhammad}
+                title="Muhammad Usman"
               />
             </Card>
           </Grid>
@@ -198,6 +189,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact: I like doing art
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/sai-patibandla-8b6b1715a/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -206,6 +200,7 @@ export default function MediaControlCard() {
               <CardMedia
                 className={classes.cover}
                 image="https://avatars2.githubusercontent.com/u/15235080?s=400&v=4"
+                title="Sai Patibandla"
               />
             </Card>
           </Grid>
@@ -226,6 +221,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact: My favorite fictional character is Sherlock Holmes
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/elisa-martinez-fuentes/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -233,8 +231,37 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://media-exp1.licdn.com/dms/image/C4E03AQGV5rhrl7tHYA/profile-displayphoto-shrink_400_400/0/1553719191230?e=1616025600&v=beta&t=SvhGj059AXGJkC-PD9n4VpwzkYUg2OY1jc7M7Vk1Tac"
+                image={Elisa}
+                title="Elisa Martinez"
               />
+            </Card>
+          </Grid>
+
+          <Grid item xs={3}>
+            <Card className={classes.root}>
+              <div className={classes.details}>
+                <CardContent className={classes.content}>
+                  <Typography component="h5" variant="h5">
+                    Hai Vu
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Junior, BS Computer Science (May 2022)
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Minor: Mathematics
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Fun Fact: I'm an amateur carpenter
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Backend
+                  </Typography>
+                  <Link href="https://www.linkedin.com/in/haidvu/">
+                    <LinkedInIcon className={classes.icon} />
+                  </Link>
+                </CardContent>
+              </div>
+              <CardMedia className={classes.cover} image={Hai} title="Hai Vu" />
             </Card>
           </Grid>
 
@@ -251,6 +278,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Minor: Mathematics
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Backend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/thanhtanle/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -258,7 +288,8 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://media-exp1.licdn.com/dms/image/C4E03AQEu83drkqqoFw/profile-displayphoto-shrink_400_400/0/1597455837340?e=1616025600&v=beta&t=ruvWomJEmRqXI7_a4vsbcPlN_AgWu4LV69N4t7jVSPQ"
+                image={Thanh}
+                title="Thanh Le"
               />
             </Card>
           </Grid>
@@ -279,6 +310,9 @@ export default function MediaControlCard() {
                   <Typography variant="subtitle1" color="textSecondary">
                     Fun Fact:
                   </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Backend
+                  </Typography>
                   <Link href="https://www.linkedin.com/in/lejing-huang-248467176/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
@@ -287,6 +321,7 @@ export default function MediaControlCard() {
               <CardMedia
                 className={classes.cover}
                 image="https://avatars1.githubusercontent.com/u/60712503?s=400&v=4"
+                title="Lejing Huang"
               />
             </Card>
           </Grid>
