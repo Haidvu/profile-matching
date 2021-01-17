@@ -87,7 +87,6 @@ const CompanyProjectTeam = ({ id }) => {
     axios
       .get(`/project_select_student/all`, getConfig())
       .then((res) => {
-        console.log(res.data);
         const savedMembers = res.data.filter((item) => {
           return parseInt(item.project_id) === parseInt(id);
         });
@@ -127,8 +126,6 @@ const CompanyProjectTeam = ({ id }) => {
         getConfig()
       )
       .then((res) => {
-        console.log("update skill", student_skills);
-
         setTeamMembers({
           ...teamMembers,
           [student_db_id]: {

@@ -33,16 +33,6 @@ const CompanyRoutes = () => {
 
         <Route path={`${path}/search`} exact component={CompanySearch} />
         <Route path={`${path}/search/:id`} component={StudentDetailed} />
-        {/* <Route
-          path={`${path}/*`}
-          render={() => (
-            <Redirect
-              to={{
-                pathname: "/whoTouchMySpaghet",
-              }}
-            />
-          )}
-        /> */}
       </Switch>
     </div>
   );

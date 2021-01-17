@@ -69,7 +69,6 @@ const StudentSelected = () => {
       };
 
       axios.post("/company_project/search", param, getConfig()).then((res) => {
-        console.log(res.data);
         setSelectedProjects(matchProjects(studentSelection, res.data));
         setLoading(false);
       });

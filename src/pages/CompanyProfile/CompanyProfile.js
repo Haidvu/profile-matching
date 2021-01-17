@@ -457,7 +457,6 @@ export default function CompanyProfile() {
                 //Profile update api error.
               })
               .catch((err) => {
-                console.log(err.response.data);
                 setUpdateErrors({ ...updateErrors, ...err.response.data });
                 setDialogOpen(false);
                 setLoading2(false);

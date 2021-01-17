@@ -354,7 +354,6 @@ export const StudentSearch = () => {
               >
                 <AccordionSummary
                   className={classes.accordionExpand}
-                  // expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
@@ -376,13 +375,6 @@ export const StudentSearch = () => {
                     alignItems="center"
                   >
                     <Grid
-                      // container
-                      // id="first-left"
-                      // item
-                      // xs={12}
-                      // spacing={1}
-                      // direction="row"
-                      // className={classes.ASGrid}
                       container
                       id="first-left"
                       item

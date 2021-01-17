@@ -117,11 +117,10 @@ export default function Dashboard() {
         })
         .catch((err) => {
           // to prevent user from changing their roles
-          // would keep commented while in developement
-          // console.log(err.response);
-          // if (err.response.status === 404) {
-          //   logout();
-          // }
+          console.log(err.response);
+          if (err.response.status === 404) {
+            logout();
+          }
         });
     }
   }, [dispatch, role_id, slug]);

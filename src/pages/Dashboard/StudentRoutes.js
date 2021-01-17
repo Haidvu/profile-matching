@@ -20,17 +20,6 @@ const StudentRoutes = () => {
           path={`${path}/projects/:project`}
           render={(props) => <ProjectsListTemplate {...props} />}
         />
-
-        {/* <Route
-          path={`${path}/*`}
-          render={() => (
-            <Redirect
-              to={{
-                pathname: "/whoTouchMySpaghet",
-              }}
-            />
-          )}
-        /> */}
       </Switch>
     </div>
   );

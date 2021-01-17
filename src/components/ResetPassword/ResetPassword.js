@@ -54,7 +54,6 @@ export default function ResetPassword({ setValidEmail }) {
           setError(res.data.error);
         } else {
           setEmailInput(res.data);
-          console.log(res.data);
           setValidEmail(true);
         }
       })
@@ -62,7 +61,6 @@ export default function ResetPassword({ setValidEmail }) {
         setError(
           "Oops! Be sure to enter an existing email registered on FutureStart. Try again"
         );
-        console.log(err);
       });
   };
 

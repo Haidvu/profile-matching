@@ -1139,7 +1139,6 @@ export default function CompanyProject({ match }) {
                               project_tech: e,
                             });
                           }}
-                          {...console.log(skills)}
                         />
                       )}
 
