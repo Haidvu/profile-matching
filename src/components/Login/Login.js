@@ -91,7 +91,6 @@ function Login() {
         localStorage.setItem("refresh", res.data.refresh);
         setTimeout(getNewToken, 17900 * 1000); //Get new token approxiamtey every 4 hrs and 58 min.
         if (res.data.slug) {
-          console.log("Inside Login: ", res);
           localStorage.setItem("slug", res.data.slug);
           history.push("/dashboard");
         } else {
@@ -99,7 +98,6 @@ function Login() {
         }
       })
       .catch((err) => {
-        console.log(err);
         setError(
           err.response.data.detail +
             ". Make sure your email and password is correct."
@@ -165,11 +163,6 @@ function Login() {
                 Sign In
               </Button>
               <Grid container justify="space-between">
-                {/* <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid> */}
                 <Grid item>
                   <Link to="/signup" href="signup" variant="body2">
                     {"Don't have an account? Sign Up"}

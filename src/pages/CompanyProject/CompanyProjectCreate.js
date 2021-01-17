@@ -343,7 +343,6 @@ export default function CompanyProjectCreate() {
               onChange={(e) => {
                 setCompanyInput({ ...companyInput, project_type: e.label });
               }}
-              {...console.log(projectType)}
               options={projectType}
             />
 
