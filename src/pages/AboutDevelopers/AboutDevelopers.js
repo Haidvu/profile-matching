@@ -19,6 +19,7 @@ import Muhammad from "../../assets/Muhammad.jpeg";
 import Elisa from "../../assets/Elisa.jpeg";
 import Hai from "../../assets/Hai.jpeg";
 import Thanh from "../../assets/Thanh.jpeg";
+import Lejing from "../../assets/Lejing.jpeg"
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -302,13 +303,10 @@ export default function MediaControlCard() {
                     Lejing Huang
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    BS Computer Science
+                    Junior, BS Computer Information Systems (May 2022)
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    CS Undergrad at University of Houston.
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact:
+                    Minor: Computer Science
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     Project Task: Backend
@@ -320,7 +318,7 @@ export default function MediaControlCard() {
               </div>
               <CardMedia
                 className={classes.cover}
-                image="https://avatars1.githubusercontent.com/u/60712503?s=400&v=4"
+                image={Lejing}
                 title="Lejing Huang"
               />
             </Card>
