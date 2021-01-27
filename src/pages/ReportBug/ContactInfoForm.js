@@ -63,7 +63,7 @@ const SecondStep = ({
   handleBack,
   handleNext,
   handleChange,
-  values: { first_name, last_name, contact_email, contact_phone },
+  values: { first_name, last_name, contact_email },
   formErrors,
 }) => {
   // Check if all values are not empty or if there are some error
@@ -73,9 +73,7 @@ const SecondStep = ({
     last_name.length > 0 &&
     !formErrors.lastName &&
     contact_email.length > 0 &&
-    !formErrors.email &&
-    contact_phone.length > 0 &&
-    !formErrors.phone;
+    !formErrors.email;
 
   const classes = useStyles();
   return (
@@ -125,21 +123,6 @@ const SecondStep = ({
                   margin="normal"
                   error={!!formErrors.contact_email}
                   helperText={formErrors.contact_email}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Phone"
-                  name="contact_phone"
-                  placeholder="Your phone number"
-                  type="phone"
-                  value={contact_phone || ""}
-                  onChange={handleChange}
-                  margin="normal"
-                  error={!!formErrors.contact_phone}
-                  helperText={formErrors.contact_phone}
                   required
                 />
               </Grid>

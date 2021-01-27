@@ -73,7 +73,6 @@ const Confirm = ({ handleNext, handleBack, values }) => {
     first_name,
     last_name,
     contact_email,
-    contact_phone,
     issue_summary,
   } = values;
 
@@ -123,19 +122,6 @@ const Confirm = ({ handleNext, handleBack, values }) => {
                     <ListItemText
                       primary="Email Address"
                       secondary={contact_email}
-                    />
-                  </ListItem>
-
-                  <Divider />
-
-                  <ListItem>
-                    <ListItemText
-                      primary="Phone"
-                      secondary={
-                        contact_phone.length > 0
-                          ? contact_phone
-                          : "Not Provided"
-                      }
                     />
                   </ListItem>
                 </List>
