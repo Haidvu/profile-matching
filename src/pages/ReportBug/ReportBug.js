@@ -19,7 +19,6 @@ export default function ReportBug() {
     first_name: "",
     last_name: "",
     contact_email: "",
-    contact_phone: "",
     issue_summary: "",
   };
 
@@ -40,11 +39,6 @@ export default function ReportBug() {
       error: "",
       validate: "contact_email",
       maxLength: 50,
-    },
-    contact_phone: {
-      error: "",
-      validate: "contact_phone",
-      maxLength: 15,
     },
     issue_summary: {
       error: "",
