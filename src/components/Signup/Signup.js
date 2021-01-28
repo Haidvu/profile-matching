@@ -7,14 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
-import {
-  Button,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from "@material-ui/core/";
+import { Button } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
@@ -47,13 +40,22 @@ const useStyles = makeStyles((theme) => ({
   alert: {
     marginTop: theme.spacing(2),
   },
+  agree: {
+    background: "#C8102E",
+    color: "#FFFFFF",
+    "&:hover, &.Mui-focusVisible": {
+      transition: "0.3s",
+      color: "#FFFFFF",
+      backgroundColor: "#C8102E",
+    },
+  },
 }));
 
 export default function SignUp() {
   const classes = useStyles();
   const [signUpInfo, setSignUpInfo] = useState({
     email: "",
-    role_id: "",
+    role_id: "0",
     password1: "",
     password2: "",
   });
@@ -201,7 +203,11 @@ export default function SignUp() {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClose} color="secondary" autoFocus>
+                  <Button
+                    onClick={handleClose}
+                    className={classes.agree}
+                    autoFocus
+                  >
                     Agree
                   </Button>
                 </DialogActions>
