@@ -39,7 +39,6 @@ import WorkRoundedIcon from "@material-ui/icons/WorkRounded";
 import ShortTextRoundedIcon from "@material-ui/icons/ShortTextRounded";
 import PeopleRoundedIcon from "@material-ui/icons/PeopleRounded";
 import LanguageRoundedIcon from "@material-ui/icons/LanguageRounded";
-import PhoneRoundedIcon from "@material-ui/icons/PhoneRounded";
 import LocationOnRoundedIcon from "@material-ui/icons/LocationOnRounded";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 
@@ -191,7 +190,6 @@ export default function CompanyProfile() {
     companyWebsite: "",
     companyRep: "",
     industryType: "",
-    phoneNumber: "",
     streetAddress: "",
     city: "",
     state: "",
@@ -268,7 +266,6 @@ export default function CompanyProfile() {
             companyWebsite: res.data.company_website,
             companyRep: res.data.representative_name,
             industryType: res.data.industry_type,
-            phoneNumber: res.data.company_phone_no,
             streetAddress: getStreetAddress(res.data.company_address),
             city: getCity(res.data.company_address),
             state: getState(res.data.company_address),
@@ -314,7 +311,6 @@ export default function CompanyProfile() {
       companyWebsite: profile.company_website,
       companyRep: profile.representative_name,
       industryType: profile.industry_type,
-      phoneNumber: profile.company_phone_no,
       zip: profile.company_zip,
       streetAddress: getStreetAddress(profile.company_address),
       city: getCity(profile.company_address),
@@ -366,7 +362,6 @@ export default function CompanyProfile() {
 
   const [authError, setAuthError] = useState("");
   const [updateErrors, setUpdateErrors] = useState({
-    company_phone_no: "",
     company_name: "",
     industry_type: "",
     representative_name: "",
@@ -410,7 +405,6 @@ export default function CompanyProfile() {
                 {
                   username: localStorage.getItem("email_id"),
                   company_name: profileInfo.name,
-                  company_phone_no: profileInfo.phoneNumber,
                   industry_type: profileInfo.industryType,
                   representative_name: profileInfo.companyRep,
                   company_representative_type: profileInfo.isSolo,
@@ -926,58 +920,6 @@ export default function CompanyProfile() {
                         ))}
                       </Select>
                     </FormControl>
-                  </div>
-                )}
-              </ListItem>
-              {!showEditFields ? (
-                <Divider variant="inset" component="li" />
-              ) : null}
-              <ListItem alignItems="flex-start">
-                <ListItemIcon>
-                  <PhoneRoundedIcon />
-                </ListItemIcon>
-                {showEditFields === false ? (
-                  <ListItemText
-                    primary="Phone Number"
-                    classes={{
-                      secondary: classes.inline,
-                      primary: classes.inputLabelBold,
-                    }}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          color="textPrimary"
-                        >
-                          {profileInfo.phoneNumber}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                ) : (
-                  <div className={classes.fullWidth}>
-                    <TextField
-                      label="Phone Number"
-                      className={classes.formInput}
-                      value={profileInfo.phoneNumber}
-                      onChange={handleChange}
-                      name="phoneNumber"
-                      required
-                      InputLabelProps={{
-                        classes: {
-                          root: classes.inputLabel,
-                          asterisk: classes.labelAsterisk,
-                        },
-                      }}
-                      inputProps={{ maxLength: 10 }}
-                      error={updateErrors.company_phone_no !== ""}
-                    ></TextField>
-                    {updateErrors.company_phone_no ? (
-                      <Typography color="error">
-                        {updateErrors.company_phone_no}
-                      </Typography>
-                    ) : null}
                   </div>
                 )}
               </ListItem>

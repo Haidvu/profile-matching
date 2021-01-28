@@ -128,7 +128,6 @@ const CompanyInfo = () => {
   const [companySecond, setCompanySecond] = useState({
     companyRep: "",
     contact_email: "",
-    phoneNumber: "",
     website: "",
     mission: "",
     description: "",
@@ -234,7 +233,6 @@ const CompanyInfo = () => {
     setErrorsSecond({
       companyRep: companySecond.companyRep === "" ? "Required" : null,
       contact_email: companySecond.contact_email === "" ? "Required" : null,
-      phoneNumber: companySecond.phoneNumber === "" ? "Required" : null,
       mission: companySecond.mission === "" ? "Required" : null,
       description: companySecond.description === "" ? "Required" : null,
     });
@@ -277,7 +275,6 @@ const CompanyInfo = () => {
           .then((response) => {
             const data = {
               company_name: companyFirst.name,
-              company_phone_no: companySecond.phoneNumber,
               industry_type: companyFirst.industryType,
               company_contact_email: companySecond.contact_email,
               company_zip: companyFirst.zip,
@@ -769,33 +766,6 @@ const CompanyInfo = () => {
                           companySecond.contact_email === ""
                         }>
                         {errorsSecond.contact_email}
-                      </FormHelperText>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      error={
-                        (errorsSecond.phoneNumber &&
-                          companySecond.phoneNumber === "") ||
-                        errorsSecond.phoneNumber === "Enter valid Phone Number"
-                      }
-                      variant="outlined"
-                      fullWidth
-                      id="phoneNumber"
-                      label="Phone Number"
-                      name="phoneNumber"
-                      onChange={handleChangeSecond}
-                      value={companySecond.phoneNumber}
-                      inputProps={{ maxLength: 10 }}
-                    />
-                    {errorsSecond.phoneNumber &&
-                    companySecond.phoneNumber === "" ? (
-                      <FormHelperText
-                        error={
-                          errorsSecond.phoneNumber &&
-                          companySecond.phoneNumber === ""
-                        }>
-                        {errorsSecond.phoneNumber}
                       </FormHelperText>
                     ) : null}
                   </Grid>

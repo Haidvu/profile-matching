@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -11,7 +11,6 @@ import clsx from "clsx";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
 import WebRoundedIcon from "@material-ui/icons/WebRounded";
-import { DataContext } from "../../contexts/dataContext";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import WarningIcon from "@material-ui/icons/Warning";
@@ -127,9 +126,6 @@ function StudentProject({ projects, setProjects, skills }) {
   }
   const [alert, setAlert] = useState("");
 
-  const { data } = useContext(DataContext);
-  const { profile } = data;
-
   const classes = useStyles();
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -137,7 +133,6 @@ function StudentProject({ projects, setProjects, skills }) {
   const [openDelete, setOpenDelete] = useState(false);
 
   const [currentProject, setCurrentProject] = useState({
-    student_id: profile.student_id,
     project_description: "",
     project_end_date: "",
     project_id: null,
@@ -165,7 +160,6 @@ function StudentProject({ projects, setProjects, skills }) {
   const handleClickOpenEdit = (project) => {
     setOpenEdit(true);
     setCurrentProject({
-      student_id: profile.student_id,
       project_description: project.project_description,
       project_end_date: project.project_end_date,
       project_id: project.project_id,
@@ -264,7 +258,6 @@ function StudentProject({ projects, setProjects, skills }) {
         .put(
           `/student_project/${project_id}/update`,
           {
-            student_id: profile.student_id,
             project_name: currentProject.project_name,
             project_description: currentProject.project_description,
             project_link: currentProject.project_link,
@@ -343,7 +336,7 @@ function StudentProject({ projects, setProjects, skills }) {
                 className={classes.projectDesc}
                 style={{ fontWeight: "lighter" }}
               >
-                * {project.project_description} {project.student_id}
+                * {project.project_description}
               </p>
             </div>
 

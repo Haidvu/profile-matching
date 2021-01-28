@@ -112,7 +112,6 @@ const AdminMatchingTable = ({ loading, matchingList }) => {
     {label:"Company", key: "company_name", align:"center" }, 
     {label:"Project", key:"project_name", align:"center" } , 
     {label:"Student", key:"student_name", align:"center" }, 
-    {label:"PeopleSoft ID", key: "student_id", align:"center" }, 
     {label:"Company Preference", key:"project_preference_for_student", align:"center" },
     {label:"Student Preference", key:"student_preference_for_project",align:"center" }];
  
