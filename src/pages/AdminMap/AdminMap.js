@@ -32,7 +32,6 @@ function getTooltip({ object }) {
       <div>Address: ${object.address}</div>
       <div>Description: ${object.description}</div>
       <div>Email: ${object.contact_email}</div>
-      <div>Contact: ${object.phone}</div>
       <div>Website: ${object.website}</div>
       <div>
 
@@ -80,7 +79,6 @@ export default function AdminMap({
               ],
               name: res.company_name,
               description: res.company_description,
-              phone: res.company_phone_no,
               website: res.company_website,
               contact_email: res.company_contact_email,
               address: address,

@@ -125,7 +125,7 @@ const StudentsList = ({ loading, studentsList }) => {
                     }}
                     avatar={<Avatar className={classes.avatar}></Avatar>}
                     title={student.full_name}
-                    subheader={`${student.degree} - ${student.major}`}></CardHeader>
+                    ></CardHeader>
 
                   <CardContent
                     className={`${classes.cardContent} ${classes.noPaddingTop}`}>

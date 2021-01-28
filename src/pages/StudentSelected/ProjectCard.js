@@ -282,7 +282,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
             )}
           </div>
         </CardContent>
-        <Divider></Divider>
+        <Divider/>
         <CardContent>
           <Link
             to={{

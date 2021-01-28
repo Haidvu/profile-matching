@@ -18,7 +18,6 @@ import {
 import clsx from "clsx";
 import WebRoundedIcon from "@material-ui/icons/WebRounded";
 import FormatListBulletedTwoToneIcon from "@material-ui/icons/FormatListBulletedTwoTone";
-import SchoolRoundedIcon from "@material-ui/icons/SchoolRounded";
 import StarsIcon from "@material-ui/icons/Stars";
 import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import axios from "axios";
@@ -230,9 +229,6 @@ const StudentDetailed = ({ match }) => {
     getStudent();
   }, [getStudent]);
 
-  const openDialog = () => {
-    setDialogOpen(false);
-  };
   return (
     <>
       {loading ? (
@@ -281,53 +277,6 @@ const StudentDetailed = ({ match }) => {
                     </div>
                   </div>
                 </ListItemText>
-              </ListItem>
-
-              <Divider variant="inset" component="li" />
-
-              <ListItem alignItems="flex-start">
-                <ListItemIcon>
-                  <SchoolRoundedIcon />
-                </ListItemIcon>
-                <div className={classes.flexColumn}>
-                  <Typography className={classes.sectionHeader}>
-                    Academic
-                  </Typography>
-
-                  <Typography
-                    className={
-                      classes.sectionContent
-                    }>{`Degree: ${student.degree}`}</Typography>
-                  <Typography className={classes.sectionContent}>
-                    {" "}
-                    {`Major: ${student.major}`}
-                  </Typography>
-                </div>
-              </ListItem>
-
-              <Divider variant="inset" component="li" />
-
-              <ListItem alignItems="flex-start">
-                <ListItemIcon>
-                  <SchoolRoundedIcon />
-                </ListItemIcon>
-                <div className={classes.flexColumn}>
-                  <Typography className={classes.sectionHeader}>
-                    Academic
-                  </Typography>
-                  <Typography
-                    className={
-                      classes.sectionContent
-                    }>{`Graduation Date: ${student.graduation_date}`}</Typography>
-                  <Typography
-                    className={
-                      classes.sectionContent
-                    }>{`Degree: ${student.degree}`}</Typography>
-                  <Typography className={classes.sectionContent}>
-                    {" "}
-                    {`Major: ${student.major}`}
-                  </Typography>
-                </div>
               </ListItem>
 
               <Divider variant="inset" component="li" />

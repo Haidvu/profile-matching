@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Button,
   TextField,
@@ -17,7 +17,6 @@ import classNames from "classnames";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { getConfig } from "../../authConfig";
-import { DataContext } from "../../contexts/dataContext";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -60,8 +59,6 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const { data } = useContext(DataContext);
-  const { profile } = data;
   const [updateFailed, setUpdateFailed] = useState(false);
   const handleCloseUpdateFailed = () => {
     setUpdateFailed(false);
@@ -154,7 +151,6 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const handleSave = () => {
     if (validate()) {
       const data = {
-        student_id: profile.student_id,
         project_name: studentInput.project_name,
         project_description: studentInput.project_description,
         project_link: studentInput.project_link,
