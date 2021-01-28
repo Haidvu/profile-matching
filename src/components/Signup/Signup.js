@@ -163,39 +163,17 @@ export default function SignUp() {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControl>
-                <FormLabel>Choose account type</FormLabel>
-                <RadioGroup
-                  className={classes.radio}
-                  aria-label="account_type"
-                  name="role_id"
-                  row
-                  color="secondary"
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="0"
-                    control={<Radio />}
-                    label="Student"
-                  />
-                  <FormControlLabel
-                    value="1"
-                    control={<Radio />}
-                    label="Company"
-                  />
-                </RadioGroup>
-              </FormControl>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                className={classes.submit}
+              >
+                Sign Up
+              </Button>
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
           <Grid
             container
             justify="space-between"
