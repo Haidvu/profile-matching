@@ -20,6 +20,12 @@ import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -56,6 +62,16 @@ export default function SignUp() {
 
   const handleChange = (e) => {
     setSignUpInfo({ ...signUpInfo, [e.target.name]: e.target.value });
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   let history = useHistory();
@@ -104,7 +120,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Student Sign up
         </Typography>
         <form className={classes.form} onSubmit={signUp}>
           <Grid container spacing={2}>
@@ -180,7 +196,39 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container justify="flex-end">
+          <Grid
+            container
+            justify="space-between"
+            direction="row"
+            alignItems="flex-start"
+          >
+            <Grid item>
+              <Link variant="body2" onClick={handleClickOpen}>
+                Company Account?
+              </Link>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Creating a Company Account?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    For company accounts, we please ask that you contact Dr.
+                    Nouhad Rizk to request an account. You may also request an
+                    account by emailing consultingclinicservices@gmail.com
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary" autoFocus>
+                    Agree
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Grid>
             <Grid item>
               <Link href="/login" variant="body2">
                 Already have an account? Sign in
