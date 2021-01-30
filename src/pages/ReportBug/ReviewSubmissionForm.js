@@ -69,12 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Destructure props
 const Confirm = ({ handleNext, handleBack, values }) => {
-  const {
-    first_name,
-    last_name,
-    contact_email,
-    issue_summary,
-  } = values;
+  const { first_name, last_name, contact_email, issue_summary } = values;
 
   const handleSubmit = () => {
     axios
