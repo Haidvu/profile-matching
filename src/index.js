@@ -6,7 +6,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import customTheme from "./customTheme";
 import axios from "axios";
 
-axios.defaults.baseURL = "http://18.213.74.196:8000/api";
+axios.defaults.baseURL = "http://52.173.242.147:8000/api";
 
 ReactDOM.render(
   <DataContextProvider>
