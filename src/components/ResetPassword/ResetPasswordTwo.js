@@ -81,7 +81,10 @@ export default function ResetPasswordTwo() {
       };
 
       axios
-        .patch("/user_accounts/password_reset_complete", data)
+        .patch(
+          "http://52.173.242.147:8000/api/user_accounts/password_reset_complete",
+          data
+        )
         .then((res) => {
           if (res.data.error) {
             setError(res.data.error);

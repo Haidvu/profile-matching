@@ -69,16 +69,11 @@ const useStyles = makeStyles((theme) => ({
 
 // Destructure props
 const Confirm = ({ handleNext, handleBack, values }) => {
-  const {
-    first_name,
-    last_name,
-    contact_email,
-    issue_summary,
-  } = values;
+  const { first_name, last_name, contact_email, issue_summary } = values;
 
   const handleSubmit = () => {
     axios
-      .post("/issue_report/create", values)
+      .post("http://52.173.242.147:8000/api/issue_report/create", values)
       .then((res) => {
         console.log(values);
         handleNext();
