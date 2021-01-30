@@ -73,7 +73,7 @@ const Confirm = ({ handleNext, handleBack, values }) => {
 
   const handleSubmit = () => {
     axios
-      .post("http://52.173.242.147:8000/api/issue_report/create", values)
+      .post("/issue_report/create", values)
       .then((res) => {
         console.log(values);
         handleNext();

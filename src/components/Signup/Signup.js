@@ -88,7 +88,7 @@ export default function SignUp() {
     } else {
       setError("");
       axios
-        .post("http://52.173.242.147:8000/api/user_accounts/signup", signUpInfo)
+        .post("/user_accounts/signup", signUpInfo)
         .then((res) => {
           if (res.data.error) {
             setError(res.data.error);
