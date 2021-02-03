@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { DataContext } from "../../contexts/dataContext";
 import {
   Button,
   TextField,
@@ -60,6 +61,9 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [updateFailed, setUpdateFailed] = useState(false);
+  const { data } = useContext(DataContext);
+  const { profile } = data;
+  
   const handleCloseUpdateFailed = () => {
     setUpdateFailed(false);
   };
@@ -151,6 +155,7 @@ export default function StudentProjectAdd({ projects, setProjects, skills }) {
   const handleSave = () => {
     if (validate()) {
       const data = {
+        student_db_id: profile.student_db_id,
         project_name: studentInput.project_name,
         project_description: studentInput.project_description,
         project_link: studentInput.project_link,

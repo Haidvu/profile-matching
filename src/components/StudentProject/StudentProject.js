@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { DataContext } from "../../contexts/dataContext";
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -110,6 +111,9 @@ const useStyles = makeStyles((theme) => ({
 
 //Skills denotes to all the skills in the database
 function StudentProject({ projects, setProjects, skills }) {
+  const { data } = useContext(DataContext);
+  const { profile } = data;
+
   const options = skills.map((skill) => {
     return {
       label: skill.skill_name,
@@ -258,6 +262,7 @@ function StudentProject({ projects, setProjects, skills }) {
         .put(
           `/student_project/${project_id}/update`,
           {
+            student_db_id: profile.student_db_id,
             project_name: currentProject.project_name,
             project_description: currentProject.project_description,
             project_link: currentProject.project_link,

@@ -333,7 +333,7 @@ export default function CompanyProjectCreate() {
 
           <FormControl required className={classes.selectProjectType}>
             <FormHelperText>
-              Project Type<span className={classes.labelAsterisk}>*</span>
+              Project Type
             </FormHelperText>
             <Select
               //className={classes.selectProjectType}
@@ -354,7 +354,7 @@ export default function CompanyProjectCreate() {
           </FormControl>
           <FormControl required className={classes.selectCompanySkills}>
             <FormHelperText>
-              Skills<span className={classes.labelAsterisk}>*</span>
+              Skills
             </FormHelperText>
             <Select
               //className={classes.selectCompanySkills}
