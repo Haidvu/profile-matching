@@ -142,7 +142,7 @@ const ProjectCard = ({ project, setModifiedProject, removeProject }) => {
         `/student_select_project/${project.selection_id}/update`,
         {
           project_id: project.project_id,
-          student_preference_for_project: preference,
+          student_preference_for_project: preference
         },
         getConfig()
       )

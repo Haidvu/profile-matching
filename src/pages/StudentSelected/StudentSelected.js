@@ -57,7 +57,7 @@ const StudentSelected = () => {
   useEffect(() => {
     axios.get("/student_select_project/all", getConfig()).then((res) => {
       const studentSelection = res.data.filter(
-        (selection) => selection.student_id === data.profile.student_id
+        (selection) => selection.student_db_id === data.profile.student_db_id
       );
       const param = {
         company_name: "",
@@ -92,7 +92,7 @@ const StudentSelected = () => {
       //     });
       //   });
     });
-  }, [data.profile.student_id]);
+  }, [data.profile.student_db_id]);
 
   //used to change preference from project card (child) component
   const setModifiedProject = (modifiedProject) => {

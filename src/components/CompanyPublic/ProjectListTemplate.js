@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { DataContext } from "../../contexts/dataContext";
 import { Typography, Grid, Chip, LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -175,6 +176,8 @@ const actions = [{ icon: <SaveIcon />, name: "Save Project" }];
 
 export default function ProjectsListTemplate({ match }) {
   const classes = useStyles();
+  const { data } = useContext(DataContext);
+  const { profile } = data;
 
   const [open, setOpen] = React.useState(false);
 
@@ -199,6 +202,7 @@ export default function ProjectsListTemplate({ match }) {
   const saveProject = () => {
     setOpen(false);
     const data = {
+      student_db_id: profile.student_db_id,
       project_id: match.params.project,
       student_preference_for_project: "0",
     };

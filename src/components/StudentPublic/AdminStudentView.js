@@ -124,10 +124,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
     fontWeight: "bold",
   },
-  degree: {
-    textAlign: "left",
-    fontSize: "small",
-  },
   verticalElementTitle: {
     margin: 0,
     display: "flex",

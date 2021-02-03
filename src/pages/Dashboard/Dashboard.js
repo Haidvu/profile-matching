@@ -117,7 +117,6 @@ export default function Dashboard() {
         })
         .catch((err) => {
           // to prevent user from changing their roles
-          console.log(err.response);
           if (err.response.status === 404) {
             logout();
           }
