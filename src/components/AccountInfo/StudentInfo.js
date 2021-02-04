@@ -447,7 +447,7 @@ function StudentInfo() {
                     <TextField
                       error={
                         errorsFirst.student_description &&
-                        errorsFirst.student_description === ""
+                        studentFirst.student_description === ""
                       }
                       helperText={`${studentFirst.student_description.length}/500`}
                       variant="outlined"
