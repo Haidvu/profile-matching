@@ -34,7 +34,6 @@ function getTooltip({ object }) {
       <div>Email: ${object.contact_email}</div>
       <div>Website: ${object.website}</div>
       <div>
-
       `,
     }
   );
@@ -92,7 +91,7 @@ export default function AdminMap({
   }, []);
   const layer = new IconLayer({
     ...layerProps,
-    id: "icon",
+    id: "icon-layer",
     getIcon: (d) => "marker",
     sizeUnits: "meters",
     sizeScale: 2000,
