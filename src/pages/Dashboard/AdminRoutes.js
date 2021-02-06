@@ -5,6 +5,7 @@ import AdminMap from "../AdminMap/AdminMap";
 import AdminStudentView from "../../components/StudentPublic/AdminStudentView";
 import AdminCompanyView from "../../components/CompanyPublic/AdminCompanyView";
 import AdminCompanyProjects from "../AdminCompanyProjects/AdminCompanyProjects";
+import AdminCompanySignUp from '../../components/AdminCompanySignUp/AdminCompanySignUp';
 
 const AdminRoutes = () => {
   let { path } = useRouteMatch();
@@ -19,6 +20,7 @@ const AdminRoutes = () => {
           path={`${path}/projects/:project`}
           render={(props) => <AdminCompanyView {...props} />}
         />
+        <Route path={`${path}/Company/SignUp`} exact component={AdminCompanySignUp}/>
       </Switch>
     </div>
   );
