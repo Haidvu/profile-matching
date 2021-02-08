@@ -13,13 +13,13 @@ import Grid from "@material-ui/core/Grid";
 import NavBar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
-import Jerel from "../../assets/Jerel.jpeg";
+import Jerel from "../../assets/JerelPic.PNG";
 import Mayoor from "../../assets/Mayoor.jpeg";
 import Muhammad from "../../assets/Muhammad.jpeg";
 import Elisa from "../../assets/Elisa.jpeg";
 import Hai from "../../assets/Hai.jpeg";
 import Thanh from "../../assets/Thanh.jpeg";
-import Lejing from "../../assets/Lejing.jpeg"
+import Lejing from "../../assets/Lejing.jpeg";
 
 const useStyles = makeStyles((theme) => ({
   main: {
