@@ -241,12 +241,13 @@ const CompanyProjectTeam = ({ id }) => {
         return <Avatar />;
       },
       sortable: false,
-      disableColumnMenu: false,
+      disableColumnMenu: true,
     },
     {
       field: "student_name",
       headerName: "Student Name",
       width: 260,
+      disableColumnMenu: true,
       renderCell: (params) => {
         return (
           <Link
@@ -260,6 +261,7 @@ const CompanyProjectTeam = ({ id }) => {
       },
     },
     {
+      disableColumnMenu: true,
       field: "preference",
       headerName: "Preference",
       width: 130,
@@ -271,6 +273,7 @@ const CompanyProjectTeam = ({ id }) => {
         param2.row.project_preference_for_student,
     },
     {
+      disableColumnMenu: true,
       field: "student_skills",
       headerName: "Student Skills",
       sortable: false,
@@ -305,6 +308,7 @@ const CompanyProjectTeam = ({ id }) => {
       },
     },
     {
+      disableColumnMenu: true,
       field: "action",
       headerName: "Action",
       width: 500,

@@ -97,6 +97,8 @@ export default function AdminMap({
     sizeScale: 2000,
     sizeMinPixels: 30,
     pickable: true,
+    getPosition: d => d.coordinates,
+    getSize: d => 5
   });
   return (
     <DeckGL
