@@ -67,7 +67,7 @@ export default function Footer() {
               src="https://uh.edu/marcom/_images/brand/logo-uh-primary-black.svg"
             ></img>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Link
               to="/developers"
               href="/developers"
@@ -78,7 +78,7 @@ export default function Footer() {
               </Typography>
             </Link>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Link
               to="/report-bug"
               href="/report-bug"
@@ -86,6 +86,17 @@ export default function Footer() {
             >
               <Typography variant="body1" className={classes.footerRelated}>
                 Report an Issue
+              </Typography>
+            </Link>
+          </Grid>
+          <Grid item xs={2}>
+            <Link
+              to="/privacy-policy"
+              href="/privacy-policy"
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant="body1" className={classes.footerRelated}>
+                Privacy Policy
               </Typography>
             </Link>
           </Grid>
