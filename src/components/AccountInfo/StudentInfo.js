@@ -230,7 +230,8 @@ function StudentInfo() {
           errors = true;
         }
       });
-      if (!errors) {
+    
+      if (!errors && mySkills.length !== 0) {
         const data = {
           full_name: studentFirst.first_name + " " + studentFirst.last_name,
           student_contact_email: studentFirst.contact_email,
