@@ -64,8 +64,10 @@ export default function SignUp() {
         .post("/user_accounts/signup", signUpInfo)
         .then((res) => {
           if (res.data.error) {
+            setSuccess("");
             setError(res.data.error);
           } else {
+            setError("");
             setSuccess(res.data.success);
           }
         })

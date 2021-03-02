@@ -447,11 +447,15 @@ export default function CompanyProfile() {
                   })
                   .catch((err) => {
                     console.log(err.response.data);
+                    setEmail("");
+                    setPassword("");
                   });
                 //Profile update api error.
               })
               .catch((err) => {
                 setUpdateErrors({ ...updateErrors, ...err.response.data });
+                setEmail("");
+                setPassword("");
                 setDialogOpen(false);
                 setLoading2(false);
               });
@@ -744,7 +748,6 @@ export default function CompanyProfile() {
                       InputLabelProps={{
                         classes: {
                           root: classes.inputLabel,
-                          asterisk: classes.labelAsterisk,
                         },
                       }}
                       className={classes.formInput}
