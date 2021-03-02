@@ -1,121 +1,113 @@
-import DeckGL from "@deck.gl/react";
-import { IconLayer } from "@deck.gl/layers";
-import React, { useState, useEffect } from "react";
-import { StaticMap } from "react-map-gl";
-import { MapView } from "@deck.gl/core";
-import locationIconAtlas from "../../assets/location-icon-atlas.png";
-import locationIconMapping from "../../assets/location-icon-mapping.json";
-import { getConfig } from "../../authConfig";
+import React, { useState, useEffect,useRef } from "react";
+import mapboxgl from "mapbox-gl";
 import axios from "axios";
+import { getConfig } from "../../authConfig";
+import { makeStyles } from "@material-ui/core/styles";
 
-const MAP_VIEW = new MapView({ repeat: true });
-
-const INITIAL_VIEW_STATE = {
-  longitude: -95.5698,
-  latitude: 29.7604,
-  zoom: 8,
-  maxZoom: 20,
-  pitch: 0,
-  bearing: 0,
-};
-
-const TOKEN =
-  "pk.eyJ1Ijoicm9oaXRzaGFyZGhhIiwiYSI6ImNrajIxcWVxaTIyZWgycXF0NWwxMG9wMTMifQ.NuOk3LeRP5b5Gvtso3MFrg";
-
-function getTooltip({ object }) {
-  return (
-    object && {
-      html: `\
-      <div style="width:250px">
-      <div><b>Company Information</b></div>
-      <div>Name: ${object.name}</div>
-      <div>Address: ${object.address}</div>
-      <div>Description: ${object.description}</div>
-      <div>Email: ${object.contact_email}</div>
-      <div>Website: ${object.website}</div>
-      <div>
-      `,
+const useStyles = makeStyles((theme) => ({
+  mapContainer:{
+    position: "absolute",
+    top: "0",
+    right: "0",
+    left: "0",
+    bottom: "0",
     }
-  );
-}
+}))
 
-export default function AdminMap({
-  iconMapping = locationIconMapping,
-  iconAtlas = locationIconAtlas,
-}) {
-  const mapStyle =
-    "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
-
-  const [data, setData] = useState([]);
-  const layerProps = {
-    data,
-    pickable: true,
-    getPosition: (d) => d.coordinates,
-    iconAtlas,
-    iconMapping,
-  };
-
-  const getAddress = (address) => {
-    if (address !== "") {
-      const res = address.split("|");
-      return `${res[0]}, ${res[1]}, ${res[2]} `;
-    }
-    return "";
-  };
-
-  useEffect(() => {
-    axios
-      .get("/company_profile/", getConfig())
-      .then((res) => {
-        res.data.map((res) => {
-          let address = getAddress(res.company_address) + res.company_zip;
-          setData((data) => [
-            ...data,
-            {
-              coordinates: [
-                parseFloat(res.company_longitude),
-                parseFloat(res.company_latitude),
-              ],
-              name: res.company_name,
-              description: res.company_description,
-              website: res.company_website,
-              contact_email: res.company_contact_email,
-              address: address,
-            },
-          ]);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+export default function AdminMap(){
+    
+    //access token 
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoiY29uc3VsdGluZ2NsaW5pY3NlcnZpY2VzIiwiYSI6ImNrbG4zdndrZzBmNXkyd256bTkzajlkNmcifQ.QDoyQPnSgSGKazCEN_I4Vg";
+    
+    const node = useRef(null);
+    const classes = useStyles();
+    
+    const initializeMap = () => {
+      return new mapboxgl.Map({
+        container: node.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-95.5698, 29.7604],
+        zoom: 8
       });
-  }, []);
-  const layer = new IconLayer({
-    ...layerProps,
-    id: "icon-layer",
-    getIcon: (d) => "marker",
-    sizeUnits: "meters",
-    sizeScale: 2000,
-    sizeMinPixels: 30,
-    pickable: true,
-    getPosition: d => d.coordinates,
-    getSize: d => 5
-  });
-  return (
-    <DeckGL
-      width={"100%"}
-      layers={[layer]}
-      views={MAP_VIEW}
-      initialViewState={INITIAL_VIEW_STATE}
-      controller={true}
-      getTooltip={getTooltip}
-      useDevicePixels={false}
-    >
-      <StaticMap
-        reuseMaps
-        mapStyle={mapStyle}
-        mapboxApiAccessToken={TOKEN}
-        preventStyleDiffing={true}
-      />
-    </DeckGL>
-  );
-}
+    }
+
+    // create markups for each company
+    const createMarkups = (marker) =>{
+      // create a HTML element for each feature
+      var el = document.createElement('div');
+      el.className = 'marker';
+
+      return new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(new mapboxgl.Popup({ offset: 10 }) // add popups
+          .setHTML(
+            '<h3>' + marker.properties.name + '</h3>' +
+            '<p>' + marker.properties.description + '</p>' +
+            '<p>' + marker.properties.website + '</p>' +
+            '<p>' + marker.properties.contact_email + '</p>' +
+            '<p>' + marker.properties.address + '</p>'
+        ))
+    }
+
+    //array holding company data
+    const [companyAddress, setCompanyAddress] = useState([]);
+    //create company address string
+    const getAddress = (address) => {
+        if (address !== "") {
+          const res = address.split("|");
+          return `${res[0]}, ${res[1]}, ${res[2]} `;
+        }
+        return "";
+      };
+    
+    useEffect(() => {
+      //get all companies description and addresses
+      axios
+          .get("/company_profile/", getConfig())
+          .then((res) => {
+            let companyData = [];
+            res.data.map((res) => {
+                let address = getAddress(res.company_address) + res.company_zip;
+                companyData.push({
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      parseFloat(res.company_longitude),
+                      parseFloat(res.company_latitude),
+                    ]
+                  },
+                  properties: {
+                    name: res.company_name,
+                    description: res.company_description,
+                    website: res.company_website,
+                    contact_email: res.company_contact_email,
+                    address: address
+                  }
+                })
+            });
+            setCompanyAddress(companyData);
+            })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, []);
+
+      useEffect(()=>{
+        //map object with initial position
+        const map = initializeMap()
+        // add markers to map
+        companyAddress.forEach(function(marker) {
+          //create markups and add to the map
+          createMarkups(marker)
+          .addTo(map);
+        });  
+      },[companyAddress]);
+
+      return(
+        <div>
+          <div className={classes.mapContainer} ref={node} />
+        </div>
+      );
+};
