@@ -23,6 +23,7 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import PersonIcon from "@material-ui/icons/Person";
+import StudentDashboard from "../../assets/StudentDashboard.jpg";
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -32,6 +33,16 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(5),
+  },
+  profileLogo: {
+    backgroundRepeat: "no-repeat",
+    position: "relative",
+    objectPosition: "20% 30%",
+    width: "100vw",
+    height: "15vw",
+    maxWidth: "100%",
+    zIndex: 1,
+    objectFit: "cover",
   },
   skills: {
     position: "relative",
@@ -212,6 +223,11 @@ const AdminStudentView = ({ match }) => {
         <LinearProgress color="secondary" />
       ) : (
         <>
+         <img
+          alt="profile background"
+          className={classes.profileLogo}
+          src={StudentDashboard}
+        ></img>
           <List className={classes.root}>
             <ListItem>
               <ListItemIcon edge="start">

@@ -25,12 +25,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getConfig } from "../../authConfig";
 import SaveStudent from "./SaveStudent";
 import PersonIcon from "@material-ui/icons/Person";
-
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-
 import SaveIcon from "@material-ui/icons/Save";
+import StudentDashboard from "../../assets/StudentDashboard.jpg";
 
 const useStyles = makeStyles((theme) => ({
   dialogInput: {
@@ -275,6 +274,11 @@ const StudentDetailed = ({ match }) => {
         <LinearProgress color="secondary" />
       ) : (
         <>
+         <img
+          alt="profile background"
+          className={classes.profileLogo}
+          src={StudentDashboard}
+        ></img>
           <Grid container>
             <List className={classes.root}>
               <ListItem>
