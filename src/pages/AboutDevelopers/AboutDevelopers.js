@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 
 import NavBar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-
+import Nouhad from "../../assets/Nouhad.jpg";
 import Jerel from "../../assets/JerelPic.PNG";
 import Mayoor from "../../assets/Mayoor.jpeg";
 import Muhammad from "../../assets/Muhammad.jpeg";
@@ -82,29 +82,26 @@ export default function MediaControlCard() {
               <div className={classes.details}>
                 <CardContent className={classes.content}>
                   <Typography component="h5" variant="h5">
-                    Jerel Lopez
+                    Professor Nouhad Rizk
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Senior, BS Computer Science (May 2021)
+                    Instructional Professor and Director of Undergraduates
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Minor: Mathematics
+                    University of Houston
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
-                    Fun Fact: I like to work on cars as a hobby
+                    Project Entrepreneur
                   </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    Project Task: Frontend
-                  </Typography>
-                  <Link href="https://www.linkedin.com/in/jerellopez/">
+                  <Link href="https://www.linkedin.com/in/nouhad-j-rizk-50427325/">
                     <LinkedInIcon className={classes.icon} />
                   </Link>
                 </CardContent>
               </div>
               <CardMedia
                 className={classes.cover}
-                image={Jerel}
-                title="Jerel Lopez"
+                image={Nouhad}
+                title="Nouhad Rizk"
               />
             </Card>
           </Grid>
@@ -138,6 +135,38 @@ export default function MediaControlCard() {
                 className={classes.cover}
                 image={Mayoor}
                 title="Mayoor Shardha"
+              />
+            </Card>
+          </Grid>
+          
+          <Grid item xs={3}>
+            <Card className={classes.root}>
+              <div className={classes.details}>
+                <CardContent className={classes.content}>
+                  <Typography component="h5" variant="h5">
+                    Jerel Lopez
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Senior, BS Computer Science (May 2021)
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Minor: Mathematics
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Fun Fact: I like to work on cars as a hobby
+                  </Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Project Task: Frontend
+                  </Typography>
+                  <Link href="https://www.linkedin.com/in/jerellopez/">
+                    <LinkedInIcon className={classes.icon} />
+                  </Link>
+                </CardContent>
+              </div>
+              <CardMedia
+                className={classes.cover}
+                image={Jerel}
+                title="Jerel Lopez"
               />
             </Card>
           </Grid>
