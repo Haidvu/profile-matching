@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.0383a416.chunk.css",
-    "main.js": "/static/js/main.5d3f75c2.chunk.js",
-    "main.js.map": "/static/js/main.5d3f75c2.chunk.js.map",
+    "main.js": "/static/js/main.98ccfae1.chunk.js",
+    "main.js.map": "/static/js/main.98ccfae1.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.4775ebf3.js",
     "runtime-main.js.map": "/static/js/runtime-main.4775ebf3.js.map",
     "static/css/2.22ca87da.chunk.css": "/static/css/2.22ca87da.chunk.css",
-    "static/js/2.c9e936c9.chunk.js": "/static/js/2.c9e936c9.chunk.js",
-    "static/js/2.c9e936c9.chunk.js.map": "/static/js/2.c9e936c9.chunk.js.map",
+    "static/js/2.f86a4584.chunk.js": "/static/js/2.f86a4584.chunk.js",
+    "static/js/2.f86a4584.chunk.js.map": "/static/js/2.f86a4584.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b4c564852041e3d0c99d8318949503a5.js": "/precache-manifest.b4c564852041e3d0c99d8318949503a5.js",
+    "precache-manifest.6aaa55a3593ff442e829e869e9f6d90a.js": "/precache-manifest.6aaa55a3593ff442e829e869e9f6d90a.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.22ca87da.chunk.css.map": "/static/css/2.22ca87da.chunk.css.map",
     "static/css/main.0383a416.chunk.css.map": "/static/css/main.0383a416.chunk.css.map",
-    "static/js/2.c9e936c9.chunk.js.LICENSE.txt": "/static/js/2.c9e936c9.chunk.js.LICENSE.txt",
+    "static/js/2.f86a4584.chunk.js.LICENSE.txt": "/static/js/2.f86a4584.chunk.js.LICENSE.txt",
     "static/media/CompanyDashboard.jpg": "/static/media/CompanyDashboard.51c962f8.jpg",
     "static/media/Elisa.jpeg": "/static/media/Elisa.67399582.jpeg",
     "static/media/Hai.jpeg": "/static/media/Hai.d124ffb5.jpeg",
@@ -23,6 +23,7 @@
     "static/media/LoginBackground.jpg": "/static/media/LoginBackground.f8d53424.jpg",
     "static/media/Mayoor.jpeg": "/static/media/Mayoor.c1c120cc.jpeg",
     "static/media/Muhammad.jpeg": "/static/media/Muhammad.1b1875ce.jpeg",
+    "static/media/Nouhad.jpg": "/static/media/Nouhad.790a33aa.jpg",
     "static/media/StudentDashboard.jpg": "/static/media/StudentDashboard.bbbefee8.jpg",
     "static/media/UHLogo.png": "/static/media/UHLogo.ab32729f.png",
     "static/media/image.jpg": "/static/media/image.882dccfd.jpg"
@@ -30,8 +31,8 @@
   "entrypoints": [
     "static/js/runtime-main.4775ebf3.js",
     "static/css/2.22ca87da.chunk.css",
-    "static/js/2.c9e936c9.chunk.js",
+    "static/js/2.f86a4584.chunk.js",
     "static/css/main.0383a416.chunk.css",
-    "static/js/main.5d3f75c2.chunk.js"
+    "static/js/main.98ccfae1.chunk.js"
   ]
 }
