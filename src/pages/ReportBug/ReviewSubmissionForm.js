@@ -75,7 +75,6 @@ const Confirm = ({ handleNext, handleBack, values }) => {
     axios
       .post("/issue_report/create", values)
       .then((res) => {
-        console.log(values);
         handleNext();
       })
       .catch((err) => {
