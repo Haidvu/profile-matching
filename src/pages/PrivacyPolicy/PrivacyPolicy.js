@@ -4,10 +4,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Footer from "../../components/Footer/Footer";
+import NavBar from "../../components/Navbar/Navbar";
 
 const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(2),
+    marginTop:theme.spacing(8)
   },
   subheader: {
     marginTop: theme.spacing(2),
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   bodyContent: {
     lineHeight: "1.8rem",
+    alignItems:"justify"
   },
   topGrid: {
       marginTop: theme.spacing(4)
@@ -39,9 +42,10 @@ export default function PrivacyPolicy() {
         justify="space-between"
         alignItems="center"
       >
+        <NavBar />
         <Grid item xs={8} className={classes.topGrid}>
-          <Typography variant="h3" className={classes.title}>UHConsultingClinic PrivacyPolicy</Typography>
-          <Typography variant="body1">
+          <Typography variant="h3" className={classes.title}>Privacy Policy</Typography>
+          <Typography variant="body1" align={"center"}>
             Last updated: February 08, 2021
           </Typography>
         </Grid>
@@ -49,13 +53,13 @@ export default function PrivacyPolicy() {
           <Typography variant="h4" className={classes.subheader}>Overview</Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="body1" className={classes.bodyContent}>
+          <Typography variant="body1" align={"justify"} className={classes.bodyContent}>
             This Privacy Policy describes Our policies and procedures on the
             collection, use and disclosure of Your information when You use the
             Service and tells You about Your privacy rights and how the law
             protects You.
           </Typography>
-          <Typography variant="body1" className={classes.bodyContent}>
+          <Typography variant="body1" align={"justify"} className={classes.bodyContent}>
             We use Your Personal data to provide and improve the Service. By
             using the Service, You agree to the collection and use of
             information in accordance with this Privacy Policy. This Privacy
@@ -71,7 +75,7 @@ export default function PrivacyPolicy() {
           <Typography variant="h5" className={classes.bodyHeader}>
             Interpretation
           </Typography>
-          <Typography variant="body1" className={classes.bodyContent}>
+          <Typography align={"justify"} variant="body1" className={classes.bodyContent}>
             The words of which the initial letter is capitalized have meanings
             defined under the following conditions. The following definitions
             shall have the same meaning regardless of whether they appear in
@@ -85,7 +89,7 @@ export default function PrivacyPolicy() {
           <Typography variant="body1" className={classes.bodyContent}>
             For the purposes of this Privacy Policy:
           </Typography>
-          <Typography className={classes.bodyContent}>
+          <Typography className={classes.bodyContent} align={"justify"}>
             <ul>
               <li>
                 <p>
@@ -242,7 +246,7 @@ export default function PrivacyPolicy() {
           <Typography variant="h5" className={classes.bodyHeader}>
             Tracking Technologies and Cookies
           </Typography>
-          <Typography className={classes.bodyContent}>
+          <Typography className={classes.bodyContent} align={"justify"}>
             <p>
               We use Cookies and similar tracking technologies to track the
               activity on Our Service and store certain information. Tracking
@@ -332,7 +336,7 @@ export default function PrivacyPolicy() {
           <Typography variant="h4" className={classes.subheader}>
             Changes to this Privacy Policy
           </Typography>
-          <Typography className={classes.bodyContent}>
+          <Typography align={"justify"} className={classes.bodyContent}>
             We may update Our Privacy Policy from time to time. We will notify
             You of any changes by posting the new Privacy Policy on this page.
             We will let You know via email and/or a prominent notice on Our
