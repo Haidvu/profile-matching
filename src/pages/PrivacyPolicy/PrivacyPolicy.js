@@ -195,7 +195,7 @@ export default function PrivacyPolicy() {
           <Typography variant="h5" className={classes.bodyHeader}>
             Personal Data
           </Typography>
-          <Typography className={classes.bodyContent}>
+          <Typography className={classes.bodyContent}  align={"justify"}>
             <p>
               While using Our Service, We may ask You to provide Us with certain
               personally identifiable information that can be used to contact or
@@ -220,7 +220,7 @@ export default function PrivacyPolicy() {
           <Typography variant="h5" className={classes.bodyHeader}>
             Usage Data
           </Typography>
-          <Typography className={classes.bodyContent}>
+          <Typography className={classes.bodyContent} align={"justify"}>
             <p>Usage Data is collected automatically when using the Service.</p>
             <p>
               Usage Data may include information such as Your Device's Internet
