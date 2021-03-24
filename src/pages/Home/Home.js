@@ -3,8 +3,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import Background from "../../assets/HomePageBackground.jpg";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import { createMuiTheme } from "@material-ui/core/styles";
-
 import Footer from "../../components/Footer/Footer";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const classes = useStyles();
-  const theme = createMuiTheme();
   const background = {
     imageUrl: {
       backgroundImage: `url(${Background})`,
@@ -49,15 +46,7 @@ function Home() {
       width: "100%"
     },
   };
-  theme.typography.h3 = {
-    fontSize: "1.4rem",
-    "@media (min-width:400px)": {
-      fontSize: "1.4rem",
-    },
-    [theme.breakpoints.up("md")]: {
-      fontSize: "2rem",
-    },
-  };
+
   return (
     <div>
       <React.Fragment>
@@ -73,13 +62,13 @@ function Home() {
               <Typography
                 className={classes.title_1}
                 display="inline"
-                variant="h2">
+                variant="h3">
                 Welcome to
               </Typography>
               <Typography
                 className={classes.title_2}
                 display="inline"
-                variant="h2">
+                variant="h3">
                 &nbsp;FutureStart
               </Typography>
             </Grid>

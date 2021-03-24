@@ -90,10 +90,10 @@ export default function ResetPasswordTwo() {
           }
         })
         .catch((err) => {
-          setError("Error! Unable to reset password");
+          setError("Error! Unable to reset password. Please make sure the password is atleast 8 characters.");
         });
-      e.preventDefault();
     }
+    e.preventDefault();
   };
 
   return (
