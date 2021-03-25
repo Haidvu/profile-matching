@@ -200,6 +200,7 @@ export default function CompanyProjectCreate() {
     project_type: null,
     project_tech: null,
     project_deadline: null,
+    non_field_errors: null
   });
 
   const saveToDB = (values) => {
@@ -294,6 +295,10 @@ export default function CompanyProjectCreate() {
           {updateErrors.project_name ? (
             <Typography className={classes.error} color="error">
               {updateErrors.project_name}
+            </Typography>
+          ) : updateErrors.non_field_errors ? (
+            <Typography className={classes.error} color="error">
+              {updateErrors.non_field_errors}
             </Typography>
           ) : null}
 
