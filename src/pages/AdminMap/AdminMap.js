@@ -1,8 +1,10 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 import React, { useState, useEffect,useRef } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "!mapbox-gl";
 import axios from "axios";
 import { getConfig } from "../../authConfig";
 import { makeStyles } from "@material-ui/core/styles";
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 const useStyles = makeStyles((theme) => ({
   mapContainer:{
