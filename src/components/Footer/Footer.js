@@ -8,7 +8,7 @@ function Copyright() {
   return (
     <Typography variant="body2" style={{ color: "white", fontWeight: "bold" }}>
       {"Copyright © "}
-      <Link color="inherit" href="http://scmatch.cs.uh.edu/">
+      <Link color="inherit" href="https://scmatch.cs.uh.edu/">
         UHCS Consulting Clinic
       </Link>{" "}
       {new Date().getFullYear()}
