@@ -4,44 +4,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" style={{ color: "white", fontWeight: "bold" }}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://scmatch.cs.uh.edu/">
-        UHCS Consulting Clinic
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    // minHeight: "60vh",
     width: "100%",
     flex: "1 0 auto",
   },
-  rootGrid: {
-    flexGrow: 1,
-  },
+
   footer: {
     padding: "1em",
     marginTop: "auto",
     backgroundColor: "#C8102E",
   },
-  footerRelated: {
-    color: "#FFFFFF",
-  },
   footerText: {
     color: "#FFFFFF",
+    marginTop: theme.spacing(2)
   },
   image: {
-    width: "50%",
-    float: "left",
+    width: "40%",
+    // float: "left",
     objectFit: "contain",
   },
 }));
@@ -55,19 +38,17 @@ export default function Footer() {
         <Grid
           container
           direction="row"
-          justify="space-around"
-          alignItems="center"
-          spacing={4}
-          className={classes.rootGrid}
+          justify="flex-start"
+          alignItems="flex-start"
         >
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={7} md={3}>
             <img
               className={classes.image}
               alt=""
               src="https://uh.edu/marcom/_images/brand/logo-uh-primary-black.svg"
             ></img>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={12} sm={7} md={3}>
             <Link
               to="/developers"
               href="/developers"
@@ -78,30 +59,27 @@ export default function Footer() {
               </Typography>
             </Link>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={12} sm={7} md={3}>
             <Link
               to="/report-bug"
               href="/report-bug"
               style={{ textDecoration: "none" }}
             >
-              <Typography variant="body1" className={classes.footerRelated}>
+              <Typography variant="body1" className={classes.footerText}>
                 Report an Issue
               </Typography>
             </Link>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={12} sm={7} md={3}>
             <Link
               to="/privacy-policy"
               href="/privacy-policy"
               style={{ textDecoration: "none" }}
             >
-              <Typography variant="body1" className={classes.footerRelated}>
+              <Typography variant="body1" className={classes.footerText}>
                 Privacy Policy
               </Typography>
             </Link>
-          </Grid>
-          <Grid item xs={3}>
-            <Copyright />
           </Grid>
         </Grid>
       </footer>
