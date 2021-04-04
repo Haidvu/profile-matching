@@ -56,8 +56,8 @@ export default function AdminProfile() {
   const classes = useStyles();
 
   const [reportInput, setReportInput] = useState({
-    project_preference_for_student: 0,
-    student_preference_for_project: 0,
+    project_preference_for_student: "Company Preference",
+    student_preference_for_project: "Student Preference",
     company_name: "Company Name",
   });
 
@@ -118,9 +118,13 @@ export default function AdminProfile() {
           ? ""
           : reportInput.company_name,
       project_preference_for_student:
-        reportInput.project_preference_for_student,
+        reportInput.project_preference_for_student === "Company Preference"
+        ? ""
+        : reportInput.project_preference_for_student,
       student_preference_for_project:
-        reportInput.student_preference_for_project,
+        reportInput.student_preference_for_project === "Student Preference"
+        ? ""
+        : reportInput.student_preference_for_project,
     };
     axios
       .post("/project_select_student/admin_matching", data, getConfig())
@@ -161,9 +165,10 @@ export default function AdminProfile() {
               }}
               label="Student Preference For Project"
             >
-              <MenuItem value={0}>
+              <MenuItem value={"Student Preference"}>
                 <em>Student Preference For Project</em>
               </MenuItem>
+              <MenuItem value={0}>No Preference</MenuItem>
               <MenuItem value={1}>Low</MenuItem>
               <MenuItem value={2}>Medium</MenuItem>
               <MenuItem value={3}>High</MenuItem>
@@ -183,9 +188,10 @@ export default function AdminProfile() {
               }}
               label="Company Preference For Student"
             >
-              <MenuItem value={0}>
+              <MenuItem value={"Company Preference"}>
                 <em>Company Preference For Student</em>
               </MenuItem>
+              <MenuItem value={0}>No Preference</MenuItem>
               <MenuItem value={1}>Low</MenuItem>
               <MenuItem value={2}>Medium</MenuItem>
               <MenuItem value={3}>High</MenuItem>
