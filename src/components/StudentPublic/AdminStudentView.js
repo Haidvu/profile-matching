@@ -196,6 +196,7 @@ const AdminStudentView = ({ match }) => {
       `/student_profile/id/${match.params.id}`,
       getConfig()
     );
+
     const studentProjects = axios.post(
       `/student_project/list_by_student`,
       {
