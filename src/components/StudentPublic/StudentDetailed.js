@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     //backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(3),
+    padding: theme.spacing(3)
   },
   skills: {
     position: "relative",

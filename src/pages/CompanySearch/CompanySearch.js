@@ -19,10 +19,7 @@ import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
   searchBackground: {
-    //backgroundColor: "rgba(200,16,46,1)",
     margin: "10px",
-    borderRadius: "5px",
-    flex: "column",
   },
   header: {
     textAlign: "center",
@@ -37,19 +34,27 @@ const useStyles = makeStyles((theme) => ({
     //color: "white",
   },
   SearchButton: {
-    marginLeft: "10px",
+    // marginLeft: "10px",
+    width: "10vw",
+  },
+  search: {
+    marginTop: theme.spacing(5.0),
+    justifyContent: "center",
+    display: "flex",
+    alignItems: "center"
   },
   KeywordSearch: {
     backgroundColor: "white",
     borderRadius: "10px",
-    objectFit: "contain",
-    width: 180,
+    // objectFit: "contain",
+    maxWidth: "250px",
   },
   zipCode: {
     backgroundColor: "white",
     borderRadius: "10px",
-    objectFit: "contain",
-    width: 100,
+    // objectFit: "contain",
+    // width: 100,
+    maxWidth: "250px",
   },
   MajorSearch: {
     width: 150,
@@ -63,23 +68,16 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
   },
   SkillSearch: {
-    objectFit: "contain",
+    // objectFit: "contain",
     borderRadius: "10px",
-    width: 150,
-  },
-  chipRoot: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    padding: theme.spacing(1),
-    listStyle: "none",
-    margin: 1,
-  },
-  chip: {
-    margin: theme.spacing(0.5),
+    maxWidth: "200px",
   },
   ButtonHelp: {
     padding: "5px",
+  },
+  grids: {
+    marginLeft: theme.spacing(1.0),
+    margin: theme.spacing(2),
   },
 }));
 
@@ -185,9 +183,13 @@ export default function CompanySearch() {
 
   return (
     <div>
-      <div className={classes.searchBackground}>
-        <Grid>
-          <Typography className={classes.header}>FutureStart Search</Typography>
+      <div>
+        <Grid container direction="row" justify="center" alignItems="center">
+          <Grid item className={classes.searchBackground}>
+            <Typography className={classes.header}>
+              FutureStart Search
+            </Typography>
+          </Grid>
         </Grid>
         <ul className={classes.chipRoot}>
           {searchInput.keywords.map((data, index) => (
@@ -200,107 +202,104 @@ export default function CompanySearch() {
             </li>
           ))}
         </ul>
-        <Grid
-          container
-          id="master"
-          direction="column"
-          justify="space-between"
-          spacing={2}
-          alignItems="center">
-          <Grid
-            container
-            id="first-left"
-            justify="center"
-            item
-            xs={12}
-            spacing={4}
-            direction="row">
-            <Grid item>
-              <Typography className={classes.SearchLabels} variant="h6">
-                Keyword
-                <Tooltip
-                  title={
-                    <p style={{ fontSize: "13px" }}>
-                      Press enter to save your keywords after you type them.
-                      <br /> This will search the entire student description.
-                    </p>
-                  }>
-                  <IconButton className={classes.ButtonHelp}>
-                    <HelpIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <TextField
-                className={classes.KeywordSearch}
-                name="keywords"
-                placeholder="Keyword"
-                type="search"
-                variant="outlined"
-                size="small"
-                onKeyDown={handleChange}
-              />
-            </Grid>
-            <Grid item>
-              <Typography className={classes.SearchLabels} variant="h6">
-                Skills
-              </Typography>
-              <Select
-                AutoSize={true}
-                closeMenuOnSelect={true}
-                components={animatedComponents}
-                isMulti
-                isSearchable
-                className={classes.SkillSearch}
-                onChange={(e) => {
-                  e = e ? e : [];
-                  var skillsSeparatedByCommas = Array.prototype.map
-                    .call(e, (s) => s.label)
-                    .toString();
-                  if (skillsSeparatedByCommas.length > 0) {
-                    setSearchInput({
-                      ...searchInput,
-                      student_skills: skillsSeparatedByCommas.split(","),
-                    });
-                  } else {
-                    setSearchInput({
-                      ...searchInput,
-                      student_skills: [],
-                    });
-                  }
-                }}
-                options={skills}
-                styles={customStyles}
-              />
-            </Grid>
-            <Grid item>
-              <Typography className={classes.SearchLabels} variant="h6">
-                Zipcode
-              </Typography>
-              <TextField
-                inputProps={{ maxLength: 5 }}
-                className={classes.zipCode}
-                name="zipCode"
-                placeholder="zipcode"
-                type="string"
-                variant="outlined"
-                size="small"
-                onChange={(e) => {
-                  setSearchInput({
-                    ...searchInput,
-                    zipcode: e.target.value,
-                  });
-                }}></TextField>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.SearchButton}
-                onClick={handleClick}>
-                Search
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
       </div>
+      <Grid
+        container
+        spacing={1}
+        justify="center"
+        alignItems="center"
+        direction="row"
+      >
+        <Grid item xs={9} sm={3} className={classes.grids}>
+          <Typography className={classes.SearchLabels} variant="h6">
+            Keyword
+            <Tooltip
+              title={
+                <p style={{ fontSize: "13px" }}>
+                  Press enter to save your keywords after you type them.
+                  <br /> This will search the entire student description.
+                </p>
+              }
+            >
+              <IconButton className={classes.ButtonHelp}>
+                <HelpIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+          <TextField
+            className={classes.KeywordSearch}
+            name="keywords"
+            placeholder="Keyword"
+            type="search"
+            variant="outlined"
+            size="small"
+            onKeyDown={handleChange}
+          />
+        </Grid>
+        <Grid item xs={9} sm={3} className={classes.grids}>
+          <Typography className={classes.SearchLabels} variant="h6">
+            Skills
+          </Typography>
+          <Select
+            AutoSize={true}
+            closeMenuOnSelect={true}
+            components={animatedComponents}
+            isMulti
+            isSearchable
+            className={classes.SkillSearch}
+            onChange={(e) => {
+              e = e ? e : [];
+              var skillsSeparatedByCommas = Array.prototype.map
+                .call(e, (s) => s.label)
+                .toString();
+              if (skillsSeparatedByCommas.length > 0) {
+                setSearchInput({
+                  ...searchInput,
+                  student_skills: skillsSeparatedByCommas.split(","),
+                });
+              } else {
+                setSearchInput({
+                  ...searchInput,
+                  student_skills: [],
+                });
+              }
+            }}
+            options={skills}
+            styles={customStyles}
+          />
+        </Grid>
+        <Grid item xs={9} sm={3} className={classes.grids}>
+          <Typography className={classes.SearchLabels} variant="h6">
+            Zipcode
+          </Typography>
+          <TextField
+            inputProps={{ maxLength: 5 }}
+            className={classes.zipCode}
+            name="zipCode"
+            placeholder="zipcode"
+            type="string"
+            variant="outlined"
+            size="small"
+            onChange={(e) => {
+              setSearchInput({
+                ...searchInput,
+                zipcode: e.target.value,
+              });
+            }}
+          ></TextField>
+        </Grid>
+        <Grid item xs={12} md={2} sm={2}  className={classes.search}>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.SearchButton}
+            onClick={handleClick}
+          >
+            Search
+          </Button>
+        </Grid>
+      </Grid>
+      
       <StudentsLists loading={loading} studentsList={studentsList} />
     </div>
   );

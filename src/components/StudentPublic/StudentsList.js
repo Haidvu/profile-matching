@@ -16,13 +16,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
-  rootChild: {
-    margin: "0 auto",
-    //width: "100%",
-    // marginLeft: theme.spacing(2),
-    // marginRight: theme.spacing(2),
-    // width: "100%",
-  },
   studentName: {
     fontWeight: "bold",
     fontSize: "1rem",
@@ -69,11 +62,12 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   card: {
-    width: "280px",
-    height: "325px",
+    height: "65vh",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    width: "90%",
+    marginLeft: theme.spacing(2)
   },
   button: {
     width: "100%",
@@ -91,14 +85,14 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translate(-50%, -50%)",
   },
-  buttonContainer: {
-    justifyContent: "center",
-  },
   loader: {
     position: "relative",
     left: "50%",
     transform: "translate(-50%, -50%)",
   },
+  grids: {
+    marginTop: theme.spacing(5)
+  }
 }));
 
 const StudentsList = ({ loading, studentsList }) => {
@@ -110,11 +104,25 @@ const StudentsList = ({ loading, studentsList }) => {
       {loading ? (
         <LinearProgress
           color="secondary"
-          style={{ margin: "20px" }}></LinearProgress>
+          style={{ margin: "20px" }}
+        ></LinearProgress>
       ) : (
-        <Grid container justify={"center"}>
+        <Grid
+          container
+          justify="center"
+          direction="row"
+          alignItems="flex-start"
+          spacing={4}
+        >
           {studentsList.map((student) => (
-            <Grid item key={student.username_id} style={{ margin: "15px" }}>
+            <Grid
+              item
+              key={student.username_id}
+              xs={12}
+              sm={6}
+              md={4}
+              className={classes.grids}
+            >
               <Card className={classes.card}>
                 <div>
                   <CardHeader
@@ -125,30 +133,35 @@ const StudentsList = ({ loading, studentsList }) => {
                     }}
                     avatar={<Avatar className={classes.avatar}></Avatar>}
                     title={student.full_name}
-                    ></CardHeader>
+                  ></CardHeader>
 
                   <CardContent
-                    className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                    className={`${classes.cardContent} ${classes.noPaddingTop}`}
+                  >
                     <Typography className={classes.fieldTitle}>
                       Description
                     </Typography>
                     <Typography
                       className={classes.fieldValue}
-                      style={{ wordBreak: "break-all" }}>
+                      style={{ wordBreak: "break-all" }}
+                    >
                       {student.student_description}
                     </Typography>
                   </CardContent>
 
                   <CardContent
-                    className={`${classes.cardContent} ${classes.noPaddingTop}`}>
+                    className={`${classes.cardContent} ${classes.noPaddingTop}`}
+                  >
                     <Typography
                       variant="subtitle2"
-                      className={classes.fieldTitle}>
+                      className={classes.fieldTitle}
+                    >
                       Skills
                     </Typography>
                     <div
                       className={classes.skillsRoot}
-                      style={{ flexWrap: "wrap" }}>
+                      style={{ flexWrap: "wrap" }}
+                    >
                       {student.student_skills.map((skill, index) => (
                         <Chip
                           key={index}
@@ -170,12 +183,14 @@ const StudentsList = ({ loading, studentsList }) => {
                   <CardContent>
                     <Link
                       href={`${url}/${student.student_db_id}`}
-                      style={{ textDecoration: "none" }}>
+                      style={{ textDecoration: "none" }}
+                    >
                       <Button
                         color="secondary"
                         size="small"
                         variant="contained"
-                        className={classes.button}>
+                        className={classes.button}
+                      >
                         View Profile
                       </Button>
                     </Link>
