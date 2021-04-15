@@ -227,7 +227,7 @@ export default function StudentProfile() {
     const response = await axios.post(
       `/student_project/list_by_student`,
       {
-        username_id: parseInt(localStorage.getItem("email_id")),
+        student_db_id: parseInt(profile.student_db_id),
       },
       getConfig()
     );
