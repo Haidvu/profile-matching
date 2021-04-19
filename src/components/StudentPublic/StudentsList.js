@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  div1: {
+    overflow: "auto",
+  },
   chip: {
     marginRight: theme.spacing(1),
     marginBottom: theme.spacing(1),
@@ -67,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-between",
     width: "90%",
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   button: {
     width: "100%",
@@ -91,8 +94,8 @@ const useStyles = makeStyles((theme) => ({
     transform: "translate(-50%, -50%)",
   },
   grids: {
-    marginTop: theme.spacing(5)
-  }
+    marginTop: theme.spacing(5),
+  },
 }));
 
 const StudentsList = ({ loading, studentsList }) => {
@@ -124,7 +127,7 @@ const StudentsList = ({ loading, studentsList }) => {
               className={classes.grids}
             >
               <Card className={classes.card}>
-                <div>
+                <div className={classes.div1}>
                   <CardHeader
                     classes={{
                       root: classes.cardHeader,
